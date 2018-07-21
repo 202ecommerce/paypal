@@ -533,7 +533,7 @@ class PayPal extends PaymentModule
         $form = $helper->generateForm($fields_form);
 
 
-        if (count($this->errors)) {
+        if (count((array)$this->errors)) {
             $this->message .= $this->errors;
         } elseif (Configuration::get('PAYPAL_METHOD') && Configuration::get('PAYPAL_SANDBOX') == 1) {
             if (Configuration::get('PAYPAL_METHOD') == 'BT') {
