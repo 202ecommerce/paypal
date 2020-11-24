@@ -44,6 +44,11 @@ class PaypalOrderCreateRequest extends RequestAbstract
         $order = new OrdersCreateRequest();
         $order->body = $this->buildRequestBody();
         $order->headers = array_merge($this->getHeaders(), $order->headers);
+        
+        Hook::exec('actionPaypalOrderCreateRequest', array(
+            'request' => &$this,
+            'order' => &$order
+        ));
 
         try {
             $exec = $this->client->execute($order);
