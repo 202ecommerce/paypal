@@ -1,7 +1,23 @@
 {
+    "name": "module-partners/paypal",
+    "description": "PrestaShop module PayPal",
+    "homepage": "https://paypal.com/",
+    "license": "AFL-3.0",
+    "authors": [
+        {
+            "name": "202 ecommerce",
+            "email": "tech@202-ecommerce.com"
+        }
+    ],
     "config": {
         "vendor-dir": "vendor",
-        "prepend-autoloader": false
+        "preferred-install": "dist",
+        "classmap-authoritative": true,
+        "optimize-autoloader": true,
+        "prepend-autoloader": false,
+        "platform": {
+            "php": "5.6"
+        }
     },
     "autoload": {
         "psr-4": {
@@ -10,7 +26,8 @@
         },
         "classmap": [
           "classes/",
-          "controllers/front/abstract.php"
+          "controllers/front/abstract.php",
+          "paypal.php"
         ]
     },
     "scripts": {
@@ -19,8 +36,13 @@
         ]
     },
     "require": {
-      "paypal/paypal-checkout-sdk": " 1.*",
-      "guzzlehttp/guzzle": "6.*",
-      "paypal/rest-api-sdk-php": "1.*"
-    }
+        "php": ">=5.6.0",
+        "paypal/paypal-checkout-sdk": " 1.*",
+        "guzzlehttp/guzzle": "6.*",
+        "paypal/rest-api-sdk-php": "1.*"
+    },
+    "require-dev": {
+        "prestashop/php-dev-tools": "^3.4"
+    },
+    "type": "prestashop-module"
 }
