@@ -9,7 +9,6 @@ parameters:
       - ../../paypal.php
       - ../../classes
       - ../../controllers
-      - ../../src
       - ../../upgrade
     
   reportUnmatchedIgnoredErrors: false
