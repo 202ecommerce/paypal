@@ -1551,7 +1551,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         ProcessLoggerHandler::openLogger();
         ProcessLoggerHandler::logInfo(
-            $orderState->name,
+            is_array($orderState->name) ? $orderState->name[$order->id_lang] : $orderState->name,
             isset($transaction['transaction_id']) ? $transaction['transaction_id'] : null,
             $this->currentOrder,
             (int) $id_cart,
