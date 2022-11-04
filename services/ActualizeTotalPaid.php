@@ -41,8 +41,8 @@ class ActualizeTotalPaid
         $order->save();
         $payments = $order->getOrderPayments();
 
-        if (count($payments) > 1) {
-            // todo: implement
+        if (count($payments) != 1) {
+            // todo: implement if none or more than one are found
             return;
         }
 
