@@ -332,7 +332,7 @@ class AdminPayPalSetupController extends AdminPayPalController
             $content['redirectUrl'] = $this->context->link->getAdminLink($this->controller_name);
         }
 
-        $response->setContent(\Tools::jsonEncode($content));
+        $response->setContent(json_encode($content));
 
         return $response->send();
     }

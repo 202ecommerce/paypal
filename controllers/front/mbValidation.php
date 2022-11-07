@@ -47,7 +47,7 @@ class PaypalMbValidationModuleFrontController extends PaypalAbstarctModuleFrontC
     public function postProcess()
     {
         $paypal = Module::getInstanceByName($this->name);
-        $payemtData = Tools::jsonDecode(Tools::getValue('paymentData'));
+        $payemtData = json_decode(Tools::getValue('paymentData'));
         $this->method->setPaymentId($payemtData->paymentId);
         $this->method->setPayerId($payemtData->result->payer->payer_info->payer_id);
         $this->method->setRememberedCards($payemtData->result->rememberedCards);
@@ -58,7 +58,7 @@ class PaypalMbValidationModuleFrontController extends PaypalAbstarctModuleFrontC
             $customer = new Customer($cart->id_customer);
             $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $paypal->id . '&id_order=' . $paypal->currentOrder . '&key=' . $customer->secure_key;
         } catch (PayPal\Exception\PayPalConnectionException $e) {
-            $decoded_message = Tools::jsonDecode($e->getData());
+            $decoded_message = json_decode($e->getData());
             $this->_errors['error_code'] = $e->getCode();
             $this->_errors['error_msg'] = $decoded_message->message;
             $this->_errors['msg_long'] = $decoded_message->name;
