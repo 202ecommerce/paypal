@@ -1499,7 +1499,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         $dont_touch_amount = false,
         $secure_key = false,
         Shop $shop = null,
-        ?string $order_reference = null
+        $order_reference = null
     ) {
         if ($this->needConvert()) {
             $amount_paid_curr = Tools::ps_round(Tools::convertPrice($amount_paid, new Currency($currency_special), true), 2);
