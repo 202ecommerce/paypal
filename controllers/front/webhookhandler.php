@@ -51,7 +51,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
     {
         parent::__construct();
 
-        $this->request = file_get_contents('php://input');
+        $this->request = Tools::file_get_contents('php://input');
         $this->webhookEventHandler = new WebhookEventHandler();
     }
 
