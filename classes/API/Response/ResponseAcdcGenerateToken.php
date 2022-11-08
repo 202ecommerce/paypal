@@ -31,9 +31,6 @@ class ResponseAcdcGenerateToken extends Response
     /** @var string */
     protected $token;
 
-    /** @var string */
-    protected $idToken;
-
     /**
      * @return string
      */
@@ -48,18 +45,6 @@ class ResponseAcdcGenerateToken extends Response
     public function setToken($token)
     {
         $this->token = $token;
-
-        return $this;
-    }
-
-    public function getIdToken()
-    {
-        return (string) $this->idToken;
-    }
-
-    public function setIdToken($idToken)
-    {
-        $this->idToken = (string) $idToken;
 
         return $this;
     }

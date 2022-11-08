@@ -46,7 +46,6 @@ class PaypalAcdcGenerateTokenRequest extends RequestAbstract
                 $response->setSuccess(true)
                     ->setData($exec);
                 $response->setToken($exec->result->client_token);
-                $response->setIdToken($exec->result->id_token);
             } else {
                 $error = new Error();
                 $resultDecoded = json_decode($exec->message);
@@ -61,6 +60,10 @@ class PaypalAcdcGenerateTokenRequest extends RequestAbstract
             $response->setSuccess(false)
                 ->setError($error);
         } catch (\Exception $e) {
+            $error = new Error();
+            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
+            $response->setError($error)->setSuccess(false);
+        } catch (\Throwable $e) { //for php verion > 7.0
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);

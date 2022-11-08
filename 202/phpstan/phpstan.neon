@@ -12,5 +12,8 @@ parameters:
       - ../../controllers
       - ../../upgrade
 
+  ignoreErrors:
+  		- '#Call to an undefined static method Product::getIdProductAttributesByIdAttributes\(\)#'
+
   reportUnmatchedIgnoredErrors: false
   level: 1
