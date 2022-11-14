@@ -68,6 +68,5 @@ class PaypalWebhook extends ObjectModel
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
             'date_completed' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
         ],
-        'collation' => 'utf8_general_ci',
     ];
 }

@@ -164,7 +164,16 @@ class WebhookEventHandler
         $paypalWebhook->event_type = $event->getEventType();
         $paypalWebhook->data = $event->toJSON();
         $paypalWebhook->date_completed = date(PaypalWebhook::DATE_FORMAT);
-        $paypalWebhook->save();
+        // Trying to save a webhook event without field 'data' if there is an error
+        try {
+            $paypalWebhook->save();
+        } catch (Exception $e) {
+            $paypalWebhook->data = '';
+            $paypalOrder->save();
+        } catch (\Throwable $e) {//for php 7.0 and more
+            $paypalWebhook->data = '';
+            $paypalOrder->save();
+        }
 
         if ($psOrderStatus == $this->getStatusMapping()->getAcceptedStatus()) {
             $this->servicePaypalOrder->setTransactionId($paypalOrder, $event->getResource()->id);
