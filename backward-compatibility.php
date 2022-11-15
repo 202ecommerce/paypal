@@ -23,40 +23,10 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  */
-
-namespace PaypalAddons\classes\API\Request\V_1;
-
-use PayPal\Api\Webhook;
-use PaypalAddons\classes\API\Response\Error as PaypalError;
-use PaypalAddons\classes\API\Response\Response;
-
-class GetWebHooks extends RequestAbstract
-{
-    public function execute()
-    {
-        $response = $this->getResponse();
-
-        try {
-            $webHookList = Webhook::getAll($this->getApiContext());
-            $response
-                ->setSuccess(true)
-                ->setData($webHookList->webhooks);
-        } catch (\Throwable $e) {
-            $error = new PaypalError();
-            $error
-                ->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-
-            $response
-                ->setSuccess(false)
-                ->setError($error);
+if (version_compare(phpversion(), '7', '<')) {
+    if (false === class_exists('Throwable') && false === interface_exists('Throwable')) {
+        class Throwable extends Exception
+        {
         }
-
-        return $response;
-    }
-
-    protected function getResponse()
-    {
-        return new Response();
     }
 }

@@ -42,13 +42,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
 
         try {
             $exec = $this->client->execute($getSellerStatus);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-
-            return $response->setSuccess(false)->setError($error);
-        } catch (\Throwable $e) {// for php version > 7.0
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

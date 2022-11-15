@@ -139,7 +139,7 @@ class PaypalOrderCreateRequest extends RequestAbstractMB
 
         try {
             $payment->create($this->getApiContext());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error
                 ->setErrorCode($e->getCode())

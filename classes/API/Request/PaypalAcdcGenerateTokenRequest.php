@@ -59,11 +59,7 @@ class PaypalAcdcGenerateTokenRequest extends RequestAbstract
 
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
-            $response->setError($error)->setSuccess(false);
-        } catch (\Throwable $e) { //for php verion > 7.0
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);

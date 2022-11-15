@@ -78,7 +78,7 @@ class PaypalOrderCreateRequest extends RequestAbstract
             $error->setMessage($resultDecoded->details[0]->description)->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

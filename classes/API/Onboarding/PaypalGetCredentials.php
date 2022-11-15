@@ -73,7 +73,7 @@ class PaypalGetCredentials
                 ->setClientId($responseDecode->client_id)
                 ->setSecret($responseDecode->client_secret)
                 ->setData($returnResponse);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);

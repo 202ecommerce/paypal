@@ -87,7 +87,7 @@ class PaypalOrderRefundRequest extends RequestAbstract
             }
         } catch (OrderFullyRefundedException $e) {
             $response->setSuccess(false)->setAlreadyRefunded(true);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);

@@ -54,8 +54,6 @@ class WhiteListService
 
         try {
             return json_decode($list, true);
-        } catch (\Exception $e) {
-            return [];
         } catch (\Throwable $e) {
             return [];
         }

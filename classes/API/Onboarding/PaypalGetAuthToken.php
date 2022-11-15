@@ -84,7 +84,7 @@ class PaypalGetAuthToken
                 ->setRefreshToken($responseDecode->refresh_token)
                 ->setTokenType($responseDecode->token_type)
                 ->setNonce($responseDecode->nonce);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);

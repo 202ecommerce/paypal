@@ -55,7 +55,7 @@ class PaypalAccessTokenRequest extends RequestAbstract
             $error->setMessage($resultDecoded->error_description)->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())
                 ->setMessage($e->getMessage());

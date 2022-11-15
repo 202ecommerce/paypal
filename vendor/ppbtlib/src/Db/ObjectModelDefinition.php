@@ -38,7 +38,7 @@ class ObjectModelDefinition
      * Defaults.
      */
     const CHARSET   = 'utf8';
-    const COLLATION = 'utf8_general_ci';
+    const COLLATION = 'DEFAULT';
     const ENGINE    = _MYSQL_ENGINE_;
     const DB_PREFIX = _DB_PREFIX_;
     /**
