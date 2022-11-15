@@ -167,7 +167,7 @@ class WebhookEventHandler
         // Trying to save a webhook event without field 'data' if there is an error
         try {
             $paypalWebhook->save();
-        }  catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $paypalWebhook->data = '';
             $paypalOrder->save();
         }
