@@ -36,48 +36,6 @@ class TrackingParameters
 
     const STATUS_SHIPPED = 'SHIPPED';
 
-    public static function getGermanCarriers()
-    {
-        return [
-            [
-                'key' => 'ASENDIA_DE',
-                'name' => 'Asendia Germany',
-            ],
-            [
-                'key' => 'DELTEC_DE',
-                'name' => 'Deltec Germany',
-            ],
-            [
-                'key' => 'DEUTSCHE_DE',
-                'name' => 'Deutsche',
-            ],
-            [
-                'key' => 'DHL_DEUTSCHE_POST',
-                'name' => 'DHL Deutsche Post',
-            ],
-            [
-                'key' => 'DPD_DE',
-                'name' => 'DPD Germany',
-            ],
-            [
-                'key' => 'GLS_DE',
-                'name' => 'GLS Germany',
-            ],
-            [
-                'key' => 'HERMES_DE',
-                'name' => 'Hermes Germany',
-            ],
-            [
-                'key' => 'TNT_DE',
-                'name' => 'TNT Germany',
-            ],
-            [
-                'key' => 'OTHER',
-                'name' => 'Other',
-            ],
-        ];
-    }
-
     public static function getPaypalStatusList()
     {
         return [
