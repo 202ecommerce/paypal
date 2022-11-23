@@ -41,7 +41,7 @@ class GetWebHooks extends RequestAbstract
             $response
                 ->setSuccess(true)
                 ->setData($webHookList->webhooks);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new PaypalError();
             $error
                 ->setMessage($e->getMessage())

@@ -1,0 +1,47 @@
+name: 🐛 Bug Report
+description: Report an issue in PayPal module for PrestaShop. DO NOT disclose security issues here!
+labels: [ "Bug", "New" ]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the bug and add screenshots
+      description: What went wrong? If applicable, add screenshots or screen recordings to help explain your problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: Explain what you expected to happen instead.
+    validations:
+      required: false
+  - type: textarea
+    id: steps-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: List the exact steps to reproduce the issue
+      placeholder: |
+        1. Go to '...'
+
+        2. Click on '....'
+
+        3. Scroll down to '....'
+
+        4. See error
+    validations:
+      required: true
+  - type: input
+    id: prestashop-version
+    attributes:
+      label: PrestaShop version(s) where the bug happened
+      placeholder: "e.g., 1.7.5.2 or 1.7.8.0"
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP version(s) where the bug happened
+      placeholder: "e.g., 7.1 or 8.0"
+    validations:
+      required: false

@@ -15,11 +15,10 @@
           <td>
             <select name="carrier_map[]" id="">
               <option value="0">{l s='Select carrier' mod='paypal'}</option>
-              {foreach from=$mapService->getPaypalCarriers() item=paypalCarrier}
+              {foreach from=$mapService->getPaypalCarriersByCountry() item=paypalCarrier}
                 <option
                         value="{$carrier['id_reference']|escape:'htmlall':'utf-8'},{$paypalCarrier['key']|escape:'htmlall':'utf-8'}"
-                        {if $selectedCarrier == $paypalCarrier['key']}selected{/if}
-                >
+                        {if $selectedCarrier == $paypalCarrier['key']}selected{/if}>
 
                     {$paypalCarrier['name']|escape:'htmlall':'utf-8'}
 

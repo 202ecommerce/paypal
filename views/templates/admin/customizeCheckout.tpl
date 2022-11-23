@@ -51,5 +51,9 @@
     {if isset($formAdvanced)}
         {$formAdvanced nofilter} {* the variable contains html code *}
     {/if}
+
+    {if isset($formWhiteList)}
+        {$formWhiteList nofilter} {* the variable contains html code *}
+    {/if}
 {/block}
 

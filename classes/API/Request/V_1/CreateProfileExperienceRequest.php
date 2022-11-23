@@ -62,7 +62,7 @@ class CreateProfileExperienceRequest extends RequestAbstractMB
         try {
             // Use this call to create a profile.
             $createProfileResponse = $webProfile->create($this->getApiContext());
-        } catch (\Exception $ex) {
+        } catch (\Throwable $ex) {
             $module = Module::getInstanceByName($this->method->name);
             $error = new Error();
             $error->setMessage($module->l('An error occurred while creating your web experience. Check your credentials.', get_class($this)));

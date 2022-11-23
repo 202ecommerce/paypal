@@ -26,6 +26,7 @@
 
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\PaypalApiManagerMB;
+use PaypalAddons\classes\WhiteList\WhiteListService;
 use PaypalAddons\services\ServicePaypalVaulting;
 
 /**
@@ -65,10 +66,14 @@ class MethodMB extends AbstractMethodPaypal
         'paypal_os_refunded_paypal',
     ];
 
+    /** @var WhiteListService */
+    protected $whiteListService;
+
     public function __construct()
     {
         $this->servicePaypalVaulting = new ServicePaypalVaulting();
         $this->paypalApiManager = new PaypalApiManagerMB($this);
+        $this->whiteListService = new WhiteListService();
     }
 
     /**
@@ -153,6 +158,10 @@ class MethodMB extends AbstractMethodPaypal
      */
     public function isConfigured($mode = null)
     {
+        if ($this->whiteListService->isEnabled() && !$this->whiteListService->isEligibleContext()) {
+            return false;
+        }
+
         $isMbConfigured = (bool) Configuration::get('PAYPAL_MB_EXPERIENCE');
 
         // If a payment by PayPal account is enabled and the credentials for EC are not setted, so it should use MB credentials

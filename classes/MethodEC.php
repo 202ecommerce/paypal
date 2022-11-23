@@ -26,6 +26,7 @@
 
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\PaypalApiManager;
+use PaypalAddons\classes\WhiteList\WhiteListService;
 
 /**
  * Class MethodEC.
@@ -62,9 +63,13 @@ class MethodEC extends AbstractMethodPaypal
     /** @var bool */
     protected $isSandbox;
 
+    /** @var WhiteListService */
+    protected $whiteListService;
+
     public function __construct()
     {
         $this->paypalApiManager = new PaypalApiManager($this);
+        $this->whiteListService = new WhiteListService();
     }
 
     /**
@@ -184,6 +189,10 @@ class MethodEC extends AbstractMethodPaypal
      */
     public function isConfigured()
     {
+        if ($this->whiteListService->isEnabled() && !$this->whiteListService->isEligibleContext()) {
+            return false;
+        }
+
         if ($this->isCredentialsSetted() === false) {
             return false;
         }

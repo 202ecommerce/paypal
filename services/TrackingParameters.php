@@ -27,29 +27,50 @@
 namespace PaypalAddons\services;
 
 use Configuration;
+use Country;
 use Exception;
 use PaypalAddons\classes\Constants\TrackingParameters as Map;
 use PrestaShopLogger;
 
 class TrackingParameters
 {
+    /** @var array */
     protected $carrierMap;
+    /** @var array */
+    protected $paypalCarriers = [];
+    /** @var Country */
+    protected $defaultCountry;
 
     public function __construct()
     {
-        try {
-            $this->carrierMap = json_decode(Configuration::get(Map::CARRIER_MAP), true);
-        } catch (Exception $e) {
-        }
-
-        if (false == is_array($this->carrierMap)) {
-            $this->carrierMap = [];
-        }
+        $this->initDefaultCountry();
+        $this->initCarrierMap();
+        $this->initPaypalCarrierList();
     }
 
     public function getPaypalCarriers()
     {
-        return Map::getGermanCarriers();
+        return $this->paypalCarriers;
+    }
+
+    public function getPaypalCarriersByCountry($isoCountry = null)
+    {
+        $carriers = [
+            [
+                'key' => Map::CARRIER_OTHER,
+                 'name' => Map::CARRIER_OTHER,
+            ],
+        ];
+
+        if ($isoCountry === null) {
+            $isoCountry = $this->defaultCountry->iso_code;
+        }
+
+        if (empty($this->paypalCarriers[strtoupper($isoCountry)])) {
+            return $carriers;
+        }
+
+        return array_merge($carriers, $this->paypalCarriers[strtoupper($isoCountry)]);
     }
 
     public function getPaypalCarrierByPsCarrier($carrierRef)
@@ -61,16 +82,14 @@ class TrackingParameters
         return $this->carrierMap[$carrierRef];
     }
 
-    public function addCarrierMap($psCarrierRef, $paypalCarrier)
-    {
-        $this->carrierMap[$psCarrierRef] = $paypalCarrier;
-        $this->updateCarrierMap();
-    }
-
     public function setCarrierMap(array $map)
     {
-        $this->carrierMap = $map;
+        $this->carrierMap = [
+            $this->defaultCountry->iso_code => $map,
+        ];
         $this->updateCarrierMap();
+
+        return $this;
     }
 
     protected function updateCarrierMap()
@@ -122,5 +141,50 @@ class TrackingParameters
         }
 
         return false;
+    }
+
+    protected function initDefaultCountry()
+    {
+        try {
+            $this->defaultCountry = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
+        } catch (\Throwable $e) {
+            $this->defaultCountry = new Country();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function initPaypalCarrierList()
+    {
+        try {
+            $this->paypalCarriers = json_decode(file_get_contents(_PS_MODULE_DIR_ . 'paypal/paypal-carriers.json'), true);
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function initCarrierMap()
+    {
+        try {
+            $carrierMap = json_decode(Configuration::get(Map::CARRIER_MAP), true);
+        } catch (Exception $e) {
+            $this->carrierMap = [];
+
+            return false;
+        }
+
+        if (empty($carrierMap[$this->defaultCountry->iso_code])) {
+            $carrierMap = [];
+        } else {
+            $carrierMap = $carrierMap[$this->defaultCountry->iso_code];
+        }
+
+        $this->carrierMap = $carrierMap;
+
+        return true;
     }
 }

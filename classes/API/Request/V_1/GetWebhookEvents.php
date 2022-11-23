@@ -51,7 +51,7 @@ class GetWebhookEvents extends RequestAbstract
             $response
                 ->setSuccess(true)
                 ->setData($eventList);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new PaypalError();
             $error
                 ->setMessage($e->getMessage())

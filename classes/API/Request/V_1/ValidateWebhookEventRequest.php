@@ -93,7 +93,7 @@ class ValidateWebhookEventRequest extends RequestAbstract
                 $this->method->isSandbox()
             );
             ProcessLoggerHandler::closeLogger();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $message = implode(
                 '; ',
                 [

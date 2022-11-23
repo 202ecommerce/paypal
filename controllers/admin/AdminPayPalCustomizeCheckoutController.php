@@ -37,6 +37,7 @@ use PaypalAddons\classes\Form\Field\SelectOption;
 use PaypalAddons\classes\Form\Field\TextInput;
 use PaypalAddons\classes\Form\FormInterface;
 use PaypalAddons\classes\Form\TrackingParametersForm;
+use PaypalAddons\classes\Form\WhiteListForm;
 use PaypalAddons\classes\PUI\PuiFunctionality;
 use PaypalAddons\classes\Shortcut\Form\Definition\CustomizeButtonStyleSectionDefinition;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
@@ -107,6 +108,7 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
         ];
 
         $this->forms['trackingParameters'] = new TrackingParametersForm();
+        $this->forms['whiteList'] = new WhiteListForm();
     }
 
     public function initContent()
@@ -126,16 +128,19 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
 
         $this->initForm();
         $this->context->smarty->assign('formBehavior', $this->renderForm());
-
-        if ($this->method == 'PPP' && $this->initPuiFunctionality()->isAvailable(false)) {
-            $this->clearFieldsForm();
-            $this->initTrackingParametersForm();
-            $this->context->smarty->assign('formTrackingParameters', $this->renderForm());
-        }
+        //Setting form for tracking info
+        $this->clearFieldsForm();
+        $this->initTrackingParametersForm();
+        $this->context->smarty->assign('formTrackingParameters', $this->renderForm());
 
         $this->clearFieldsForm();
         $this->initAdvancedForm();
         $this->context->smarty->assign('formAdvanced', $this->renderForm());
+
+        //Setting form for white list of IPs
+        $this->clearFieldsForm();
+        $this->initWhiteListForm();
+        $this->context->smarty->assign('formWhiteList', $this->renderForm());
 
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'customizeCheckout.tpl');
         $this->context->smarty->assign('content', $this->content);
@@ -1241,5 +1246,19 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
 
         $this->fields_form['form']['form'] = $this->forms['trackingParameters']->getFields();
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $this->forms['trackingParameters']->getValues());
+    }
+
+    protected function initWhiteListForm()
+    {
+        if (empty($this->forms['whiteList'])) {
+            return;
+        }
+
+        if (false == $this->forms['whiteList'] instanceof FormInterface) {
+            return;
+        }
+
+        $this->fields_form['form']['form'] = $this->forms['whiteList']->getFields();
+        $this->tpl_form_vars = array_merge($this->tpl_form_vars, $this->forms['whiteList']->getValues());
     }
 }

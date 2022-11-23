@@ -23,32 +23,12 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  */
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-namespace PaypalAddons\services;
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 
-use Order;
-use OrderPayment;
-
-class ActualizeTotalPaid
-{
-    /**
-     * @param Order $order
-     * @param float $totalPaid
-     */
-    public function actualize(Order $order, $totalPaid)
-    {
-        $order->total_paid_real = $totalPaid;
-        $order->save();
-        $payments = $order->getOrderPayments();
-
-        if (count($payments) != 1) {
-            // todo: implement if none or more than one are found
-            return;
-        }
-
-        /** @var OrderPayment $payment */
-        $payment = array_shift($payments);
-        $payment->amount = (float) $totalPaid;
-        $payment->save();
-    }
-}
+header('Location: ../');
+exit;

@@ -11,7 +11,8 @@
     "doc-build": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml",
     "doc-watch": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml -w -b",
     "lint-css": "stylelint \"_dev/scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache --fix",
-    "lint-css-fix": "stylelint \"_dev/scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache --fix"
+    "lint-css-fix": "stylelint \"_dev/scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache --fix",
+    "fetch-paypal-carriers": "node ./_dev/modules/fetch-paypal-carriers/main.js ./paypal-carriers.json"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,8 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-html": "^5.0.5",
     "eslint-plugin-import": "^2.22.1",
+    "intl-tel-input": "17.0.16",
+    "jsdom": "^20.0.3",
     "mini-css-extract-plugin": "^0.4.3",
     "node-sass": "^4.12.0",
     "npm-run-all": "^4.1.5",
@@ -49,7 +52,6 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",
-    "webpack-fix-style-only-entries": "^0.2.2",
-    "intl-tel-input": "17.0.16"
+    "webpack-fix-style-only-entries": "^0.2.2"
   }
 }

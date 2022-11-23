@@ -23,32 +23,10 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  */
-
-namespace PaypalAddons\services;
-
-use Order;
-use OrderPayment;
-
-class ActualizeTotalPaid
-{
-    /**
-     * @param Order $order
-     * @param float $totalPaid
-     */
-    public function actualize(Order $order, $totalPaid)
-    {
-        $order->total_paid_real = $totalPaid;
-        $order->save();
-        $payments = $order->getOrderPayments();
-
-        if (count($payments) != 1) {
-            // todo: implement if none or more than one are found
-            return;
+if (version_compare(phpversion(), '7', '<')) {
+    if (false === class_exists('Throwable') && false === interface_exists('Throwable')) {
+        class Throwable extends Exception
+        {
         }
-
-        /** @var OrderPayment $payment */
-        $payment = array_shift($payments);
-        $payment->amount = (float) $totalPaid;
-        $payment->save();
     }
 }

@@ -24,31 +24,11 @@
  *  @copyright PayPal
  */
 
-namespace PaypalAddons\services;
+namespace PaypalAddons\classes\Constants;
 
-use Order;
-use OrderPayment;
-
-class ActualizeTotalPaid
+class WhiteList
 {
-    /**
-     * @param Order $order
-     * @param float $totalPaid
-     */
-    public function actualize(Order $order, $totalPaid)
-    {
-        $order->total_paid_real = $totalPaid;
-        $order->save();
-        $payments = $order->getOrderPayments();
+    const ENABLED = 'PAYPAL_WHITE_LIST_ENABLED';
 
-        if (count($payments) != 1) {
-            // todo: implement if none or more than one are found
-            return;
-        }
-
-        /** @var OrderPayment $payment */
-        $payment = array_shift($payments);
-        $payment->amount = (float) $totalPaid;
-        $payment->save();
-    }
+    const LIST_IP = 'PAYPAL_WHITE_LIST_IP';
 }

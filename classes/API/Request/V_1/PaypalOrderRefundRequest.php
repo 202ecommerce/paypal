@@ -70,7 +70,7 @@ class PaypalOrderRefundRequest extends RequestAbstractMB
                 ->setDateTransaction($this->getDateTransaction($exec));
 
             return $response;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error
                 ->setMessage($e->getMessage())

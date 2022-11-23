@@ -28,6 +28,7 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\PaypalApiManager;
 use PaypalAddons\classes\PUI\DataUserForm;
 use PaypalAddons\classes\PuiMethodInterface;
+use PaypalAddons\classes\WhiteList\WhiteListService;
 
 /**
  * Class MethodPPP
@@ -77,9 +78,13 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         'paypal_os_accepted_two',
     ];
 
+    /** @var WhiteListService */
+    protected $whiteListService;
+
     public function __construct()
     {
         $this->paypalApiManager = new PaypalApiManager($this);
+        $this->whiteListService = new WhiteListService();
     }
 
     /**
@@ -144,6 +149,10 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
      */
     public function isConfigured()
     {
+        if ($this->whiteListService->isEnabled() && !$this->whiteListService->isEligibleContext()) {
+            return false;
+        }
+
         if ($this->isCredentialsSetted() === false) {
             return false;
         }

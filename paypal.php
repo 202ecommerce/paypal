@@ -1008,8 +1008,21 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 $this->l('Should use the PayPal wallet button ') // todo: specify message
             )
         );
+        $is_virtual = 0;
+        foreach ($params['cart']->getProducts() as $product) {
+            if ($product['is_virtual']) {
+                $is_virtual = 1;
+                break;
+            }
+        }
+        $additionalInformation = $this->getShortcutPaymentStep()->render();
+
+        if (!$is_virtual && Configuration::get('PAYPAL_API_ADVANTAGES')) {
+            $additionalInformation .= $this->context->smarty->fetch('module:paypal/views/templates/front/payment_infos.tpl');
+        }
+
         $paymentOption->setModuleName($this->name);
-        $paymentOption->setAdditionalInformation($this->getShortcutPaymentStep()->render());
+        $paymentOption->setAdditionalInformation($additionalInformation);
         $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
 
         return $paymentOption;
@@ -3119,11 +3132,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         /** @var $paypalOrder PaypalOrder */
         $paypalOrder = PaypalOrder::loadByOrderId($params['order']->id);
-
-        if ($paypalOrder->payment_tool != 'PAY_UPON_INVOICE') {
-            return;
-        }
-
         $method = AbstractMethodPaypal::load($this->paypal_method);
         $response = $method->addOrderTrackingInfo($paypalOrder);
 
