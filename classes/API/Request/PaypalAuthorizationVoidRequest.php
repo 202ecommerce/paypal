@@ -26,12 +26,14 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseAuthorizationVoid;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Payments\AuthorizationsVoidRequest;
 use PayPalHttp\HttpException;
+use Throwable;
 
 class PaypalAuthorizationVoidRequest extends RequestAbstract
 {
@@ -69,7 +71,11 @@ class PaypalAuthorizationVoidRequest extends RequestAbstract
             $error->setMessage($resultDecoded->details[0]->description)->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
+            $response->setError($error)->setSuccess(false);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);

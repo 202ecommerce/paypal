@@ -26,10 +26,12 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PaypalAddons\classes\API\ExtensionSDK\AcdcGenerateTokenRequest;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseAcdcGenerateToken;
 use PayPalHttp\HttpException;
+use Throwable;
 
 class PaypalAcdcGenerateTokenRequest extends RequestAbstract
 {
@@ -59,7 +61,11 @@ class PaypalAcdcGenerateTokenRequest extends RequestAbstract
 
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
+            $response->setError($error)->setSuccess(false);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);

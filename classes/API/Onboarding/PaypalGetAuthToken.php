@@ -26,10 +26,12 @@
 
 namespace PaypalAddons\classes\API\Onboarding;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseGetAuthToken;
+use Throwable;
 
 class PaypalGetAuthToken
 {
@@ -84,7 +86,11 @@ class PaypalGetAuthToken
                 ->setRefreshToken($responseDecode->refresh_token)
                 ->setTokenType($responseDecode->token_type)
                 ->setNonce($responseDecode->nonce);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setMessage($e->getMessage())->setErrorCode($e->getCode());
+            $returnResponse->setError($error)->setSuccess(false);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);

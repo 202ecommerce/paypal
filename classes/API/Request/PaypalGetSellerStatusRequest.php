@@ -26,10 +26,12 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PayPal;
 use PaypalAddons\classes\API\ExtensionSDK\GetSellerStatus;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\services\Core\PaypalMerchantId;
+use Throwable;
 use Tools;
 
 class PaypalGetSellerStatusRequest extends RequestAbstract
@@ -42,7 +44,13 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
 
         try {
             $exec = $this->client->execute($getSellerStatus);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setMessage($e->getMessage())
+                ->setErrorCode($e->getCode());
+
+            return $response->setSuccess(false)->setError($error);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

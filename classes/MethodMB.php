@@ -291,6 +291,8 @@ class MethodMB extends AbstractMethodPaypal
         try {
             $response = $this->init();
             $context->cookie->__set('paypal_plus_mb_payment', $this->paymentId);
+        } catch (Throwable $e) {
+            return false;
         } catch (Exception $e) {
             return false;
         }

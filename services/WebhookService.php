@@ -29,6 +29,7 @@ namespace PaypalAddons\services;
 use Db;
 use DbQuery;
 use Exception;
+use Throwable;
 
 class WebhookService
 {
@@ -91,6 +92,8 @@ class WebhookService
 
         try {
             $result = Db::getInstance()->executeS($query);
+        } catch (Throwable $e) {
+            return $webhooks;
         } catch (Exception $e) {
             return $webhooks;
         }
@@ -104,6 +107,7 @@ class WebhookService
                 $webhook = new \PaypalWebhook();
                 $webhook->hydrate($row);
                 $webhooks[] = $webhook;
+            } catch (Throwable $e) {
             } catch (Exception $e) {
             }
         }

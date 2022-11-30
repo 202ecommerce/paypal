@@ -27,9 +27,11 @@
 namespace PaypalAddons\classes\API\Request\V_1;
 
 use Configuration;
+use Exception;
 use Module;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseCreateProfileExperience;
+use Throwable;
 use Tools;
 
 class CreateProfileExperienceRequest extends RequestAbstractMB
@@ -62,7 +64,13 @@ class CreateProfileExperienceRequest extends RequestAbstractMB
         try {
             // Use this call to create a profile.
             $createProfileResponse = $webProfile->create($this->getApiContext());
-        } catch (\Throwable $ex) {
+        } catch (Throwable $ex) {
+            $module = Module::getInstanceByName($this->method->name);
+            $error = new Error();
+            $error->setMessage($module->l('An error occurred while creating your web experience. Check your credentials.', get_class($this)));
+
+            return $response->setError($error)->setSuccess(false);
+        } catch (Exception $ex) {
             $module = Module::getInstanceByName($this->method->name);
             $error = new Error();
             $error->setMessage($module->l('An error occurred while creating your web experience. Check your credentials.', get_class($this)));

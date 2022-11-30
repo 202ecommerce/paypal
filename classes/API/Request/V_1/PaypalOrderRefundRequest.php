@@ -27,6 +27,7 @@
 namespace PaypalAddons\classes\API\Request\V_1;
 
 use DateTime;
+use Exception;
 use PayPal;
 use PayPal\Api\Amount;
 use PayPal\Api\DetailedRefund;
@@ -37,6 +38,7 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseOrderRefund;
 use PaypalOrder;
+use Throwable;
 
 class PaypalOrderRefundRequest extends RequestAbstractMB
 {
@@ -70,7 +72,16 @@ class PaypalOrderRefundRequest extends RequestAbstractMB
                 ->setDateTransaction($this->getDateTransaction($exec));
 
             return $response;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error
+                ->setMessage($e->getMessage())
+                ->setErrorCode($e->getCode());
+
+            return $response
+                ->setSuccess(false)
+                ->setError($error);
+        } catch (Exception $e) {
             $error = new Error();
             $error
                 ->setMessage($e->getMessage())

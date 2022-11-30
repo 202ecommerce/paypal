@@ -46,6 +46,7 @@ use PaypalAddons\services\Order\RefundAmountCalculator;
 use PaypalAddons\services\StatusMapping;
 use PaypalPPBTlib\AbstractMethod;
 use PrestaShopLogger;
+use Throwable;
 use Tools;
 use Validate;
 
@@ -473,6 +474,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
         try {
             $key[] = $cart->getOrderTotal(true, Cart::BOTH);
+        } catch (Throwable $e) {
+            PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
         } catch (Exception $e) {
             PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
         }

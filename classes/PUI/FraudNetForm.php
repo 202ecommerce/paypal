@@ -28,7 +28,9 @@ namespace PaypalAddons\classes\PUI;
 
 use Address;
 use Context;
+use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
+use Throwable;
 
 class FraudNetForm
 {
@@ -56,7 +58,9 @@ class FraudNetForm
 
         try {
             return Context::getContext()->smarty->fetch('module:paypal/views/templates/pui/fraudNetForm.tpl');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            return '';
+        } catch (Exception $e) {
             return '';
         }
     }

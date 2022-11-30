@@ -177,6 +177,8 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         try {
             $approval_url = $this->init()->getApproveLink();
             $context->cookie->__set('paypal_plus_payment', $this->paymentId);
+        } catch (Throwable $e) {
+            return false;
         } catch (Exception $e) {
             return false;
         }

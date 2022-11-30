@@ -26,9 +26,11 @@
 
 namespace PaypalAddons\classes\API\Request\V_1;
 
+use Exception;
 use PayPal\Api\Webhook;
 use PaypalAddons\classes\API\Response\Error as PaypalError;
 use PaypalAddons\classes\API\Response\Response;
+use Throwable;
 
 class GetWebHooks extends RequestAbstract
 {
@@ -41,7 +43,16 @@ class GetWebHooks extends RequestAbstract
             $response
                 ->setSuccess(true)
                 ->setData($webHookList->webhooks);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new PaypalError();
+            $error
+                ->setMessage($e->getMessage())
+                ->setErrorCode($e->getCode());
+
+            $response
+                ->setSuccess(false)
+                ->setError($error);
+        } catch (Exception $e) {
             $error = new PaypalError();
             $error
                 ->setMessage($e->getMessage())

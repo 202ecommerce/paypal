@@ -45,6 +45,7 @@ use PaypalOrder;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PaypalWebhook;
 use Shop;
+use Throwable;
 use Tools;
 use Validate;
 
@@ -167,7 +168,10 @@ class WebhookEventHandler
         // Trying to save a webhook event without field 'data' if there is an error
         try {
             $paypalWebhook->save();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $paypalWebhook->data = '';
+            $paypalOrder->save();
+        } catch (Exception $e) {
             $paypalWebhook->data = '';
             $paypalOrder->save();
         }
@@ -188,6 +192,8 @@ class WebhookEventHandler
 
         try {
             return (bool) Db::getInstance()->getValue($query);
+        } catch (Throwable $e) {
+            return false;
         } catch (Exception $e) {
             return false;
         }
@@ -234,11 +240,7 @@ class WebhookEventHandler
      */
     protected function isCaptureAuthorization(WebhookEvent $event)
     {
-        try {
-            return (bool) $this->getAuthorizationId($event);
-        } catch (Exception $e) {
-            return false;
-        }
+        return (bool) $this->getAuthorizationId($event);
     }
 
     /**
@@ -250,6 +252,8 @@ class WebhookEventHandler
     {
         try {
             return $event->getResource()->supplementary_data->related_ids->authorization_id;
+        } catch (Throwable $e) {
+            return '';
         } catch (Exception $e) {
             return '';
         }
@@ -264,6 +268,8 @@ class WebhookEventHandler
     {
         try {
             return (float) $event->getResource()->amount->value;
+        } catch (Throwable $e) {
+            return 0;
         } catch (Exception $e) {
             return 0;
         }
@@ -294,13 +300,11 @@ class WebhookEventHandler
 
         $order = array_shift($orders);
 
-        try {
-            $totalPaid = $webhookEvent->resource->amount->value;
-        } catch (Exception $e) {
+        if (empty($webhookEvent->resource->amount->value)) {
             return;
         }
 
-        $this->getActualizeTotalPaid()->actualize($order, $totalPaid);
+        $this->getActualizeTotalPaid()->actualize($order, $webhookEvent->resource->amount->value);
     }
 
     /**

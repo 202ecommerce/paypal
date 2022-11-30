@@ -28,10 +28,7 @@
           "classes/",
           "controllers/front/abstract.php",
           "paypal.php"
-        ],
-      "files": [
-        "backward-compatibility.php"
-      ]
+        ]
     },
     "scripts": {
         "pre-autoload-dump": [

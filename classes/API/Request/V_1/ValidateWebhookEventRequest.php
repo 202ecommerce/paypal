@@ -33,6 +33,7 @@ use PaypalAddons\classes\API\Response\Error as PaypalError;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\Webhook\WebhookId;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use Throwable;
 
 class ValidateWebhookEventRequest extends RequestAbstract
 {
@@ -93,7 +94,36 @@ class ValidateWebhookEventRequest extends RequestAbstract
                 $this->method->isSandbox()
             );
             ProcessLoggerHandler::closeLogger();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $message = implode(
+                '; ',
+                [
+                    'Message: ' . $e->getMessage(),
+                    'File: ' . $e->getFile(),
+                    'Line: ' . $e->getLine(),
+                    'Correlation-Id: ' . (isset($this->headers['CORRELATION-ID']) ? $this->headers['CORRELATION-ID'] : ''),
+                ]
+            );
+            ProcessLoggerHandler::openLogger();
+            ProcessLoggerHandler::logError(
+                '[ValidateWebhookEventRequest::execut()]: ' . $message,
+                null,
+                null,
+                null,
+                null,
+                null,
+                $this->method->isSandbox()
+            );
+            ProcessLoggerHandler::closeLogger();
+            $error = new PaypalError();
+            $error
+                ->setMessage($message)
+                ->setErrorCode($e->getCode());
+
+            $response
+                ->setSuccess(false)
+                ->setError($error);
+        } catch (Exception $e) {
             $message = implode(
                 '; ',
                 [
@@ -136,6 +166,8 @@ class ValidateWebhookEventRequest extends RequestAbstract
     {
         try {
             return (new WebhookId($this->method))->get();
+        } catch (Throwable $e) {
+            return '';
         } catch (Exception $e) {
             return '';
         }

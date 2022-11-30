@@ -31,6 +31,7 @@ use Country;
 use Exception;
 use PaypalAddons\classes\Constants\TrackingParameters as Map;
 use PrestaShopLogger;
+use Throwable;
 
 class TrackingParameters
 {
@@ -96,6 +97,10 @@ class TrackingParameters
     {
         try {
             return Configuration::updateValue(Map::CARRIER_MAP, json_encode($this->carrierMap));
+        } catch (Throwable $e) {
+            PrestaShopLogger::addLog('[paypal][TrackingParameters::updateCarrierMap()] Error: ' . $e->getMessage());
+
+            return false;
         } catch (Exception $e) {
             PrestaShopLogger::addLog('[paypal][TrackingParameters::updateCarrierMap()] Error: ' . $e->getMessage());
 
@@ -147,7 +152,11 @@ class TrackingParameters
     {
         try {
             $this->defaultCountry = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $this->defaultCountry = new Country();
+
+            return false;
+        } catch (Exception $e) {
             $this->defaultCountry = new Country();
 
             return false;
@@ -160,7 +169,9 @@ class TrackingParameters
     {
         try {
             $this->paypalCarriers = json_decode(file_get_contents(_PS_MODULE_DIR_ . 'paypal/paypal-carriers.json'), true);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            return false;
+        } catch (Exception $e) {
             return false;
         }
 
@@ -171,6 +182,10 @@ class TrackingParameters
     {
         try {
             $carrierMap = json_decode(Configuration::get(Map::CARRIER_MAP), true);
+        } catch (Throwable $e) {
+            $this->carrierMap = [];
+
+            return false;
         } catch (Exception $e) {
             $this->carrierMap = [];
 

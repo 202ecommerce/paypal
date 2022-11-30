@@ -31,6 +31,7 @@ use PayPal\Api\Webhook;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
+use Throwable;
 
 class DeleteWebHook extends RequestAbstract
 {
@@ -58,6 +59,14 @@ class DeleteWebHook extends RequestAbstract
         try {
             $result = $this->webhook->delete($this->getApiContext());
             $response->setSuccess(true);
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error
+                ->setErrorCode($e->getCode())
+                ->setMessage($e->getMessage());
+            $response
+                ->setSuccess(false)
+                ->setError($error);
         } catch (Exception $e) {
             $error = new Error();
             $error

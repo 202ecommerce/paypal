@@ -30,6 +30,7 @@ use Address;
 use Cart;
 use Context;
 use Country;
+use Exception;
 use Module;
 use PayPal;
 use PayPal\Api\Amount;
@@ -45,6 +46,7 @@ use PayPal\Api\Transaction;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseOrderCreate;
 use State;
+use Throwable;
 use Tools;
 
 class PaypalOrderCreateRequest extends RequestAbstractMB
@@ -139,7 +141,14 @@ class PaypalOrderCreateRequest extends RequestAbstractMB
 
         try {
             $payment->create($this->getApiContext());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error
+                ->setErrorCode($e->getCode())
+                ->setMessage($e->getMessage());
+
+            return $response->setError($error)->setSuccess(false);
+        } catch (Exception $e) {
             $error = new Error();
             $error
                 ->setErrorCode($e->getCode())

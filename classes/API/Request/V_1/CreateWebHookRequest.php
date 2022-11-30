@@ -33,6 +33,7 @@ use PaypalAddons\classes\API\Response\Error as PaypalError;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\Constants\WebHookType;
 use PaypalAddons\classes\Webhook\WebhookHandlerUrl;
+use Throwable;
 
 class CreateWebHookRequest extends RequestAbstract
 {
@@ -55,6 +56,14 @@ class CreateWebHookRequest extends RequestAbstract
             $response
                 ->setSuccess(true)
                 ->setData($result);
+        } catch (Throwable $e) {
+            $error = new PaypalError();
+            $error
+                ->setErrorCode($e->getCode())
+                ->setMessage($e->getMessage());
+            $response
+                ->setSuccess(false)
+                ->setError($error);
         } catch (Exception $e) {
             $error = new PaypalError();
             $error

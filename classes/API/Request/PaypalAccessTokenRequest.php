@@ -26,10 +26,12 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\PaypalResponseAccessToken;
 use PayPalCheckoutSdk\Core\AccessTokenRequest;
 use PayPalHttp\HttpException;
+use Throwable;
 
 class PaypalAccessTokenRequest extends RequestAbstract
 {
@@ -55,7 +57,13 @@ class PaypalAccessTokenRequest extends RequestAbstract
             $error->setMessage($resultDecoded->error_description)->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setErrorCode($e->getCode())
+                ->setMessage($e->getMessage());
+            $response->setSuccess(false)
+                ->setError($error);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())
                 ->setMessage($e->getMessage());

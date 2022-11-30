@@ -26,6 +26,9 @@
 
 namespace PaypalAddons\services;
 
+use Exception;
+use Throwable;
+
 require_once dirname(__FILE__) . '/../classes/PaypalVaulting.php';
 
 class ServicePaypalVaulting
@@ -62,7 +65,9 @@ class ServicePaypalVaulting
         $paypalVaultingObject->rememberedCards = $rememberedCards;
         try {
             return $paypalVaultingObject->save();
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
+            return false;
+        } catch (Exception $e) {
             return false;
         }
     }

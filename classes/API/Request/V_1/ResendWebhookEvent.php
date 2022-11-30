@@ -31,6 +31,7 @@ use PayPal\Api\WebhookEvent;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
+use Throwable;
 
 class ResendWebhookEvent extends RequestAbstract
 {
@@ -51,6 +52,13 @@ class ResendWebhookEvent extends RequestAbstract
         try {
             $this->webhookEvent->resend($this->getApiContext());
             $response->setSuccess(true);
+        } catch (Throwable $e) {
+            $error = (new Error())
+                ->setMessage($e->getMessage())
+                ->setErrorCode($e->getMessage());
+            $response
+                ->setSuccess(false)
+                ->setError($error);
         } catch (Exception $e) {
             $error = (new Error())
                 ->setMessage($e->getMessage())

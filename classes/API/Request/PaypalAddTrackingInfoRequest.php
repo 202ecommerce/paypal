@@ -26,6 +26,7 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\ExtensionSDK\AddTrackingInfo;
 use PaypalAddons\classes\API\Response\Error;
@@ -33,6 +34,7 @@ use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\services\Builder\AddTrackingInfoRequestBuilder;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalHttp\HttpException;
+use Throwable;
 
 class PaypalAddTrackingInfoRequest extends RequestAbstract
 {
@@ -76,7 +78,11 @@ class PaypalAddTrackingInfoRequest extends RequestAbstract
 
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
+            $response->setError($error)->setSuccess(false);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);
