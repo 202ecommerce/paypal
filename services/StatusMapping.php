@@ -182,4 +182,9 @@ class StatusMapping
 
         return $orderStatus;
     }
+
+    public function getPsOutOfStock()
+    {
+        return (int) Configuration::get('PS_OS_OUTOFSTOCK_UNPAID');
+    }
 }

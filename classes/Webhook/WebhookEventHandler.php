@@ -128,7 +128,7 @@ class WebhookEventHandler
             }
 
             if ($event->getEventType() == WebHookType::CAPTURE_COMPLETED) {
-                if ($order->current_state != $this->getStatusMapping()->getWaitValidationStatus()) {
+                if (false === in_array($order->current_state, [$this->getStatusMapping()->getWaitValidationStatus(), $this->getStatusMapping()->getPsOutOfStock()])) {
                     continue;
                 }
             }
