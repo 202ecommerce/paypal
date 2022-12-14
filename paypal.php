@@ -36,6 +36,7 @@ use PaypalAddons\classes\ACDC\AcdcPaymentMethod;
 use PaypalAddons\classes\APM\ApmCollection;
 use PaypalAddons\classes\APM\ApmFunctionality;
 use PaypalAddons\classes\Constants\APM;
+use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\WebHookConf;
 use PaypalAddons\classes\InstallmentBanner\BannerManager;
 use PaypalAddons\classes\InstallmentBanner\BNPL\BnplAvailabilityManager;
@@ -435,15 +436,15 @@ class PayPal extends \PaymentModule implements WidgetInterface
             'PAYPAL_REQUIREMENTS' => 0,
             'PAYPAL_MB_EC_ENABLED' => 1,
             'PAYPAL_CUSTOMIZE_ORDER_STATUS' => 0,
-            'PAYPAL_OS_REFUNDED' => (int) Configuration::get('PS_OS_REFUND'),
-            'PAYPAL_OS_CANCELED' => (int) Configuration::get('PS_OS_CANCELED'),
-            'PAYPAL_OS_ACCEPTED' => (int) Configuration::get('PS_OS_PAYMENT'),
-            'PAYPAL_OS_CAPTURE_CANCELED' => (int) Configuration::get('PS_OS_CANCELED'),
-            'PAYPAL_OS_ACCEPTED_TWO' => (int) Configuration::get('PS_OS_PAYMENT'),
-            'PAYPAL_OS_WAITING_VALIDATION' => (int) Configuration::get('PAYPAL_OS_WAITING'),
-            'PAYPAL_OS_PROCESSING' => (int) Configuration::get('PAYPAL_OS_WAITING'),
-            'PAYPAL_OS_VALIDATION_ERROR' => (int) Configuration::get('PS_OS_CANCELED'),
-            'PAYPAL_OS_REFUNDED_PAYPAL' => (int) Configuration::get('PS_OS_REFUND'),
+            PaypalConfigurations::OS_REFUNDED => (int) Configuration::get('PS_OS_REFUND'),
+            PaypalConfigurations::OS_CANCELED => (int) Configuration::get('PS_OS_CANCELED'),
+            PaypalConfigurations::OS_ACCEPTED => (int) Configuration::get('PS_OS_PAYMENT'),
+            PaypalConfigurations::OS_CAPTURE_CANCELED => (int) Configuration::get('PS_OS_CANCELED'),
+            PaypalConfigurations::OS_ACCEPTED_TWO => (int) Configuration::get('PS_OS_PAYMENT'),
+            PaypalConfigurations::OS_WAITING_VALIDATION => (int) Configuration::get('PAYPAL_OS_WAITING'),
+            PaypalConfigurations::OS_PROCESSING => (int) Configuration::get('PAYPAL_OS_WAITING'),
+            PaypalConfigurations::OS_VALIDATION_ERROR => (int) Configuration::get('PS_OS_CANCELED'),
+            PaypalConfigurations::OS_REFUNDED_PAYPAL => (int) Configuration::get('PS_OS_REFUND'),
             \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::ENABLE_BNPL => 1,
             \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CART_PAGE => 1,
             \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE => 1,
