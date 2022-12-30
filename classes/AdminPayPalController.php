@@ -214,8 +214,12 @@ class AdminPayPalController extends \ModuleAdminController
             'error_message' => '',
         ];
 
-        if (defined('CURL_SSLVERSION_TLSv1_2') == false) {
-            define('CURL_SSLVERSION_TLSv1_2', 6);
+        if (defined('CURL_SSLVERSION_TLSv1_3')) {
+            $tlsVersion = CURL_SSLVERSION_TLSv1_3;
+        } elseif (defined('CURL_SSLVERSION_TLSv1_3')) {
+            $tlsVersion = CURL_SSLVERSION_TLSv1_2;
+        } else {
+            $tlsVersion = 6;
         }
 
         $tls_server = $this->context->link->getModuleLink($this->module->name, 'tlscurltestserver');
@@ -223,7 +227,7 @@ class AdminPayPalController extends \ModuleAdminController
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+        curl_setopt($curl, CURLOPT_SSLVERSION, $tlsVersion);
         $response = curl_exec($curl);
         if (trim($response) != 'ok') {
             $return['status'] = false;
