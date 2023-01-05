@@ -68,6 +68,7 @@ use PaypalAddons\services\ServicePaypalOrder;
 use PaypalAddons\services\StatusMapping;
 use PaypalAddons\services\WebhookService;
 use PaypalPPBTlib\Extensions\AbstractModuleExtension;
+use PaypalPPBTlib\Extensions\Diagnostic\DiagnosticExtension;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PaypalPPBTlib\Install\ModuleInstaller;
@@ -210,6 +211,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
      */
     public $extensions = [
         ProcessLoggerExtension::class,
+        DiagnosticExtension::class,
     ];
 
     /**
@@ -476,6 +478,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
             return false;
         }
 
+        $this->updateDiagnosticTabs();
         // Registration order status
         if (!$this->installOrderState()) {
             return false;
@@ -3160,6 +3163,23 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 $paypalOrder->sandbox
             );
             ProcessLoggerHandler::closeLogger();
+        }
+    }
+
+    protected function updateDiagnosticTabs()
+    {
+        $diagnosticExt = new DiagnosticExtension();
+        $parentTab = Tab::getInstanceFromClassName('AdminPayPalConfiguration');
+
+        foreach ($diagnosticExt->extensionAdminControllers as $adminController) {
+            $tab = Tab::getInstanceFromClassName($adminController['class_name']);
+
+            if (false === Validate::isLoadedObject($tab)) {
+                continue;
+            }
+
+            $tab->id_parent = $parentTab->id;
+            $tab->save();
         }
     }
 }
