@@ -370,7 +370,11 @@ class ObjectModelDefinition
                 case ObjectModel::TYPE_SQL:
                     $length = isset($constraints['size']) ? $constraints['size'] : null;
                     $length = isset($length['max']) ? $length['max'] : $length;
-                    $description .= $length ? "TEXT($length)" : 'TEXT';
+                    if ($length >= 65535) {
+                        $description .= $length ? "TEXT($length)" : 'TEXT';
+                    } else {
+                        $description .= 'MEDIUMTEXT';
+                    }
                     break;
                 case ObjectModel::TYPE_INT:
                     $description .= 'INT(10)'.(
