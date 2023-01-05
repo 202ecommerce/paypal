@@ -1,0 +1,176 @@
+/*!
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from SARL 202 ecommerce
+ * Use, copy, modification or distribution of this source file without written
+ * license agreement from the SARL 202 ecommerce is strictly forbidden.
+ * In order to obtain a license, please contact us: tech@202-ecommerce.com
+ * ...........................................................................
+ * INFORMATION SUR LA LICENCE D'UTILISATION
+ *
+ * L'utilisation de ce fichier source est soumise a une licence commerciale
+ * concedee par la societe 202 ecommerce
+ * Toute utilisation, reproduction, modification ou distribution du present
+ * fichier source sans contrat de licence ecrit de la part de la SARL 202 ecommerce est
+ * expressement interdite.
+ * Pour obtenir une licence, veuillez contacter 202-ecommerce <tech@202-ecommerce.com>
+ * ...........................................................................
+ *
+ * @author    202-ecommerce <tech@202-ecommerce.com>
+ * @copyright Copyright (c) 202-ecommerce
+ * @license   Commercial license
+ * @version   [version]
+ */
+
+.paypalApp {
+  margin: 0;
+  font-family: Open Sans, Helvetica, Arial, sans-serif;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #363a41;
+  text-align: left;
+}
+
+.paypalApp .card-header, .card-header .card-header-title {
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.paypalApp .card-header .main-header #header-search-container .input-group:before,
+.card-header .material-icons, .card-header .ps-tree-items .tree-name button:before,
+.main-header #header-search-container .card-header .input-group:before,
+.ps-tree-items .tree-name .card-header button:before {
+  color: #6c868e;
+  margin-right: 5px;
+}
+
+.paypalApp .form-group.has-danger:after, .paypalApp .form-group.has-success:after,
+.paypalApp .form-group.has-warning:after {
+  right: 10px;
+}
+
+.nobootstrap {
+  background-color: unset !important;
+  padding-top: 150px;
+  min-width: unset !important;
+}
+
+.nobootstrap .form-group > div {
+  float: unset;
+}
+
+.nobootstrap fieldset {
+  background-color: unset;
+  border: unset;
+  color: unset;
+  margin: unset;
+  padding: unset;
+}
+
+.nobootstrap label {
+  color: unset;
+  float: unset;
+  font-weight: unset;
+  padding: unset;
+  text-align: unset;
+  text-shadow: unset;
+  width: unset;
+}
+
+.nobootstrap .table tr th {
+  background-color: unset;
+  color: unset;
+  font-size: unset;
+}
+
+.nobootstrap .table.table-hover tbody tr:hover {
+  color: #fff;
+}
+
+.nobootstrap .table.table-hover tbody tr:hover a {
+  color: #fff !important;
+}
+
+.nobootstrap .table tr td {
+  border-bottom: unset;
+  color: unset;
+}
+
+.nobootstrap .table {
+  background-color: unset;
+  border: unset;
+  border-radius: unset;
+  padding: unset;
+}
+
+.page-sidebar.mobile #content.nobootstrap {
+  margin-left: unset;
+}
+
+.page-sidebar-closed:not(.mobile) #content.nobootstrap {
+  padding-left: 50px;
+}
+
+.material-icons.js-mobile-menu {
+  display: none !important
+}
+
+.alert {
+  padding-left: 3.8rem !important;
+  padding-right: 0.5rem !important;
+}
+
+#ajax_confirmation {
+  display: none;
+}
+
+body {
+  background: #eaebec;
+}
+
+.card-header {
+  cursor: pointer;
+}
+
+.accordion-section .panel-default > .panel-heading {
+  border: 0;
+  background: white !important;
+  padding: 0;
+}
+
+.accordion-section .panel-default .panel-title {
+  top: auto !important;
+  display: block !important;
+}
+
+.accordion-section .panel-default .panel-title,
+.accordion-section .panel-default {
+  /* border:none!important; */
+  background: white !important;
+}
+
+.accordion-section .panel-default .panel-title a {
+  color: #000 !important;
+  display: block !important;
+}
+
+.accordion-section .panel-body a {
+  color: #25b9d7 !important;
+}
+
+.accordion-section .panel-default .panel-title a:after {
+  font-family: 'FontAwesome';
+  font-style: normal !important;
+  font-size: 1rem;
+  content: "\f106";
+  float: right;
+}
+
+.accordion-section .panel-default .panel-title a.collapsed:after {
+  content: "\f107";
+}
+
+.table-wrapper {
+  overflow: auto;
+}

@@ -461,6 +461,12 @@ class PayPal extends \PaymentModule implements WidgetInterface
         }
 
         $this->moduleConfigs[ShortcutConfiguration::CART_PAGE_HOOK] = ShortcutConfiguration::HOOK_EXPRESS_CHECKOUT;
+
+        foreach ($this->extensions as $extensionName) {
+            $extension = new $extensionName($this);
+            $extension->initExtension();
+            $this->hooks = array_merge($this->hooks, $extension->hooks);
+        }
     }
 
     public function install()

@@ -116,5 +116,15 @@ class ExtensionInstaller extends AbstractInstaller
         return $this;
     }
 
+    public function install()
+    {
+        return parent::install() && $this->extension->install();
+    }
+
+    public function uninstall()
+    {
+        return parent::uninstall() && $this->extension->uninstall();
+    }
+
     //endregion
 }

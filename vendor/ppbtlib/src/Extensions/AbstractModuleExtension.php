@@ -45,6 +45,11 @@ abstract class AbstractModuleExtension
 
     //endregion
 
+    public function __construct($module = null)
+    {
+        $this->module = $module;
+    }
+
     /**
      * @param Module $module
      */
@@ -53,5 +58,32 @@ abstract class AbstractModuleExtension
         $this->module = $module;
 
         return $this;
+    }
+
+    /**
+     * Do smth during the installation process
+     * @return bool
+     */
+    public function install()
+    {
+        return true;
+    }
+
+    /**
+     * Do smth during the uninstall action
+     * @return bool
+     */
+    public function uninstall()
+    {
+        return true;
+    }
+
+    /**
+     * Do shmth while each initialisation of extension, must be overrided in nested classes
+     * @return void
+     */
+    public function initExtension()
+    {
+
     }
 }
