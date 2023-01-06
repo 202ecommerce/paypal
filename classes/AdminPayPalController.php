@@ -216,7 +216,7 @@ class AdminPayPalController extends \ModuleAdminController
 
         if (defined('CURL_SSLVERSION_TLSv1_3')) {
             $tlsVersion = CURL_SSLVERSION_TLSv1_3;
-        } elseif (defined('CURL_SSLVERSION_TLSv1_3')) {
+        } elseif (defined('CURL_SSLVERSION_TLSv1_2')) {
             $tlsVersion = CURL_SSLVERSION_TLSv1_2;
         } else {
             $tlsVersion = 6;
