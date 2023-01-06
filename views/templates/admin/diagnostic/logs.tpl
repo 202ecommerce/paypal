@@ -22,7 +22,7 @@
                     {foreach $logs.files as $file}
                       <div class="panel-group pt-2">
                         <div class="panel panel-default mb-3">
-                          <div class="panel-heading [Module]-collapse"
+                          <div class="panel-heading paypal-collapse"
                                 data-type="files"
                                 data-value="{$file.path|escape:'html':'UTF-8'}">
                             <h4 class="panel-title mb-0">
@@ -51,7 +51,7 @@
                     {foreach $logs.db as $db => $dbValues}
                       <div class="panel-group pt-2">
                         <div class="panel panel-default mb-3">
-                          <div class="panel-heading [Module]-collapse"
+                          <div class="panel-heading paypal-collapse"
                                data-type="db"
                                data-value="{$db|escape:'html':'UTF-8'}">
                             <h4 class="panel-title mb-0">

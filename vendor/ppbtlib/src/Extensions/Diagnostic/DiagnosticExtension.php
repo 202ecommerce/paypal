@@ -31,18 +31,13 @@ use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\GithubVersionStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\HooksStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\HostStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\OverridesStub;
-use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\ConnectStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\LogsStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\ConfigurationStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\DatabaseStub;
-use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\OrderStateStub;
-use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\SecurityAdvisoryStub;
-use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\ModuleInventoryStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Storage\DiagnosticRetriever;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Storage\StubStorage;
 use PaypalPPBTlib\Extensions\AbstractModuleExtension;
 use PaypalPPBTlib\Extensions\Diagnostic\Controllers\Admin\AdminDiagnosticController;
-use PaypalPPBTlib\Extensions\Diagnostic\Controllers\Admin\AdminSSOConnectController;
 use Configuration;
 
 class DiagnosticExtension extends AbstractModuleExtension
@@ -59,15 +54,6 @@ class DiagnosticExtension extends AbstractModuleExtension
             'parent_class_name' => 'AdminParentPaypalConfiguration',
             'visible' => true,
         ],
-        [
-            'name' => [
-                'en' => 'SSO Connection',
-                'fr' => 'Connection SSO',
-            ],
-            'class_name' => 'AdminPaypalSSOConnect',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
-            'visible' => false,
-        ],
     ];
 
     public $objectModels = [];
@@ -82,17 +68,12 @@ class DiagnosticExtension extends AbstractModuleExtension
 
     const CONNECT_RESTRICTED_IPS = 'PAYPAL_CONNECT_RESTRICTED_IPS';
 
-    const CONNECT_SSO_AVAILABLE = 'PAYPAL_CONNECT_SSO_AVAILABLE';
-
     const CONNECT_SLUG = 'PAYPAL_CONNECT_SLUG';
 
     public function install()
     {
         Configuration::updateGlobalValue(self::MODULE_NAME, $this->module->name);
         Configuration::updateGlobalValue(self::DIAGNOSTIC_MODULE_NAME, $this->module->name);
-        Configuration::updateGlobalValue(self::CONNECT_SSO_AVAILABLE, json_encode([
-            $this->module->name => false,
-        ]));
 
         return parent::install();
     }

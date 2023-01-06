@@ -1,4 +1,4 @@
-<div class="[Module]App">
+<div class="paypalApp">
   {foreach $stubs as $stub}
       {$stub nofilter}
   {/foreach}

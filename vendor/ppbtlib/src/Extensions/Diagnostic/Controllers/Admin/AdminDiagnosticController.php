@@ -157,58 +157,7 @@ class AdminDiagnosticController extends \ModuleAdminController
             Tools::redirectAdmin(Context::getContext()->link->getAdminLink($this->controller_name));
         }
 
-        if (Tools::getIsset('stubExport')) {
-            $this->processStubExport();
-            Tools::redirectAdmin(Context::getContext()->link->getAdminLink($this->controller_name));
-        }
-
         parent::postProcess();
-    }
-
-    public function processStubExport()
-    {
-        $stubStorage = StubStorage::getInstance();
-
-        if (!empty($stubStorage->getModuleConfigModel())) {
-            $zipPath = _PS_MODULE_DIR_ . $this->module->name . '/export.zip';
-            if (file_exists($zipPath)) {
-                unlink($zipPath);
-            }
-            $zip = new ZipArchive();
-
-            if (!$zip->open($zipPath, ZipArchive::CREATE)) {
-                throw new \PrestaShopException('Failed to create zip file');
-            }
-
-            /** @var AbstractStub $stub */
-            foreach ($stubStorage->getModuleConfigModel()->getStubs() as $stub => $parameters) {
-                /** @var AbstractStub $stubObj */
-                $stubObj = new $stub($parameters);
-                $stubObj->setModule($this->getStubModule());
-                if (!$stubObj->isHasExport()) {
-                    continue;
-                }
-                $content = $stubObj->getHandler()->export(false);
-                if (empty($content)) {
-                    continue;
-                }
-
-                foreach ($content as $fileName => $data) {
-                    $zip->addFromString($fileName, $data);
-                }
-            }
-
-            $zip->close();
-
-            header("Content-type: application/zip");
-            $moduleName = $this->getStubModule()->name;
-            header("Content-Disposition: attachment; filename=export.$moduleName.zip");
-            header("Content-length: " . filesize($zipPath));
-            header("Pragma: no-cache");
-            header("Expires: 0");
-            readfile($zipPath);
-            unlink($zipPath);
-        }
     }
 
     public function initPageHeaderToolbar()
