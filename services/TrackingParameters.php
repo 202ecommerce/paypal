@@ -29,6 +29,7 @@ namespace PaypalAddons\services;
 use Configuration;
 use Country;
 use Exception;
+use PaypalAddons\classes\Constants\CountryIsoAlias;
 use PaypalAddons\classes\Constants\TrackingParameters as Map;
 use PrestaShopLogger;
 use Throwable;
@@ -59,19 +60,24 @@ class TrackingParameters
         $carriers = [
             [
                 'key' => Map::CARRIER_OTHER,
-                 'name' => Map::CARRIER_OTHER,
+                'name' => Map::CARRIER_OTHER,
             ],
         ];
+        $isoAliasList = CountryIsoAlias::getAliasList();
 
         if ($isoCountry === null) {
-            $isoCountry = $this->defaultCountry->iso_code;
+            $isoCountry = strtoupper($this->defaultCountry->iso_code);
         }
 
-        if (empty($this->paypalCarriers[strtoupper($isoCountry)])) {
-            return $carriers;
+        if (empty($this->paypalCarriers[$isoCountry])) {
+            if (empty($isoAliasList[$isoCountry]) || empty($this->paypalCarriers[$isoAliasList[$isoCountry]])) {
+                return $carriers;
+            }
+
+            $isoCountry = $isoAliasList[$isoCountry];
         }
 
-        return array_merge($carriers, $this->paypalCarriers[strtoupper($isoCountry)]);
+        return array_merge($carriers, $this->paypalCarriers[$isoCountry]);
     }
 
     public function getPaypalCarrierByPsCarrier($carrierRef)
