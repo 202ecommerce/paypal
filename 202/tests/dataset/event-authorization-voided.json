@@ -1,0 +1,20 @@
+{
+  "id": "test-webhook-event-id-denied-6",
+  "resource_type": "capture",
+  "event_type": "PAYMENT.AUTHORIZATION.VOIDED",
+  "resource": {
+  "amount": {
+    "value": "10.80",
+      "currency_code": "EUR"
+  },
+  "supplementary_data": {
+    "related_ids": {
+      "order_id": "test-payment-id-6"
+    }
+  },
+    "id": "test-transaction-id-6",
+    "status": "COMPLETED"
+},
+  "event_version": "1.0",
+  "resource_version": "2.0"
+}

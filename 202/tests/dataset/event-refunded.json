@@ -1,0 +1,22 @@
+{
+  "id": "test-webhook-event-id-refunded-3",
+  "resource_type": "capture",
+  "event_type": "PAYMENT.CAPTURE.REFUNDED",
+  "resource": {
+    "amount": {
+      "value": "10.80",
+      "currency_code": "EUR"
+    },
+    "id": "test-transaction-id-3",
+    "status": "COMPLETED",
+    "links": [
+      {
+        "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/test-transaction-id-3",
+        "rel": "up",
+        "method": "GET"
+      }
+    ]
+  },
+  "event_version": "1.0",
+  "resource_version": "2.0"
+}

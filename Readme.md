@@ -4,14 +4,14 @@
 
 ## About
 
-Let customer pay with one of the payment methods : 
+Let customer pay with one of the payment methods :
 
-On PrestaShop 1.7 : 
+On PrestaShop 1.7 :
 - PayPal Express Checkout
 - PayPal Express Checkout Cards
 - PayPal Plus Germany, Mexico and Brazil
 
-On PrestaShop 1.6 : 
+On PrestaShop 1.6 :
 - PayPal Express Checkout
 - Braintree cards
 - PayPal Plus Germany
@@ -62,15 +62,15 @@ See the [composer documentation][composer-doc] to learn more about the composer.
 ## Compiling assets
 **For development**
 
-We use _Webpack_ to compile our javascript and scss files.  
-In order to compile those files, you must :  
+We use _Webpack_ to compile our javascript and scss files.
+In order to compile those files, you must :
 1. have _Node 10+_ installed locally
 2. run `npm install` in the root folder to install dependencies
 3. then run `npm run watch` to compile assets and watch for file changes
 
 **For production**
 
-Run `npm run build` to compile for production.  
+Run `npm run build` to compile for production.
 Files are minified, `console.log` and comments dropped.
 
 ## Contributing
@@ -121,6 +121,15 @@ You need a docker container to launch phpstan:
 ~$ docker run --rm --volumes-from temp-ps -v $PWD:/var/www/html/modules/paypal -e _PS_ROOT_DIR_=/var/www/html --workdir=/var/www/html/modules/paypal phpstan/phpstan:0.12 analyse --configuration=/var/www/html/modules/paypal/202/phpstan/phpstan.neon
 ```
 
+
+### phpunit
+
+You need a docker container to launch phpunit
+
+```
+docker run -tid --rm -v $PWD:/var/www/html/modules/paypal --name temp-paypal-unittest-ps 202ecommerce/prestashop:1.7.8.7
+docker exec -t temp-paypal-unittest-ps sh /var/www/html/modules/paypal/202/docker/run_for_unittest.sh
+```
 
 [1]: https://devdocs.prestashop.com/1.7/development/coding-standards/
 [2]: http://doc.prestashop.com/display/PS16/How+to+write+a+commit+message

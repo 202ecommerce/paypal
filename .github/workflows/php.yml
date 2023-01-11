@@ -75,6 +75,12 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
 
+          # Set php version to avoid error during perform command composer update
+            - name: Setup PHP
+              uses: nanasess/setup-php@v3
+              with:
+                php-version: '7.3'
+
             # Add vendor folder in cache to make next builds faster
             - name: Cache vendor folder
               uses: actions/cache@v1
