@@ -28,9 +28,9 @@
         ]
     },
     "autoload-dev": {
-      "psr-4": {
-        "PaypalTests\\": "202/tests/"
-      }
+        "psr-4": {
+            "PaypalTests\\": "202/tests/"
+        }
     },
     "scripts": {
         "pre-autoload-dump": [
