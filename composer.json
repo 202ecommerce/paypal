@@ -2,7 +2,7 @@
     "name": "module-partners/paypal",
     "description": "PrestaShop module PayPal",
     "homepage": "https://paypal.com/",
-    "license": "AFL-3.0",
+    "license": "OSL-3.0",
     "authors": [
         {
             "name": "202 ecommerce",
@@ -25,9 +25,9 @@
             "PaypalAddons\\": "."
         },
         "classmap": [
-          "classes/",
-          "controllers/front/abstract.php",
-          "paypal.php"
+            "classes/",
+            "controllers/front/abstract.php",
+            "paypal.php"
         ]
     },
     "scripts": {
@@ -44,5 +44,6 @@
     "require-dev": {
         "prestashop/php-dev-tools": "^3.4"
     },
-    "type": "prestashop-module"
+    "type": "prestashop-module",
+    "author": "PrestaShop"
 }
