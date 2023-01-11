@@ -26,6 +26,7 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
@@ -33,6 +34,7 @@ use PaypalAddons\services\Builder\OrderPatchBody;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Orders\OrdersPatchRequest;
 use PayPalHttp\HttpException;
+use Throwable;
 
 class PaypalOrderPatchRequest extends PaypalOrderCreateRequest
 {
@@ -67,7 +69,11 @@ class PaypalOrderPatchRequest extends PaypalOrderCreateRequest
             $error->setMessage($resultDecoded->details[0]->description)->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
+            $response->setError($error)->setSuccess(false);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);

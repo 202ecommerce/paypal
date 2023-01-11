@@ -27,8 +27,10 @@
 namespace PaypalAddons\classes\WhiteList;
 
 use Configuration;
+use Exception;
 use PaypalAddons\classes\Constants\WhiteList;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 class WhiteListService
 {
@@ -54,7 +56,9 @@ class WhiteListService
 
         try {
             return json_decode($list, true);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            return [];
+        } catch (Exception $e) {
             return [];
         }
     }

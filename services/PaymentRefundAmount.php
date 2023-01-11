@@ -34,6 +34,7 @@ use PaypalAddons\classes\Exception\RefundCalculationException;
 use PaypalOrder;
 use PaypalWebhook;
 use PrestaShopCollection;
+use Throwable;
 
 class PaymentRefundAmount
 {
@@ -56,7 +57,9 @@ class PaymentRefundAmount
                     $totalRefund += $refund->amount->value;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
+            throw new RefundCalculationException($e->getMessage());
+        } catch (Exception $e) {
             throw new RefundCalculationException($e->getMessage());
         }
 
@@ -82,6 +85,7 @@ class PaymentRefundAmount
 
             try {
                 $totalRefunded += $webhookEvent->resource->amount->value;
+            } catch (Throwable $e) {
             } catch (Exception $e) {
             }
         }
@@ -101,7 +105,9 @@ class PaymentRefundAmount
                 ->where('id_paypal_order', '=', (int) $paypalOrder->id);
 
             return $collection->getResults();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            return [];
+        } catch (Exception $e) {
             return [];
         }
     }

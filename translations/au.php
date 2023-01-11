@@ -23,10 +23,6 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  */
-if (version_compare(phpversion(), '7', '<')) {
-    if (false === class_exists('Throwable') && false === interface_exists('Throwable')) {
-        class Throwable extends Exception
-        {
-        }
-    }
-}
+global $_MODULE;
+$_MODULE = [];
+$_MODULE['<{paypal}prestashop>paypal_a5798511a026181ecf457aa003eebbbc'] = 'Pay in 4';

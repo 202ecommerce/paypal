@@ -26,6 +26,7 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\ExtensionSDK\PartnerReferrals;
 use PaypalAddons\classes\API\Response\Error;
@@ -33,6 +34,7 @@ use PaypalAddons\classes\API\Response\ResponsePartnerReferrals;
 use PaypalAddons\services\Builder\PartnerReferralsRequestBody;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalHttp\HttpException;
+use Throwable;
 
 class PaypalPartnerReferralsRequest extends RequestAbstract
 {
@@ -63,7 +65,13 @@ class PaypalPartnerReferralsRequest extends RequestAbstract
 
             return $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setMessage($e->getMessage())
+                ->setErrorCode($e->getCode());
+
+            return $response->setSuccess(false)->setError($error);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

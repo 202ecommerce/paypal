@@ -407,9 +407,9 @@ class AdminPayPalController extends \ModuleAdminController
             'sandbox_mode' => \Configuration::get('PAYPAL_SANDBOX') ? 0 : 1,
         ];
         $this->page_header_toolbar_btn['switch_sandbox'] = [
-            'desc' => $this->l('Sandbox mode', 'AdminPayPalController'),
+            'desc' => $this->module->l('Sandbox mode', 'AdminPayPalController'),
             'icon' => 'process-icon-toggle-' . (\Configuration::get('PAYPAL_SANDBOX') ? 'on' : 'off'),
-            'help' => $this->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.', 'AdminPayPalController'),
+            'help' => $this->module->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.', 'AdminPayPalController'),
             'href' => self::$currentIndex . '?' . http_build_query($query),
         ];
 
@@ -449,7 +449,7 @@ class AdminPayPalController extends \ModuleAdminController
     {
         $return = [
             'state' => true,
-            'message' => $this->l('PayPal webhooks are enabled with success.', get_class($this)),
+            'message' => $this->module->l('PayPal webhooks are enabled with success.', 'AdminPayPalController'),
         ];
 
         $webhookAvailable = $this->getWebhookAvalability()->check();
@@ -463,7 +463,7 @@ class AdminPayPalController extends \ModuleAdminController
 
         if ($return['state'] && !$this->isWebhookCreated()) {
             $return['state'] = false;
-            $return['message'] = $this->l('PayPal webhooks can not be enabled. The webhook listener was not created. Webhooks are not used by the module until the moment the problem will be fixed. Please try to refresh the page and click on \'check requirements\' again.', get_class($this));
+            $return['message'] = $this->module->l('PayPal webhooks can not be enabled. The webhook listener was not created. Webhooks are not used by the module until the moment the problem will be fixed. Please try to refresh the page and click on \'check requirements\' again.', 'AdminPayPalController');
         }
 
         \Configuration::updateValue(WebHookConf::AVAILABLE, (int) $return['state']);

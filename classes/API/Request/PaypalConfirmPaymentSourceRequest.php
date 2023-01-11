@@ -26,6 +26,7 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\ExtensionSDK\ConfirmPaymentSource;
 use PaypalAddons\classes\API\Response\Error;
@@ -33,6 +34,7 @@ use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\services\Builder\ConfirmPaymentSourceBuilder;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalHttp\HttpException;
+use Throwable;
 
 class PaypalConfirmPaymentSourceRequest extends RequestAbstract
 {
@@ -78,7 +80,13 @@ class PaypalConfirmPaymentSourceRequest extends RequestAbstract
 
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setErrorCode($e->getCode())
+                ->setMessage($e->getMessage());
+            $response->setSuccess(false)
+                ->setError($error);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())
                 ->setMessage($e->getMessage());

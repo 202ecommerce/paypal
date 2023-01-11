@@ -27,6 +27,7 @@
 namespace PaypalAddons\services;
 
 use Exception;
+use Throwable;
 use Tools;
 
 class CurrencyConverter
@@ -40,6 +41,8 @@ class CurrencyConverter
     {
         try {
             return Tools::convertPrice($amount, $currency, $to);
+        } catch (Throwable $e) {
+            return 0;
         } catch (Exception $e) {
             return 0;
         }

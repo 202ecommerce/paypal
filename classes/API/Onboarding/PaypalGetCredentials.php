@@ -26,10 +26,12 @@
 
 namespace PaypalAddons\classes\API\Onboarding;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseGetCredentials;
+use Throwable;
 
 class PaypalGetCredentials
 {
@@ -73,7 +75,11 @@ class PaypalGetCredentials
                 ->setClientId($responseDecode->client_id)
                 ->setSecret($responseDecode->client_secret)
                 ->setData($returnResponse);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $error = new Error();
+            $error->setMessage($e->getMessage())->setErrorCode($e->getCode());
+            $returnResponse->setError($error)->setSuccess(false);
+        } catch (Exception $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);

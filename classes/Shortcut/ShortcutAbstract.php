@@ -27,10 +27,12 @@
 namespace PaypalAddons\classes\Shortcut;
 
 use Context;
+use Exception;
 use Hook;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\services\PaypalMedia;
+use Throwable;
 
 abstract class ShortcutAbstract
 {
@@ -172,7 +174,8 @@ abstract class ShortcutAbstract
 
         try {
             Hook::exec('actionPaypalShortcutIsAddJquery', ['isAddJquery' => &$isAddJquery]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+        } catch (Exception $e) {
         }
 
         return $isAddJquery;
