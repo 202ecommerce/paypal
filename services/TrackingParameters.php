@@ -169,7 +169,7 @@ class TrackingParameters
     protected function initPaypalCarrierList()
     {
         try {
-            $this->paypalCarriers = json_decode(file_get_contents(_PS_MODULE_DIR_ . 'paypal/paypal-carriers.json'), true);
+            $this->paypalCarriers = json_decode(\Tools::file_get_contents(_PS_MODULE_DIR_ . 'paypal/paypal-carriers.json'), true);
         } catch (Throwable $e) {
             return false;
         } catch (Exception $e) {
