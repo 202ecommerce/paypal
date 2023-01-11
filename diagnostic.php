@@ -41,6 +41,21 @@ return [
                 'integrity' => false,
             ],
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\ConfigurationStub::class => [],
+            PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\OrderStateStub::class => [
+                'statuses' => [
+                    'PAYPAL_OS_REFUNDED' => [],
+                    'PAYPAL_OS_CANCELED' => [],
+                    'PAYPAL_OS_ACCEPTED' => [],
+                    'PAYPAL_OS_CAPTURE_CANCELED' => [],
+                    'PAYPAL_OS_WAITING_VALIDATION' => [],
+                    'PAYPAL_OS_REFUNDED' => [],
+                    'PAYPAL_OS_WAITING' => [
+                        'color' => '#4169E1',
+                        'invoice' => false,
+                        'send_email' => false,
+                    ],
+                ],
+            ],
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\HooksStub::class => [],
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\OverridesStub::class => [],
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\HostStub::class => [],

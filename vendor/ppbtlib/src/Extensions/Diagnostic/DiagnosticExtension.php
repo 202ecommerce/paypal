@@ -30,6 +30,7 @@ use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\FileIntegrityStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\GithubVersionStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\HooksStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\HostStub;
+use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\OrderStateStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\OverridesStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\LogsStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\ConfigurationStub;
