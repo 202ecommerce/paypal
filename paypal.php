@@ -3189,4 +3189,21 @@ class PayPal extends \PaymentModule implements WidgetInterface
             $tab->save();
         }
     }
+
+    public function hookActionPaypalGetConflicts()
+    {
+        $conflicts = [];
+
+        if (Module::isEnabled('pricerounding')) {
+            $conflicts[] = $this->l('Using the module \'pricerounding\' can lead to an incorrect work.');
+        }
+
+        if (\Configuration::get('PS_ROUND_TYPE') != \Order::ROUND_ITEM
+            || \Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_UP
+            || \Configuration::get('PS_PRICE_DISPLAY_PRECISION') != 2) {
+            $conflicts[] = $this->l('Your rounding settings are not fully compatible with PayPal requirements. In order to avoid some of the transactions to fail, please change the PrestaShop rounding mode.');
+        }
+
+        return $conflicts;
+    }
 }

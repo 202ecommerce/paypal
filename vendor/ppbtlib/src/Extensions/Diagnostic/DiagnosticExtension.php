@@ -35,6 +35,7 @@ use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\OverridesStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\LogsStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\ConfigurationStub;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\DatabaseStub;
+use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Model\Constant\DiagnosticHook;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Storage\DiagnosticRetriever;
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Storage\StubStorage;
 use PaypalPPBTlib\Extensions\AbstractModuleExtension;
@@ -70,6 +71,12 @@ class DiagnosticExtension extends AbstractModuleExtension
     const CONNECT_RESTRICTED_IPS = 'PAYPAL_CONNECT_RESTRICTED_IPS';
 
     const CONNECT_SLUG = 'PAYPAL_CONNECT_SLUG';
+
+    public $hooks = [
+        DiagnosticHook::HOOK_CONFLICTS,
+        DiagnosticHook::HOOK_CONFLICTS_ACTION,
+        DiagnosticHook::HOOK_FIX_MODULE_TABLES,
+    ];
 
     public function install()
     {
