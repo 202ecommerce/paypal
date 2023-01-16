@@ -42,7 +42,9 @@
         "paypal/rest-api-sdk-php": "1.*"
     },
     "require-dev": {
-        "prestashop/php-dev-tools": "^3.4"
+      "php": "^7.3",
+      "prestashop/php-dev-tools": "^3.4",
+      "phpunit/phpunit": "^9.0"
     },
     "type": "prestashop-module",
     "author": "PrestaShop"
