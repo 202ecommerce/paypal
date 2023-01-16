@@ -237,6 +237,7 @@ $_MODULE['<{paypal}prestashop>accountsettingsblock_0f39f52910e673781d520f99ed959
 $_MODULE['<{paypal}prestashop>accountsettingsblock_0323de4f66a1700e2173e9bcdce02715'] = 'Ausloggen';
 $_MODULE['<{paypal}prestashop>accountsettingsblock_1a62e25acfc39191546704505349bb49'] = 'PayPal-Konto verknüpfen oder erstellen';
 $_MODULE['<{paypal}prestashop>accountsettingsblock_ee5f19511f2f20a65a4b82b59ba20202'] = 'PUI Funktion ist verfügbar';
+$_MODULE['<{paypal}prestashop>accountsettingsblock_7914c55619bd20d12c735b0d927b74a4'] = 'Wenn Ihnen die Zahlart \"Rechnungskauf\" auf Ihrer Checkout-Seite nicht angezeigt wird, fordern Sie sie bitte über diesen [a @href1@]Link[/a] bei PayPal an';
 $_MODULE['<{paypal}prestashop>headerlogo_e269d95cbf9105896810d64a7307acdd'] = 'Aktivieren Sie das PayPal-Modul, um an mehr als 300 Millionen PayPal-Kunden auf der ganzen Welt zu verkaufen';
 $_MODULE['<{paypal}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'In drei einfachen Schritten aktivieren';
 $_MODULE['<{paypal}prestashop>headerlogo_536b624906878dc3954749a6cef3b0fa'] = 'In 2 einfachen Schritten aktivieren';

@@ -116,8 +116,8 @@
     {/if}
 </div>
 
-{if isset($isPuiAvailable) && $isPuiAvailable}
-  <div class="alert alert-success pp__mt-3">
-      {l s='Pay upon invoice feature is availabe' mod='paypal'}
+{if isset($isPuiAvailable) && $isPuiAvailable == false}
+  <div class="alert alert-warning pp__mt-3">
+      {{l s='If you don\'t see Pay Upon Invoice payment method at your checkout page, please request it to PayPal by using this [a @href1@]link[/a]' mod='paypal'}|paypalreplace:['@href1@' => 'https://www.paypal.com/bizsignup/entry?country.x=DE&product=payment_methods&capabilities=PAY_UPON_INVOICE', '@target@' => {'target="blank"'}]}
   </div>
 {/if}
