@@ -14,10 +14,7 @@
         "preferred-install": "dist",
         "classmap-authoritative": true,
         "optimize-autoloader": true,
-        "prepend-autoloader": false,
-        "platform": {
-            "php": "5.6"
-        }
+        "prepend-autoloader": false
     },
     "autoload": {
         "psr-4": {
