@@ -145,6 +145,12 @@
             '[data-module-name="paypal_acdc"]',
             '#payment-confirmation'
         );
+        acdcObj.addMarkTo(
+          document.querySelector('[data-module-name="paypal_acdc"]').closest('.payment-option'),
+          {
+            display: "table-cell"
+          }
+        );
     }
 
     waitPaypalAcdcSDKIsLoaded();

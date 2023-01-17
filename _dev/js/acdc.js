@@ -213,6 +213,29 @@ ACDC.prototype.hideElementTillPaymentOptionChecked = function(paymentOptionSelec
   Tools.hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector);
 };
 
+ACDC.prototype.addMarkTo = function(element, styles = {}) {
+  if (element instanceof Element == false) {
+    return;
+  }
+
+  const markContainer = document.createElement('span');
+
+  for (let key in styles) {
+    markContainer.style[key] = styles[key];
+  }
+
+  markContainer.setAttribute('paypal-mark-container', '');
+  element.appendChild(markContainer);
+
+  const mark = totPaypalAcdcSdk.Marks({
+    fundingSource: totPaypalAcdcSdk.FUNDING.CARD
+  });
+
+  if (mark.isEligible()) {
+    mark.render(markContainer);
+  }
+};
+
 window.ACDC = ACDC;
 
 

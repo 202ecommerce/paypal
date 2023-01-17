@@ -70,7 +70,7 @@ class AcdcPaymentMethod
     {
         $scripts = [];
 
-        $srcLib = $this->method->getUrlJsSdkLib(['components' => 'buttons,hosted-fields']);
+        $srcLib = $this->method->getUrlJsSdkLib(['components' => 'buttons,hosted-fields,marks']);
 
         $scripts['tot-paypal-acdc-sdk'] = [
             'src' => $srcLib,
