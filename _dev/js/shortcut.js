@@ -209,6 +209,29 @@ const Shortcut = {
 
   hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector) {
     Tools.hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector);
+  },
+
+  addMarkTo(element, styles = {}) {
+    if (element instanceof Element == false) {
+      return;
+    }
+
+    const markContainer = document.createElement('span');
+
+    for (let key in styles) {
+      markContainer.style[key] = styles[key];
+    }
+
+    markContainer.setAttribute('paypal-mark-container', '');
+    element.appendChild(markContainer);
+
+    const mark = totPaypalSdkButtons.Marks({
+      fundingSource: totPaypalSdkButtons.FUNDING.PAYPAL
+    });
+
+    if (mark.isEligible()) {
+      mark.render(markContainer);
+    }
   }
 
 };

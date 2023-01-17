@@ -44,6 +44,12 @@
 
           Shortcut.init();
           Shortcut.initButton();
+          Shortcut.addMarkTo(
+            document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),
+            {
+              display: "table-cell"
+            }
+          );
       }
 
       waitPaypalIsLoaded();

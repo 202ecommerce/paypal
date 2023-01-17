@@ -49,6 +49,12 @@
           }
 
           BNPL.initButton();
+          BNPL.addMarkTo(
+            document.querySelector('[data-module-name="paypal_bnpl"]').closest('.payment-option'),
+            {
+              display: "table-cell"
+            }
+          );
       }
 
       waitPaypalSDKIsLoaded();

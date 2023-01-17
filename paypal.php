@@ -1023,7 +1023,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         $paymentOption->setModuleName($this->name);
         $paymentOption->setAdditionalInformation($additionalInformation);
-        $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
 
         return $paymentOption;
     }
@@ -2957,7 +2956,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         );
         $paymentOption->setModuleName('paypal_bnpl');
         $paymentOption->setAdditionalInformation($this->renderBnpl(['sourcePage' => ConfigurationMap::PAGE_TYPE_PAYMENT_STEP]));
-        $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
 
         return $paymentOption;
     }

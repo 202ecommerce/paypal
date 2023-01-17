@@ -88,7 +88,7 @@ abstract class BNPLAbstract
     protected function getJS()
     {
         $JSscripts = [];
-        $srcLib = $this->method->getUrlJsSdkLib() . '&enable-funding=paylater';
+        $srcLib = $this->method->getUrlJsSdkLib(['components' => 'buttons,marks']) . '&enable-funding=paylater';
 
         if ($this->method->isSandbox()) {
             $buyerCountry = $this->getBuyerCountry();
