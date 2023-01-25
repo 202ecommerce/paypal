@@ -36,7 +36,7 @@
   {
     "f":"{/literal}{$sessionId}{literal}",
     "s":"{/literal}{$sourceId}{literal}",
-    "sandbox": {/literal}{$isSandbox}{literal}
+    "sandbox": {/literal}{if $isSandbox}true{else}false{/if}{literal}
   }
 </script>
 {/literal}
