@@ -72,8 +72,7 @@ class FraudNetForm
 
     protected function getSourceId()
     {
-        //todo: use format merchantId + page name
-        return '[use-client-id-here]-checkout-page';
+        return (new PsMerchantId($this->method))->get() . '-checkout-page';
     }
 
     protected function getUserData()
