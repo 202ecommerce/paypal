@@ -94,7 +94,7 @@ class DbTable
             }
             $result = $this->db->execute("CREATE TABLE IF NOT EXISTS `$this->name` (".
                             implode(', ', array_merge($this->columns, $keys)).
-                        ") ENGINE=$this->engine CHARSET=$this->charset COLLATE=$this->collation;");
+                        ") ENGINE=$this->engine CHARSET=$this->charset;");
             if ($result == true) {
                 $this->alterKeys();
             }
@@ -368,7 +368,7 @@ class DbTable
                 break;
             case static::FOREIGN:
                 list($table, $columns) = explode('.', $name);
-                $this->keys[] = "FOREIGN KEY (`$columns`) REFERENCES $table (`$columns`) 
+                $this->keys[] = "FOREIGN KEY (`$columns`) REFERENCES $table (`$columns`)
                 ON UPDATE CASCADE ON DELETE CASCADE";
                 break;
             case static::UNIQUE:

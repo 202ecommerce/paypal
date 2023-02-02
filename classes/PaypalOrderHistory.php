@@ -49,7 +49,7 @@ class PaypalOrderHistory extends ObjectModel
         'primary' => 'id_paypal_order_history',
         'multilang' => false,
         'fields' => [
-            'status' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+            'status' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             '$completed' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
             'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],

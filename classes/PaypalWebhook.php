@@ -60,11 +60,11 @@ class PaypalWebhook extends ObjectModel
         'primary' => 'id_paypal_webhook',
         'multilang' => false,
         'fields' => [
-            'id_paypal_order' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+            'id_paypal_order' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             'id_webhook' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName'],
             'event_type' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
             'data' => ['type' => self::TYPE_HTML, 'validate' => 'isString'],
-            'id_state' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
+            'id_state' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
             'date_completed' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
         ],
