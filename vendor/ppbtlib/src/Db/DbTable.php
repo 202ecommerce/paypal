@@ -104,7 +104,13 @@ class DbTable
         $alter = $this->alterFields();
 
         if (!empty($alter)) {
-            return $this->db->execute($alter);
+            $result = true;
+
+            foreach ($alter as $request) {
+                $result &= $this->db->execute($request);
+            }
+
+            return $result;
         }
         $this->alterKeys();
 
@@ -147,7 +153,7 @@ class DbTable
             }
         }
 
-        return implode("\r\n", $alters);
+        return $alters;
     }
 
     /**
