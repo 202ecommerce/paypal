@@ -30,7 +30,7 @@ use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\ExtensionSDK\ConfirmPaymentSource;
 use PaypalAddons\classes\API\Response\Error;
-use PaypalAddons\classes\API\Response\Response;
+use PaypalAddons\classes\API\Response\ResponseConfirmationPaymentSource;
 use PaypalAddons\services\Builder\ConfirmPaymentSourceBuilder;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalHttp\HttpException;
@@ -62,7 +62,11 @@ class PaypalConfirmPaymentSourceRequest extends RequestAbstract
 
             if ($exec->statusCode >= 200 && $exec->statusCode < 300) {
                 $response->setSuccess(true)
-                    ->setData($exec);
+                    ->setData($exec)
+                    ->setPaymentId($exec->result->id)
+                    ->setStatusCode($exec->statusCode)
+                    ->setApproveLink($this->getLink('approve', $exec->result->links))
+                    ->setPayerActionLink($this->getLink('payer-action', $exec->result->links));
             } else {
                 $response->setSuccess(false)->setData($exec);
             }
@@ -99,11 +103,28 @@ class PaypalConfirmPaymentSourceRequest extends RequestAbstract
 
     protected function initResponse()
     {
-        return new Response();
+        return new ResponseConfirmationPaymentSource();
     }
 
     protected function initBodyBuilder()
     {
         return new ConfirmPaymentSourceBuilder($this->apmMethod);
+    }
+
+    /**
+     * @param $nameLink string
+     * @param $links array
+     *
+     * @return string
+     */
+    protected function getLink($nameLink, $links)
+    {
+        foreach ($links as $link) {
+            if ($link->rel == $nameLink) {
+                return $link->href;
+            }
+        }
+
+        return '';
     }
 }

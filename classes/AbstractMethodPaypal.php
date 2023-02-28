@@ -133,7 +133,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @return \PaypalAddons\classes\API\Response\ResponseOrderCreate
+     * @return \PaypalAddons\classes\API\Response\ResponseConfirmationPaymentSource
      *
      * @throws Exception
      */
@@ -146,7 +146,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             throw new \Exception($response->getError()->getMessage());
         }
 
-        return $response;
+        return $confirmation;
     }
 
     /**

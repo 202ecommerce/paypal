@@ -41,6 +41,7 @@ class PaypalEcInitModuleFrontController extends PaypalAbstarctModuleFrontControl
         $this->values['credit_card'] = Tools::getvalue('credit_card');
         $this->values['short_cut'] = 0;
         $this->setMethod(AbstractMethodPaypal::load($this->getMethodType(Tools::getAllValues())));
+        $this->values['apmMethod'] = Tools::getValue('apmMethod', null);
     }
 
     /**
@@ -50,7 +51,12 @@ class PaypalEcInitModuleFrontController extends PaypalAbstarctModuleFrontControl
     {
         try {
             $this->method->setParameters($this->values);
-            $this->redirectUrl = $this->method->init()->getApproveLink();
+
+            if (empty($this->values['apmMethod'])) {
+                $this->redirectUrl = $this->method->init()->getApproveLink();
+            } else {
+                $this->redirectUrl = $this->method->initApm($this->values['apmMethod'])->getPayerActionLink();
+            }
         } catch (PaypalAddons\classes\PaypalException $e) {
             $this->_errors['error_code'] = $e->getCode();
             $this->_errors['error_msg'] = $e->getMessage();

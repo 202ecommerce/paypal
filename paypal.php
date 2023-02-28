@@ -952,14 +952,24 @@ class PayPal extends \PaymentModule implements WidgetInterface
         foreach ($optionsMap as $optionMap) {
             $paymentOption = new PaymentOption();
             $paymentOption->setCallToActionText($optionMap['label']);
-            $paymentOption->setAction(
-                sprintf(
-                    'javascript:alert(\'%s\');',
-                    $this->l('Should use the alternative payment button') // todo: specify message
-                )
-            );
             $paymentOption->setModuleName('paypal_' . $optionMap['method']);
-            $paymentOption->setAdditionalInformation($this->initApmCollection([$optionMap['method']])->render());
+
+            if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
+                $paymentOption->setAdditionalInformation($this->initApmCollection([$optionMap['method']])->render());
+            } else {
+                $paymentOption->setAction(
+                    $this->context->link->getModuleLink(
+                        $this->name,
+                        'ecInit',
+                        [
+                            'credit_card' => '0',
+                            'methodType' => 'PPP',
+                            'apmMethod' => $optionMap['method'],
+                        ],
+                        true
+                    )
+                );
+            }
 
             $paymentOptions[] = $paymentOption;
         }
