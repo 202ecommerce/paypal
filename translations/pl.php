@@ -236,6 +236,7 @@ $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_b8b3fb00541
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_f6d4c204b4375f370ae346ac19af224a'] = 'Użyj prawidłowego formatu pliku (.gif, .jpg lub .png).';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_30e94012b686df7279f6a1db3c8a0684'] = 'Ogranicz rozmiar obrazu do 190 na 60 pikseli.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_06b778accab7c14a499bc6e7a68138ec'] = 'Wystąpił błąd podczas kopiowania obrazu.';
+$_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_1981089a58ccc371526094328e8f3b0a'] = 'Umieść przycisk PayPal na końcu strony zamówienia';
 $_MODULE['<{paypal}prestashop>adminpaypalsetupcontroller_8af703b2bf59cc9742883ae7f4cb0e5b'] = 'Ustawienia konta';
 $_MODULE['<{paypal}prestashop>adminpaypalsetupcontroller_f1a9672d88ab0cae23402867e2def274'] = 'Ustawienia płatności';
 $_MODULE['<{paypal}prestashop>adminpaypalsetupcontroller_93b06f54e738e1a36e44bafcb2ba9d56'] = 'Płatność';

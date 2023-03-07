@@ -272,6 +272,7 @@ $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_c9cc8cce247
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_f6d4c204b4375f370ae346ac19af224a'] = 'Gebruik een geldige grafische indeling, bijvoorbeeld .gif, .jpg of .png.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_30e94012b686df7279f6a1db3c8a0684'] = 'Beperk de afbeelding tot 190 pixels breed en 60 pixels hoog.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_06b778accab7c14a499bc6e7a68138ec'] = 'Er is een fout opgetreden bij het kopiëren van de afbeelding.';
+$_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_1981089a58ccc371526094328e8f3b0a'] = 'Plaats de PayPal-knop aan het einde van de bestelpagina';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_2ce895700ba5c16bede3b769128d216f'] = 'Hier u de standaardconfiguratie voor deze proces logger wijzigen';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_36c23650a89439d28101b389567fe2f5'] = 'Logs met Order-ID worden niet gewist.';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_3073ef21c0b326939d5b630edd08cfb6'] = 'Automatisch wissen uitschakelen';

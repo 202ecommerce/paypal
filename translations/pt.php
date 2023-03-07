@@ -272,6 +272,7 @@ $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_c9cc8cce247
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_f6d4c204b4375f370ae346ac19af224a'] = 'Use um formato de gráfico válido, como .gif, .jpg ou .png.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_30e94012b686df7279f6a1db3c8a0684'] = 'Limite a imagem a 190 pixels de largura por 60 pixels de altura.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_06b778accab7c14a499bc6e7a68138ec'] = 'Ocorreu um erro ao copiar a imagem.';
+$_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_1981089a58ccc371526094328e8f3b0a'] = 'Coloque o botão do PayPal no final da página do pedido';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_2ce895700ba5c16bede3b769128d216f'] = 'Aqui poderá alterar a configuração principal para este Process logger (pas sur de lexpression process logger en anglais)';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_36c23650a89439d28101b389567fe2f5'] = 'Os logs com order ID não serão apagados.';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_3073ef21c0b326939d5b630edd08cfb6'] = 'Desativar o apagamento automático dos dados';

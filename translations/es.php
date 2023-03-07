@@ -475,6 +475,7 @@ $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_42420612952
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_889cde7b5565eb585e83bc4e2af3744c'] = 'Botón de salida (recomendado)';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_f82f6e09a9e203576f21207fc3efe2cf'] = 'Pague con el botón de PayPal';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_b021df6aac4654c454f46c77646e745f'] = 'Etiqueta';
+$_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_1981089a58ccc371526094328e8f3b0a'] = 'Poner el botón de PayPal al final de la página de pedido';
 $_MODULE['<{paypal}prestashop>blockpreviewbuttoncontext_4f927595c36cb935133b3315e35c7cf8'] = 'Se recomienda el acceso directo a la Caja Express en el paso \"Registrarse\" en la caja para permitir que su cliente se salte el formulario de \"Registrarse\" en su sitio web. Toda la información, incluyendo la dirección de entrega, será proporcionada por PayPal';
 $_MODULE['<{paypal}prestashop>blockpreviewbuttoncontext_b29281296165d65c9c816c2ed17e5109'] = 'Regístrese paso a paso en la caja';
 $_MODULE['<{paypal}prestashop>blockpreviewbuttoncontext_e028b0667d313a0f1f687ca774141c4e'] = 'Los accesos directos de PayPal permiten un proceso de pago más rápido para sus compradores. PayPal le proporciona automáticamente la información de envío y facturación del cliente.';

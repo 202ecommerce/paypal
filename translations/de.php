@@ -489,4 +489,5 @@ $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_42420612952
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_889cde7b5565eb585e83bc4e2af3744c'] = 'Checkout-Schaltfläche (empfohlen)';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_f82f6e09a9e203576f21207fc3efe2cf'] = 'Schaltfläche Mit PayPal bezahlen';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_b021df6aac4654c454f46c77646e745f'] = 'Etikett';
+$_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_1981089a58ccc371526094328e8f3b0a'] = 'Setzen Sie den PayPal-Button am Ende der Bestellseite';
 $_MODULE['<{paypal}prestashop>adminpaypalhelpcontroller_09a74d0b7e593735e8f2ed964e25bc52'] = 'Hooks erfolgreich registriert';
