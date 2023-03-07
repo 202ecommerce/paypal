@@ -78,12 +78,6 @@
 
 <div paypal-acdc-wrapper class="pp-flex pp-flex-direction-column">
 
-  <div paypal-acdc-button-wrapper class="pp-flex pp-center">
-    <div id="paypal-acdc-button-container"></div>
-  </div>
-
-  <div class="pp-flex pp-center pp-padding-1"> or </div>
-
   <!-- Advanced credit and debit card payments form -->
   <div paypal-acdc-card-wrapper class="pp-flex pp-center">
     <form id="card-form" class="pp-flex pp-flex-direction-column">
@@ -106,7 +100,7 @@
       </div>
 
       <div class="pp-padding-1">
-        <button value="submit" id="submit" class="btn btn-primary">{l s='Pay' mod='paypal'}</button>
+        <button paypal-acdc-form-button class="btn btn-primary" style="width: 300px">{l s='Pay' mod='paypal'}</button>
       </div>
 
       <div paypal-acdc-card-error>
@@ -134,16 +128,20 @@
         messages['DATE_IS_EMPTY'] = '{l s='Please enter a valid date' mod='paypal'}';
         messages['3DS_FAILED'] = '{l s='3DS verification is failed' mod='paypal'}';
         acdcObj = new ACDC({
-            button: '#paypal-acdc-button-container',
             controller: '{$scInitController nofilter}',
             validationController: '{$validationController nofilter}',
-            messages: messages
+            messages: messages,
+            buttonForm: document.querySelector('[paypal-acdc-form-button]'),
+            isMoveButtonAtEnd: PAYPAL_MOVE_BUTTON_AT_END
         });
-        acdcObj.initButton();
         acdcObj.initHostedFields();
         acdcObj.hideElementTillPaymentOptionChecked(
             '[data-module-name="paypal_acdc"]',
             '#payment-confirmation'
+        );
+        acdcObj.showElementIfPaymentOptionChecked(
+          '[data-module-name="paypal_acdc"]',
+          '[paypal-acdc-form-button]'
         );
         acdcObj.addMarkTo(
           document.querySelector('[data-module-name="paypal_acdc"]').closest('.payment-option'),

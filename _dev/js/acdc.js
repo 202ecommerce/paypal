@@ -34,6 +34,10 @@ const ACDC = function(conf) {
   this.validationController = typeof conf['validationController'] != 'undefined' ? conf['validationController'] : null;
 
   this.messages = typeof conf['messages'] != "undefined" ? conf['messages'] : [];
+
+  this.isMoveButtonAtEnd = conf['isMoveButtonAtEnd'] === undefined ? null : conf['isMoveButtonAtEnd'];
+
+  this.buttonForm = conf['buttonForm'] === undefined ? null : conf['buttonForm'];
 };
 
 ACDC.prototype.initButton = function() {
@@ -90,8 +94,28 @@ ACDC.prototype.sendData = function(data) {
   form.submit();
 };
 
+ACDC.prototype.getPaypalButtonsContainer = function() {
+  if (document.querySelector('#paypal-buttons')) {
+    return document.querySelector('#paypal-buttons');
+  }
+
+  var container = document.createElement('div');
+  container.id = 'paypal-buttons';
+  container.style = 'width: 300px';
+
+  document.querySelector('#payment-confirmation').after(container);
+
+  return container;
+};
+
 ACDC.prototype.initHostedFields = function() {
   if (totPaypalAcdcSdk.HostedFields.isEligible()) {
+
+    if (this.isMoveButtonAtEnd) {
+      let paypalButtonsContainer = this.getPaypalButtonsContainer();
+      paypalButtonsContainer.append(this.buttonForm);
+      this.buttonForm.style.display = 'none';
+    }
 
     // Renders card fields
     totPaypalAcdcSdk.HostedFields.render({
@@ -125,7 +149,7 @@ ACDC.prototype.initHostedFields = function() {
         }
       }
     }).then(function (cardFields) {
-      document.querySelector("#card-form").addEventListener('submit', function(event) {
+      this.buttonForm.addEventListener('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -154,7 +178,7 @@ ACDC.prototype.initHostedFields = function() {
         }
 
         this.submitHostedFields(cardFields);
-        document.querySelector('#card-form #submit').setAttribute('disabled', true);
+        this.buttonForm.setAttribute('disabled', true);
       }.bind(this));
     }.bind(this));
   } else {
@@ -163,9 +187,13 @@ ACDC.prototype.initHostedFields = function() {
   }
 
   Tools.disableTillConsenting(
-    document.querySelector('[paypal-acdc-card-wrapper] button'),
+    this.buttonForm,
     document.getElementById('conditions_to_approve[terms-and-conditions]')
   );
+};
+
+ACDC.prototype.showElementIfPaymentOptionChecked = function(checkElementSelector, showElementSelector) {
+  Tools.showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector);
 };
 
 ACDC.prototype.submitHostedFields = function(cardFields) {
@@ -182,7 +210,7 @@ ACDC.prototype.submitHostedFields = function(cardFields) {
             this.setError(this.messages['3DS_FAILED']);
           }
 
-          document.querySelector('#card-form #submit').removeAttribute('disabled');
+          this.buttonForm.removeAttribute('disabled');
           return;
         }
       }
@@ -192,7 +220,7 @@ ACDC.prototype.submitHostedFields = function(cardFields) {
       });
     }.bind(this))
     .catch(function(reason) {
-      document.querySelector('#card-form #submit').removeAttribute('disabled');
+      this.buttonForm.removeAttribute('disabled');
 
       if (reason['name'] == 'INVALID_REQUEST' || reason['name'] == 'VALIDATION_ERROR') {
         if (typeof this.messages['INVALID_REQUEST'] != 'undefined') {

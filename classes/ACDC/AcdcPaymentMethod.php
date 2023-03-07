@@ -26,8 +26,10 @@
 
 namespace PaypalAddons\classes\ACDC;
 
+use Configuration;
 use Context;
 use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\classes\Constants\PaypalConfigurations;
 
 class AcdcPaymentMethod
 {
@@ -59,7 +61,9 @@ class AcdcPaymentMethod
     {
         $vars = [
             'psPaypalDir' => _PS_MODULE_DIR_ . 'paypal',
-            'JSvars' => [],
+            'JSvars' => [
+                PaypalConfigurations::MOVE_BUTTON_AT_END => (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+            ],
             'JSscripts' => $this->getScripts(),
         ];
 

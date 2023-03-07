@@ -53,7 +53,8 @@
                   button: '#paypal-sepa',
                   controller: '{$scInitController nofilter}',
                   validationController: '{$validationController nofilter}',
-                  paypal: window[skdNameSpace]
+                  paypal: window[skdNameSpace],
+                  isMoveButtonAtEnd: PAYPAL_MOVE_BUTTON_AT_END
               });
               sepaObj.initButton();
               sepaObj.hideElementTillPaymentOptionChecked(
