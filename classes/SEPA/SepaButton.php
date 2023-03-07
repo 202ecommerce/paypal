@@ -26,9 +26,11 @@
 
 namespace PaypalAddons\classes\SEPA;
 
+use Configuration;
 use Context;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\classes\Constants\PaypalConfigurations;
 
 class SepaButton
 {
@@ -65,7 +67,9 @@ class SepaButton
      */
     protected function getJSvars()
     {
-        return [];
+        return [
+            $vars[PaypalConfigurations::MOVE_BUTTON_AT_END] = (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+        ];
     }
 
     /**

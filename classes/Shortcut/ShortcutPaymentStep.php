@@ -29,6 +29,7 @@ namespace PaypalAddons\classes\Shortcut;
 use Configuration;
 use MethodMB;
 use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\classes\Constants\PaypalConfigurations;
 use Tools;
 
 class ShortcutPaymentStep extends ShortcutAbstract
@@ -71,6 +72,7 @@ class ShortcutPaymentStep extends ShortcutAbstract
     {
         $vars = parent::getJSvars();
         $vars['scOrderUrl'] = $this->method->getReturnUrl();
+        $vars[PaypalConfigurations::MOVE_BUTTON_AT_END] = (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END);
 
         return $vars;
     }

@@ -31,7 +31,13 @@ export const ApmButton = function(conf) {
 
     this.method = typeof conf['method'] != 'undefined' ? conf['method'] : null;
 
-    this.button = typeof conf['button'] != 'undefined' ? conf['button'] : null;
+    if (typeof conf['button'] != 'undefined') {
+      if (conf['button'] instanceof Element) {
+        this.button = conf['button'];
+      } else {
+        this.button = document.querySelector(conf['button']);
+      }
+    }
 
     this.controller = typeof conf['controller'] != 'undefined' ? conf['controller'] : null;
 
@@ -40,11 +46,19 @@ export const ApmButton = function(conf) {
     this.paypal = conf['paypal'] === undefined ? null : conf['paypal'];
 
     this.messages = conf['messages'] === undefined ? [] : conf['messages'];
+
+    this.isMoveButtonAtEnd = conf['isMoveButtonAtEnd'] === undefined ? [] : conf['isMoveButtonAtEnd'];
 };
 
 ApmButton.prototype.initButton = function() {
   if (this.paypal == null) {
     return;
+  }
+
+  if (this.isMoveButtonAtEnd) {
+    let paypalButtonsContainer = this.getPaypalButtonsContainer();
+    paypalButtonsContainer.append(this.button);
+    this.button.style.display = 'none';
   }
 
   let paypalButton = this.paypal.Buttons({
@@ -77,7 +91,7 @@ ApmButton.prototype.initButton = function() {
   paypalButton.render(this.button);
 
   Tools.disableTillConsenting(
-    document.querySelector(this.button),
+    this.button,
     document.getElementById('conditions_to_approve[terms-and-conditions]')
   );
 };
@@ -122,6 +136,10 @@ ApmButton.prototype.hideElementTillPaymentOptionChecked = function(paymentOption
   Tools.hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector);
 };
 
+ApmButton.prototype.showElementIfPaymentOptionChecked = function(checkElementSelector, showElementSelector) {
+  Tools.showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector);
+};
+
 ApmButton.prototype.addMarkTo = function(element, styles = {}) {
   if (element instanceof Element == false) {
     return;
@@ -143,6 +161,20 @@ ApmButton.prototype.addMarkTo = function(element, styles = {}) {
   if (mark.isEligible()) {
     mark.render(markContainer);
   }
+};
+
+ApmButton.prototype.getPaypalButtonsContainer = function() {
+  if (document.querySelector('#paypal-buttons')) {
+    return document.querySelector('#paypal-buttons');
+  }
+
+  var container = document.createElement('div');
+  container.id = 'paypal-buttons';
+  container.style = 'width: 300px';
+
+  document.querySelector('#payment-confirmation').after(container);
+
+  return container;
 };
 
 window.ApmButton = ApmButton;

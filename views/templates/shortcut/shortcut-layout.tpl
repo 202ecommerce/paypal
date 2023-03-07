@@ -43,6 +43,11 @@
           }
 
           Shortcut.init();
+
+          if (PAYPAL_MOVE_BUTTON_AT_END != undefined) {
+            Shortcut.isMoveButtonAtEnd = PAYPAL_MOVE_BUTTON_AT_END;
+          }
+
           Shortcut.initButton();
           Shortcut.addMarkTo(
             document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),

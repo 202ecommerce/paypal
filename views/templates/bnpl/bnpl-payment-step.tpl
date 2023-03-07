@@ -73,12 +73,20 @@
             '[data-module-name="paypal_bnpl"]',
             '#payment-confirmation'
         );
+        BNPL.showElementIfPaymentOptionChecked(
+          '[data-module-name="paypal_bnpl"]',
+          '[paypal-bnpl-button-container]'
+        );
     } else {
         document.addEventListener('paypal-after-init-bnpl-button', function (event) {
             BNPL.disableTillConsenting();
             BNPL.hideElementTillPaymentOptionChecked(
                 '[data-module-name="paypal_bnpl"]',
                 '#payment-confirmation'
+            );
+            BNPL.showElementIfPaymentOptionChecked(
+              '[data-module-name="paypal_bnpl"]',
+              '[paypal-bnpl-button-container]'
             );
         })
     }

@@ -46,6 +46,8 @@ const BNPL = {
 
   isAddAddress: null,
 
+  isMoveButtonAtEnd: null,
+
   init() {
     this.updateInfo();
     BNPL.checkProductAvailability();
@@ -84,7 +86,26 @@ const BNPL = {
     return combination;
   },
 
+  getPaypalButtonsContainer() {
+    if (document.querySelector('#paypal-buttons')) {
+      return document.querySelector('#paypal-buttons');
+    }
+
+    var container = document.createElement('div');
+    container.id = 'paypal-buttons';
+    container.style = 'width: 300px';
+
+    document.querySelector('#payment-confirmation').after(container);
+
+    return container;
+  },
+
   initButton() {
+    if (BNPL.isMoveButtonAtEnd) {
+      var paypalButtonsContainer = BNPL.getPaypalButtonsContainer();
+      paypalButtonsContainer.append(BNPL.button);
+      BNPL.button.style.display = 'none';
+    }
 
     totPaypalBnplSdkButtons.Buttons({
       fundingSource: totPaypalBnplSdkButtons.FUNDING.PAYLATER,
@@ -227,6 +248,10 @@ const BNPL = {
 
   hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector) {
     Tools.hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector);
+  },
+
+  showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector) {
+    Tools.showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector);
   },
 
   addMarkTo(element, styles = {}) {

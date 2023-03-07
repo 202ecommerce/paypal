@@ -61,6 +61,7 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
         parent::__construct();
         $this->parametres = [
             'paypal_express_checkout_in_context',
+            PaypalConfigurations::MOVE_BUTTON_AT_END,
             'paypal_api_advantages',
             'paypal_config_brand',
             Tools::strtolower(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
@@ -228,6 +229,25 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
             'hint' => $this->l('By default, PayPal shortcut is displayed directly on your cart page. In order to improve your customers’ experience, you can enable PayPal shortcuts on other pages of your shop : product pages or/and Sign up form on order page (on the first step of checkout). Shipping costs will be estimated on the base of the cart total and default carrier fees.'),
             'name' => '',
             'html_content' => $htmlContent,
+        ];
+
+        $this->fields_form['form']['form']['input'][] = [
+            'type' => 'switch',
+            'label' => $this->l('Put the PayPal button at the end of the order page'),
+            'name' => PaypalConfigurations::MOVE_BUTTON_AT_END,
+            'is_bool' => true,
+            'values' => [
+                [
+                    'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_on',
+                    'value' => 1,
+                    'label' => $this->l('Enabled'),
+                ],
+                [
+                    'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_off',
+                    'value' => 0,
+                    'label' => $this->l('Disabled'),
+                ],
+            ],
         ];
 
         $this->fields_form['form']['form']['input'][] = [

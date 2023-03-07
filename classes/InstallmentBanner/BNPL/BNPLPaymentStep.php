@@ -27,6 +27,7 @@
 namespace PaypalAddons\classes\InstallmentBanner\BNPL;
 
 use Configuration;
+use PaypalAddons\classes\Constants\PaypalConfigurations;
 use Tools;
 
 class BNPLPaymentStep extends BNPLAbstract
@@ -57,6 +58,7 @@ class BNPLPaymentStep extends BNPLAbstract
     {
         $vars = parent::getJSvars();
         $vars['scOrderUrl'] = $this->method->getReturnUrl();
+        $vars[PaypalConfigurations::MOVE_BUTTON_AT_END] = (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END);
 
         return $vars;
     }

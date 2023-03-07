@@ -143,6 +143,50 @@ export const Tools = {
     })
   },
 
+  showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector) {
+    const checkElement = document.querySelector(checkElementSelector);
+    const showElement = document.querySelector(showElementSelector);
+
+    if (checkElement instanceof Element == false) {
+      return;
+    }
+
+    if (showElement instanceof Element == false) {
+      return;
+    }
+
+    if ('paypalToolsShowElemenList' in window == false) {
+      window.paypalToolsShowElemenList = {};
+    }
+
+    if (showElementSelector in window.paypalToolsShowElemenList) {
+      window.paypalToolsShowElemenList[showElementSelector].push(checkElement);
+      return;
+    }
+
+    window.paypalToolsShowElemenList[showElementSelector] = [checkElement];
+    const options = checkElement.closest('.payment-options');
+
+    if (options instanceof Element == false) {
+      return;
+    }
+
+    options.addEventListener('input', function(event) {
+      let isShow = false;
+      window.paypalToolsShowElemenList[showElementSelector].forEach(function(elem) {
+        if (elem.checked) {
+          isShow = true;
+        }
+      });
+
+      if (isShow) {
+        showElement.style.display = 'block';
+      } else {
+        showElement.style.display = 'none';
+      }
+    });
+  },
+
   initPhoneInput(input, options = {}) {
     if (false == input instanceof Element) {
       return false;

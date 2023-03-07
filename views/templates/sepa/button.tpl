@@ -60,6 +60,10 @@
                   '[data-module-name="paypal_sepa"]',
                   '#payment-confirmation'
               );
+              sepaObj.showElementIfPaymentOptionChecked(
+                '[data-module-name="paypal_sepa"]',
+                '#paypal-sepa'
+              );
               sepaObj.addMarkTo(
                   document.querySelector('input[data-module-name="paypal_sepa"]').closest('.payment-option'),
                   {
