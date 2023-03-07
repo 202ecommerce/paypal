@@ -272,7 +272,7 @@ $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_c9cc8cce247
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_f6d4c204b4375f370ae346ac19af224a'] = 'Usa un formato grafico valido, come .gif, .jpg o .png.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_30e94012b686df7279f6a1db3c8a0684'] = 'Limita l\'immagine a 190 pixel di larghezza per 60 pixel di altezza.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_06b778accab7c14a499bc6e7a68138ec'] = 'Si è verificato un errore durante la copia dell\'immagine.';
-$_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_1981089a58ccc371526094328e8f3b0a'] = 'Metti il ​​pulsante PayPal alla fine della pagina dell\'ordine';
+$_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_1981089a58ccc371526094328e8f3b0a'] = 'Metti il pulsante PayPal alla fine della pagina dell\'ordine';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_2ce895700ba5c16bede3b769128d216f'] = 'Qui è possibile modificare la configurazione predefinita del Process Logger';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_36c23650a89439d28101b389567fe2f5'] = 'I registri con i riferimenti agli ordini non verranno cancellati';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_3073ef21c0b326939d5b630edd08cfb6'] = 'Disabilita la cancellazione automatica';
