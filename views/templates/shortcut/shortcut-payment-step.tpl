@@ -68,6 +68,12 @@
       });
 
       if (typeof Shortcut != "undefined") {
+          Shortcut.addMarkTo(
+            document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),
+            {
+              display: "table-cell"
+            }
+          );
           Shortcut.disableTillConsenting();
           Shortcut.hideElementTillPaymentOptionChecked(
               '[data-module-name="paypal"]',
@@ -79,6 +85,12 @@
           );
       } else {
           document.addEventListener('paypal-after-init-shortcut-button', function (event) {
+              Shortcut.addMarkTo(
+                document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),
+                {
+                  display: "table-cell"
+                }
+              );
               Shortcut.disableTillConsenting();
               Shortcut.hideElementTillPaymentOptionChecked(
                   '[data-module-name="paypal"]',

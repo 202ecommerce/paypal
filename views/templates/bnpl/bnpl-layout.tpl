@@ -48,17 +48,11 @@
               BNPL.setColor(bnplColor);
           }
 
-          if (PAYPAL_MOVE_BUTTON_AT_END != undefined) {
+          if (typeof PAYPAL_MOVE_BUTTON_AT_END != 'undefined') {
             BNPL.isMoveButtonAtEnd = PAYPAL_MOVE_BUTTON_AT_END;
           }
 
           BNPL.initButton();
-          BNPL.addMarkTo(
-            document.querySelector('[data-module-name="paypal_bnpl"]').closest('.payment-option'),
-            {
-              display: "table-cell"
-            }
-          );
       }
 
       waitPaypalSDKIsLoaded();
