@@ -65,9 +65,23 @@
                 document.querySelector('[paypal-wrong-button-message]').style.display = 'block';
             }
         });
+        paypalInitBNPLButtons(true);     
     });
 
     if (typeof BNPL != "undefined") {
+        paypalInitBNPLButtons(false);
+    } else {
+        document.addEventListener('paypal-after-init-bnpl-button', function (event) {
+          paypalInitBNPLButtons(false);
+        })
+    }
+
+    function paypalInitBNPLButtons(repeatTimer) {
+        if (typeof BNPL == 'undefined' && repeatTimer === true) {
+          setTimeout(paypalInitBNPLButtons, 150);
+        } else {
+          return;
+        }
         BNPL.addMarkTo(
           document.querySelector('[data-module-name="paypal_bnpl"]').closest('.payment-option'),
           {
@@ -83,24 +97,6 @@
           '[data-module-name="paypal_bnpl"]',
           '[paypal-bnpl-button-container]'
         );
-    } else {
-        document.addEventListener('paypal-after-init-bnpl-button', function (event) {
-            BNPL.addMarkTo(
-              document.querySelector('[data-module-name="paypal_bnpl"]').closest('.payment-option'),
-              {
-                display: "table-cell"
-              }
-            );
-            BNPL.disableTillConsenting();
-            BNPL.hideElementTillPaymentOptionChecked(
-                '[data-module-name="paypal_bnpl"]',
-                '#payment-confirmation'
-            );
-            BNPL.showElementIfPaymentOptionChecked(
-              '[data-module-name="paypal_bnpl"]',
-              '[paypal-bnpl-button-container]'
-            );
-        })
     }
   </script>
 {/block}
