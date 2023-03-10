@@ -78,7 +78,15 @@ export const Tools = {
       } else {
         Tools.disable(disabledElement);
       }
-    })
+    });
+
+    $('.payment-option').click(function() {
+      if (checkBox.checked) {
+        Tools.enable(disabledElement);
+      } else {
+        Tools.disable(disabledElement);
+      }
+    });
   },
 
   disable(element) {
