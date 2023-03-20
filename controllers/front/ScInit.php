@@ -153,13 +153,23 @@ class PaypalScInitModuleFrontController extends PaypalAbstarctModuleFrontControl
             $this->method->setShortCut(true);
         }
 
-        if (empty($request->apmMethod)) {
-            $this->method->init();
-        } else {
-            $this->method->initApm($request->apmMethod);
+        try {
+            if (empty($request->apmMethod)) {
+                $this->method->init();
+            } else {
+                $this->method->initApm($request->apmMethod);
+            }
+        } catch (Exception $e) {
+        } catch (Throwable $e) {
+        } finally {
+            if (isset($e)) {
+                $this->_errors['error_code'] = $e->getCode();
+                $this->_errors['error_msg'] = $e->getMessage();
+                $this->jsonValues = ['success' => false];
+            } else {
+                $this->jsonValues = ['success' => true, 'idOrder' => $this->method->getPaymentId()];
+            }
         }
-
-        $this->jsonValues = ['success' => true, 'idOrder' => $this->method->getPaymentId()];
     }
 
     public function getRequest()
