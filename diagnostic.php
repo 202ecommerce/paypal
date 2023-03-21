@@ -30,10 +30,10 @@ return [
         'name' => 'paypal',
         'stubs' => [
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\FileIntegrityStub::class => [
-                'repository' => '202-ecommerce/paypal',
+                'repository' => '202ecommerce/paypal',
             ],
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\GithubVersionStub::class => [
-                'repository' => '202-ecommerce/paypal',
+                'repository' => '202ecommerce/paypal',
             ],
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\ConflictsStub::class => [],
             PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\DatabaseStub::class => [
