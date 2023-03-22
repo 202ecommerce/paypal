@@ -28,5 +28,5 @@
       {$stub nofilter}
   {/foreach}
 
-  {include file="./export.tpl"}
+{*  {include file="./export.tpl"}*}
 </div>
