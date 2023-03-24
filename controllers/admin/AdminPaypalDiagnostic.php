@@ -35,4 +35,9 @@ use PaypalPPBTlib\Extensions\Diagnostic\Controllers\Admin\AdminDiagnosticControl
 
 class AdminPaypalDiagnosticController extends AdminDiagnosticController
 {
+    public function initPageHeaderToolbar()
+    {
+        parent::initPageHeaderToolbar();
+        $this->context->smarty->clearAssign('help_link');
+    }
 }
