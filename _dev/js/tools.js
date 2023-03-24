@@ -1,4 +1,4 @@
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -78,7 +78,15 @@ export const Tools = {
       } else {
         Tools.disable(disabledElement);
       }
-    })
+    });
+
+    $('.payment-option').click(function() {
+      if (checkBox.checked) {
+        Tools.enable(disabledElement);
+      } else {
+        Tools.disable(disabledElement);
+      }
+    });
   },
 
   disable(element) {
@@ -141,6 +149,50 @@ export const Tools = {
         hideElement.style.visibility = 'initial';
       }
     })
+  },
+
+  showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector) {
+    const checkElement = document.querySelector(checkElementSelector);
+    const showElement = document.querySelector(showElementSelector);
+
+    if (checkElement instanceof Element == false) {
+      return;
+    }
+
+    if (showElement instanceof Element == false) {
+      return;
+    }
+
+    if ('paypalToolsShowElemenList' in window == false) {
+      window.paypalToolsShowElemenList = {};
+    }
+
+    if (showElementSelector in window.paypalToolsShowElemenList) {
+      window.paypalToolsShowElemenList[showElementSelector].push(checkElement);
+      return;
+    }
+
+    window.paypalToolsShowElemenList[showElementSelector] = [checkElement];
+    const options = checkElement.closest('.payment-options');
+
+    if (options instanceof Element == false) {
+      return;
+    }
+
+    options.addEventListener('input', function(event) {
+      let isShow = false;
+      window.paypalToolsShowElemenList[showElementSelector].forEach(function(elem) {
+        if (elem.checked) {
+          isShow = true;
+        }
+      });
+
+      if (isShow) {
+        showElement.style.display = 'block';
+      } else {
+        showElement.style.display = 'none';
+      }
+    });
   },
 
   initPhoneInput(input, options = {}) {

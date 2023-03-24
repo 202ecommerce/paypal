@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -33,7 +33,7 @@
 {if isset($methodCollection)}
     {foreach from=$methodCollection item=method}
         <div>
-          <div id="paypal-apm-{$method|escape:'htmlall':'utf-8'}"></div>
+          <div id="paypal-apm-{$method|escape:'htmlall':'UTF-8'}"></div>
         </div>
     {/foreach}
 {/if}
@@ -61,12 +61,17 @@
                       button: '#paypal-apm-'+method,
                       controller: '{$scInitController nofilter}',
                       validationController: '{$validationController nofilter}',
-                      paypal: window[skdNameSpace]
+                      paypal: window[skdNameSpace],
+                      isMoveButtonAtEnd: PAYPAL_MOVE_BUTTON_AT_END
                   });
                   apmObj.initButton();
                   apmObj.hideElementTillPaymentOptionChecked(
                       '[data-module-name="paypal_' + method + '"]',
                       '#payment-confirmation'
+                  );
+                  apmObj.showElementIfPaymentOptionChecked(
+                    '[data-module-name="paypal_' + method + '"]',
+                    '#paypal-apm-'+method
                   );
                   apmObj.addMarkTo(
                       document.querySelector('input[data-module-name="paypal_'+method+'"]').closest('.payment-option'),

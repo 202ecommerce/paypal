@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -25,7 +25,7 @@
  *}
 
 <div class="pp__flex" style="max-width: 400px">
-  <input name = "PAYPAL_WHITE_LIST_IP" type="text" value="{$PAYPAL_WHITE_LIST_IP|escape:'html':'utf-8'}">
+  <input name = "PAYPAL_WHITE_LIST_IP" type="text" value="{$PAYPAL_WHITE_LIST_IP|escape:'html':'UTF-8'}">
   <button style="white-space: nowrap;" current-ip="{$paypal_current_ip}" type="button" class="btn btn-primary" add-ip-btn>{l s='Add my IP' mod='paypal'}</button>
 </div>
 

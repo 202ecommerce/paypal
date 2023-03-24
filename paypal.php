@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,7 +22,6 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- *
  */
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -962,14 +961,24 @@ class PayPal extends \PaymentModule implements WidgetInterface
         foreach ($optionsMap as $optionMap) {
             $paymentOption = new PaymentOption();
             $paymentOption->setCallToActionText($optionMap['label']);
-            $paymentOption->setAction(
-                sprintf(
-                    'javascript:alert(\'%s\');',
-                    $this->l('Should use the alternative payment button') // todo: specify message
-                )
-            );
             $paymentOption->setModuleName('paypal_' . $optionMap['method']);
-            $paymentOption->setAdditionalInformation($this->initApmCollection([$optionMap['method']])->render());
+
+            if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
+                $paymentOption->setAdditionalInformation($this->initApmCollection([$optionMap['method']])->render());
+            } else {
+                $paymentOption->setAction(
+                    $this->context->link->getModuleLink(
+                        $this->name,
+                        'ecInit',
+                        [
+                            'credit_card' => '0',
+                            'methodType' => 'PPP',
+                            'apmMethod' => $optionMap['method'],
+                        ],
+                        true
+                    )
+                );
+            }
 
             $paymentOptions[] = $paymentOption;
         }
@@ -999,7 +1008,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         );
         $paymentOption->setModuleName('paypal_acdc');
         $paymentOption->setAdditionalInformation($this->initAcdcPaymentMethod()->render());
-        $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
 
         return $paymentOption;
     }
@@ -1013,6 +1021,8 @@ class PayPal extends \PaymentModule implements WidgetInterface
     {
         $paymentOption = new PaymentOption();
         $paymentOption->setCallToActionText($this->l('PayPal'));
+        $additionalInformation = '';
+
         $paymentOption->setAction(
             sprintf(
                 'javascript:alert(\'%s\');',
@@ -1026,7 +1036,22 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 break;
             }
         }
-        $additionalInformation = $this->getShortcutPaymentStep()->render();
+
+        if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
+            $additionalInformation .= $this->getShortcutPaymentStep()->render();
+        } else {
+            $paymentOption->setAction(
+                $this->context->link->getModuleLink(
+                    $this->name,
+                    'ecInit',
+                    [
+                        'credit_card' => '0',
+                        'methodType' => 'PPP',
+                    ],
+                    true
+                )
+            );
+        }
 
         if (!$is_virtual && Configuration::get('PAYPAL_API_ADVANTAGES')) {
             $additionalInformation .= $this->context->smarty->fetch('module:paypal/views/templates/front/payment_infos.tpl');
@@ -1034,7 +1059,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         $paymentOption->setModuleName($this->name);
         $paymentOption->setAdditionalInformation($additionalInformation);
-        $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
 
         return $paymentOption;
     }
@@ -1060,7 +1084,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         }
         $paymentOption = new PaymentOption();
         $action_text = $this->l('Pay with Paypal');
-        $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
         $paymentOption->setModuleName($this->name);
         if (Configuration::get('PAYPAL_API_ADVANTAGES')) {
             $action_text .= ' | ' . $this->l('It\'s simple, fast and secure');
@@ -1072,6 +1095,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
             $additionalInformation .= $this->getShortcutPaymentStep()->render();
         } else {
+            $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
             $paymentOption->setAction($this->context->link->getModuleLink($this->name, 'ecInit', ['credit_card' => '0'], true));
         }
         if (!$is_virtual && Configuration::get('PAYPAL_API_ADVANTAGES')) {
@@ -2968,7 +2992,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         );
         $paymentOption->setModuleName('paypal_bnpl');
         $paymentOption->setAdditionalInformation($this->renderBnpl(['sourcePage' => ConfigurationMap::PAGE_TYPE_PAYMENT_STEP]));
-        $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
 
         return $paymentOption;
     }

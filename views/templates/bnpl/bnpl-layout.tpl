@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -46,6 +46,10 @@
 
           if (typeof bnplColor != 'undefined') {
               BNPL.setColor(bnplColor);
+          }
+
+          if (typeof PAYPAL_MOVE_BUTTON_AT_END != 'undefined') {
+            BNPL.isMoveButtonAtEnd = PAYPAL_MOVE_BUTTON_AT_END;
           }
 
           BNPL.initButton();

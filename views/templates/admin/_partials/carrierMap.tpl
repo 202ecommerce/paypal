@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -36,16 +36,16 @@
     {foreach from=$carriers item=carrier}
         {assign var='selectedCarrier' value=$mapService->getPaypalCarrierByPsCarrier($carrier['id_reference'])}
         <tr>
-          <td>{$carrier['name']|escape:'htmlall':'utf-8'}</td>
+          <td>{$carrier['name']|escape:'htmlall':'UTF-8'}</td>
           <td>
             <select name="carrier_map[]" id="">
               <option value="0">{l s='Select carrier' mod='paypal'}</option>
               {foreach from=$mapService->getPaypalCarriersByCountry() item=paypalCarrier}
                 <option
-                        value="{$carrier['id_reference']|escape:'htmlall':'utf-8'},{$paypalCarrier['key']|escape:'htmlall':'utf-8'}"
+                        value="{$carrier['id_reference']|escape:'htmlall':'UTF-8'},{$paypalCarrier['key']|escape:'htmlall':'UTF-8'}"
                         {if $selectedCarrier == $paypalCarrier['key']}selected{/if}>
 
-                    {$paypalCarrier['name']|escape:'htmlall':'utf-8'}
+                    {$paypalCarrier['name']|escape:'htmlall':'UTF-8'}
 
                 </option>
               {/foreach}

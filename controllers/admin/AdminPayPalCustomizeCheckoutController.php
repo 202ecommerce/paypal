@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,7 +22,6 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- *
  */
 require_once _PS_MODULE_DIR_ . 'paypal/vendor/autoload.php';
 
@@ -62,6 +61,7 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
         parent::__construct();
         $this->parametres = [
             'paypal_express_checkout_in_context',
+            PaypalConfigurations::MOVE_BUTTON_AT_END,
             'paypal_api_advantages',
             'paypal_config_brand',
             Tools::strtolower(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
@@ -229,6 +229,25 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
             'hint' => $this->l('By default, PayPal shortcut is displayed directly on your cart page. In order to improve your customers’ experience, you can enable PayPal shortcuts on other pages of your shop : product pages or/and Sign up form on order page (on the first step of checkout). Shipping costs will be estimated on the base of the cart total and default carrier fees.'),
             'name' => '',
             'html_content' => $htmlContent,
+        ];
+
+        $this->fields_form['form']['form']['input'][] = [
+            'type' => 'switch',
+            'label' => $this->l('Put the PayPal button at the end of the order page'),
+            'name' => PaypalConfigurations::MOVE_BUTTON_AT_END,
+            'is_bool' => true,
+            'values' => [
+                [
+                    'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_on',
+                    'value' => 1,
+                    'label' => $this->l('Enabled'),
+                ],
+                [
+                    'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_off',
+                    'value' => 0,
+                    'label' => $this->l('Disabled'),
+                ],
+            ],
         ];
 
         $this->fields_form['form']['form']['input'][] = [
@@ -784,7 +803,7 @@ class AdminPayPalCustomizeCheckoutController extends AdminPayPalController
 
                                 if (false == $value) {
                                     $msg = $this->l('An error occurred while creating the webhook. This feature has been automatically disabled.');
-                                    $msg .= $this->l('Please enbale it via the “Experience” tab-> “Advanced mode”-> “Enable event notifications”.');
+                                    $msg .= $this->l('Please enable it via the “Experience” tab-> “Advanced mode”-> “Enable event notifications”.');
                                     $msg .= $this->l('If the problem persists please contact our support service.');
                                     $this->errors[] = $msg;
                                 }

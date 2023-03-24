@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,7 +22,6 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- *
  */
 
 namespace PaypalAddons\classes\PUI;
@@ -73,8 +72,7 @@ class FraudNetForm
 
     protected function getSourceId()
     {
-        //todo: use format merchantId + page name
-        return '[use-client-id-here]-checkout-page';
+        return (new PsMerchantId($this->method))->get() . '-checkout-page';
     }
 
     protected function getUserData()

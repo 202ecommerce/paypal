@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,34 +22,33 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- */
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
-use PaypalAddons\classes\AbstractMethodPaypal;
-use PaypalPPBTlib\Install\ModuleInstaller;
-
-/**
- * @param $module PayPal
  *
- * @return bool
  */
-function upgrade_module_5_0_0($module)
-{
-    $installer = new ModuleInstaller($module);
-    $installer->registerHooks();
-    $installer->installAdminControllers();
-    $module->renameTabParent();
-    $method = AbstractMethodPaypal::load('EC');
-    $method->checkCredentials();
-    $tabConfiguration = Tab::getInstanceFromClassName('AdminPaypalConfiguration');
 
-    if (Validate::isLoadedObject($tabConfiguration) == false) {
-        return false;
+namespace PaypalAddons\classes\API\Response;
+
+class ResponseConfirmationPaymentSource extends ResponseOrderCreate
+{
+    /** @var string */
+    protected $payerActionLink;
+
+    /**
+     * @return string
+     */
+    public function getPayerActionLink()
+    {
+        return (string) $this->payerActionLink;
     }
 
-    $tabConfiguration->active = false;
+    /**
+     * @param string $link
+     *
+     * @return self
+     */
+    public function setPayerActionLink($link)
+    {
+        $this->payerActionLink = (string) $link;
 
-    return $tabConfiguration->save();
+        return $this;
+    }
 }

@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -98,7 +98,7 @@
         fetch(url.toString(), {
             method: 'post',
             headers: {
-                'content-type': 'application/json;charset=utf-8'
+                'content-type': 'application/json;charset=UTF-8'
             },
             body: JSON.stringify(this.getProductInfo())
         }).then(function (res) {

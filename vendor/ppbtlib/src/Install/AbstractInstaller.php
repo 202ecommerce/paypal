@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE

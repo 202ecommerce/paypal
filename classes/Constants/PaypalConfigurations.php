@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,7 +22,6 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- *
  */
 
 namespace PaypalAddons\classes\Constants;
@@ -56,4 +55,6 @@ class PaypalConfigurations
     const OS_VALIDATION_ERROR = 'PAYPAL_OS_VALIDATION_ERROR';
 
     const OS_REFUNDED_PAYPAL = 'PAYPAL_OS_REFUNDED_PAYPAL';
+
+    const MOVE_BUTTON_AT_END = 'PAYPAL_MOVE_BUTTON_AT_END';
 }

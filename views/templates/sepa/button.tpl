@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -53,12 +53,17 @@
                   button: '#paypal-sepa',
                   controller: '{$scInitController nofilter}',
                   validationController: '{$validationController nofilter}',
-                  paypal: window[skdNameSpace]
+                  paypal: window[skdNameSpace],
+                  isMoveButtonAtEnd: PAYPAL_MOVE_BUTTON_AT_END
               });
               sepaObj.initButton();
               sepaObj.hideElementTillPaymentOptionChecked(
                   '[data-module-name="paypal_sepa"]',
                   '#payment-confirmation'
+              );
+              sepaObj.showElementIfPaymentOptionChecked(
+                '[data-module-name="paypal_sepa"]',
+                '#paypal-sepa'
               );
               sepaObj.addMarkTo(
                   document.querySelector('input[data-module-name="paypal_sepa"]').closest('.payment-option'),

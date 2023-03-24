@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,14 +22,15 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- *
  */
 
 namespace PaypalAddons\classes\SEPA;
 
+use Configuration;
 use Context;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\classes\Constants\PaypalConfigurations;
 
 class SepaButton
 {
@@ -66,7 +67,9 @@ class SepaButton
      */
     protected function getJSvars()
     {
-        return [];
+        return [
+            $vars[PaypalConfigurations::MOVE_BUTTON_AT_END] = (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+        ];
     }
 
     /**

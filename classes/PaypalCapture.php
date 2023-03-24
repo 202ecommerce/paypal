@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,7 +22,6 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- *
  */
 
 /**
@@ -57,7 +56,7 @@ class PaypalCapture extends ObjectModel
         'multilang' => false,
         'fields' => [
             'id_capture' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
-            'id_paypal_order' => ['type' => self::TYPE_INT],
+            'id_paypal_order' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             'capture_amount' => ['type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2],
             'result' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],

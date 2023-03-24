@@ -1,4 +1,4 @@
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -46,6 +46,8 @@ const Shortcut = {
 
   isAddAddress: null,
 
+  isMoveButtonAtEnd: null,
+
   init() {
     this.updateInfo();
     prestashop.on('updatedProduct', function(e, xhr, settings) {
@@ -83,9 +85,29 @@ const Shortcut = {
     return combination;
   },
 
+  getPaypalButtonsContainer() {
+    if (document.querySelector('#paypal-buttons')) {
+      return document.querySelector('#paypal-buttons');
+    }
+
+    var container = document.createElement('div');
+    container.id = 'paypal-buttons';
+    container.style = 'width: 300px';
+
+    document.querySelector('#payment-confirmation').after(container);
+
+    return container;
+  },
+
   initButton() {
     if (typeof Shortcut.getStyleSetting()['width'] !== 'undefined') {
       Shortcut.button.style.width = Shortcut.getStyleSetting()['width'] + 'px';
+    }
+
+    if (Shortcut.isMoveButtonAtEnd) {
+      var paypalButtonsContainer = Shortcut.getPaypalButtonsContainer();
+      paypalButtonsContainer.append(Shortcut.button);
+      Shortcut.button.style.display = 'none';
     }
 
     totPaypalSdkButtons.Buttons({
@@ -209,6 +231,33 @@ const Shortcut = {
 
   hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector) {
     Tools.hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector);
+  },
+
+  showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector) {
+    Tools.showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector);
+  },
+
+  addMarkTo(element, styles = {}) {
+    if (element instanceof Element == false) {
+      return;
+    }
+
+    const markContainer = document.createElement('span');
+
+    for (let key in styles) {
+      markContainer.style[key] = styles[key];
+    }
+
+    markContainer.setAttribute('paypal-mark-container', '');
+    element.appendChild(markContainer);
+
+    const mark = totPaypalSdkButtons.Marks({
+      fundingSource: totPaypalSdkButtons.FUNDING.PAYPAL
+    });
+
+    if (mark.isEligible()) {
+      mark.render(markContainer);
+    }
   }
 
 };

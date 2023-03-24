@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -68,17 +68,37 @@
       });
 
       if (typeof Shortcut != "undefined") {
+          Shortcut.addMarkTo(
+            document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),
+            {
+              display: "table-cell"
+            }
+          );
           Shortcut.disableTillConsenting();
           Shortcut.hideElementTillPaymentOptionChecked(
               '[data-module-name="paypal"]',
               '#payment-confirmation'
           );
+          Shortcut.showElementIfPaymentOptionChecked(
+            '[data-module-name="paypal"]',
+            '[paypal-button-container]'
+          );
       } else {
           document.addEventListener('paypal-after-init-shortcut-button', function (event) {
+              Shortcut.addMarkTo(
+                document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),
+                {
+                  display: "table-cell"
+                }
+              );
               Shortcut.disableTillConsenting();
               Shortcut.hideElementTillPaymentOptionChecked(
                   '[data-module-name="paypal"]',
                   '#payment-confirmation'
+              );
+              Shortcut.showElementIfPaymentOptionChecked(
+                '[data-module-name="paypal"]',
+                '[paypal-button-container]'
               );
           })
       }

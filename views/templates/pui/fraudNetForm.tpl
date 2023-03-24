@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -36,7 +36,7 @@
   {
     "f":"{/literal}{$sessionId}{literal}",
     "s":"{/literal}{$sourceId}{literal}",
-    "sandbox": {/literal}{$isSandbox}{literal}
+    "sandbox": {/literal}{if $isSandbox}true{else}false{/if}{literal}
   }
 </script>
 {/literal}

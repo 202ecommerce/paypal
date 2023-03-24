@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,7 +22,6 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- *
  */
 
 namespace PaypalAddons\services;
@@ -30,7 +29,6 @@ namespace PaypalAddons\services;
 use Configuration;
 use Country;
 use Exception;
-use PaypalAddons\classes\Constants\CountryIsoAlias;
 use PaypalAddons\classes\Constants\TrackingParameters as Map;
 use PrestaShopLogger;
 use Throwable;
@@ -61,24 +59,19 @@ class TrackingParameters
         $carriers = [
             [
                 'key' => Map::CARRIER_OTHER,
-                'name' => Map::CARRIER_OTHER,
+                 'name' => Map::CARRIER_OTHER,
             ],
         ];
-        $isoAliasList = CountryIsoAlias::getAliasList();
 
         if ($isoCountry === null) {
-            $isoCountry = strtoupper($this->defaultCountry->iso_code);
+            $isoCountry = $this->defaultCountry->iso_code;
         }
 
-        if (empty($this->paypalCarriers[$isoCountry])) {
-            if (empty($isoAliasList[$isoCountry]) || empty($this->paypalCarriers[$isoAliasList[$isoCountry]])) {
-                return $carriers;
-            }
-
-            $isoCountry = $isoAliasList[$isoCountry];
+        if (empty($this->paypalCarriers[strtoupper($isoCountry)])) {
+            return $carriers;
         }
 
-        return array_merge($carriers, $this->paypalCarriers[$isoCountry]);
+        return array_merge($carriers, $this->paypalCarriers[strtoupper($isoCountry)]);
     }
 
     public function getPaypalCarrierByPsCarrier($carrierRef)
@@ -175,7 +168,7 @@ class TrackingParameters
     protected function initPaypalCarrierList()
     {
         try {
-            $this->paypalCarriers = json_decode(file_get_contents(_PS_MODULE_DIR_ . 'paypal/paypal-carriers.json'), true);
+            $this->paypalCarriers = json_decode(\Tools::file_get_contents(_PS_MODULE_DIR_ . 'paypal/paypal-carriers.json'), true);
         } catch (Throwable $e) {
             return false;
         } catch (Exception $e) {
