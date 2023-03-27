@@ -36,6 +36,12 @@
       align-items: flex-start;
     }
 
+    @media (max-width: 480px) {
+      [paypal-mark-container] {
+        display: none !important;
+      }
+    }
+
   </style>
 
   <div data-container-express-checkout data-paypal-source-page="payment-step">

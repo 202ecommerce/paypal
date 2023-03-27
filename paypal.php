@@ -483,8 +483,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         if (($isPhpVersionCompliant && parent::install() && $installer->install()) == false) {
             return false;
         }
-
-        $this->updateDiagnosticTabs();
         // Registration order status
         if (!$this->installOrderState()) {
             return false;
@@ -978,6 +976,10 @@ class PayPal extends \PaymentModule implements WidgetInterface
                         true
                     )
                 );
+
+                if (isset($optionMap['logo'])) {
+                    $paymentOption->setLogo($optionMap['logo']);
+                }
             }
 
             $paymentOptions[] = $paymentOption;
@@ -1085,7 +1087,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         $paymentOption = new PaymentOption();
         $action_text = $this->l('Pay with Paypal');
         $paymentOption->setModuleName($this->name);
-        if (Configuration::get('PAYPAL_API_ADVANTAGES')) {
+        if (Configuration::get('PAYPAL_API_ADVANTAGES') && $this->isMobile() == false) {
             $action_text .= ' | ' . $this->l('It\'s simple, fast and secure');
         }
         $this->context->smarty->assign([
@@ -3069,11 +3071,13 @@ class PayPal extends \PaymentModule implements WidgetInterface
             $map[] = [
                 'method' => APM::GIROPAY,
                 'label' => $this->l('giropay'),
+                'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/giropay.svg'),
             ];
 
             $map[] = [
                 'method' => APM::SOFORT,
                 'label' => $this->l('Sofort'),
+                'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/sofort.svg'),
             ];
         }
 
@@ -3196,23 +3200,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         }
     }
 
-    protected function updateDiagnosticTabs()
-    {
-        $diagnosticExt = new DiagnosticExtension();
-        $parentTab = Tab::getInstanceFromClassName('AdminPayPalConfiguration');
-
-        foreach ($diagnosticExt->extensionAdminControllers as $adminController) {
-            $tab = Tab::getInstanceFromClassName($adminController['class_name']);
-
-            if (false === Validate::isLoadedObject($tab)) {
-                continue;
-            }
-
-            $tab->id_parent = $parentTab->id;
-            $tab->save();
-        }
-    }
-
     public function hookActionPaypalGetConflicts()
     {
         $conflicts = [];
@@ -3228,5 +3215,13 @@ class PayPal extends \PaymentModule implements WidgetInterface
         }
 
         return $conflicts;
+    }
+
+    protected function isMobile()
+    {
+        return preg_match(
+            "/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i",
+            $_SERVER['HTTP_USER_AGENT']
+        );
     }
 }
