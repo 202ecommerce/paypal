@@ -30,6 +30,7 @@ use Exception;
 use PayPal\Api\Patch;
 use PayPal\Api\PatchRequest;
 use PayPal\Api\Webhook;
+use PayPal\Exception\PayPalConnectionException;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Response\Error  as PaypalError;
 use PaypalAddons\classes\API\Response\Response;
@@ -61,6 +62,24 @@ class UpdateWebHookEventType extends RequestAbstract
             $response
                 ->setSuccess(true)
                 ->setData($result);
+        } catch (PayPalConnectionException $e) {
+            if (empty($e->getData())) {
+                $data = [];
+            } else {
+                $data = json_decode($e->getData(), true);
+            }
+
+            if (isset($data['name']) && $data['name'] === 'WEBHOOK_PATCH_REQUEST_NO_CHANGE') {
+                $response->setSuccess(true);
+            } else {
+                $response
+                    ->setSuccess(false)
+                    ->setError(
+                        (new PaypalError())
+                            ->setErrorCode($e->getCode())
+                            ->setMessage($e->getMessage())
+                    );
+            }
         } catch (Throwable $e) {
             $error = new PaypalError();
             $error
