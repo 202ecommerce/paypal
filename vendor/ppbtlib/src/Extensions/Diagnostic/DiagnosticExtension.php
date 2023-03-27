@@ -53,7 +53,7 @@ class DiagnosticExtension extends AbstractModuleExtension
                 'fr' => 'Diagnostique',
             ],
             'class_name' => 'AdminPaypalDiagnostic',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
+            'parent_class_name' => 'AdminPaypalConfiguration',
             'visible' => true,
         ],
     ];
