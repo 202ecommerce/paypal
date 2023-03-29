@@ -76,9 +76,6 @@ class DatabaseStub extends AbstractStub
                     $this->handler->fixPStables($params);
                 }
                 break;
-            case self::OPTIMIZE_TABLES_EVENT:
-                $this->handler->optimizePSTables($params);
-                break;
             default:
                 throw new \RuntimeException('Undefined hook event provided');
         }

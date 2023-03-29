@@ -80,18 +80,6 @@ class DatabaseStubHandler extends AbstractStubHandler
             }
         }
 
-        $optimizeQueries = [];
-        if ($parameters->getOptimize() === true) {
-            $optimizeQueries = $this->getOptimizeQueries();
-            foreach ($optimizeQueries as &$queryArray) {
-                $queryArray = array_map(function (FixQueryModel $fixQueryModel) {
-                    return $fixQueryModel->toArray();
-                }, $queryArray);
-            }
-        }
-
-
-
         return [
             'module_name' => $this->getStub()->getModule()->name,
             'tables' => array_map(function (DefinitionInfo $definitionInfo) {
@@ -99,7 +87,7 @@ class DatabaseStubHandler extends AbstractStubHandler
             }, $tablesInfo),
             'hasDatabaseErrors' => $this->hasDatabaseErrors($tablesInfo),
             'queries' => $queriesToExecute,
-            'optimizeQueries' => $optimizeQueries,
+            'optimizeQueries' => [],
         ];
     }
 
@@ -383,20 +371,6 @@ class DatabaseStubHandler extends AbstractStubHandler
         return $result;
     }
 
-    public function optimizePSTables($data)
-    {
-        $queries = $this->getOptimizeQueries();
-        $result = true;
-        foreach ($queries as $queryArray) {
-            /** @var FixQueryModel $query */
-            foreach ($queryArray as $query) {
-                $result &= Db::getInstance()->execute($query->getFixQuery());
-            }
-        }
-
-        return $result;
-    }
-
     protected function getPsQueriesToFix()
     {
         $queriesToExecute = [];
@@ -426,25 +400,6 @@ class DatabaseStubHandler extends AbstractStubHandler
         $stockAvailableQueries = $psQueryHandler->getStockAvailableQueries();
         if (!empty($stockAvailableQueries)) {
             $queriesToExecute[$this->l('Stock available tables')] = $stockAvailableQueries;
-        }
-
-        return $queriesToExecute;
-    }
-
-    protected function getOptimizeQueries()
-    {
-        $queriesToExecute = [];
-
-        $psQueryHandler = new PsQueryHandler();
-
-        $cartQueries = $psQueryHandler->getCartQueries();
-        if (!empty($cartQueries)) {
-            $queriesToExecute[$this->l('Cart optimization queries')] = $cartQueries;
-        }
-
-        $cartRulesQueries = $psQueryHandler->getCartRulesQueries();
-        if (!empty($cartRulesQueries)) {
-            $queriesToExecute[$this->l('Cart rules optimization queries')] = $cartRulesQueries;
         }
 
         return $queriesToExecute;

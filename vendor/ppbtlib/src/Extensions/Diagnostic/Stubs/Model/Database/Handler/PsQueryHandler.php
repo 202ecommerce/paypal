@@ -234,33 +234,6 @@ class PsQueryHandler
         return $resultQueries;
     }
 
-    public function getCartRulesQueries()
-    {
-        $resultQueries = [];
-
-        $query = 'SELECT * FROM `' . _DB_PREFIX_ . 'cart_rule`
-                  WHERE (
-                    active = 0
-                    OR quantity = 0
-                    OR date_to < "' . pSQL(date('Y-m-d')) . '"
-                  )
-                  AND date_add < "' . pSQL(date('Y-m-d', strtotime('-1 month'))) . '"';
-
-        $result = Db::getInstance()->executeS($query);
-
-        if (!empty($result)) {
-            $fixQueryModel = new FixQueryModel();
-            $fixQueryModel->setQuery($query);
-            $fixQueryModel->setFixQuery(str_replace('SELECT *', 'DELETE', $query));
-            $fixQueryModel->setRows($result);
-            $fixQueryModel->setHeaders(array_keys($result[0]));
-
-            $resultQueries[] = $fixQueryModel;
-        }
-
-        return $resultQueries;
-    }
-
     public function clearAllCaches()
     {
         $index = file_exists(_PS_TMP_IMG_DIR_ . 'index.php')
