@@ -35,14 +35,14 @@ class DatabaseValidator
 
     public function tableExist($tableName)
     {
-        $result = Db::getInstance()->ExecuteS('SHOW TABLES LIKE "' . _DB_PREFIX_ . $tableName . '"');
+        $result = Db::getInstance()->ExecuteS('SHOW TABLES LIKE "' . bqSQL(_DB_PREFIX_ . $tableName) . '"');
 
         return !empty($result);
     }
 
     public function fieldExists($tableName, $fieldName)
     {
-        $result = Db::getInstance()->executeS('SHOW COLUMNS FROM `' . _DB_PREFIX_ . $tableName . '` LIKE \'' . $fieldName . '\';');
+        $result = Db::getInstance()->executeS('SHOW COLUMNS FROM `' . bqSQL(_DB_PREFIX_ . $tableName) . '` LIKE \'' . bqSQL($fieldName) . '\';');
 
         return !empty($result);
     }
@@ -50,7 +50,7 @@ class DatabaseValidator
     public function checkFieldArguments($tableName, $fieldName, $arguments)
     {
         $errors = [];
-        $result = Db::getInstance()->executeS('SHOW FIELDS FROM `' . _DB_PREFIX_ . $tableName . '` LIKE "' . $fieldName . '";');
+        $result = Db::getInstance()->executeS('SHOW FIELDS FROM `' . bqSQL(_DB_PREFIX_ . $tableName) . '` LIKE "' . bqSQL($fieldName) . '";');
 
         if (empty($result)) {
             $errors[] = (new DatabaseError())
@@ -184,7 +184,7 @@ class DatabaseValidator
 
     public function compareColumns($tableName, $fields)
     {
-        $result = Db::getInstance()->executeS('SHOW COLUMNS FROM `' . _DB_PREFIX_ . $tableName . '`');
+        $result = Db::getInstance()->executeS('SHOW COLUMNS FROM `' . bqSQL(_DB_PREFIX_ . $tableName) . '`');
 
         if (empty($result)) {
             return [];
@@ -201,7 +201,7 @@ class DatabaseValidator
     {
         $query = 'SELECT group_concat(column_name order by seq_in_index) as index_columns
                   FROM information_schema.statistics
-                  where TABLE_NAME = "' . _DB_PREFIX_ . $tableName . '"
+                  where TABLE_NAME = "' . bqSQL(_DB_PREFIX_ . $tableName) . '"
                       AND INDEX_SCHEMA = "' . _DB_NAME_ . '"
                       AND non_unique = 0
                       AND INDEX_NAME <> "PRIMARY"

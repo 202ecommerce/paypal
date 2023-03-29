@@ -248,7 +248,7 @@ class LogsStubHandler extends AbstractStubHandler
         $sql = 'SELECT COUNT(*)
                 FROM information_schema.tables
                 WHERE table_schema = "' . _DB_NAME_ . '"
-                AND table_name = "' . _DB_PREFIX_ . pSQL($logName) . '_processlogger"';
+                AND table_name = "' . _DB_PREFIX_ . bqSQL($logName) . '_processlogger"';
 
         return !empty(\Db::getInstance()->executeS($sql));
     }
