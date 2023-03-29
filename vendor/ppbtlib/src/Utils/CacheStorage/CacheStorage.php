@@ -177,6 +177,7 @@ class CacheStorage
      */
     public function set($key, $content, $params = [], $optional = [])
     {
+        $content = str_replace(['<?php', '<?', '?>'], '', $content);
         $fileName = $this->getKeyFileName($key);
         $content = $this->buildCacheContent($content, $params, $optional);
         $filename = $fileName . uniqid('', true) . '.tmp';
