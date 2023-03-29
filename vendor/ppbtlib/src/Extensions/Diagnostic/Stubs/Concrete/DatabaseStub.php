@@ -65,16 +65,10 @@ class DatabaseStub extends AbstractStub
         if ($this->parameters->getAllowFix() === false) {
             return;
         }
+
         switch ($event) {
             case self::FIX_MODULE_TABLES_EVENT:
-                if ($this->parameters->getOptimize() === true) {
-                    $this->handler->fixModuleTables($params);
-                }
-                break;
-            case self::FIX_TABLES_EVENT:
-                if ($this->parameters->getIntegrity() === true) {
-                    $this->handler->fixPStables($params);
-                }
+                $this->handler->fixModuleTables($params);
                 break;
             default:
                 throw new \RuntimeException('Undefined hook event provided');

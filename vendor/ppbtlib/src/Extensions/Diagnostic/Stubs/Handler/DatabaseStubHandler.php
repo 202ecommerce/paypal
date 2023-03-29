@@ -67,7 +67,6 @@ class DatabaseStubHandler extends AbstractStubHandler
 
     public function handle()
     {
-        $parameters = $this->getStub()->getParameters();
         $tablesInfo = $this->getTablesInfo();
 
         return [
