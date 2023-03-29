@@ -70,23 +70,13 @@ class DatabaseStubHandler extends AbstractStubHandler
         $parameters = $this->getStub()->getParameters();
         $tablesInfo = $this->getTablesInfo();
 
-        $queriesToExecute = [];
-        if ($parameters->getIntegrity() === true) {
-            $queriesToExecute = $this->getPsQueriesToFix();
-            foreach ($queriesToExecute as &$queryArray) {
-                $queryArray = array_map(function (FixQueryModel $fixQueryModel) {
-                    return $fixQueryModel->toArray();
-                }, $queryArray);
-            }
-        }
-
         return [
             'module_name' => $this->getStub()->getModule()->name,
             'tables' => array_map(function (DefinitionInfo $definitionInfo) {
                 return $definitionInfo->toArray();
             }, $tablesInfo),
             'hasDatabaseErrors' => $this->hasDatabaseErrors($tablesInfo),
-            'queries' => $queriesToExecute,
+            'queries' => [],
             'optimizeQueries' => [],
         ];
     }
@@ -350,58 +340,5 @@ class DatabaseStubHandler extends AbstractStubHandler
         Hook::exec(DiagnosticHook::HOOK_FIX_MODULE_TABLES, [], $idModule, false);
 
         return true;
-    }
-
-    public function fixPStables($data)
-    {
-        $queries = $this->getPsQueriesToFix();
-        $result = true;
-        foreach ($queries as $queryArray) {
-            /** @var FixQueryModel $query */
-            foreach ($queryArray as $query) {
-                $result &= Db::getInstance()->execute($query->getFixQuery());
-            }
-        }
-
-        Category::regenerateEntireNtree();
-
-        Image::clearTmpDir();
-        (new PsQueryHandler())->clearAllCaches();
-
-        return $result;
-    }
-
-    protected function getPsQueriesToFix()
-    {
-        $queriesToExecute = [];
-
-        $psQueryHandler = new PsQueryHandler();
-
-        $configurationDuplicates = $psQueryHandler->getConfigurationDuplicates();
-        if (!empty($configurationDuplicates)) {
-            $queriesToExecute[$this->l('Configuration duplicates')] = $configurationDuplicates;
-        }
-
-        $psTablesQueries = $psQueryHandler->getPSTablesQueries();
-        if (!empty($psTablesQueries)) {
-            $queriesToExecute[$this->l('Prestashop tables')] = $psTablesQueries;
-        }
-
-        $langTablesQueries = $psQueryHandler->getLangTableQueries();
-        if (!empty($langTablesQueries)) {
-            $queriesToExecute[$this->l('Language tables')] = $langTablesQueries;
-        }
-
-        $shopTablesQueries = $psQueryHandler->getShopTableQueries();
-        if (!empty($shopTablesQueries)) {
-            $queriesToExecute[$this->l('Shop tables')] = $shopTablesQueries;
-        }
-
-        $stockAvailableQueries = $psQueryHandler->getStockAvailableQueries();
-        if (!empty($stockAvailableQueries)) {
-            $queriesToExecute[$this->l('Stock available tables')] = $stockAvailableQueries;
-        }
-
-        return $queriesToExecute;
     }
 }
