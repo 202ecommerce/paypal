@@ -408,11 +408,6 @@ class DatabaseStubHandler extends AbstractStubHandler
             $queriesToExecute[$this->l('Configuration duplicates')] = $configurationDuplicates;
         }
 
-        $configurationMonoLanguageOrphans = $psQueryHandler->getMonoLanguageConfigurationOrhpans();
-        if (!empty($configurationMonoLanguageOrphans)) {
-            $queriesToExecute[$this->l('Configuration mono-language orphans')] = $configurationMonoLanguageOrphans;
-        }
-
         $psTablesQueries = $psQueryHandler->getPSTablesQueries();
         if (!empty($psTablesQueries)) {
             $queriesToExecute[$this->l('Prestashop tables')] = $psTablesQueries;

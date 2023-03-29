@@ -64,27 +64,6 @@ class PsQueryHandler
         return $queryModels;
     }
 
-    public function getMonoLanguageConfigurationOrhpans()
-    {
-        $queries = [];
-
-        $query = 'SELECT * FROM `' . _DB_PREFIX_ . 'configuration_lang`
-                  WHERE `id_configuration` NOT IN (SELECT `id_configuration` FROM `' . _DB_PREFIX_ . 'configuration`)
-                  OR `id_configuration` IN (SELECT `id_configuration` FROM `' . _DB_PREFIX_ . 'configuration` WHERE name IS NULL OR name = "")';
-        $result = Db::getInstance()->executeS($query);
-        if (!empty($result)) {
-            $fixQueryModel = new FixQueryModel();
-            $fixQueryModel->setQuery($query);
-            $fixQueryModel->setFixQuery(str_replace('SELECT *', 'DELETE', $query));
-            $fixQueryModel->setRows($result);
-            $fixQueryModel->setHeaders(array_keys($result[0]));
-
-            $queries[] = $fixQueryModel;
-        }
-
-        return $queries;
-    }
-
     public function getPSTablesQueries()
     {
         $resultQueries = [];
