@@ -35,8 +35,7 @@ if (!defined('_PS_VERSION_')) {
  */
 function upgrade_module_5_8_0($module)
 {
-    $installer = new \PaypalPPBTlib\Install\ModuleInstaller($module);
-    $installer->installExtension(\PaypalPPBTlib\Extensions\Diagnostic\DiagnosticExtension::class);
+    Configuration::updateGlobalValue(PayPal::NEED_INSTALL_EXTENSIONS, 1);
     $module->resetHooks();
 
     return true;

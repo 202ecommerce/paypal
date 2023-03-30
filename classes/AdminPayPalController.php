@@ -32,6 +32,7 @@ use PaypalAddons\classes\Webhook\WebhookAvailability;
 use PaypalAddons\classes\Webhook\WebhookHandlerUrl;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use PaypalPPBTlib\Install\ModuleInstaller;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -78,6 +79,12 @@ class AdminPayPalController extends \ModuleAdminController
             if ($this->module->installModels()) {
                 \Configuration::updateGlobalValue(\PayPal::NEED_INSTALL_MODELS, 0);
             }
+        }
+
+        if ((int) \Configuration::getGlobalValue(\PayPal::NEED_INSTALL_EXTENSIONS) === 1) {
+            $installer = new ModuleInstaller($this->module);
+            $installer->installExtensions();
+            \Configuration::deleteByName(\PayPal::NEED_INSTALL_EXTENSIONS);
         }
     }
 

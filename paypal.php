@@ -96,6 +96,8 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const NEED_INSTALL_MODELS = 'PAYPAL_NEED_INSTALL_MODELS';
 
+    const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
+
     public static $dev = true;
     public $express_checkout;
     public $message;
@@ -463,6 +465,10 @@ class PayPal extends \PaymentModule implements WidgetInterface
         $this->moduleConfigs[ShortcutConfiguration::CART_PAGE_HOOK] = ShortcutConfiguration::HOOK_EXPRESS_CHECKOUT;
 
         foreach ($this->extensions as $extensionName) {
+            if (false === class_exists($extensionName)) {
+                continue;
+            }
+
             $extension = new $extensionName($this);
             $extension->initExtension();
             $this->hooks = array_merge($this->hooks, $extension->hooks);
