@@ -51,7 +51,7 @@
              {if $conflicts.action|escape:'html':'UTF-8'}
                <div class="card-footer {if empty($conflicts.data)}d-none{/if}">
                  <div class="d-flex justify-content-end">
-                   <a href="{$conflicts.action}" class="btn btn-lg btn-primary badge-info" type="submit">
+                   <a href="{$conflicts.action|escape:'html':'UTF-8'}" class="btn btn-lg btn-primary badge-info" type="submit">
                        {l s='Fix conflicts' mod='paypal'}
                    </a>
                  </div>
