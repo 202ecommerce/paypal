@@ -36,9 +36,12 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
     /** @var AbstractMethodPaypal */
     protected $method;
 
+    protected $fileName;
+
     public function init()
     {
         parent::init();
+        $this->fileName = pathinfo(__FILE__)['filename'];
         $this->setPaymentData(json_decode(Tools::getValue('paymentData')));
 
         if ($this->module->paypal_method == 'MB') {
@@ -86,6 +89,14 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
     public function prepareOrder($info)
     {
         $module = Module::getInstanceByName($this->name);
+
+        if (false === $this->method->isCorrectCart($this->context->cart, $this->paymentData->orderID)) {
+            $this->redirectUrl = Context::getContext()->link->getPageLink('order');
+            $this->_errors[] = $module->l('The elements in the shopping cart were changed. Please try to pay again.', $this->fileName);
+            $module->resetCookiePaymentInfo();
+
+            return;
+        }
 
         if ($this->context->cookie->logged) {
             $customer = $this->context->customer;
@@ -171,11 +182,11 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
             $orderAddress->alias = 'Paypal_Address ' . ($count);
             $validationMessage = $orderAddress->validateFields(false, true);
             if (Country::containsStates($orderAddress->id_country) && $orderAddress->id_state == false) {
-                $validationMessage = $module->l('State is required in order to process payment. Please fill in state field.', pathinfo(__FILE__)['filename']);
+                $validationMessage = $module->l('State is required in order to process payment. Please fill in state field.', $this->fileName);
             }
             $country = new Country($orderAddress->id_country);
             if ($country->active == false) {
-                $validationMessage = $module->l('Country is not active', pathinfo(__FILE__)['filename']);
+                $validationMessage = $module->l('Country is not active', $this->fileName);
             }
 
             if (is_string($validationMessage)) {

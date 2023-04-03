@@ -472,6 +472,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             $key[] = $cart->id_carrier;
         }
 
+        $key[] = $cart->id;
+
         try {
             $key[] = $cart->getOrderTotal(true, Cart::BOTH);
         } catch (Throwable $e) {
@@ -504,7 +506,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             return $this->cartTrace;
         }
 
-        return isset($_COOKIE['paypal_cart_trace']) ? $_COOKIE['paypal_cart_trace'] : '';
+        return isset(Context::getContext()->cookie->paypal_cart_trace) ? Context::getContext()->cookie->paypal_cart_trace : '';
     }
 
     /**
@@ -517,7 +519,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     {
         $cartTrace = $this->buildCartTrace($cart, $paymentId);
         $this->setCartTrace($cartTrace);
-        setcookie('paypal_cart_trace', $cartTrace, 0, '/');
+        Context::getContext()->cookie->paypal_cart_trace = $cartTrace;
+        Context::getContext()->cookie->write();
     }
 
     /**
@@ -526,7 +529,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      *
      * @return bool
      */
-    protected function isCorrectCart(Cart $cart, $paymentId)
+    public function isCorrectCart(Cart $cart, $paymentId)
     {
         return $this->getCartTrace() == $this->buildCartTrace($cart, $paymentId);
     }
