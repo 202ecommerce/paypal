@@ -8,6 +8,5 @@ api/Results.txt
 vendor/*
 !vendor/ppbtlib
 node_modules/
-package-lock.json
 views/js/*
 views/css/*
