@@ -1,4 +1,10 @@
 <?php
+
+use PaypalAddons\classes\Form\CheckoutForm;
+use PaypalAddons\classes\Form\FormInstallment;
+use PaypalAddons\classes\Form\TrackingParametersForm;
+use PaypalAddons\classes\Form\WhiteListForm;
+
 /**
  * 2007-2023 PayPal
  *
@@ -25,6 +31,8 @@
  */
 class AdminPaypalConfigurationController extends \ModuleAdminController
 {
+    public $bootstrap = false;
+
     protected $forms = [];
 
     public function __construct()
@@ -36,6 +44,34 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
     protected function initForms()
     {
+        $this->forms['checkoutForm'] = new CheckoutForm();
+        $this->forms['tranckingForm'] = new TrackingParametersForm();
+        $this->forms['FormInstallment'] = new FormInstallment();
+        $this->forms['WhiteListForm'] = new WhiteListForm();
+    }
 
+    public function setMedia($isNewTheme = false)
+    {
+        parent::setMedia($isNewTheme);
+
+        $this->addJS(_PS_MODULE_DIR_ . 'paypal/views/js/admin.js');
+        $this->addCSS(_PS_MODULE_DIR_ . 'paypal/views/css/paypal_bo.css');
+    }
+
+    public function initContent()
+    {
+        $this->content .= $this->renderConfiguration();
+        parent::initContent();
+    }
+
+    protected function renderConfiguration()
+    {
+        $tpl = $this->context->smarty->createTemplate($this->getTemplatePath() . 'admin.tpl');
+        /** @var \PaypalAddons\classes\Form\FormInterface $form*/
+        foreach ($this->forms as $formName => $form) {
+            $tpl->assign($formName, $form->getDescription());
+        }
+
+        return $tpl->fetch();
     }
 }

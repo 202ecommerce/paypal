@@ -32,7 +32,6 @@ use Country;
 use Module;
 use PaypalAddons\classes\Form\Field\Select;
 use PaypalAddons\classes\Form\Field\SelectOption;
-use PaypalAddons\classes\Form\FormInterface;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use Tools;
 
@@ -46,15 +45,13 @@ class FormInstallment implements FormInterface
     public function __construct()
     {
         $this->module = Module::getInstanceByName('paypal');
-
-        $reflection = new \ReflectionClass($this);
-        $this->className = $reflection->getShortName();
+        $this->className = 'FormInstallment';
     }
 
     /**
      * @return array
      */
-    public function getDesciption()
+    public function getDescription()
     {
         $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
         $fields = [];
@@ -184,14 +181,13 @@ class FormInstallment implements FormInterface
         $description = [
             'legend' => [
                 'title' => $this->module->l('Settings', $this->className),
-                'icon' => 'icon-cogs',
             ],
             'fields' => $fields,
             'submit' => [
                 'title' => $this->module->l('Save', $this->className),
                 'name' => 'installmentForm',
             ],
-            'id_form' => 'pp_config_installment',
+            'id_form' => 'pp_installment_form',
         ];
 
         return $description;
@@ -275,30 +271,30 @@ class FormInstallment implements FormInterface
         $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
         $colorOptions = [
             [
-                'name' => ConfigurationMap::COLOR_GRAY,
+                'value' => ConfigurationMap::COLOR_GRAY,
                 'title' => $this->module->l('gray', $this->className)
             ],
             [
-                'name' => ConfigurationMap::COLOR_BLUE,
+                'value' => ConfigurationMap::COLOR_BLUE,
                 'title' => $this->module->l('blue', $this->className)
             ],
             [
-                'name' => ConfigurationMap::COLOR_BLACK,
+                'value' => ConfigurationMap::COLOR_BLACK,
                 'title' => $this->module->l('black', $this->className)
             ],
             [
-                'name' => ConfigurationMap::COLOR_WHITE,
+                'value' => ConfigurationMap::COLOR_WHITE,
                 'title' => $this->module->l('white', $this->className)
             ],
         ];
 
         if ($isoCountryDefault !== 'de') {
             $colorOptions[] = [
-                'name' => ConfigurationMap::COLOR_MONOCHROME,
+                'value' => ConfigurationMap::COLOR_MONOCHROME,
                 'title' => $this->module->l('monochrome', $this->className)
             ];
             $colorOptions[] = [
-                'name' => ConfigurationMap::COLOR_GRAYSCALE,
+                'value' => ConfigurationMap::COLOR_GRAYSCALE,
                 'title' => $this->module->l('grayscale', $this->className)
             ];
         }

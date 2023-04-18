@@ -51,12 +51,11 @@ class TrackingParametersForm implements FormInterface
     /**
      * @return array
      */
-    public function getDesciption()
+    public function getDescription()
     {
         return [
             'legend' => [
                 'title' => $this->module->l('Tracking parameters', $this->className),
-                'icon' => 'icon-cogs',
             ],
             'fields' => [
                 'carrier_map' => [
@@ -79,7 +78,7 @@ class TrackingParametersForm implements FormInterface
                 'title' => $this->module->l('Save', $this->className),
                 'name' => 'trackingParametersForm',
             ],
-            'id_form' => 'pp_tracking_parameters',
+            'id_form' => 'pp_tracking_form',
         ];
     }
 
@@ -133,7 +132,7 @@ class TrackingParametersForm implements FormInterface
 
         foreach ($this->initTrackingParametersService()->getStatusList() as $status) {
             $list[] = [
-                'name' => $status['key'],
+                'value' => $status['key'],
                 'title' => $status['key'],
             ];
         }

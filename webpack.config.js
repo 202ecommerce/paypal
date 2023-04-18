@@ -53,6 +53,7 @@ const config = {
     'js/acdc': './_dev/js/acdc.js',
     'js/tools': './_dev/js/tools.js',
     'js/diagnostic/diagnostic': './_dev/js/diagnostic/diagnostic.js',
+    'js/admin': './_dev/js/admin.js',
 
     'css/paypal_bo': './_dev/scss/paypal_bo.scss',
     'css/paypal_fo': './_dev/scss/paypal_fo.scss',

@@ -1,5 +1,4 @@
-<?php
-/**
+{*
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,19 +21,9 @@
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
- */
+ *
+ *}
 
-namespace PaypalAddons\classes\Form;
-
-interface FormInterface
-{
-    /**
-     * @return array
-     */
-    public function getDescription();
-
-    /**
-     * @return bool
-     */
-    public function save($data = null);
-}
+<pre>
+  {$checkoutForm|var_dump}
+</pre>

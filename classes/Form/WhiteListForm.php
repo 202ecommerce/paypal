@@ -39,26 +39,22 @@ class WhiteListForm implements FormInterface
 
     protected $className;
 
-    protected $context;
-
     public function __construct()
     {
         $this->module = Module::getInstanceByName('paypal');
         $this->className = 'WhiteListForm';
-        $this->context = Context::getContext();
     }
 
     /**
      * @return array
      */
-    public function getDesciption()
+    public function getDescription()
     {
         $request = Request::createFromGlobals();
 
         return [
             'legend' => [
                 'title' => $this->module->l('White list', $this->className),
-                'icon' => 'icon-cogs',
             ],
             'fields' => [
                 WhiteList::ENABLED => [
@@ -93,7 +89,7 @@ class WhiteListForm implements FormInterface
                 'title' => $this->module->l('Save', $this->className),
                 'name' => 'whiteListForm',
             ],
-            'id_form' => 'pp_white_list',
+            'id_form' => 'pp_white_list_form',
         ];
     }
 
