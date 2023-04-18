@@ -25,12 +25,17 @@
  */
 class AdminPaypalConfigurationController extends \ModuleAdminController
 {
-    /** @var Module Instance of your module automatically set by ModuleAdminController */
-    public $module;
+    protected $forms = [];
 
     public function __construct()
     {
         parent::__construct();
-        Tools::redirect($this->context->link->getAdminLink('AdminPayPalSetup', true));
+
+        $this->initForms();
+    }
+
+    protected function initForms()
+    {
+
     }
 }

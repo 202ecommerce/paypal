@@ -263,116 +263,12 @@ class PayPal extends \PaymentModule implements WidgetInterface
     public $moduleAdminControllers = [
         [
             'name' => [
-                'en' => 'PayPal Official',
-                'fr' => 'PayPal Officiel',
-            ],
-            'class_name' => 'AdminParentPaypalConfiguration',
-            'parent_class_name' => 'SELL',
-            'visible' => false,
-            'icon' => 'payment',
-        ],
-        [
-            'name' => [
                 'en' => 'Configuration',
                 'fr' => 'Configuration',
             ],
             'class_name' => 'AdminPaypalConfiguration',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
-            'visible' => false,
-        ],
-        [
-            'name' => [
-                'en' => 'Setup',
-                'fr' => 'Paramètres',
-                'pt' => 'Definições',
-                'pl' => 'Ustawienia',
-                'nl' => 'Instellingen',
-                'it' => 'Impostazioni',
-                'es' => 'Configuración',
-                'de' => 'Einstellungen',
-                'mx' => 'Configuración',
-                'br' => 'Definições',
-            ],
-            'class_name' => 'AdminPayPalSetup',
-            'parent_class_name' => 'AdminPayPalConfiguration',
+            'parent_class_name' => 'paypal',
             'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Experience',
-                'fr' => 'Expérience',
-                'de' => 'User Experience',
-                'pt' => 'Experiência',
-                'pl' => 'Doświadczenie',
-                'nl' => 'Ervaring',
-                'it' => 'Percorso Cliente',
-                'es' => 'Experiencia',
-                'mx' => 'Experiencia',
-                'br' => 'Experiência',
-            ],
-            'class_name' => 'AdminPayPalCustomizeCheckout',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Pay in X times',
-                'fr' => 'Paiement en X fois',
-                'de' => 'Pay in X times',
-            ],
-            'class_name' => 'AdminPayPalInstallment',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Help',
-                'fr' => 'Aide',
-                'pt' => 'Ajuda',
-                'pl' => 'Pomoc',
-                'nl' => 'Hulp',
-                'it' => 'Aiuto',
-                'es' => 'Ayuda',
-                'de' => 'Hilfe',
-                'mx' => 'Ayuda',
-                'br' => 'Ajuda',
-            ],
-            'class_name' => 'AdminPayPalHelp',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Logs',
-                'fr' => 'Logs',
-                'de' => 'Logs',
-                'pt' => 'Logs',
-                'pl' => 'Dzienniki',
-                'nl' => 'Logs',
-                'it' => 'Logs',
-                'es' => 'Logs',
-                'mx' => 'Logs',
-                'br' => 'Logs',
-            ],
-            'class_name' => 'AdminPayPalLogs',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Get Credentials',
-            ],
-            'class_name' => 'AdminPaypalGetCredentials',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
-            'visible' => false,
-        ],
-        [
-            'name' => [
-                'en' => 'PUI listener',
-            ],
-            'class_name' => 'AdminPayPalPUIListener',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
-            'visible' => false,
         ],
     ];
 
@@ -748,7 +644,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     public function getContent()
     {
-        return Tools::redirectAdmin($this->context->link->getAdminLink('AdminPayPalSetup'));
+        return Tools::redirectAdmin($this->context->link->getAdminLink('AdminPaypalConfiguration'));
     }
 
     protected function initVenmoFunctionality()

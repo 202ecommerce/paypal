@@ -51,77 +51,70 @@ class WhiteListForm implements FormInterface
     /**
      * @return array
      */
-    public function getFields()
+    public function getDesciption()
     {
-        $input = [
-            [
-                'type' => 'switch',
-                'label' => $this->module->l('Enable restriction by IP', $this->className),
-                'name' => WhiteList::ENABLED,
-                'is_bool' => true,
-                'values' => [
-                    [
-                        'id' => WhiteList::ENABLED . '_on',
-                        'value' => 1,
-                        'label' => $this->module->l('Enabled', $this->className),
-                    ],
-                    [
-                        'id' => WhiteList::ENABLED . '_off',
-                        'value' => 0,
-                        'label' => $this->module->l('Disabled', $this->className),
-                    ],
-                ],
-            ],
-            [
-                'type' => 'html',
-                'html_content' => $this->getListHTML(),
-                'name' => '',
-                'label' => $this->module->l('List of IPs', $this->className),
-            ],
-        ];
+        $request = Request::createFromGlobals();
 
-        $fields = [
+        return [
             'legend' => [
                 'title' => $this->module->l('White list', $this->className),
                 'icon' => 'icon-cogs',
             ],
-            'input' => $input,
+            'fields' => [
+                WhiteList::ENABLED => [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Enable restriction by IP', $this->className),
+                    'name' => WhiteList::ENABLED,
+                    'is_bool' => true,
+                    'values' => [
+                        [
+                            'id' => WhiteList::ENABLED . '_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Enabled', $this->className),
+                        ],
+                        [
+                            'id' => WhiteList::ENABLED . '_off',
+                            'value' => 0,
+                            'label' => $this->module->l('Disabled', $this->className),
+                        ],
+                    ],
+                    'value' => $this->initWhiteListService()->isEnabled(),
+                ],
+                'list_ip' => [
+                    'type' => 'variable-set',
+                    'label' => $this->module->l('List of IPs', $this->className),
+                    'set' => [
+                        WhiteList::LIST_IP => implode(';', $this->initWhiteListService()->getListIP()),
+                        'paypal_current_ip' => $request->getClientIp(),
+                    ]
+                ],
+            ],
             'submit' => [
                 'title' => $this->module->l('Save', $this->className),
-                'class' => 'btn btn-default pull-right button',
                 'name' => 'whiteListForm',
             ],
             'id_form' => 'pp_white_list',
         ];
-
-        return $fields;
-    }
-
-    /**
-     * @return array
-     */
-    public function getValues()
-    {
-        $values = [
-            WhiteList::ENABLED => $this->initWhiteListService()->isEnabled(),
-        ];
-
-        return $values;
     }
 
     /**
      * @return bool
      */
-    public function save()
+    public function save($data = null)
     {
-        if (Tools::isSubmit('whiteListForm') == false) {
-            return false;
+        if (is_null($data)) {
+            $data = Tools::getAllValues();
         }
 
         $service = $this->initWhiteListService();
-        $service->setEnabled((int) Tools::getValue(WhiteList::ENABLED));
+        $service->setEnabled(
+            (isset($data[WhiteList::ENABLED]) ? (int) $data[WhiteList::ENABLED] : 0)
+        );
         $service->setListIP(
-            explode(';', Tools::getValue(WhiteList::LIST_IP, ''))
+            explode(
+                ';',
+                (isset($data[WhiteList::LIST_IP]) ? $data[WhiteList::LIST_IP] : '')
+            )
         );
 
         return true;
@@ -130,18 +123,5 @@ class WhiteListForm implements FormInterface
     protected function initWhiteListService()
     {
         return new WhiteListService();
-    }
-
-    protected function getListHTML()
-    {
-        $request = Request::createFromGlobals();
-        Context::getContext()->smarty->assign([
-                WhiteList::LIST_IP => implode(';', $this->initWhiteListService()->getListIP()),
-                'paypal_current_ip' => $request->getClientIp(),
-        ]);
-
-        return Context::getContext()
-            ->smarty
-            ->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/white-list.tpl');
     }
 }

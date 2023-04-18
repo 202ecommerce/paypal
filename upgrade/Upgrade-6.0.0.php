@@ -1,4 +1,5 @@
-{**
+<?php
+/*
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,29 +23,24 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  *
- *}
+ */
 
+use PaypalPPBTlib\Install\ModuleInstaller;
 
-<div field-row  class="pp__my-5">
-  <div label>
-    {if isset($label)}
-        <div class="pp__my-2 pp__label">
-            {$label|escape:'htmlall':'UTF-8'}
-        </div>
-    {/if}
-  </div>
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-  <div field>
-    <div chain-input-container>
-        {if isset($inputs) && false === empty($inputs)}
-            {foreach from=$inputs item=input}
-              <div input>
-                  {$input->render() nofilter}
-              </div>
-            {/foreach}
-        {/if}
-    </div>
+/**
+ * @param $module PayPal
+ *
+ * @return bool
+ */
+function upgrade_module_6_0_0($module)
+{
+    $installer = new ModuleInstaller($module);
+    $installer->uninstallModuleAdminControllers();
+    $installer->installAdminControllers();
 
-    <div msg-container></div>
-  </div>
-</div>
+    return true;
+}

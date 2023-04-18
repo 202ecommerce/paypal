@@ -51,77 +51,55 @@ class TrackingParametersForm implements FormInterface
     /**
      * @return array
      */
-    public function getFields()
+    public function getDesciption()
     {
-        $input = [
-            [
-                'type' => 'html',
-                'html_content' => $this->module->displayInformation(
-                    $this->module->l('Configure tracking settings to apply for PayPal seller protection', $this->className),
-                    false
-                ),
-                'name' => '',
-            ],
-            [
-                'type' => 'html',
-                'html_content' => $this->getCarrierMapHtml(),
-                'name' => '',
-                'label' => $this->module->l('Carrier map', $this->className),
-            ],
-            [
-                'type' => 'select',
-                'label' => $this->module->l('PayPal checkout', $this->className),
-                'name' => TrackingParametersMap::STATUS,
-                'options' => [
-                    'query' => $this->getPaypalStatusList(),
-                    'id' => 'id',
-                    'name' => 'name',
-                ],
-            ],
-        ];
-
-        $fields = [
+        return [
             'legend' => [
                 'title' => $this->module->l('Tracking parameters', $this->className),
                 'icon' => 'icon-cogs',
             ],
-            'input' => $input,
+            'fields' => [
+                'carrier_map' => [
+                    'type' => 'variable-set',
+                    'label' => $this->module->l('Carrier map', $this->className),
+                    'set' => [
+                        'mapService' => $this->initTrackingParametersService(),
+                        'carriers' => Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS),
+                    ]
+                ],
+                TrackingParametersMap::STATUS => [
+                    'type' => 'select',
+                    'label' => $this->module->l('PayPal checkout', $this->className),
+                    'name' => TrackingParametersMap::STATUS,
+                    'options' => $this->getPaypalStatusList(),
+                    'value' => $this->initTrackingParametersService()->getStatus(),
+                ],
+            ],
             'submit' => [
                 'title' => $this->module->l('Save', $this->className),
-                'class' => 'btn btn-default pull-right button',
                 'name' => 'trackingParametersForm',
             ],
             'id_form' => 'pp_tracking_parameters',
         ];
-
-        return $fields;
-    }
-
-    /**
-     * @return array
-     */
-    public function getValues()
-    {
-        $values = [
-            TrackingParametersMap::STATUS => $this->initTrackingParametersService()->getStatus(),
-        ];
-
-        return $values;
     }
 
     /**
      * @return bool
      */
-    public function save()
+    public function save($data = null)
     {
-        if (Tools::isSubmit('trackingParametersForm') == false) {
+        if (is_null($data)) {
+            $data = Tools::getAllValues();
+        }
+
+        if (empty($data['trackingParametersForm']) || empty($data['carrier_map'])) {
             return false;
         }
 
         $carrierMap = [];
         $service = $this->initTrackingParametersService();
 
-        foreach (Tools::getValue('carrier_map', []) as $map) {
+        foreach ($data['carrier_map'] as $map) {
             if ($map == '0') {
                 continue;
             }
@@ -136,7 +114,10 @@ class TrackingParametersForm implements FormInterface
         }
 
         $service->setCarrierMap($carrierMap);
-        $service->setStatus(Tools::getValue(TrackingParametersMap::STATUS));
+
+        if (isset($data[TrackingParametersMap::STATUS])) {
+            $service->setStatus($data[]);
+        }
 
         return true;
     }
@@ -146,25 +127,14 @@ class TrackingParametersForm implements FormInterface
         return new TrackingParameters();
     }
 
-    protected function getCarrierMapHtml()
-    {
-        $trackingParametersService = $this->initTrackingParametersService();
-        $carriers = Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS);
-
-        return $this->context->smarty
-            ->assign('mapService', $trackingParametersService)
-            ->assign('carriers', $carriers)
-            ->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/carrierMap.tpl');
-    }
-
     protected function getPaypalStatusList()
     {
         $list = [];
 
         foreach ($this->initTrackingParametersService()->getStatusList() as $status) {
             $list[] = [
-                'id' => $status['key'],
                 'name' => $status['key'],
+                'title' => $status['key'],
             ];
         }
 

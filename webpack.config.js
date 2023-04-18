@@ -45,12 +45,8 @@ const config = {
     'js/shortcut_payment': './_dev/js/shortcut_payment.js',
     'js/shortcut': './_dev/js/shortcut.js',
     'js/bnpl': './_dev/js/bnpl.js',
-    'js/adminSetup': './_dev/js/adminSetup.js',
-    'js/adminCheckout': './_dev/js/adminCheckout.js',
-    'js/helpAdmin': './_dev/js/helpAdmin.js',
     'js/payment_mb': './_dev/js/payment_mb.js',
     'js/paypal-info': './_dev/js/paypal-info.js',
-    'js/adminInstallment': './_dev/js/adminInstallment.js',
     'js/Venmo': './_dev/js/Venmo.js',
     'js/apmButton': './_dev/js/apmButton.js',
     'js/sepaButton': './_dev/js/sepaButton.js',
@@ -120,13 +116,18 @@ module.exports = (env, argv) => {
   // Production specific settings
   if (argv.mode === 'production') {
     const terserPlugin = new TerserPlugin({
-      cache: true,
-      extractComments: /^\**!|@preserve|@license|@cc_on/i, // Remove comments except those containing @preserve|@license|@cc_on
+      // Remove comments except those containing @preserve|@license|@cc_on
+      extractComments: /^\**!|@preserve|@license|@cc_on/i,
       parallel: true,
       terserOptions: {
-        drop_console: true,
+        compress: {
+          pure_funcs: [
+            'console.log'
+          ]
+        }
       },
     });
+
 
     config.optimization.minimizer.push(terserPlugin);
   }
