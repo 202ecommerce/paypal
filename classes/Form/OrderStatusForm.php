@@ -11,6 +11,7 @@ use Module;
 use OrderState;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
+use PaypalAddons\classes\Constants\WebHookConf;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use Tools;
 
@@ -140,7 +141,7 @@ class OrderStatusForm implements FormInterface
             ];
         }
 
-        if ($this->webhookOption->isEnable()) {
+        if ($this->webhookOption->isEnable() && $this->webhookOption->isEligibleContext()) {
             if ($this->method->getIntent() == 'CAPTURE') {
                 $fields[PaypalConfigurations::OS_WAITING_VALIDATION] = [
                     'type' => 'select',
@@ -151,6 +152,29 @@ class OrderStatusForm implements FormInterface
                     'value' => (int) Configuration::get(PaypalConfigurations::OS_WAITING_VALIDATION),
                 ];
             }
+        }
+
+        if ($this->webhookOption->isEligibleContext()) {
+            $fields[] = [
+                'type' => 'switch',
+                'label' => $this->module->l('Enable PayPal webhooks', 'AdminPayPalCustomizeCheckoutController'),
+                'name' => WebHookConf::ENABLE,
+                'hint' => $this->module->l('PayPal webhooks allow you to automatically update the order status on PrestaShop once the status of transaction on PayPal is changed.', 'AdminPayPalCustomizeCheckoutController'),
+                'is_bool' => true,
+                'values' => [
+                    [
+                        'id' => WebHookConf::ENABLE . '_on',
+                        'value' => 1,
+                        'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                    [
+                        'id' => WebHookConf::ENABLE . '_off',
+                        'value' => 0,
+                        'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                ],
+                'value' => $this->webhookOption->isEnable(),
+            ];
         }
 
         return [
@@ -212,6 +236,12 @@ class OrderStatusForm implements FormInterface
             Configuration::updateValue(
                 PaypalConfigurations::OS_CAPTURE_CANCELED,
                 (int) $data[PaypalConfigurations::OS_CAPTURE_CANCELED]
+            );
+        }
+        if (isset($data[WebHookConf::ENABLE])) {
+            Configuration::updateValue(
+                WebHookConf::ENABLE,
+                (int) $data[WebHookConf::ENABLE]
             );
         }
 
