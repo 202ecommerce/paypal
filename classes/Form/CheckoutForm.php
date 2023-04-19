@@ -131,19 +131,22 @@ class CheckoutForm implements FormInterface
             'type' => 'checkbox',
             'name' => ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE,
             'label' => $this->module->l('Product Pages', 'blockpreviewbuttoncontext'),
-            'value' => Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
         ];
         $fields[ShortcutConfiguration::SHOW_ON_CART_PAGE] = [
             'type' => 'checkbox',
             'name' => ShortcutConfiguration::SHOW_ON_CART_PAGE,
             'label' => $this->module->l('Cart Page', 'blockpreviewbuttoncontext'),
-            'value' => Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE),
         ];
         $fields[ShortcutConfiguration::SHOW_ON_SIGNUP_STEP] = [
             'type' => 'checkbox',
             'name' => ShortcutConfiguration::SHOW_ON_SIGNUP_STEP,
             'label' => $this->module->l('Sign up step in checkout', 'blockpreviewbuttoncontext'),
-            'value' => Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP),
         ];
 
         if ($this->acdcFunctionality->isAvailable()) {

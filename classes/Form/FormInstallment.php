@@ -80,25 +80,29 @@ class FormInstallment implements FormInterface
                 'type' => 'checkbox',
                 'name' => ConfigurationMap::BNPL_PRODUCT_PAGE,
                 'label' => $this->module->l('Product Pages', $this->className),
-                'value' => Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE),
+                'value' => 1,
+                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE),
             ];
             $fields[ConfigurationMap::BNPL_PAYMENT_STEP_PAGE] = [
                 'type' => 'checkbox',
                 'name' => ConfigurationMap::BNPL_PAYMENT_STEP_PAGE,
                 'label' => $this->module->l('Step payment in checkout', $this->className),
-                'value' => Configuration::get(ConfigurationMap::BNPL_PAYMENT_STEP_PAGE),
+                'value' => 1,
+                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_PAYMENT_STEP_PAGE),
             ];
             $fields[ConfigurationMap::BNPL_CART_PAGE] = [
                 'type' => 'checkbox',
                 'name' => ConfigurationMap::BNPL_CART_PAGE,
                 'label' => $this->module->l('Cart Page', $this->className),
-                'value' => Configuration::get(ConfigurationMap::BNPL_CART_PAGE),
+                'value' => 1,
+                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_CART_PAGE),
             ];
             $fields[ConfigurationMap::BNPL_CHECKOUT_PAGE] = [
                 'type' => 'checkbox',
                 'name' => ConfigurationMap::BNPL_CHECKOUT_PAGE,
                 'label' => $this->module->l('Sign up step in checkout', $this->className),
-                'value' => Configuration::get(ConfigurationMap::BNPL_CHECKOUT_PAGE),
+                'value' => 1,
+                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_CHECKOUT_PAGE),
             ];
         }
 
@@ -123,31 +127,36 @@ class FormInstallment implements FormInterface
         ];
         $fields[ConfigurationMap::PRODUCT_PAGE] = [
             'type' => 'checkbox',
-            'value' => Configuration::get(ConfigurationMap::PRODUCT_PAGE),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ConfigurationMap::PRODUCT_PAGE),
             'name' => ConfigurationMap::PRODUCT_PAGE,
             'label' => $this->module->l('Product Page', $this->className),
         ];
         $fields[ConfigurationMap::HOME_PAGE] = [
             'type' => 'checkbox',
-            'value' => Configuration::get(ConfigurationMap::HOME_PAGE),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ConfigurationMap::HOME_PAGE),
             'name' => ConfigurationMap::HOME_PAGE,
             'label' => $this->module->l('Home Page', $this->className),
         ];
         $fields[ConfigurationMap::CATEGORY_PAGE] = [
             'type' => 'checkbox',
-            'value' => Configuration::get(ConfigurationMap::CATEGORY_PAGE),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ConfigurationMap::CATEGORY_PAGE),
             'name' => ConfigurationMap::CATEGORY_PAGE,
             'label' => $this->module->l('Category Page', $this->className),
         ];
         $fields[ConfigurationMap::CART_PAGE] = [
             'type' => 'checkbox',
-            'value' => Configuration::get(ConfigurationMap::CART_PAGE),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ConfigurationMap::CART_PAGE),
             'name' => ConfigurationMap::CART_PAGE,
             'label' => $this->module->l('Cart', $this->className),
         ];
         $fields[ConfigurationMap::CHECKOUT_PAGE] = [
             'type' => 'checkbox',
-            'value' => Configuration::get(ConfigurationMap::CHECKOUT_PAGE),
+            'value' => 1,
+            'checked' => (bool) Configuration::get(ConfigurationMap::CHECKOUT_PAGE),
             'name' => ConfigurationMap::CART_PAGE,
             'label' => $this->module->l('Checkout', $this->className),
         ];
