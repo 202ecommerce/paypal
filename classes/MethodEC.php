@@ -249,43 +249,6 @@ class MethodEC extends AbstractMethodPaypal
         // TODO: Implement saveAccountForm() method.
     }
 
-    public function getAdvancedFormInputs()
-    {
-        $inputs = [];
-        $module = Module::getInstanceByName($this->name);
-        $orderStatuses = $module->getOrderStatuses();
-
-        if ($this->getIntent() == 'AUTHORIZE') {
-            $inputs[] = [
-                'type' => 'select',
-                'label' => $module->l('Payment authorized and waiting for validation by admin', get_class($this)),
-                'name' => 'paypal_os_waiting_validation',
-                'hint' => $module->l('You are currently using the Authorize mode. It means that you separate the payment authorization from the capture of the authorized payment. By default the orders will be created in the "Waiting for PayPal payment" but you can customize it if needed.', get_class($this)),
-                'desc' => $module->l('Default status : Waiting for PayPal payment', get_class($this)),
-                'options' => [
-                    'query' => $orderStatuses,
-                    'id' => 'id',
-                    'name' => 'name',
-                ],
-            ];
-        } else {
-            $inputs[] = [
-                'type' => 'select',
-                'label' => $module->l('Payment accepted and transaction completed', get_class($this)),
-                'name' => 'paypal_os_accepted_two',
-                'hint' => $module->l('You are currently using the Sale mode (the authorization and capture occur at the same time as the sale). So the payement is accepted instantly and the new order is created in the "Payment accepted" status. You can customize the status for orders with completed transactions. Ex : you can create an additional status "Payment accepted via PayPal" and set it as the default status.', get_class($this)),
-                'desc' => $module->l('Default status : Payment accepted', get_class($this)),
-                'options' => [
-                    'query' => $orderStatuses,
-                    'id' => 'id',
-                    'name' => 'name',
-                ],
-            ];
-        }
-
-        return $inputs;
-    }
-
     public function getIntent()
     {
         return Configuration::get('PAYPAL_API_INTENT') == 'sale' ? self::SALE : self::AUTHORIZE;

@@ -2670,26 +2670,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return $result;
     }
 
-    public function getOrderStatuses()
-    {
-        $orderStatuses = [
-            [
-                'id' => 0,
-                'name' => $this->l('No action'),
-            ],
-        ];
-        $prestashopOrderStatuses = OrderState::getOrderStates($this->context->language->id);
-
-        foreach ($prestashopOrderStatuses as $prestashopOrderStatus) {
-            $orderStatuses[] = [
-                'id' => $prestashopOrderStatus['id_order_state'],
-                'name' => $prestashopOrderStatus['name'],
-            ];
-        }
-
-        return $orderStatuses;
-    }
-
     public function showPsCheckoutMessage()
     {
         $countryDefault = new Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);

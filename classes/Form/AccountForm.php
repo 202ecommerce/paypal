@@ -24,6 +24,7 @@ class AccountForm implements FormInterface
         $this->puiFunctionality = new PuiFunctionality();
         $this->method = AbstractMethodPaypal::load();
     }
+
     public function getDescription()
     {
         $fields = [];

@@ -28,6 +28,8 @@ namespace PaypalAddons\classes\Constants;
 
 class PaypalConfigurations
 {
+    const CUSTOMIZE_ORDER_STATUS = 'PAYPAL_CUSTOMIZE_ORDER_STATUS';
+
     const INTENT = 'PAYPAL_API_INTENT';
 
     const EXPRESS_CHECKOUT_IN_CONTEXT = 'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT';
