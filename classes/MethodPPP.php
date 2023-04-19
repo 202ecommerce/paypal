@@ -200,7 +200,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         return true;
     }
 
-    public function getTplVars()
+    public function getVarsForAccountForm()
     {
         $tplVars = [];
 
@@ -211,25 +211,11 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
 
         return $tplVars;
+    }
 
-        $sandboxMode = (int) Configuration::get('PAYPAL_SANDBOX');
-
-        if ($sandboxMode) {
-            $tpl_vars = [
-                'paypal_sandbox_clientid' => Configuration::get('PAYPAL_SANDBOX_CLIENTID'),
-                'paypal_sandbox_secret' => Configuration::get('PAYPAL_SANDBOX_SECRET'),
-            ];
-        } else {
-            $tpl_vars = [
-                'paypal_live_secret' => Configuration::get('PAYPAL_LIVE_SECRET'),
-                'paypal_live_clientid' => Configuration::get('PAYPAL_LIVE_CLIENTID'),
-            ];
-        }
-
-        $tpl_vars['accountConfigured'] = $this->isConfigured();
-        $tpl_vars['sandboxMode'] = $sandboxMode;
-
-        return $tpl_vars;
+    public function saveAccountForm($data = null)
+    {
+        // TODO: Implement saveAccountForm() method.
     }
 
     public function checkCredentials()

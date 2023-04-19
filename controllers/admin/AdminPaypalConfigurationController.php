@@ -1,5 +1,6 @@
 <?php
 
+use PaypalAddons\classes\Form\AccountForm;
 use PaypalAddons\classes\Form\CheckoutForm;
 use PaypalAddons\classes\Form\FormInstallment;
 use PaypalAddons\classes\Form\TrackingParametersForm;
@@ -46,8 +47,9 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
     {
         $this->forms['checkoutForm'] = new CheckoutForm();
         $this->forms['tranckingForm'] = new TrackingParametersForm();
-        $this->forms['FormInstallment'] = new FormInstallment();
-        $this->forms['WhiteListForm'] = new WhiteListForm();
+        $this->forms['formInstallment'] = new FormInstallment();
+        $this->forms['whiteListForm'] = new WhiteListForm();
+        $this->forms['accountForm'] = new AccountForm();
     }
 
     public function setMedia($isNewTheme = false)

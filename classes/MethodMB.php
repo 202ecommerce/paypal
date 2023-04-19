@@ -179,7 +179,7 @@ class MethodMB extends AbstractMethodPaypal
         return $isMbConfigured;
     }
 
-    public function getTplVars()
+    public function getVarsForAccountForm()
     {
         if ($this->isSandbox()) {
             $tpl_vars = [
@@ -200,6 +200,11 @@ class MethodMB extends AbstractMethodPaypal
         }
 
         return $tpl_vars;
+    }
+
+    public function saveAccountForm($data = null)
+    {
+        // TODO: Implement saveAccountForm() method.
     }
 
     public function checkCredentials()

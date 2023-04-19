@@ -595,4 +595,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     /** @return  bool*/
     abstract public function isConfigured();
+
+    abstract public function getVarsForAccountForm();
+
+    abstract public function saveAccountForm($data = null);
 }

@@ -225,7 +225,7 @@ class MethodEC extends AbstractMethodPaypal
         }
     }
 
-    public function getTplVars()
+    public function getVarsForAccountForm()
     {
         $tplVars = [];
         $countryDefault = new Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
@@ -242,6 +242,11 @@ class MethodEC extends AbstractMethodPaypal
             'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
 
         return $tplVars;
+    }
+
+    public function saveAccountForm($data = null)
+    {
+        // TODO: Implement saveAccountForm() method.
     }
 
     public function getAdvancedFormInputs()
