@@ -4,6 +4,7 @@ use PaypalAddons\classes\Form\AccountForm;
 use PaypalAddons\classes\Form\CheckoutForm;
 use PaypalAddons\classes\Form\FormInstallment;
 use PaypalAddons\classes\Form\OrderStatusForm;
+use PaypalAddons\classes\Form\ShortcutConfigurationForm;
 use PaypalAddons\classes\Form\TrackingParametersForm;
 use PaypalAddons\classes\Form\WhiteListForm;
 
@@ -52,6 +53,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $this->forms['whiteListForm'] = new WhiteListForm();
         $this->forms['accountForm'] = new AccountForm();
         $this->forms['orderStatusForm'] = new OrderStatusForm();
+        $this->forms['shortcutConfigurationForm'] = new ShortcutConfigurationForm();
     }
 
     public function setMedia($isNewTheme = false)

@@ -66,6 +66,6 @@ class AccountForm implements FormInterface
             $data = Tools::getAllValues();
         }
 
-        $this->method->saveAccountForm($data);
+        return $this->method->saveAccountForm($data);
     }
 }

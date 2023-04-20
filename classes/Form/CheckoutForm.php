@@ -16,8 +16,6 @@ class CheckoutForm implements FormInterface
     /** @var \Paypal */
     protected $module;
 
-    protected $className;
-
     protected $method;
 
     protected $acdcFunctionality;
@@ -50,16 +48,16 @@ class CheckoutForm implements FormInterface
         if (in_array($this->method, ['EC', 'MB'])) {
             $fields[PaypalConfigurations::INTENT] = [
                 'type' => 'select',
-                'label' => $this->module->l('Payment action', ''),
+                'label' => $this->module->l('Payment action', 'AdminPayPalSetupController'),
                 'name' => PaypalConfigurations::INTENT,
                 'options' => [
                     [
                         'value' => 'sale',
-                        'title' => $this->module->l('Sale'),
+                        'title' => $this->module->l('Sale', 'AdminPayPalSetupController'),
                     ],
                     [
                         'value' => 'authorize',
-                        'title' => $this->module->l('Authorize'),
+                        'title' => $this->module->l('Authorize', 'AdminPayPalSetupController'),
                     ],
                 ],
             ];
@@ -111,7 +109,6 @@ class CheckoutForm implements FormInterface
             'type' => 'switch',
             'label' => $this->module->l('Show PayPal benefits to your customers', 'AdminPayPalCustomizeCheckoutController'),
             'name' => PaypalConfigurations::API_ADVANTAGES,
-            'is_bool' => true,
             'hint' => $this->module->l('You can increase your conversion rate by presenting PayPal benefits to your customers on payment methods selection page.', 'AdminPayPalCustomizeCheckoutController'),
             'values' => [
                 [
@@ -149,12 +146,30 @@ class CheckoutForm implements FormInterface
             'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP),
         ];
 
+        $fields[PaypalConfigurations::MOVE_BUTTON_AT_END] = [
+            'type' => 'switch',
+            'label' => $this->module->l('Location', 'CheckoutForm'),
+            'desc' => $this->module->l('Put the PayPal button at the end of the order page', 'AdminPayPalCustomizeCheckoutController'),
+            'name' => PaypalConfigurations::MOVE_BUTTON_AT_END,
+            'values' => [
+                [
+                    'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_on',
+                    'value' => 1,
+                    'label' => $this->module->l('Bottom'),
+                ],
+                [
+                    'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_off',
+                    'value' => 0,
+                    'label' => $this->module->l('Radio button'),
+                ],
+            ],
+        ];
+
         if ($this->acdcFunctionality->isAvailable()) {
-            $fields[] = [
+            $fields[PaypalConfigurations::ACDC_OPTION] = [
                 'type' => 'switch',
                 'label' => $this->module->l('Credit/Debit card', 'AdminPayPalCustomizeCheckoutController'),
                 'name' => PaypalConfigurations::ACDC_OPTION,
-                'is_bool' => true,
                 'values' => [
                     [
                         'id' => PaypalConfigurations::ACDC_OPTION . '_on',
@@ -176,7 +191,6 @@ class CheckoutForm implements FormInterface
                 'type' => 'switch',
                 'label' => $this->module->l('Pay upon invoice', 'CheckoutForm'),
                 'name' => PaypalConfigurations::PUI_ENABLED,
-                'is_bool' => true,
                 'values' => [
                     [
                         'id' => PaypalConfigurations::PUI_ENABLED . '_on',
@@ -195,7 +209,6 @@ class CheckoutForm implements FormInterface
                 'type' => 'switch',
                 'label' => $this->module->l('SEPA', 'CheckoutForm'),
                 'name' => PaypalConfigurations::SEPA_ENABLED,
-                'is_bool' => true,
                 'values' => [
                     [
                         'id' => PaypalConfigurations::SEPA_ENABLED . '_on',
@@ -214,7 +227,6 @@ class CheckoutForm implements FormInterface
                 'type' => 'switch',
                 'label' => $this->module->l('Giropay', 'CheckoutForm'),
                 'name' => PaypalConfigurations::GIROPAY_ENABLED,
-                'is_bool' => true,
                 'values' => [
                     [
                         'id' => PaypalConfigurations::GIROPAY_ENABLED . '_on',
@@ -233,7 +245,6 @@ class CheckoutForm implements FormInterface
                 'type' => 'switch',
                 'label' => $this->module->l('Sofort', 'CheckoutForm'),
                 'name' => PaypalConfigurations::SOFORT_ENABLED,
-                'is_bool' => true,
                 'values' => [
                     [
                         'id' => PaypalConfigurations::SOFORT_ENABLED . '_on',

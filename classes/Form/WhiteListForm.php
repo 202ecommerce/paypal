@@ -61,7 +61,6 @@ class WhiteListForm implements FormInterface
                     'type' => 'switch',
                     'label' => $this->module->l('Enable restriction by IP', $this->className),
                     'name' => WhiteList::ENABLED,
-                    'is_bool' => true,
                     'values' => [
                         [
                             'id' => WhiteList::ENABLED . '_on',

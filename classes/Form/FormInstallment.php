@@ -61,7 +61,6 @@ class FormInstallment implements FormInterface
                 'type' => 'switch',
                 'label' => $this->module->l('Enable \'Pay in X times\' in your checkout', $this->className),
                 'name' => ConfigurationMap::ENABLE_BNPL,
-                'is_bool' => true,
                 'values' => [
                     [
                         'id' => ConfigurationMap::ENABLE_BNPL . '_on',
@@ -110,7 +109,6 @@ class FormInstallment implements FormInterface
             'type' => 'switch',
             'label' => $this->module->l('Enable the display of banners', $this->className),
             'name' => ConfigurationMap::ENABLE_INSTALLMENT,
-            'is_bool' => true,
             'hint' => $this->module->l('Let your customers know about the option \'Pay 4x PayPal\' by displaying banners on your site.', $this->className),
             'values' => [
                 [
@@ -164,7 +162,6 @@ class FormInstallment implements FormInterface
             'type' => 'switch',
             'label' => $this->module->l('Advanced options', $this->className),
             'name' => ConfigurationMap::ADVANCED_OPTIONS_INSTALLMENT,
-            'is_bool' => true,
             'values' => [
                 [
                     'id' => ConfigurationMap::ADVANCED_OPTIONS_INSTALLMENT . '_on',

@@ -41,7 +41,6 @@ class OrderStatusForm implements FormInterface
             'label' => $this->module->l('Customize your order status', 'AdminPayPalCustomizeCheckoutController'),
             'name' => PaypalConfigurations::CUSTOMIZE_ORDER_STATUS,
             'hint' => $this->module->l('Please use this option only if you want to change the assigned default PayPal status on PrestaShop Order statuses.', 'AdminPayPalCustomizeCheckoutController'),
-            'is_bool' => true,
             'values' => [
                 [
                     'id' => PaypalConfigurations::CUSTOMIZE_ORDER_STATUS . '_on',
@@ -155,12 +154,11 @@ class OrderStatusForm implements FormInterface
         }
 
         if ($this->webhookOption->isEligibleContext()) {
-            $fields[] = [
+            $fields[WebHookConf::ENABLE] = [
                 'type' => 'switch',
                 'label' => $this->module->l('Enable PayPal webhooks', 'AdminPayPalCustomizeCheckoutController'),
                 'name' => WebHookConf::ENABLE,
                 'hint' => $this->module->l('PayPal webhooks allow you to automatically update the order status on PrestaShop once the status of transaction on PayPal is changed.', 'AdminPayPalCustomizeCheckoutController'),
-                'is_bool' => true,
                 'values' => [
                     [
                         'id' => WebHookConf::ENABLE . '_on',
