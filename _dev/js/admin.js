@@ -25,3 +25,4 @@
  */
 
 import '~/prestakit/dist/js/prestashop-ui-kit';
+import '~/bootstrap';

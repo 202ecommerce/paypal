@@ -177,7 +177,7 @@ class OrderStatusForm implements FormInterface
 
         return [
             'legend' => [
-                'title' => $this->module->l('Account', 'AdminPayPalCustomizeCheckoutController'),
+                'title' => $this->module->l('Order status', 'AdminPayPalCustomizeCheckoutController'),
             ],
             'fields' => $fields,
             'submit' => [

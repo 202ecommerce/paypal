@@ -23,22 +23,25 @@
  *  @copyright PayPal
  *
  *}
+{assign var="sectionRowClasses" value=$sectionRowClasses|default:' mt-4'}
+{assign var="sectionColFormClasses" value=$sectionColFormClasses|default:' col-md-6'}
+{assign var="sectionColInfoClasses" value=$sectionColInfoClasses|default:' col-md-6'}
 
-{* Checkout section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$checkoutForm
-  sectionRowClasses=' '
-}
+<div class="row{$sectionRowClasses}">
+ <div class="col{$sectionColFormClasses}">
+   <div class="card">
+     <div class="card-header">
+      {$form.legend.title}
+     </div>
+     <div class="card-body">
+      {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
+     </div>
+   </div>
+ </div>
 
-{* Order status section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$orderStatusForm
-}
-
-{* Shortcut configuration section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$shortcutConfigurationForm
-}
+ <div class="col{$sectionColInfoClasses}">
+   <div class="card-body">
+    {include file="module:paypal/views/templates/admin/_partials/block-info.tpl"}
+   </div>
+ </div>
+</div>

@@ -23,22 +23,19 @@
  *  @copyright PayPal
  *
  *}
+<form id="{$orderStatusForm.id_form}" class="mt-4">
+  {foreach from=$orderStatusForm.fields item=field}
+    <div class="form-group">
+      <label class="form-control-label col-lg-3 {[
+        'form-control-label-check' => $field.type == 'switch'
+      ]|classnames}" for="{$field.name}">{$field.label}</label>
+      <div class="col-lg-7">
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+      </div>
+    </div>
+  {/foreach}
 
-{* Checkout section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$checkoutForm
-  sectionRowClasses=' '
-}
-
-{* Order status section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$orderStatusForm
-}
-
-{* Shortcut configuration section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$shortcutConfigurationForm
-}
+  <div class="form-group pt-5 mb-0">
+    <button class="btn btn-secondary ml-auto" name={$orderStatusForm.submit.name}>{$orderStatusForm.submit.title}</button>
+  </div>
+</form>

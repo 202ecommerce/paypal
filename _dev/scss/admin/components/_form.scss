@@ -1,4 +1,4 @@
-{*
+/**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,23 +22,35 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  *
- *}
+ */
 
-{* Checkout section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$checkoutForm
-  sectionRowClasses=' '
+.form {
+  &-group {
+    @extend .d-flex;
+    @extend .align-items-start;
+
+    .form-control-label {
+      @extend .text-right;
+    }
+  }
+
+  &-control-label {
+    font-weight: $font-weight-base !important;
+    font-size: $custom-control-label-font-size;
+    color: $custom-control-label-color !important;
+    @extend .p-0;
+    @extend .m-0;
+
+    &:not(.form-control-label-check) {
+      min-height: add($input-line-height * 1em * $input-font-size / $custom-control-label-font-size, add($input-padding-y * 2, $input-height-border, false));
+      @extend .d-flex;
+      @extend .align-items-center;
+      @extend .justify-content-end;
+    }
+
+    &-check {
+      line-height: $custom-control-indicator-size + .2rem;
+    }
+  }
 }
 
-{* Order status section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$orderStatusForm
-}
-
-{* Shortcut configuration section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$shortcutConfigurationForm
-}

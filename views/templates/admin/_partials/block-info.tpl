@@ -23,22 +23,12 @@
  *  @copyright PayPal
  *
  *}
-
-{* Checkout section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$checkoutForm
-  sectionRowClasses=' '
-}
-
-{* Order status section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$orderStatusForm
-}
-
-{* Shortcut configuration section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$shortcutConfigurationForm
-}
+<div class="h5">
+  {l s='Where can i find this informations ?' mod='paypal'}
+</div>
+<p>
+  {l s='This is the first item\'s accordion body. It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.' mod='paypal'}
+</p>
+<p>
+  {l s='This is the first item\'s accordion body. It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.' mod='paypal'}
+</p>
