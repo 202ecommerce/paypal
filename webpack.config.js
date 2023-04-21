@@ -120,13 +120,18 @@ module.exports = (env, argv) => {
   // Production specific settings
   if (argv.mode === 'production') {
     const terserPlugin = new TerserPlugin({
-      cache: true,
-      extractComments: /^\**!|@preserve|@license|@cc_on/i, // Remove comments except those containing @preserve|@license|@cc_on
+      // Remove comments except those containing @preserve|@license|@cc_on
+      extractComments: /^\**!|@preserve|@license|@cc_on/i,
       parallel: true,
       terserOptions: {
-        drop_console: true,
+        compress: {
+          pure_funcs: [
+            'console.log'
+          ]
+        }
       },
     });
+
 
     config.optimization.minimizer.push(terserPlugin);
   }

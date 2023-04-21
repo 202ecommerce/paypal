@@ -26,7 +26,6 @@
 
 // Import functions for scrolling effect to necessary block on click
 import {hoverConfig, hoverTabConfig} from './functions.js';
-import {Onboarding} from "./Onboarding";
 
 export  const SetupAdmin = {
   init() {
@@ -72,7 +71,21 @@ export  const SetupAdmin = {
       e.preventDefault();
     });
 
-    window.onboardCallback = Onboarding.handleResponse;
+    window.onboardCallback = function (authCode, sharedId) {
+      $.ajax({
+        url: controllerUrl,
+        type: 'POST',
+        data: {
+          ajax: true,
+          action: 'handleOnboardingResponse',
+          authCode: authCode,
+          sharedId: sharedId,
+        },
+        success: function(response) {
+          console.log(response);
+        }
+      });
+    };
 
     $('[data-update-rounding-settings]').on('click', (e) => {
       SetupAdmin.updateRoundingSettings(e);
