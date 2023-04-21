@@ -130,9 +130,9 @@
     </target>
     <!-- end composer -->
     <!-- start documentation -->
-    <target name="npm" depends="check-node,clean-npm,npm-install" description="Install or update node dependencies" />
+    <target name="npm" depends="clean-npm,npm-install" description="Install or update node dependencies" />
 
-  <target name="check-node" description="Use last node version">
+  <target name="npm-install" description="Use last node version">
     <exec executable="./202/run_npm.sh">
     </exec>
   </target>
@@ -141,11 +141,7 @@
         <delete dir="${basedir}/202/node_modules" />
         <delete file="${basedir}/package-lock.json" />
     </target>
-    <target name="npm-install" description="Installing node deps">
-        <exec executable="npm">
-            <arg value="install" />
-        </exec>
-    </target>
+
     <target name="doc.check">
         <condition property="doc.directory.exist">
             <available file="${basedir}/202/doc" type="dir"/>
