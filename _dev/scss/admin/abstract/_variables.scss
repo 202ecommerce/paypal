@@ -28,7 +28,7 @@ $black: #000 !default;
 $blue: #0D3883 !default;
 $blue-light: #D3F1F7 !default;
 $yellow: #EFBB48;
-
+$cyen: #25B9D7;
 
 $white: #fff !default;
 $gray-200: #EAEBEC !default;
@@ -36,9 +36,12 @@ $gray-300: #BBCDD2 !default;
 $gray-400: #D9D9D9 !default;
 $gray-500: #6C868E !default;
 $gray-700: #363A41 !default;
+
 $primary: $blue !default;
 $primary-light: $blue-light !default;
 $secondary: $yellow !default;
+$info: $cyen !default;
+
 $text-muted:                  $gray-500 !default;
 
 // Base
@@ -51,11 +54,17 @@ $grid-gutter-width:           40px !default;
 // Typography
 $font-family-sans-serif: "Open Sans";
 $font-weight-semibold: 600;
+$font-size-base: .875rem; // 14px
+
+// Links
+$link-color:                  $info !default;
 
 // Icons
 $material-icons-font-path: '~material-icons/iconfont/';
 $icon-container-base-size: 17px;
 $icon-base-font-size: $icon-container-base-size;
+$icon-container-lg-size: 24px;
+$icon-lg-font-size: $icon-container-lg-size;
 
 // Headings
 $h5-font-size: 1.25rem !default;
@@ -70,11 +79,12 @@ $card-cap-bg:                       $primary !default;
 $card-cap-color:                    $white !default;
 $card-header-spacer-y:              .625rem !default;
 $card-header-spacer-x:              .625rem !default;
+$card-header-font-size:              1rem !default; // 16px
 
 // Buttons
 $input-btn-padding-y:         .5rem !default;
 $input-btn-padding-x:         1rem !default;
-$input-btn-font-size:         .875rem !default;
+$input-btn-font-size:         .875rem !default; // 14px
 $input-btn-line-height:       1.5 !default;
 
 $btn-font-weight:             $font-weight-semibold !default;
@@ -103,3 +113,15 @@ $custom-checkbox-indicator-icon-checked:        url("data:image/svg+xml,<svg xml
 $table-border-color:          $gray-400 !default;
 $table-border-width:          2px !default;
 $table-cell-padding:          .5625rem !default;
+
+// Alerts
+$alert-padding-y:                   8.5px !default;
+$alert-padding-x:                   1rem !default;
+$alert-margin-bottom:               1rem !default;
+
+// Shadow
+$box-shadow:                  0 .25rem .5rem rgba($black, .25) !default;
+
+// Color-swatch
+$color-swatch-width: 2.375rem;
+$color-swatch-height: $color-swatch-width;

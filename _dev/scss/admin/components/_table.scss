@@ -34,9 +34,11 @@
     padding: 0 0 $table-cell-padding !important;
     line-height: $custom-control-indicator-size + .2rem;
     color: $table-head-color !important;
+    font-size: .8125rem; // 13px
   }
 
   td {
     padding: $table-cell-padding 0 $table-cell-padding !important;
+    font-size: .75rem; // 12px
   }
 }

@@ -59,7 +59,7 @@
 
   {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true}
 
   <div class="form-group pt-5 mb-0">
     <button class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>

@@ -34,14 +34,17 @@
 // Vendors
 @import "~bootstrap/scss/bootstrap";
 @import "~material-icons/iconfont/outlined";
+@import "~material-icons/iconfont/filled";
 
 // Base
 @import "admin/base/fonts";
 
 // Components
+@import "admin/components/alert";
 @import "admin/components/form";
 @import "admin/components/custom-form";
 @import "admin/components/card";
 @import "admin/components/buttons";
 @import "admin/components/icon";
 @import "admin/components/table";
+@import "admin/components/color-swatch";

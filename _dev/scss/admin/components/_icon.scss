@@ -30,8 +30,17 @@
   @at-root .btn & {
     vertical-align: middle;
   }
-  
+
   > i {
     font-size: $icon-base-font-size;
+  }
+
+  &-lg {
+    width: $icon-container-lg-size;
+    height: $icon-container-lg-size;
+
+    > i {
+      font-size: $icon-lg-font-size;
+    }
   }
 }

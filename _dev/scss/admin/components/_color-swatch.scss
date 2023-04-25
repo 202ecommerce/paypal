@@ -23,9 +23,10 @@
  *  @copyright PayPal
  *
  */
-.card {
-  &-header {
-    padding: $card-header-spacer-y $card-header-spacer-x;
-    font-size: $card-header-font-size;
-  }
+.color-swatch {
+  width: $color-swatch-width;
+  height: $color-swatch-height;
+  display: inline-flex;
+  @include border-radius(50%);
+  @extend .align-middle;
 }

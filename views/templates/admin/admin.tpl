@@ -23,6 +23,11 @@
  *  @copyright PayPal
  *
  *}
+{* Dashboard *}
+{include
+  file="module:paypal/views/templates/admin/_partials/dashboard.tpl"
+  form=$trackingForm
+}
 
 {* Account section *}
 {include

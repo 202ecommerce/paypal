@@ -24,13 +24,17 @@
  *
  *}
 {assign var="variant" value=$field.variant|default:false}
+{assign var="withColor" value=$withColor|default:false}
 
 {if $field.type !== 'checkbox' && $field.label}
   <div class="form-group">
     <label class="form-control-label col-lg-3 {[
       'form-control-label-check' => $field.type == 'switch'
     ]|classnames}" for="{$field.name}">{$field.label}</label>
-    <div class="col-lg-7">
+
+    <div class="col-lg-7 {[
+      'col-lg-9' => $withColor
+    ]|classnames}">
       <div>
 {/if}
 
@@ -55,6 +59,10 @@
             <option {if $option.value|default:false}value="{$option.value}"{/if}>{$option.title}</option>
           {/foreach}
         </select>
+
+        {if $withColor}
+          <span class="color-swatch ml-1" style="background:{$field.options.0.value};"></span>
+        {/if}
 
       {elseif $field.type === 'switch'}
 
