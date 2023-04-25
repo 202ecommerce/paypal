@@ -48,7 +48,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
     protected function initForms()
     {
         $this->forms['checkoutForm'] = new CheckoutForm();
-        $this->forms['tranckingForm'] = new TrackingParametersForm();
+        $this->forms['trackingForm'] = new TrackingParametersForm();
         $this->forms['formInstallment'] = new FormInstallment();
         $this->forms['whiteListForm'] = new WhiteListForm();
         $this->forms['accountForm'] = new AccountForm();
@@ -77,6 +77,10 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         foreach ($this->forms as $formName => $form) {
             $tpl->assign($formName, $form->getDescription());
         }
+
+        $tpl->assign([
+            'moduleDir' => _MODULE_DIR_ . $this->module->name,
+        ]);
 
         return $tpl->fetch();
     }

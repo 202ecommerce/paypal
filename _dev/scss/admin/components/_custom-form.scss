@@ -40,7 +40,6 @@
 
   &-control-label {
     font-size: 12px;
-    // line-height: 12px;
     color: $body-color !important;
   }
 
@@ -50,6 +49,45 @@
     option {
       background: $white;
       color: $black;
+    }
+  }
+
+  &-checkbox {
+    &-wrap {
+      width: 98px;
+      max-width: 98px;
+      @extend .d-flex;
+      @extend .align-items-start;
+      @extend .flex-column;
+      margin-right: #{$grid-gutter-width / 2};
+
+      .custom-checkbox {
+        margin-right: 0;
+        height: 100%;
+      }
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::after {
+      background-size: 100% 50%;
+    }
+
+    .custom-control-input ~ .custom-control-label {
+      @extend .d-flex;
+      @extend .flex-column;
+      height: 100%;
+
+      .label {
+        line-height: $font-size-base;
+        height: 24px;
+        flex: 1 1 auto;
+        @extend .d-flex;
+        @extend .align-items-center;
+        margin-bottom: 0.75rem;
+      }
+      img {
+        margin-left: -( $custom-control-gutter + $custom-control-indicator-size);
+        width: 97px;
+      }
     }
   }
 }

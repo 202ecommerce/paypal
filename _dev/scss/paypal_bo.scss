@@ -33,6 +33,7 @@
 
 // Vendors
 @import "~bootstrap/scss/bootstrap";
+@import "~material-icons/iconfont/outlined";
 
 // Base
 @import "admin/base/fonts";
@@ -42,3 +43,5 @@
 @import "admin/components/custom-form";
 @import "admin/components/card";
 @import "admin/components/buttons";
+@import "admin/components/icon";
+@import "admin/components/table";

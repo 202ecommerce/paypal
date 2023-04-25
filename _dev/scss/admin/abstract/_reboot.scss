@@ -63,8 +63,25 @@
     @extend .custom-select;
   }
 
-}
+  tr th {
+    background-color: unset !important;
+    color: unset;
+    font-size: unset;
+    border: none !important;
+  }
 
+  tr td {
+    border-bottom: unset;
+    color: unset;
+  }
+
+  table {
+    background-color: unset;
+    border: unset !important;
+    border-radius: unset;
+    padding: unset;
+  }
+}
 
 .page-sidebar.mobile #content.nobootstrap {
   margin-left: unset;

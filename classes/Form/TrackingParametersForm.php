@@ -55,9 +55,17 @@ class TrackingParametersForm implements FormInterface
     {
         return [
             'legend' => [
-                'title' => $this->module->l('Tracking parameters', $this->className),
+                'title' => $this->module->l('Tracking', $this->className),
             ],
             'fields' => [
+                TrackingParametersMap::STATUS => [
+                    'type' => 'select',
+                    'label' => $this->module->l('PayPal checkout', $this->className),
+                    'name' => TrackingParametersMap::STATUS,
+                    'options' => $this->getPaypalStatusList(),
+                    'value' => $this->initTrackingParametersService()->getStatus(),
+                    'variant' => 'primary',
+                ],
                 'carrier_map' => [
                     'type' => 'variable-set',
                     'label' => $this->module->l('Carrier map', $this->className),
@@ -65,13 +73,6 @@ class TrackingParametersForm implements FormInterface
                         'mapService' => $this->initTrackingParametersService(),
                         'carriers' => Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS),
                     ]
-                ],
-                TrackingParametersMap::STATUS => [
-                    'type' => 'select',
-                    'label' => $this->module->l('PayPal checkout', $this->className),
-                    'name' => TrackingParametersMap::STATUS,
-                    'options' => $this->getPaypalStatusList(),
-                    'value' => $this->initTrackingParametersService()->getStatus(),
                 ],
             ],
             'submit' => [

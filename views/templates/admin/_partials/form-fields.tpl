@@ -23,38 +23,75 @@
  *  @copyright PayPal
  *
  *}
-<div>
-  {if $field.type === 'text'}
-    {* Type text *}
-    <input type="text" name="{$field.name}" id="{$field.name}" class="form-control" placeholder="{l s='Placeholder' mod='paypal'}">
+{assign var="variant" value=$field.variant|default:false}
 
-  {elseif $field.type === 'select'}
-    {* Type select *}
-    <select class="form-control custom-select {[
-      'custom-select-primary' => $field.name|in_array:['PAYPAL_API_INTENT', 'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT']
-    ]|classnames}" name="{$field.name}" id="{$field.name}">
-      {foreach from=$field.options item=option}
-        <option {if $option.value|default:false}value="{$option.value}"{/if}>{$option.title}</option>
-      {/foreach}
-    </select>
+{if $field.type !== 'checkbox' && $field.label}
+  <div class="form-group">
+    <label class="form-control-label col-lg-3 {[
+      'form-control-label-check' => $field.type == 'switch'
+    ]|classnames}" for="{$field.name}">{$field.label}</label>
+    <div class="col-lg-7">
+      <div>
+{/if}
 
-  {elseif $field.type === 'switch'}
+      {if $field.type === 'text'}
+        {* Type text *}
+        <input
+          type="text"
+          name="{$field.name}"
+          id="{$field.name}"
+          class="form-control {[
+            'form-control-primary' => $variant == 'primary'
+          ]|classnames}"
+          placeholder="{l s='Placeholder' mod='paypal'}"
+        >
 
-    {* Type switch *}
-    <div class="custom-control custom-switch {[
-      'custom-switch-secondary' => $field.name|in_array:['PAYPAL_API_ADVANTAGES', 'PAYPAL_ENABLE_WEBHOOK']
-    ]|classnames}">
-      <input type="checkbox" class="custom-control-input" id="{$field.name}" name="{$field.name}" value="1" {if $field.value|default:false}checked{/if}>
-      <label class="custom-control-label form-control-label-check" for="{$field.name}">{l s='Enabled' mod='paypal'}</label>
+      {elseif $field.type === 'select'}
+        {* Type select *}
+        <select class="form-control custom-select {[
+          'custom-select-primary' => $variant == 'primary'
+        ]|classnames}" name="{$field.name}" id="{$field.name}">
+          {foreach from=$field.options item=option}
+            <option {if $option.value|default:false}value="{$option.value}"{/if}>{$option.title}</option>
+          {/foreach}
+        </select>
+
+      {elseif $field.type === 'switch'}
+
+        {* Type switch *}
+        <div class="custom-control custom-switch {[
+          'custom-switch-secondary' => $variant == 'secondary'
+        ]|classnames}">
+          <input type="checkbox" class="custom-control-input" id="{$field.name}" name="{$field.name}" value="1" {if $field.value|default:false}checked{/if}>
+          <label class="custom-control-label form-control-label-check" for="{$field.name}">{l s='Enabled' mod='paypal'}</label>
+        </div>
+      {elseif $field.type === 'checkbox'}
+
+        {* Type checkbox *}
+        <div class="col custom-checkbox-wrap">
+          <div class="custom-control custom-checkbox form-check-inline">
+            <input class="custom-control-input" type="checkbox" id="{$field.name}" value="1" {if $field.checked}checked{/if}>
+            <label class="custom-control-label" for="{$field.name}">
+              <span class="label">
+                {$field.label}
+              </span>
+              <img src="{$moduleDir|addslashes}/views/img/location.png"  alt="location">
+            </label>
+          </div>
+        </div>
+
+      {/if}
+
+{if $field.type !== 'checkbox' && $field.label}
+      </div>
+
+      <div class="text-muted small mt-1">{l s='Placeholder' mod='paypal'}</div>
+
+      {* to do: show hint *}
+
+      {* {if $field.hint|default:false}
+        <div class="small">{$field.hint}</div>
+      {/if} *}
     </div>
-
-  {/if}
-</div>
-
-<div class="text-muted small mt-1">{l s='Placeholder' mod='paypal'}</div>
-
-{* to do: show hint *}
-
-{* {if $field.hint|default:false}
-  <div class="small">{$field.hint}</div>
-{/if} *}
+  </div>
+{/if}

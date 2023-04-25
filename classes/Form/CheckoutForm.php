@@ -60,6 +60,7 @@ class CheckoutForm implements FormInterface
                         'title' => $this->module->l('Authorize', 'AdminPayPalSetupController'),
                     ],
                 ],
+                'variant' => 'primary',
             ];
 
             if ($this->method == 'MB') {
@@ -83,6 +84,7 @@ class CheckoutForm implements FormInterface
                 ]
             ],
             'value' => Configuration::get(PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT),
+            'variant' => 'primary',
         ];
         $fields[PaypalConfigurations::BRAND_NAME] = [
             'type' => 'text',
@@ -123,6 +125,7 @@ class CheckoutForm implements FormInterface
                 ],
             ],
             'value' => (int) Configuration::get(PaypalConfigurations::API_ADVANTAGES),
+            'variant' => 'secondary',
         ];
         $fields[ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE] = [
             'type' => 'checkbox',

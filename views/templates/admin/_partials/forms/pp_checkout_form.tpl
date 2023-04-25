@@ -25,31 +25,19 @@
  *}
 {assign var="fieldsExpressCheckoutShortcut" value=['PAYPAL_EXPRESS_CHECKOUT_SHORTCUT', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_SIGNUP']}
 
-<form id="{$checkoutForm.id_form}" class="mt-4">
-  {foreach from=$checkoutForm.fields item=field}
+<form id="{$form.id_form}" class="mt-4">
+  {foreach from=$form.fields item=field}
     {if !$field.name|in_array:$fieldsExpressCheckoutShortcut}
-      <div class="form-group">
-        <label class="form-control-label col-lg-3 {[
-          'form-control-label-check' => $field.type == 'switch'
-        ]|classnames}" for="{$field.name}">{$field.label}</label>
-        <div class="col-lg-7">
-          {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
-        </div>
-      </div>
+      {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
     {/if}
   {/foreach}
   <div class="form-group">
     <label class="form-control-label form-control-label-check col-lg-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_test">{l s='Active on' mod='paypal'}</label>
-    <div class="col-lg-7">
+    <div class="col-lg-10">
       <div class="row no-gutters">
-        {foreach from=$checkoutForm.fields item=field}
+        {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsExpressCheckoutShortcut}
-            <div class="col-4">
-              <div class="custom-control custom-checkbox form-check-inline">
-                <input class="custom-control-input" type="checkbox" id="{$field.name}" value="1" {if $field.checked}checked{/if}>
-                <label class="custom-control-label" for="{$field.name}">{$field.label}</label>
-              </div>
-            </div>
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
           {/if}
         {/foreach}
       </div>
@@ -57,6 +45,6 @@
 
   </div>
   <div class="form-group pt-5 mb-0">
-    <button class="btn btn-secondary ml-auto" name={$checkoutForm.submit.name}>{$checkoutForm.submit.title}</button>
+    <button class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
   </div>
 </form>

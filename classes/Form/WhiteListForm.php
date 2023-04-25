@@ -54,35 +54,17 @@ class WhiteListForm implements FormInterface
 
         return [
             'legend' => [
-                'title' => $this->module->l('White list', $this->className),
+                'title' => $this->module->l('Restriction mode', $this->className),
             ],
             'fields' => [
-                WhiteList::ENABLED => [
-                    'type' => 'switch',
-                    'label' => $this->module->l('Enable restriction by IP', $this->className),
-                    'name' => WhiteList::ENABLED,
-                    'values' => [
-                        [
-                            'id' => WhiteList::ENABLED . '_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Enabled', $this->className),
-                        ],
-                        [
-                            'id' => WhiteList::ENABLED . '_off',
-                            'value' => 0,
-                            'label' => $this->module->l('Disabled', $this->className),
-                        ],
-                    ],
-                    'value' => $this->initWhiteListService()->isEnabled(),
-                ],
-                'list_ip' => [
-                    'type' => 'variable-set',
+                WhiteList::LIST_IP => [
+                    'type' => 'text',
                     'label' => $this->module->l('List of IPs', $this->className),
-                    'set' => [
-                        WhiteList::LIST_IP => implode(';', $this->initWhiteListService()->getListIP()),
-                        'paypal_current_ip' => $request->getClientIp(),
-                    ]
-                ],
+                    'name' => WhiteList::LIST_IP,
+                    'value' => implode(';', $this->initWhiteListService()->getListIP()),
+                    'hint' => $request->getClientIp(),
+                    'variant' => 'primary'
+                ]
             ],
             'submit' => [
                 'title' => $this->module->l('Save', $this->className),

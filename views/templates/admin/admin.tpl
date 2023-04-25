@@ -24,12 +24,34 @@
  *
  *}
 
+{* Account section *}
+{include
+  file="module:paypal/views/templates/admin/_partials/section.tpl"
+  form=$accountForm
+}
+
+{* Tracking section *}
+{include
+  file="module:paypal/views/templates/admin/_partials/section.tpl"
+  form=$trackingForm
+}
+
 {* Checkout section *}
 {include
   file="module:paypal/views/templates/admin/_partials/section.tpl"
   form=$checkoutForm
-  sectionRowClasses=' '
 }
+
+{* Installment section *}
+{include
+  file="module:paypal/views/templates/admin/_partials/section.tpl"
+  form=$formInstallment
+  sectionColFormClasses=' '
+  sectionColInfoClasses=' '
+}
+
+{* PayPal Express Checkout shortcut section *}
+<code>todo: PayPal Express Checkout shortcut</code>
 
 {* Order status section *}
 {include
@@ -37,8 +59,14 @@
   form=$orderStatusForm
 }
 
-{* Shortcut configuration section *}
+{* Shortcut section *}
 {include
   file="module:paypal/views/templates/admin/_partials/section.tpl"
   form=$shortcutConfigurationForm
+}
+
+{* White list section *}
+{include
+  file="module:paypal/views/templates/admin/_partials/section.tpl"
+  form=$whiteListForm
 }

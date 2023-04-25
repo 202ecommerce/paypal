@@ -23,16 +23,20 @@
  *  @copyright PayPal
  *
  */
-.btn {
-  @extend .d-flex;
-  @extend .align-items-center;
-  @extend .justify-content-center;
-
-  &-secondary {
-    color: $primary !important;
+.table {
+  th,
+  td {
+    vertical-align: middle;
   }
 
-  @at-root .form-group & {
-    max-width: 388px;
+  th {
+    font-weight: $font-weight-semibold;
+    padding: 0 0 $table-cell-padding !important;
+    line-height: $custom-control-indicator-size + .2rem;
+    color: $table-head-color !important;
+  }
+
+  td {
+    padding: $table-cell-padding 0 $table-cell-padding !important;
   }
 }

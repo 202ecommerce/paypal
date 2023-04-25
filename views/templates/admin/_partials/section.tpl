@@ -24,22 +24,26 @@
  *
  *}
 {assign var="sectionRowClasses" value=$sectionRowClasses|default:' mt-4'}
-{assign var="sectionColFormClasses" value=$sectionColFormClasses|default:' col-md-6'}
-{assign var="sectionColInfoClasses" value=$sectionColInfoClasses|default:' col-md-6'}
+{assign var="sectionColFormClasses" value=$sectionColFormClasses|default:' col-xl-6'}
+{assign var="sectionColInfoClasses" value=$sectionColInfoClasses|default:' col-xl-6'}
 
 <div class="row{$sectionRowClasses}">
- <div class="col{$sectionColFormClasses}">
+ <div class="col col-12 col-md-8{$sectionColFormClasses}">
    <div class="card">
      <div class="card-header">
       {$form.legend.title}
      </div>
      <div class="card-body">
-      {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
+      {if $form.id_form|in_array:['pp_checkout_form', 'pp_account_form', 'pp_installment_form', 'pp_tracking_form']}
+        {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
+      {else}
+        {include file="module:paypal/views/templates/admin/_partials/forms/form.tpl" form=$form}
+      {/if}
      </div>
    </div>
  </div>
 
- <div class="col{$sectionColInfoClasses}">
+ <div class="col col-12 col-md-4{$sectionColInfoClasses}">
    <div class="card-body">
     {include file="module:paypal/views/templates/admin/_partials/block-info.tpl"}
    </div>

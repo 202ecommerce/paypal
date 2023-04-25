@@ -23,7 +23,6 @@
  *  @copyright PayPal
  *
  */
-
 const path = require('path');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -89,7 +88,14 @@ const config = {
           {loader: 'sass-loader'},
         ],
       },
-
+      {
+        // Extract fonts in `/assets/fonts/`.
+        test: /.(woff(2)?|eot|ttf)(\?[a-z0-9=.]+)?$/,
+        type:'asset/resource',
+        generator: {
+          filename: "fonts/[name][ext]"
+        },
+      }
     ],
   },
 

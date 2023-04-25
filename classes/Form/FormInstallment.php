@@ -59,7 +59,7 @@ class FormInstallment implements FormInterface
         if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
             $fields[ConfigurationMap::ENABLE_BNPL] = [
                 'type' => 'switch',
-                'label' => $this->module->l('Enable \'Pay in X times\' in your checkout', $this->className),
+                'label' => $this->module->l('Pay Later button', $this->className),
                 'name' => ConfigurationMap::ENABLE_BNPL,
                 'values' => [
                     [
@@ -107,7 +107,7 @@ class FormInstallment implements FormInterface
 
         $fields[ConfigurationMap::ENABLE_INSTALLMENT] = [
             'type' => 'switch',
-            'label' => $this->module->l('Enable the display of banners', $this->className),
+            'label' => $this->module->l('Pay later messaging', $this->className),
             'name' => ConfigurationMap::ENABLE_INSTALLMENT,
             'hint' => $this->module->l('Let your customers know about the option \'Pay 4x PayPal\' by displaying banners on your site.', $this->className),
             'values' => [
@@ -155,12 +155,12 @@ class FormInstallment implements FormInterface
             'type' => 'checkbox',
             'value' => 1,
             'checked' => (bool) Configuration::get(ConfigurationMap::CHECKOUT_PAGE),
-            'name' => ConfigurationMap::CART_PAGE,
+            'name' => ConfigurationMap::CHECKOUT_PAGE,
             'label' => $this->module->l('Checkout', $this->className),
         ];
         $fields[ConfigurationMap::ADVANCED_OPTIONS_INSTALLMENT] = [
             'type' => 'switch',
-            'label' => $this->module->l('Advanced options', $this->className),
+            'label' => $this->module->l('Advanced settings', $this->className),
             'name' => ConfigurationMap::ADVANCED_OPTIONS_INSTALLMENT,
             'values' => [
                 [
@@ -181,12 +181,12 @@ class FormInstallment implements FormInterface
             'type' => 'select',
             'options' => $this->getColorListOptions(),
             'name' => ConfigurationMap::COLOR,
-            'label' => $this->module->l('Color', $this->className),
+            'label' => $this->module->l('Messaging color', $this->className),
         ];
 
         $description = [
             'legend' => [
-                'title' => $this->module->l('Settings', $this->className),
+                'title' => $this->module->l('Buy Now Pay Later', $this->className),
             ],
             'fields' => $fields,
             'submit' => [
