@@ -130,7 +130,7 @@
     </target>
     <!-- end composer -->
     <!-- start documentation -->
-    <target name="npm" depends="clean-npm,npm-install" description="Install or update node dependencies" />
+    <target name="npm" depends="clean-npm,npm-install,clean-npm-after" description="Install or update node dependencies" />
 
     <target name="npm-install" description="Use last node version">
         <exec executable="./202/run_npm.sh">
@@ -138,6 +138,11 @@
     </target>
 
     <target name="clean-npm" description="Empty node_modules folder">
+        <delete dir="${basedir}/202/node_modules" />
+        <delete file="${basedir}/package-lock.json" />
+    </target>
+
+    <target name="clean-npm-after" description="Remove NPM JSON">
         <delete dir="${basedir}/202/node_modules" />
         <delete file="${basedir}/package-lock.json" />
         <delete file="${basedir}/package.json" />
