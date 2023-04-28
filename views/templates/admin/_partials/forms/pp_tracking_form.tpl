@@ -23,14 +23,16 @@
  *  @copyright PayPal
  *
  *}
-<form id="{$form.id_form}" class="mt-4">
+{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
+
+{block name='form_content'}
   {foreach from=$form.fields item=field key=key}
     {if $field.name|default:false && $field.type == 'select'}
       {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
     {elseif $key == 'carrier_map'}
-      <div class="form-group pt-4">
-        <label class="form-control-label form-control-label-check col-lg-3" for="PAYPAL_CARRIER_MAP">{$field.label}</label>
-        <div class="col-md-9 col-lg-8">
+      <div class="form-group row pt-4">
+        <label class="form-control-label form-control-label-check col-3" for="PAYPAL_CARRIER_MAP">{$field.label}</label>
+        <div class="col-9 col-lg-8">
           <table class="table">
             <thead>
               <th>{l s='PrestaShop carrier' mod='paypal'}</th>
@@ -67,8 +69,4 @@
       </div>
     {/if}
   {/foreach}
-
-  <div class="form-group pt-5 mb-0">
-    <button class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
-  </div>
-</form>
+{/block}

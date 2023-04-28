@@ -31,7 +31,6 @@
 
     .form-control-label {
       @extend .text-right;
-      max-width: 183px;
     }
   }
 
@@ -39,7 +38,7 @@
     font-weight: $font-weight-base !important;
     font-size: $custom-control-label-font-size;
     color: $custom-control-label-color !important;
-    @extend .p-0;
+    padding-left: $grid-gutter-width / 2 !important;
     @extend .m-0;
 
     &:not(.form-control-label-check) {
@@ -65,6 +64,12 @@
         color: $gray-300 !important;
       }
     }
+  }
+
+  &-modal {
+    min-height: 400px;
+    @extend .d-flex;
+    @extend .flex-column;
   }
 }
 

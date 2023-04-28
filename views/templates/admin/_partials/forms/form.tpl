@@ -23,15 +23,28 @@
  *  @copyright PayPal
  *
  *}
-<form id="{$form.id_form}" class="mt-4">
-  {foreach from=$form.fields item=field}
-    {if $field.name|default:false}
-      {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
-    {/if}
-  {/foreach}
+<form id="{$form.id_form}" class="mt-4 {[
+  'form-modal' => $isModal
+]|classnames}">
+  {block name='form_content'}
+    {foreach from=$form.fields item=field}
+      {if $field.name|default:false}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
+      {/if}
+    {/foreach}
+  {/block}
 
-  <div class="form-group mb-0">
-    <button class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
-  </div>
+  {block name='form_footer'}
+    <div class="form-group mb-0 d-flex justify-content-between pt-3 mt-auto">
+      {block name='form_footer_buttons'}
+        {if $isModal}
+          <div class="d-flex justify-content-between flex-fill mr-3">
+            <button data-btn-action="prev" class="btn btn-secondary d-none">{l s='Back' mod='paypal'}</button>
+            <button data-btn-action="next" class="btn btn-outline-primary">{l s='Skip this step' mod='paypal'}</button>
+          </div>
+        {/if}
+        <button data-btn-action="next" class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
+      {/block}
+    </div>
+  {/block}
 </form>
-

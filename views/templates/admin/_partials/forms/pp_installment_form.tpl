@@ -23,15 +23,17 @@
  *  @copyright PayPal
  *
  *}
+{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
+
 {assign var="fieldsInstallmentBNPL" value=['PAYPAL_BNPL_PRODUCT_PAGE', 'PAYPAL_BNPL_PAYMENT_STEP_PAGE', 'PAYPAL_BNPL_CART_PAGE', 'PAYPAL_BNPL_CHECKOUT_PAGE']}
 {assign var="fieldsInstallment" value=['PAYPAL_INSTALLMENT_PRODUCT_PAGE', 'PAYPAL_INSTALLMENT_HOME_PAGE', 'PAYPAL_INSTALLMENT_CATEGORY_PAGE', 'PAYPAL_INSTALLMENT_CART_PAGE', 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE']}
 
-<form id="{$form.id_form}" class="mt-4">
+{block name='form_content'}
   {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_BNPL}
 
-  <div class="form-group">
-    <label class="form-control-label form-control-label-check col-lg-3" for="PAYPAL_BNPL">{l s='Active on' mod='paypal'}</label>
-    <div class="col-lg-10">
+  <div class="form-group row">
+    <label class="form-control-label form-control-label-check col-2" for="PAYPAL_BNPL">{l s='Active on' mod='paypal'}</label>
+    <div class="col-10">
       <div class="row no-gutters">
         {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsInstallmentBNPL}
@@ -44,9 +46,9 @@
 
   {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT}
 
-  <div class="form-group">
-    <label class="form-control-label form-control-label-check col-lg-3" for="PAYPAL_INSTALLMENT">{l s='Active on' mod='paypal'}</label>
-    <div class="col-lg-10">
+  <div class="form-group row">
+    <label class="form-control-label form-control-label-check col-2" for="PAYPAL_INSTALLMENT">{l s='Active on' mod='paypal'}</label>
+    <div class="col-10">
       <div class="row no-gutters">
         {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsInstallment}
@@ -61,7 +63,4 @@
 
   {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true}
 
-  <div class="form-group pt-5 mb-0">
-    <button class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
-  </div>
-</form>
+{/block}

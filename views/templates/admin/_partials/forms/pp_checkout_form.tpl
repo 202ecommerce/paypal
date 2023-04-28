@@ -23,17 +23,19 @@
  *  @copyright PayPal
  *
  *}
+{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
+
 {assign var="fieldsExpressCheckoutShortcut" value=['PAYPAL_EXPRESS_CHECKOUT_SHORTCUT', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_SIGNUP']}
 
-<form id="{$form.id_form}" class="mt-4">
+{block name='form_content'}
   {foreach from=$form.fields item=field}
     {if !$field.name|in_array:$fieldsExpressCheckoutShortcut}
       {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
     {/if}
   {/foreach}
-  <div class="form-group">
-    <label class="form-control-label form-control-label-check col-lg-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_test">{l s='Active on' mod='paypal'}</label>
-    <div class="col-lg-10">
+  <div class="form-group row">
+    <label class="form-control-label form-control-label-check col-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_test">{l s='Active on' mod='paypal'}</label>
+    <div class="col-9">
       <div class="row no-gutters">
         {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsExpressCheckoutShortcut}
@@ -42,9 +44,5 @@
         {/foreach}
       </div>
     </div>
-
   </div>
-  <div class="form-group pt-5 mb-0">
-    <button class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
-  </div>
-</form>
+{/block}

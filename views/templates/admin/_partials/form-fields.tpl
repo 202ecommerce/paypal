@@ -25,15 +25,20 @@
  *}
 {assign var="variant" value=$field.variant|default:false}
 {assign var="withColor" value=$withColor|default:false}
+{assign var="isModal" value=$isModal|default:false}
 
 {if $field.type !== 'checkbox' && $field.label}
-  <div class="form-group">
-    <label class="form-control-label col-lg-3 {[
-      'form-control-label-check' => $field.type == 'switch'
+  <div class="form-group row">
+    <label class="form-control-label {[
+      'form-control-label-check' => $field.type == 'switch',
+      'col-3' => $form.id_form !== 'pp_installment_form',
+      'col-2' => $form.id_form === 'pp_installment_form'
     ]|classnames}" for="{$field.name}">{$field.label}</label>
 
-    <div class="col-lg-7 {[
-      'col-lg-9' => $withColor
+    <div class="{[
+      'col-9' => $withColor || $isModal,
+      'col-7' => $form.id_form !== 'pp_installment_form',
+      'col-10' => $form.id_form === 'pp_installment_form'
     ]|classnames}">
       <div>
 {/if}

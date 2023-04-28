@@ -29,49 +29,53 @@
   form=$trackingForm
 }
 
-{* Account section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$accountForm
-}
+{if $isShowModalConfiguration|default:true}
+  {include
+    file="module:paypal/views/templates/admin/_partials/modal-configuration.tpl"
+  }
+{else}
+  {* Account section *}
+  {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$accountForm
+  }
 
-{* Tracking section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$trackingForm
-}
+  {* Tracking section *}
+  {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$trackingForm
+  }
 
-{* Checkout section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$checkoutForm
-}
+  {* Checkout section *}
+  {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$checkoutForm
+  }
 
-{* Installment section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$formInstallment
-  sectionColFormClasses=' '
-  sectionColInfoClasses=' '
-}
+  {* Installment section *}
+  {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$formInstallment
+    sectionColFormClasses=' '
+    sectionColInfoClasses=' '
+  }
 
-{* PayPal Express Checkout shortcut section *}
-<code>todo: PayPal Express Checkout shortcut</code>
+  {* Order status section *}
+  {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$orderStatusForm
+  }
 
-{* Order status section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$orderStatusForm
-}
+  {* Shortcut section *}
+  {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$shortcutConfigurationForm
+  }
 
-{* Shortcut section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$shortcutConfigurationForm
-}
+  {* White list section *}
+  {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$whiteListForm
+  }
 
-{* White list section *}
-{include
-  file="module:paypal/views/templates/admin/_partials/section.tpl"
-  form=$whiteListForm
-}
+{/if}

@@ -23,16 +23,26 @@
  *  @copyright PayPal
  *
  */
-.btn {
-  display: flex;
-  @extend .align-items-center;
-  @extend .justify-content-center;
+.progress {
+  border: 1px solid $progress-border-color;
+  overflow: visible;
 
-  &-secondary {
-    color: $primary !important;
-  }
+  &-bar {
+    overflow: visible;
+    position: relative;
+    height: $progress-height;
+    top: 0;
+    margin: -1px -1px -1px;
+    @include border-left-radius($progress-border-radius);
 
-  @at-root .form-group & {
-    max-width: 388px;
+    &::after {
+      content: '';
+      background: $progress-bar-bg;
+      width: 1rem;
+      height: 1rem;
+      @include border-radius(50%);
+      position: absolute;
+      right: -3px;
+    }
   }
 }

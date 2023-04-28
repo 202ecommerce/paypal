@@ -24,5 +24,16 @@
  *
  */
 
-import '~/prestakit/dist/js/prestashop-ui-kit';
 import '~/bootstrap';
+import Steps from './admin/steps';
+
+$(() => {
+  $(window).on('load', () => {
+    $('#modal-configuration').modal('show');
+  })
+
+  const steps = new Steps('#modal-configuration-steps');
+  steps.init();
+});
+
+

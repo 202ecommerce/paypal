@@ -26,14 +26,22 @@
 {assign var="sectionRowClasses" value=$sectionRowClasses|default:' mt-4'}
 {assign var="sectionColFormClasses" value=$sectionColFormClasses|default:' col-xl-6'}
 {assign var="sectionColInfoClasses" value=$sectionColInfoClasses|default:' col-xl-6'}
+{assign var="isModal" value=$isModal|default:false}
 
 <div class="row{$sectionRowClasses}">
  <div class="col col-12 col-md-8{$sectionColFormClasses}">
    <div class="card">
-     <div class="card-header">
-      {$form.legend.title}
-     </div>
-     <div class="card-body">
+   {if !$isModal}
+      <div class="card-header">
+        {$form.legend.title}
+      </div>
+    {/if}
+    <div class="card-body {[
+      'pr-0' => $isModal
+    ]|classnames}">
+      {if $isModal}
+        <div class="h1">{$form.legend.title}</div>
+      {/if}
       {if $form.id_form|in_array:['pp_checkout_form', 'pp_account_form', 'pp_installment_form', 'pp_tracking_form']}
         {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
       {else}

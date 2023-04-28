@@ -23,7 +23,10 @@
  *  @copyright PayPal
  *
  *}
-<form id="{$form.id_form}" class="mt-4">
+{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
+{assign var="isModal" value=$isModal|default:false}
+
+{block name='form_content'}
   {foreach from=$form.fields item=field}
     {if $field.type == 'variable-set'}
       {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
@@ -43,8 +46,11 @@
         'variant' => 'primary'
       ]}
       {if !$field.set.accountConfigured }
-        <div class="form-group">
-          <div class="col-lg-7 offset-3">
+        <div class="form-group row">
+          <div class="offset-3 {[
+            'col-7' => !$isModal,
+            'col-9' => $isModal
+          ]|classnames}">
             <a href="{$field.set.urlOnboarding}" class="btn btn-secondary btn-block" target="_blank">
               <span class="icon mr-2">
                 <i class="material-icons-outlined">account_circle</i>
@@ -71,8 +77,11 @@
       {/if}
     {/if}
   {/foreach}
+{/block}
 
-  <div class="form-group pt-5 mb-0">
-    <button class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
-  </div>
-</form>
+{block name='form_footer_buttons'}
+  {if $isModal}
+    <button data-btn-action="prev" class="btn btn-secondary d-none">{l s='Back' mod='paypal'}</button>
+  {/if}
+  <button data-btn-action="next" class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
+{/block}
