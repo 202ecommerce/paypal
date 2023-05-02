@@ -12,6 +12,7 @@ use OrderState;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\WebHookConf;
+use PaypalAddons\classes\Webhook\CreateWebhook;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use Tools;
 
@@ -195,12 +196,10 @@ class OrderStatusForm implements FormInterface
             $data = Tools::getAllValues();
         }
 
-        if (isset($data[PaypalConfigurations::CUSTOMIZE_ORDER_STATUS])) {
-            Configuration::updateValue(
-                PaypalConfigurations::CUSTOMIZE_ORDER_STATUS,
-                (int) $data[PaypalConfigurations::CUSTOMIZE_ORDER_STATUS]
-            );
-        }
+        Configuration::updateValue(
+            PaypalConfigurations::CUSTOMIZE_ORDER_STATUS,
+            isset($data[PaypalConfigurations::CUSTOMIZE_ORDER_STATUS]) ? 1 : 0
+        );
         if (isset($data[PaypalConfigurations::OS_REFUNDED])) {
             Configuration::updateValue(
                 PaypalConfigurations::OS_REFUNDED,
@@ -237,12 +236,15 @@ class OrderStatusForm implements FormInterface
                 (int) $data[PaypalConfigurations::OS_CAPTURE_CANCELED]
             );
         }
+
         if (isset($data[WebHookConf::ENABLE])) {
-            Configuration::updateValue(
-                WebHookConf::ENABLE,
-                (int) $data[WebHookConf::ENABLE]
-            );
+            $response = (new CreateWebhook())->execute();
+            Configuration::updateValue(WebHookConf::ENABLE, (int) $response->isSuccess());
+            // ToDo: Need show warning if creation of the webhook is failed
+        } else {
+            Configuration::updateValue(WebHookConf::ENABLE, 0);
         }
+
 
         return true;
     }
