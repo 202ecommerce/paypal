@@ -116,7 +116,7 @@ class TrackingParametersForm implements FormInterface
         $service->setCarrierMap($carrierMap);
 
         if (isset($data[TrackingParametersMap::STATUS])) {
-            $service->setStatus($data[]);
+            $service->setStatus($data[TrackingParametersMap::STATUS]);
         }
 
         return true;

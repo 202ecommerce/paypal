@@ -44,9 +44,10 @@
                   <td>{$carrier.name}</td>
                   <td>
                     {assign var="optionsPaypalCarrier" value=[]}
+                    {assign var="selectedCarrier" value=$carrier['id_reference']|cat:','|cat:$field.set.mapService->getPaypalCarrierByPsCarrier($carrier['id_reference'])}
                     {foreach from=$field.set.mapService->getPaypalCarriersByCountry() item=paypalCarrier}
                       {$optionsPaypalCarrier[] = [
-                        'value' => $paypalCarrier.key,
+                        'value' => $carrier['id_reference']|cat:','|cat:$paypalCarrier.key,
                         'title' => $paypalCarrier.name
                       ]}
                     {/foreach}
@@ -54,10 +55,11 @@
                       file="module:paypal/views/templates/admin/_partials/form-fields.tpl"
                       field=[
                         'type' => 'select',
-                        'name' => 'PAYPAL_CARRIER',
+                        'name' => 'carrier_map[]',
                         'label' => false,
                         'options' => $optionsPaypalCarrier,
-                        'variant' => 'primary'
+                        'variant' => 'primary',
+                        'value' => $selectedCarrier
                       ]
                     }
                   </td>
