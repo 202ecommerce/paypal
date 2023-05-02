@@ -134,6 +134,7 @@ class CheckoutForm implements FormInterface
             'label' => $this->module->l('Product Pages', 'blockpreviewbuttoncontext'),
             'value' => 1,
             'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/product_page_button.png',
         ];
         $fields[ShortcutConfiguration::SHOW_ON_CART_PAGE] = [
             'type' => 'checkbox',
@@ -141,6 +142,7 @@ class CheckoutForm implements FormInterface
             'label' => $this->module->l('Cart Page', 'blockpreviewbuttoncontext'),
             'value' => 1,
             'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/cart_page_button.png',
         ];
         $fields[ShortcutConfiguration::SHOW_ON_SIGNUP_STEP] = [
             'type' => 'checkbox',
@@ -148,6 +150,7 @@ class CheckoutForm implements FormInterface
             'label' => $this->module->l('Sign up step in checkout', 'blockpreviewbuttoncontext'),
             'value' => 1,
             'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/signin-checkout-button.png',
         ];
 
         $fields[PaypalConfigurations::MOVE_BUTTON_AT_END] = [

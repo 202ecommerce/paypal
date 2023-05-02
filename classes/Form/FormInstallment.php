@@ -81,6 +81,7 @@ class FormInstallment implements FormInterface
                 'label' => $this->module->l('Product Pages', $this->className),
                 'value' => 1,
                 'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE),
+                'image' => _MODULE_DIR_ . $this->module->name . '/views/img/product_page_button.png',
             ];
             $fields[ConfigurationMap::BNPL_PAYMENT_STEP_PAGE] = [
                 'type' => 'checkbox',
@@ -88,6 +89,7 @@ class FormInstallment implements FormInterface
                 'label' => $this->module->l('Step payment in checkout', $this->className),
                 'value' => 1,
                 'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_PAYMENT_STEP_PAGE),
+                'image' => _MODULE_DIR_ . $this->module->name . '/views/img/location.png',
             ];
             $fields[ConfigurationMap::BNPL_CART_PAGE] = [
                 'type' => 'checkbox',
@@ -95,6 +97,7 @@ class FormInstallment implements FormInterface
                 'label' => $this->module->l('Cart Page', $this->className),
                 'value' => 1,
                 'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_CART_PAGE),
+                'image' => _MODULE_DIR_ . $this->module->name . '/views/img/cart_page_button.png',
             ];
             $fields[ConfigurationMap::BNPL_CHECKOUT_PAGE] = [
                 'type' => 'checkbox',
@@ -102,6 +105,7 @@ class FormInstallment implements FormInterface
                 'label' => $this->module->l('Sign up step in checkout', $this->className),
                 'value' => 1,
                 'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_CHECKOUT_PAGE),
+                'image' => _MODULE_DIR_ . $this->module->name . '/views/img/signin-checkout-button.png',
             ];
         }
 
@@ -122,6 +126,7 @@ class FormInstallment implements FormInterface
                     'label' => $this->module->l('Disabled', $this->className),
                 ],
             ],
+            'value' => (int) Configuration::get(ConfigurationMap::ENABLE_INSTALLMENT),
         ];
         $fields[ConfigurationMap::PRODUCT_PAGE] = [
             'type' => 'checkbox',
@@ -129,6 +134,7 @@ class FormInstallment implements FormInterface
             'checked' => (bool) Configuration::get(ConfigurationMap::PRODUCT_PAGE),
             'name' => ConfigurationMap::PRODUCT_PAGE,
             'label' => $this->module->l('Product Page', $this->className),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/product_page_button.png',
         ];
         $fields[ConfigurationMap::HOME_PAGE] = [
             'type' => 'checkbox',
@@ -136,6 +142,7 @@ class FormInstallment implements FormInterface
             'checked' => (bool) Configuration::get(ConfigurationMap::HOME_PAGE),
             'name' => ConfigurationMap::HOME_PAGE,
             'label' => $this->module->l('Home Page', $this->className),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/location.png',
         ];
         $fields[ConfigurationMap::CATEGORY_PAGE] = [
             'type' => 'checkbox',
@@ -143,6 +150,7 @@ class FormInstallment implements FormInterface
             'checked' => (bool) Configuration::get(ConfigurationMap::CATEGORY_PAGE),
             'name' => ConfigurationMap::CATEGORY_PAGE,
             'label' => $this->module->l('Category Page', $this->className),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/location.png',
         ];
         $fields[ConfigurationMap::CART_PAGE] = [
             'type' => 'checkbox',
@@ -150,6 +158,7 @@ class FormInstallment implements FormInterface
             'checked' => (bool) Configuration::get(ConfigurationMap::CART_PAGE),
             'name' => ConfigurationMap::CART_PAGE,
             'label' => $this->module->l('Cart', $this->className),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/cart_page_button.png',
         ];
         $fields[ConfigurationMap::CHECKOUT_PAGE] = [
             'type' => 'checkbox',
@@ -157,6 +166,7 @@ class FormInstallment implements FormInterface
             'checked' => (bool) Configuration::get(ConfigurationMap::CHECKOUT_PAGE),
             'name' => ConfigurationMap::CHECKOUT_PAGE,
             'label' => $this->module->l('Checkout', $this->className),
+            'image' => _MODULE_DIR_ . $this->module->name . '/views/img/location.png',
         ];
         $fields[ConfigurationMap::ADVANCED_OPTIONS_INSTALLMENT] = [
             'type' => 'switch',
@@ -182,6 +192,7 @@ class FormInstallment implements FormInterface
             'options' => $this->getColorListOptions(),
             'name' => ConfigurationMap::COLOR,
             'label' => $this->module->l('Messaging color', $this->className),
+            'value' => Configuration::get(ConfigurationMap::COLOR),
         ];
 
         $description = [

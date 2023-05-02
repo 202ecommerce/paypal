@@ -95,7 +95,10 @@
               <span class="label">
                 {$field.label}
               </span>
-              <img src="{$moduleDir|addslashes}/views/img/location.png"  alt="location">
+              {if isset($field.image)}
+                <img src="{$field.image}"  alt="location">
+              {/if}
+
             </label>
           </div>
         </div>
