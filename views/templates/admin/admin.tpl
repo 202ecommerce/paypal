@@ -29,7 +29,7 @@
   form=$trackingForm
 }
 
-{if $isShowModalConfiguration|default:true}
+{if $isShowModalConfiguration|default:false}
   {include
     file="module:paypal/views/templates/admin/_partials/modal-configuration.tpl"
   }

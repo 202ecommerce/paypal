@@ -43,7 +43,7 @@
             <button data-btn-action="next" class="btn btn-outline-primary">{l s='Skip this step' mod='paypal'}</button>
           </div>
         {/if}
-        <button data-btn-action="next" class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
+        <button data-btn-action="next" save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
       {/block}
     </div>
   {/block}

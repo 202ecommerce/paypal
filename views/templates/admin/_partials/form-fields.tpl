@@ -53,6 +53,7 @@
             'form-control-primary' => $variant == 'primary'
           ]|classnames}"
           placeholder="{l s='Placeholder' mod='paypal'}"
+          value="{$field.value|default:''}"
         >
 
       {elseif $field.type === 'select'}
@@ -61,7 +62,7 @@
           'custom-select-primary' => $variant == 'primary'
         ]|classnames}" name="{$field.name}" id="{$field.name}">
           {foreach from=$field.options item=option}
-            <option {if $option.value|default:false}value="{$option.value}"{/if}>{$option.title}</option>
+            <option value="{$option.value|default:''}" {if isset($option.value) && isset($field.value) && $option.value == $field.value} selected {/if}>{$option.title|default:''}</option>
           {/foreach}
         </select>
 
@@ -83,7 +84,13 @@
         {* Type checkbox *}
         <div class="col custom-checkbox-wrap">
           <div class="custom-control custom-checkbox form-check-inline">
-            <input class="custom-control-input" type="checkbox" id="{$field.name}" value="1" {if $field.checked}checked{/if}>
+            <input
+              class="custom-control-input"
+              type="checkbox"
+              id="{$field.name}"
+              name="{$field.name}"
+              value="{$field.value|default:''}"
+              {if $field.checked}checked{/if}>
             <label class="custom-control-label" for="{$field.name}">
               <span class="label">
                 {$field.label}

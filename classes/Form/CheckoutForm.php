@@ -60,6 +60,7 @@ class CheckoutForm implements FormInterface
                         'title' => $this->module->l('Authorize', 'AdminPayPalSetupController'),
                     ],
                 ],
+                'value' => Configuration::get(PaypalConfigurations::INTENT),
                 'variant' => 'primary',
             ];
 
@@ -154,6 +155,7 @@ class CheckoutForm implements FormInterface
             'label' => $this->module->l('Location', 'CheckoutForm'),
             'desc' => $this->module->l('Put the PayPal button at the end of the order page', 'AdminPayPalCustomizeCheckoutController'),
             'name' => PaypalConfigurations::MOVE_BUTTON_AT_END,
+            'value' => (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
             'values' => [
                 [
                     'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_on',
@@ -287,13 +289,6 @@ class CheckoutForm implements FormInterface
             return false;
         }
 
-        if (isset($data[PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT])) {
-            Configuration::updateValue(
-                PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT,
-                (int) $data[PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT]
-            );
-        }
-
         if (isset($data[PaypalConfigurations::INTENT])) {
             Configuration::updateValue(
                 PaypalConfigurations::INTENT,
@@ -322,68 +317,55 @@ class CheckoutForm implements FormInterface
             );
         }
 
-        if (isset($data[PaypalConfigurations::API_ADVANTAGES])) {
-            Configuration::updateValue(
-                PaypalConfigurations::API_ADVANTAGES,
-                (int) $data[PaypalConfigurations::API_ADVANTAGES]
-            );
-        }
+        Configuration::updateValue(
+            PaypalConfigurations::API_ADVANTAGES,
+            isset($data[PaypalConfigurations::API_ADVANTAGES]) ? 1 : 0
+        );
 
-        if (isset($data[ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE])) {
-            Configuration::updateValue(
-                ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE,
-                (int) $data[ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE]
-            );
-        }
+        Configuration::updateValue(
+            ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE,
+            isset($data[ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE]) ? 1 : 0
+        );
 
-        if (isset($data[ShortcutConfiguration::SHOW_ON_CART_PAGE])) {
-            Configuration::updateValue(
-                ShortcutConfiguration::SHOW_ON_CART_PAGE,
-                (int) $data[ShortcutConfiguration::SHOW_ON_CART_PAGE]
-            );
-        }
+        Configuration::updateValue(
+            ShortcutConfiguration::SHOW_ON_CART_PAGE,
+            isset($data[ShortcutConfiguration::SHOW_ON_CART_PAGE]) ? 1 : 0
+        );
 
-        if (isset($data[ShortcutConfiguration::SHOW_ON_SIGNUP_STEP])) {
-            Configuration::updateValue(
-                ShortcutConfiguration::SHOW_ON_SIGNUP_STEP,
-                (int) $data[ShortcutConfiguration::SHOW_ON_SIGNUP_STEP]
-            );
-        }
+        Configuration::updateValue(
+            ShortcutConfiguration::SHOW_ON_SIGNUP_STEP,
+            isset($data[ShortcutConfiguration::SHOW_ON_SIGNUP_STEP]) ? 1 : 0
+        );
 
-        if (isset($data[PaypalConfigurations::ACDC_OPTION])) {
-            Configuration::updateValue(
-                PaypalConfigurations::ACDC_OPTION,
-                (int) $data[PaypalConfigurations::ACDC_OPTION]
-            );
-        }
+        Configuration::updateValue(
+            PaypalConfigurations::ACDC_OPTION,
+            isset($data[PaypalConfigurations::ACDC_OPTION]) ? 1 : 0
+        );
 
-        if (isset($data[PaypalConfigurations::PUI_ENABLED])) {
-            Configuration::updateValue(
-                PaypalConfigurations::PUI_ENABLED,
-                (int) $data[PaypalConfigurations::PUI_ENABLED]
-            );
-        }
+        Configuration::updateValue(
+            PaypalConfigurations::PUI_ENABLED,
+            isset($data[PaypalConfigurations::PUI_ENABLED]) ? 1 : 0
+        );
 
-        if (isset($data[PaypalConfigurations::GIROPAY_ENABLED])) {
-            Configuration::updateValue(
-                PaypalConfigurations::GIROPAY_ENABLED,
-                (int) $data[PaypalConfigurations::GIROPAY_ENABLED]
-            );
-        }
+        Configuration::updateValue(
+            PaypalConfigurations::GIROPAY_ENABLED,
+            isset($data[PaypalConfigurations::GIROPAY_ENABLED]) ? 1 : 0
+        );
 
-        if (isset($data[PaypalConfigurations::SOFORT_ENABLED])) {
-            Configuration::updateValue(
-                PaypalConfigurations::SOFORT_ENABLED,
-                (int) $data[PaypalConfigurations::SOFORT_ENABLED]
-            );
-        }
+        Configuration::updateValue(
+            PaypalConfigurations::SOFORT_ENABLED,
+            isset($data[PaypalConfigurations::SOFORT_ENABLED]) ? 1 : 0
+        );
 
-        if (isset($data[PaypalConfigurations::SEPA_ENABLED])) {
-            Configuration::updateValue(
-                PaypalConfigurations::SEPA_ENABLED,
-                (int) $data[PaypalConfigurations::SEPA_ENABLED]
-            );
-        }
+        Configuration::updateValue(
+            PaypalConfigurations::SEPA_ENABLED,
+            isset($data[PaypalConfigurations::SEPA_ENABLED]) ? 1 : 0
+        );
+
+        Configuration::updateValue(
+            PaypalConfigurations::MOVE_BUTTON_AT_END,
+            isset($data[PaypalConfigurations::MOVE_BUTTON_AT_END]) ? 1 : 0
+        );
 
         return true;
     }

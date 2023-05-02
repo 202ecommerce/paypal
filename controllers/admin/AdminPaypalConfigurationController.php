@@ -7,6 +7,7 @@ use PaypalAddons\classes\Form\OrderStatusForm;
 use PaypalAddons\classes\Form\ShortcutConfigurationForm;
 use PaypalAddons\classes\Form\TrackingParametersForm;
 use PaypalAddons\classes\Form\WhiteListForm;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * 2007-2023 PayPal
@@ -83,5 +84,28 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         ]);
 
         return $tpl->fetch();
+    }
+
+    public function ajaxProcessSaveForm()
+    {
+        $data = [];
+        $response = new JsonResponse();
+
+        try {
+            /** @var \PaypalAddons\classes\Form\FormInterface $form*/
+            foreach ($this->forms as $form) {
+                $form->save();
+            }
+
+            $data['success'] = true;
+        } catch (Throwable $e) {
+            $data['success'] = false;
+        } catch (Exception $e) {
+            $data['success'] = false;
+        }
+
+        $response->setData($data);
+        $response->send();
+        die;
     }
 }

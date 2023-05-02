@@ -14,9 +14,42 @@ class Steps {
   registerEvents() {
     $(this.btn).on('click', (e) => {
       e.preventDefault();
-      this.setAction($(e.currentTarget).data('btn-action'));
-      this.updateCurrentBadgeStep();
-      this.updateStepsProgress();
+
+      this.saveProcess(e)
+        .then((result) => {
+          if (result) {
+            this.setAction($(e.currentTarget).data('btn-action'));
+            this.updateCurrentBadgeStep();
+            this.updateStepsProgress();
+          }
+        });
+    });
+  }
+
+  saveProcess(event) {
+    return new Promise((resolve, reject) => {
+      if (false === event.currentTarget.hasAttribute('save-form')) {
+        return resolve(true);
+      }
+
+      event.currentTarget.disabled = true;
+      const formData = new FormData(event.currentTarget.closest('form'));
+      const url = new URL(document.location);
+      formData.append(event.currentTarget.getAttribute('name'), 1);
+      url.searchParams.append('ajax', 1);
+      url.searchParams.append('action', 'saveForm');
+
+      fetch(url.toString(), {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => {
+          event.currentTarget.disabled = false;
+          return response.json();
+        })
+        .then((response) => {
+          resolve(response.success == true);
+        });
     });
   }
 
