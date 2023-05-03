@@ -1,5 +1,6 @@
 <?php
 
+use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Form\AccountForm;
 use PaypalAddons\classes\Form\CheckoutForm;
 use PaypalAddons\classes\Form\FormInstallment;
@@ -81,6 +82,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         $tpl->assign([
             'moduleDir' => _MODULE_DIR_ . $this->module->name,
+            'isShowModalConfiguration' => (int) Configuration::get(PaypalConfigurations::SHOW_MODAL_CONFIGURATION),
         ]);
 
         return $tpl->fetch();
@@ -88,6 +90,8 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
     public function ajaxProcessSaveForm()
     {
+        //ToDo: refacto
+        Configuration::updateValue(PaypalConfigurations::SHOW_MODAL_CONFIGURATION, 0);
         $data = [];
         $response = new JsonResponse();
 

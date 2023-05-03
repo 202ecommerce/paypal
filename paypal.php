@@ -350,6 +350,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
             \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE => 1,
             'PAYPAL_NOT_SHOW_PS_CHECKOUT' => json_encode([$this->version, 0]),
             WebHookConf::ENABLE => 1,
+            PaypalConfigurations::SHOW_MODAL_CONFIGURATION => 1,
         ];
 
         if (version_compare(_PS_VERSION_, '1.7.6', '<')) {
