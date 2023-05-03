@@ -273,12 +273,10 @@ class ShortcutConfigurationForm implements FormInterface
             return false;
         }
 
-        if (isset($data[ShortcutConfiguration::CUSTOMIZE_STYLE])) {
-            Configuration::updateValue(
-                ShortcutConfiguration::CUSTOMIZE_STYLE,
-                (int) $data[ShortcutConfiguration::CUSTOMIZE_STYLE]
-            );
-        }
+        Configuration::updateValue(
+            ShortcutConfiguration::CUSTOMIZE_STYLE,
+            isset($data[ShortcutConfiguration::CUSTOMIZE_STYLE]) ? 1 : 0
+        );
 
         //Cart page button settings
         if (isset($data[ShortcutConfiguration::DISPLAY_MODE_CART])) {
@@ -306,12 +304,20 @@ class ShortcutConfigurationForm implements FormInterface
             );
         }
         if (isset($data[ShortcutConfiguration::STYLE_HEIGHT_CART])) {
+            if ($data[ShortcutConfiguration::STYLE_HEIGHT_CART] > 55) {
+                $data[ShortcutConfiguration::STYLE_HEIGHT_CART] = 55;
+            } elseif ($data[ShortcutConfiguration::STYLE_HEIGHT_CART] < 25) {
+                $data[ShortcutConfiguration::STYLE_HEIGHT_CART] = 25;
+            }
             Configuration::updateValue(
                 ShortcutConfiguration::STYLE_HEIGHT_CART,
                 (int) $data[ShortcutConfiguration::STYLE_HEIGHT_CART]
             );
         }
         if (isset($data[ShortcutConfiguration::STYLE_WIDTH_CART])) {
+            if ($data[ShortcutConfiguration::STYLE_WIDTH_CART] < 150) {
+                $data[ShortcutConfiguration::STYLE_WIDTH_CART] = 150;
+            }
             Configuration::updateValue(
                 ShortcutConfiguration::STYLE_WIDTH_CART,
                 (int) $data[ShortcutConfiguration::STYLE_WIDTH_CART]
@@ -350,12 +356,20 @@ class ShortcutConfigurationForm implements FormInterface
             );
         }
         if (isset($data[ShortcutConfiguration::STYLE_HEIGHT_PRODUCT])) {
+            if ($data[ShortcutConfiguration::STYLE_HEIGHT_PRODUCT] > 55) {
+                $data[ShortcutConfiguration::STYLE_HEIGHT_PRODUCT] = 55;
+            } elseif ($data[ShortcutConfiguration::STYLE_HEIGHT_PRODUCT] < 25) {
+                $data[ShortcutConfiguration::STYLE_HEIGHT_PRODUCT] = 25;
+            }
             Configuration::updateValue(
                 ShortcutConfiguration::STYLE_HEIGHT_PRODUCT,
                 (int) $data[ShortcutConfiguration::STYLE_HEIGHT_PRODUCT]
             );
         }
         if (isset($data[ShortcutConfiguration::STYLE_WIDTH_PRODUCT])) {
+            if ($data[ShortcutConfiguration::STYLE_WIDTH_PRODUCT] < 150) {
+                $data[ShortcutConfiguration::STYLE_WIDTH_PRODUCT] = 150;
+            }
             Configuration::updateValue(
                 ShortcutConfiguration::STYLE_WIDTH_PRODUCT,
                 (int) $data[ShortcutConfiguration::STYLE_WIDTH_PRODUCT]
@@ -388,12 +402,20 @@ class ShortcutConfigurationForm implements FormInterface
             );
         }
         if (isset($data[ShortcutConfiguration::STYLE_HEIGHT_SIGNUP])) {
+            if ($data[ShortcutConfiguration::STYLE_HEIGHT_SIGNUP] > 55) {
+                $data[ShortcutConfiguration::STYLE_HEIGHT_SIGNUP] = 55;
+            } elseif ($data[ShortcutConfiguration::STYLE_HEIGHT_SIGNUP] < 25) {
+                $data[ShortcutConfiguration::STYLE_HEIGHT_SIGNUP] = 25;
+            }
             Configuration::updateValue(
                 ShortcutConfiguration::STYLE_HEIGHT_SIGNUP,
                 (int) $data[ShortcutConfiguration::STYLE_HEIGHT_SIGNUP]
             );
         }
         if (isset($data[ShortcutConfiguration::STYLE_WIDTH_SIGNUP])) {
+            if ($data[ShortcutConfiguration::STYLE_WIDTH_SIGNUP] < 150) {
+                $data[ShortcutConfiguration::STYLE_WIDTH_SIGNUP] = 150;
+            }
             Configuration::updateValue(
                 ShortcutConfiguration::STYLE_WIDTH_SIGNUP,
                 (int) $data[ShortcutConfiguration::STYLE_WIDTH_SIGNUP]
