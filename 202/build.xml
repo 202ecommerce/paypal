@@ -107,7 +107,7 @@
     </target>
 
     <!-- start composer -->
-    <target name="composer" depends="clean-composer,composer-install,composer-update" description="Install or update dependencies" />
+    <target name="composer" depends="clean-composer,composer-update" description="Install or update dependencies" />
     <target name="clean-composer" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Cleanup composer artifacts">
         <delete file="${basedir}/composer.lock" />
     </target>
@@ -116,16 +116,12 @@
             <resourcecontains resource="${basedir}/.gitignore" substring="composer.lock" />
         </condition>
     </target>
-    <target name="composer-install" depends="composer.check" unless="composer.lock.exist.in.gitignore" description="Installing dependencies">
-        <echo>Installing dependencies</echo>
-        <exec executable="composer" failonerror="true">
-            <arg value="install" />
-        </exec>
-    </target>
+
     <target name="composer-update" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Updating dependencies">
         <echo>Updating dependencies</echo>
         <exec executable="composer" failonerror="true">
             <arg value="update" />
+            <arg value="--no-dev" />
         </exec>
     </target>
     <!-- end composer -->
