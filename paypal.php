@@ -3058,6 +3058,11 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         /** @var $paypalOrder PaypalOrder */
         $paypalOrder = PaypalOrder::loadByOrderId($params['order']->id);
+
+        if (false === Validate::isLoadedObject($paypalOrder)) {
+            return;
+        }
+
         $method = AbstractMethodPaypal::load($this->paypal_method);
         $response = $method->addOrderTrackingInfo($paypalOrder);
 
