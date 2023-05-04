@@ -126,12 +126,16 @@
     </div>
   </div>
   <div class="col col-md-6 mt-4">
+
     <div class="card">
       <div class="card-header">
         {l s='Technical checklist' mod='paypal'}
       </div>
       <div class="card-body">
-        <code>todo: Form integration</code>
+          {include
+          file="module:paypal/views/templates/admin/_partials/statusBlock.tpl"
+          vars=$technicalChecklistForm.fields.checklist.set
+          }
       </div>
     </div>
   </div>

@@ -9,6 +9,7 @@ use PaypalAddons\classes\Form\CheckoutForm;
 use PaypalAddons\classes\Form\FormInstallment;
 use PaypalAddons\classes\Form\OrderStatusForm;
 use PaypalAddons\classes\Form\ShortcutConfigurationForm;
+use PaypalAddons\classes\Form\TechnicalChecklistForm;
 use PaypalAddons\classes\Form\TrackingParametersForm;
 use PaypalAddons\classes\Form\WhiteListForm;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,6 +60,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $this->forms['accountForm'] = new AccountForm();
         $this->forms['orderStatusForm'] = new OrderStatusForm();
         $this->forms['shortcutConfigurationForm'] = new ShortcutConfigurationForm();
+        $this->forms['technicalChecklistForm'] = new TechnicalChecklistForm();
     }
 
     public function setMedia($isNewTheme = false)
