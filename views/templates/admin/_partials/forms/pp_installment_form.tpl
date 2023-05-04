@@ -29,7 +29,9 @@
 {assign var="fieldsInstallment" value=['PAYPAL_INSTALLMENT_PRODUCT_PAGE', 'PAYPAL_INSTALLMENT_HOME_PAGE', 'PAYPAL_INSTALLMENT_CATEGORY_PAGE', 'PAYPAL_INSTALLMENT_CART_PAGE', 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE']}
 
 {block name='form_content'}
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_BNPL}
+    {if isset($form.fields.PAYPAL_ENABLE_BNPL)}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_BNPL}
+    {/if}
 
   <div class="form-group row">
     <label class="form-control-label form-control-label-check col-2" for="PAYPAL_BNPL">{l s='Active on' mod='paypal'}</label>

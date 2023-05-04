@@ -66,6 +66,10 @@ class AccountForm implements FormInterface
             $data = Tools::getAllValues();
         }
 
+        if (empty($data['accountForm'])) {
+            return;
+        }
+
         return $this->method->saveAccountForm($data);
     }
 }

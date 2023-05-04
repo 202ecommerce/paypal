@@ -52,11 +52,6 @@ class MethodEC extends AbstractMethodPaypal
 
     public $errors = [];
 
-    public $advancedFormParametres = [
-        'paypal_os_accepted_two',
-        'paypal_os_waiting_validation',
-    ];
-
     /** payment Object IDl*/
     protected $paymentId;
 
@@ -68,8 +63,24 @@ class MethodEC extends AbstractMethodPaypal
 
     public function __construct()
     {
-        $this->paypalApiManager = new PaypalApiManager($this);
         $this->whiteListService = new WhiteListService();
+        $this->initApiManager();
+    }
+
+    protected function initApiManager()
+    {
+        $this->paypalApiManager = new PaypalApiManager($this);
+
+        return $this;
+    }
+
+    public function setSandbox($isSandbox)
+    {
+        parent::setSandbox($isSandbox);
+        $this->initApiManager();
+        $this->checkCredentials();
+
+        return $this;
     }
 
     /**
@@ -135,7 +146,13 @@ class MethodEC extends AbstractMethodPaypal
      */
     public function setConfig($params)
     {
-        if ($this->isSandbox()) {
+        if (isset($params['isSandbox'])) {
+            $isSandbox = $params['isSandbox'];
+        } else {
+            $isSandbox = $this->isSandbox();
+        }
+
+        if ($isSandbox) {
             Configuration::updateValue('PAYPAL_EC_CLIENTID_SANDBOX', $params['clientId']);
             Configuration::updateValue('PAYPAL_EC_SECRET_SANDBOX', $params['secret']);
         } else {
@@ -223,30 +240,6 @@ class MethodEC extends AbstractMethodPaypal
                 $this->errors[] = $response->getError()->getMessage();
             }
         }
-    }
-
-    public function getVarsForAccountForm()
-    {
-        $tplVars = [];
-        $countryDefault = new Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
-
-        $tplVars['accountConfigured'] = $this->isConfigured();
-        $tplVars['urlOnboarding'] = $this->getUrlOnboarding();
-        $tplVars['country_iso'] = $countryDefault->iso_code;
-        $tplVars['idShop'] = Context::getContext()->shop->id;
-        $tplVars['mode'] = $this->isSandbox() ? 'SANDBOX' : 'LIVE';
-        $tplVars['paypal_ec_clientid'] = $this->getClientId();
-        $tplVars['paypal_ec_secret'] = $this->getSecret();
-        $tplVars['paypalOnboardingLib'] = $this->isSandbox() ?
-            'https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js' :
-            'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
-
-        return $tplVars;
-    }
-
-    public function saveAccountForm($data = null)
-    {
-        // TODO: Implement saveAccountForm() method.
     }
 
     public function getIntent()

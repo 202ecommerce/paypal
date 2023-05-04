@@ -27,11 +27,17 @@
 {assign var="isModal" value=$isModal|default:false}
 
 {block name='form_content'}
-  {foreach from=$form.fields item=field}
-    {if $field.type == 'variable-set'}
+  {foreach from=$form.fields key=fieldKey item=field}
+    {if $fieldKey == 'account_form'}
+      {assign var="isShowCredentials" value=in_array($field.set.country_iso, ['MX', 'BR', 'JP', 'IN'])}
+
+      <input type="hidden" name="is_configured_live" value="{$field.set.is_configured_live}">
+      <input type="hidden" name="is_configured_sandbox" value="{$field.set.is_configured_sandbox}">
+
       {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
         'type' => 'select',
         'name' => 'mode',
+        'value' => $field.set.mode|default:'',
         'options' => [
           [
             'value' => 'LIVE',
@@ -45,43 +51,168 @@
         'label' => "{l s='Mode' mod='paypal'}",
         'variant' => 'primary'
       ]}
-      {if !$field.set.accountConfigured }
-        <div class="form-group row">
-          <div class="offset-3 {[
-            'col-7' => !$isModal,
-            'col-9' => $isModal
-          ]|classnames}">
-            <a href="{$field.set.urlOnboarding}" class="btn btn-secondary btn-block" target="_blank">
+
+      <div credential-section>
+        <div live-section style="display: none">
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            'type' => 'text',
+            'name' => 'paypal_clientid_live',
+            'label' => "{l s='Client\’s ID' mod='paypal'}",
+            'variant' => 'primary',
+            'value' => $field.set.paypal_clientid_live|default:''
+            ]}
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            'type' => 'text',
+            'name' => 'paypal_secret_live',
+            'label' => "{l s='Client\’s secret' mod='paypal'}",
+            'variant' => 'primary',
+            'value' => $field.set.paypal_secret_live|default:''
+            ]}
+        </div>
+
+        <div sandbox-section style="display: none">
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            'type' => 'text',
+            'name' => 'paypal_clientid_sandbox',
+            'label' => "{l s='Client\’s ID' mod='paypal'}",
+            'variant' => 'primary',
+            'value' => $field.set.paypal_clientid_sandbox|default:''
+            ]}
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            'type' => 'text',
+            'name' => 'paypal_secret_sandbox',
+            'label' => "{l s='Client\’s secret' mod='paypal'}",
+            'variant' => 'primary',
+            'value' => $field.set.paypal_secret_sandbox|default:''
+            ]}
+        </div>
+      </div>
+
+
+        <div onboarding-button-section>
+
+          <div live-section style="display: none">
+
+            <div class="form-group row">
+              <div class="offset-3 {[
+              'col-7' => !$isModal,
+              'col-9' => $isModal
+              ]|classnames}">
+                <a
+                  href="{$field.set.urlOnboarding_live}"
+                  class="btn btn-secondary btn-block"
+                  target="_blank"
+                  data-paypal-button
+                  data-paypal-onboard-complete="onboardCallback"
+                >
               <span class="icon mr-2">
                 <i class="material-icons-outlined">account_circle</i>
               </span>
-              <span>
+                  <span>
                 {l s='Connect your PayPal account' mod='paypal'}
               </span>
-            </a>
+                </a>
+              </div>
+            </div>
+
           </div>
+
+          <div sandbox-section style="display: none">
+
+            <div class="form-group row">
+              <div class="offset-3 {[
+              'col-7' => !$isModal,
+              'col-9' => $isModal
+              ]|classnames}">
+                <a
+                  href="{$field.set.urlOnboarding_sandbox}"
+                  class="btn btn-secondary btn-block"
+                  target="_blank"
+                  data-paypal-button
+                  data-paypal-onboard-complete="onboardCallback"
+                >
+              <span class="icon mr-2">
+                <i class="material-icons-outlined">account_circle</i>
+              </span>
+                  <span>
+                {l s='Connect your PayPal account' mod='paypal'}
+              </span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <div logout-section style="display: none">
+
+            <div class="form-group row">
+              <div class="offset-3 {[
+              'col-7' => !$isModal,
+              'col-9' => $isModal
+              ]|classnames}">
+              <span class="btn btn-secondary btn-block" logout-button>
+              <span class="icon mr-2">
+                <i class="material-icons-outlined">account_circle</i>
+              </span>
+                <span>
+                {l s='Logout' mod='paypal'}
+              </span>
+              </span>
+              </div>
+            </div>
+
+          </div>
+
         </div>
-      {else}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
-          'type' => 'text',
-          'name' => 'paypal_ec_clientid',
-          'label' => "{l s='Client\’s ID' mod='paypal'}",
-          'variant' => 'primary'
-        ]}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
-          'type' => 'text',
-          'name' => 'paypal_ec_secret',
-          'label' => "{l s='Client\’s secret' mod='paypal'}",
-          'variant' => 'primary'
-        ]}
-      {/if}
+
     {/if}
   {/foreach}
+
+  <script>
+    function onboardCallback(authCode, sharedId) {
+      document.dispatchEvent(
+        (new CustomEvent(
+          'generateCredentials',
+          {
+            bubbles: true,
+            detail: {
+              authCode: authCode,
+              sharedId: sharedId,
+            }
+          }
+        ))
+      );
+    }
+
+    window.addEventListener('load', function() {
+      var script = document.createElement('script');
+      script.src = 'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
+      document.body.appendChild(script);
+
+      var event = new CustomEvent(
+        '{if $isShowCredentials}updateCredentials{else}updateButtonSection{/if}',
+        {
+          bubbles: true
+        }
+      );
+      var mode = document.querySelector('#pp_account_form [name="mode"]');
+
+      mode.addEventListener('change', function() {
+        document.dispatchEvent(event);
+      });
+      document.dispatchEvent(event);
+
+    });
+
+
+
+  </script>
+
 {/block}
 
 {block name='form_footer_buttons'}
   {if $isModal}
     <button data-btn-action="prev" class="btn btn-secondary d-none">{l s='Back' mod='paypal'}</button>
   {/if}
-  <button data-btn-action="next" class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
+  <button data-btn-action="next" save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
 {/block}

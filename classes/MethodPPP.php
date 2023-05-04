@@ -74,17 +74,29 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     protected $payment_method = 'PayPal';
 
-    public $advancedFormParametres = [
-        'paypal_os_accepted_two',
-    ];
-
     /** @var WhiteListService */
     protected $whiteListService;
 
     public function __construct()
     {
-        $this->paypalApiManager = new PaypalApiManager($this);
         $this->whiteListService = new WhiteListService();
+        $this->initApiManager();
+    }
+
+    protected function initApiManager()
+    {
+        $this->paypalApiManager = new PaypalApiManager($this);
+
+        return $this;
+    }
+
+    public function setSandbox($isSandbox)
+    {
+        parent::setSandbox($isSandbox);
+        $this->initApiManager();
+        $this->checkCredentials();
+
+        return $this;
     }
 
     /**
@@ -117,7 +129,13 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
      */
     public function setConfig($params)
     {
-        if ($this->isSandbox()) {
+        if (isset($params['isSandbox'])) {
+            $isSandbox = $params['isSandbox'];
+        } else {
+            $isSandbox = $this->isSandbox();
+        }
+
+        if ($isSandbox) {
             Configuration::updateValue('PAYPAL_SANDBOX_CLIENTID', $params['clientId']);
             Configuration::updateValue('PAYPAL_SANDBOX_SECRET', $params['secret']);
         } else {
@@ -198,24 +216,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         Media::addJsDefL('waitingRedirectionMsg', $paypal->l('In few seconds, you will be redirected to PayPal. Please wait.', get_class($this)));
 
         return true;
-    }
-
-    public function getVarsForAccountForm()
-    {
-        $tplVars = [];
-
-        $tplVars['accountConfigured'] = $this->isConfigured();
-        $tplVars['urlOnboarding'] = $this->getUrlOnboarding();
-        $tplVars['paypalOnboardingLib'] = $this->isSandbox() ?
-            'https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js' :
-            'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
-
-        return $tplVars;
-    }
-
-    public function saveAccountForm($data = null)
-    {
-        // TODO: Implement saveAccountForm() method.
     }
 
     public function checkCredentials()

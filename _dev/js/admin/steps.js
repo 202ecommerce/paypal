@@ -5,6 +5,7 @@ class Steps {
     this.content = '[data-step-content]';
     this.currentStepBadge = '[data-badge-current-step]';
     this.stepsProgress = '[data-steps-progress]';
+    this.controller = document.location;
   }
 
   init() {
@@ -24,6 +25,85 @@ class Steps {
           }
         });
     });
+
+    document.addEventListener('generateCredentials', (event) => {
+      this.generateCredentials(event.detail);
+    });
+    document.addEventListener('updateCredentials', () => {
+      this.updateCredentials();
+    });
+    document.addEventListener('updateButtonSection', () => {
+      this.updateButtonSection();
+    });
+    document.querySelector('[logout-button]').addEventListener('click', () => {
+      this.resetCredentials();
+    });
+  }
+
+  resetCredentials() {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'resetCredentials');
+    url.searchParams.append('isSandbox', this.isSandbox() ? 1 : 0);
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          if (this.isSandbox()) {
+            document.querySelector('[name="is_configured_sandbox"]').value = 0;
+            document.querySelector('[name="paypal_clientid_sandbox"]').value = '';
+            document.querySelector('[name="paypal_secret_sandbox"]').value = '';
+          } else {
+            document.querySelector('[name="is_configured_live"]').value = 0;
+            document.querySelector('[name="paypal_clientid_live"]').value = '';
+            document.querySelector('[name="paypal_secret_live"]').value = '';
+          }
+        }
+
+        this.updateButtonSection();
+      });
+  }
+
+  updateButtonSection() {
+    const liveSection = document.querySelector('[onboarding-button-section] [live-section]');
+    const sandboxSection = document.querySelector('[onboarding-button-section] [sandbox-section]');
+    const logoutSection = document.querySelector('[onboarding-button-section] [logout-section]');
+
+    if (this.isConfigured()) {
+      liveSection.style.display = 'none';
+      sandboxSection.style.display = 'none';
+      logoutSection.style.display = null;
+      return;
+    }
+
+    if (this.isSandbox()) {
+      liveSection.style.display = 'none';
+      sandboxSection.style.display = null;
+      logoutSection.style.display = 'none';
+    } else {
+      liveSection.style.display = null;
+      sandboxSection.style.display = 'none';
+      logoutSection.style.display = 'none';
+    }
+  }
+
+  updateCredentials() {
+    const liveSection = document.querySelector('[credential-section] [live-section]');
+    const sandboxSection = document.querySelector('[credential-section] [sandbox-section]');
+
+    if (this.isSandbox()) {
+      liveSection.style.display = 'none';
+      sandboxSection.style.display = null;
+
+    } else {
+      liveSection.style.display = null;
+      sandboxSection.style.display = 'none';
+    }
   }
 
   saveProcess(event) {
@@ -34,7 +114,7 @@ class Steps {
 
       event.currentTarget.disabled = true;
       const formData = new FormData(event.currentTarget.closest('form'));
-      const url = new URL(document.location);
+      const url = new URL(this.controller);
       formData.append(event.currentTarget.getAttribute('name'), 1);
       url.searchParams.append('ajax', 1);
       url.searchParams.append('action', 'saveForm');
@@ -51,6 +131,55 @@ class Steps {
           resolve(response.success == true);
         });
     });
+  }
+
+  generateCredentials(data) {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'generateCredentials');
+    url.searchParams.append('authCode', data.authCode);
+    url.searchParams.append('sharedId', data.sharedId);
+    url.searchParams.append('isSandbox', this.isSandbox() ? 1 : 0);
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          if (response.isSandbox) {
+            document.querySelector('[name="is_configured_sandbox"]').value = 1;
+            document.querySelector('[name="paypal_clientid_sandbox"]').value = response.clientid;
+            document.querySelector('[name="paypal_secret_sandbox"]').value = response.secret;
+          } else {
+            document.querySelector('[name="is_configured_live"]').value = 1;
+            document.querySelector('[name="paypal_clientid_live"]').value = response.clientid;
+            document.querySelector('[name="paypal_secret_live"]').value = response.secret;
+          }
+        }
+
+        this.updateButtonSection();
+      });
+  }
+
+  isSandbox() {
+    const mode = document.querySelector('#pp_account_form [name="mode"]');
+
+    if (mode) {
+      return mode.value == 'SANDBOX';
+    }
+
+    return false;
+  }
+
+  isConfigured() {
+    if (this.isSandbox()) {
+      return document.querySelector('[name="is_configured_sandbox"]').value == 1;
+    }
+
+    return document.querySelector('[name="is_configured_live"]').value == 1;
   }
 
   getSteps() {

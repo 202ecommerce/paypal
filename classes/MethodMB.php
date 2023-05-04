@@ -58,22 +58,30 @@ class MethodMB extends AbstractMethodPaypal
 
     protected $servicePaypalVaulting;
 
-    public $advancedFormParametres = [
-        'paypal_os_waiting_validation',
-        'paypal_os_accepted_two',
-        'paypal_os_processing',
-        'paypal_os_validation_error',
-        'paypal_os_refunded_paypal',
-    ];
-
     /** @var WhiteListService */
     protected $whiteListService;
 
     public function __construct()
     {
         $this->servicePaypalVaulting = new ServicePaypalVaulting();
-        $this->paypalApiManager = new PaypalApiManagerMB($this);
         $this->whiteListService = new WhiteListService();
+        $this->initApiManager();
+    }
+
+    protected function initApiManager()
+    {
+        $this->paypalApiManager = new PaypalApiManagerMB($this);
+
+        return $this;
+    }
+
+    public function setSandbox($isSandbox)
+    {
+        parent::setSandbox($isSandbox);
+        $this->initApiManager();
+        $this->checkCredentials();
+
+        return $this;
     }
 
     /**
@@ -106,6 +114,19 @@ class MethodMB extends AbstractMethodPaypal
      */
     public function setConfig($params)
     {
+        if (isset($params['isSandbox'])) {
+            $isSandbox = $params['isSandbox'];
+        } else {
+            $isSandbox = $this->isSandbox();
+        }
+
+        if ($isSandbox) {
+            Configuration::updateValue('PAYPAL_MB_SANDBOX_CLIENTID', $params['clientId']);
+            Configuration::updateValue('PAYPAL_MB_SANDBOX_SECRET', $params['secret']);
+        } else {
+            Configuration::updateValue('PAYPAL_MB_LIVE_CLIENTID', $params['clientId']);
+            Configuration::updateValue('PAYPAL_MB_LIVE_SECRET', $params['secret']);
+        }
     }
 
     public function getConfig(Paypal $paypal)
@@ -177,34 +198,6 @@ class MethodMB extends AbstractMethodPaypal
         }
 
         return $isMbConfigured;
-    }
-
-    public function getVarsForAccountForm()
-    {
-        if ($this->isSandbox()) {
-            $tpl_vars = [
-                'paypal_mb_sandbox_clientid' => Configuration::get('PAYPAL_MB_SANDBOX_CLIENTID'),
-                'paypal_mb_sandbox_secret' => Configuration::get('PAYPAL_MB_SANDBOX_SECRET'),
-                'paypal_ec_clientid' => Configuration::get('PAYPAL_EC_CLIENTID_SANDBOX'),
-                'paypal_ec_secret' => Configuration::get('PAYPAL_EC_SECRET_SANDBOX'),
-                'mode' => 'SANDBOX',
-            ];
-        } else {
-            $tpl_vars = [
-                'paypal_mb_live_clientid' => Configuration::get('PAYPAL_MB_LIVE_CLIENTID'),
-                'paypal_mb_live_secret' => Configuration::get('PAYPAL_MB_LIVE_SECRET'),
-                'paypal_ec_clientid' => Configuration::get('PAYPAL_EC_CLIENTID_LIVE'),
-                'paypal_ec_secret' => Configuration::get('PAYPAL_EC_SECRET_LIVE'),
-                'mode' => 'LIVE',
-            ];
-        }
-
-        return $tpl_vars;
-    }
-
-    public function saveAccountForm($data = null)
-    {
-        // TODO: Implement saveAccountForm() method.
     }
 
     public function checkCredentials()

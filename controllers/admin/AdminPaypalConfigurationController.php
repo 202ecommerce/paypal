@@ -1,5 +1,8 @@
 <?php
 
+use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\classes\API\Onboarding\PaypalGetAuthToken;
+use PaypalAddons\classes\API\Onboarding\PaypalGetCredentials;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Form\AccountForm;
 use PaypalAddons\classes\Form\CheckoutForm;
@@ -110,6 +113,61 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         $response->setData($data);
         $response->send();
+        die;
+    }
+
+    public function ajaxProcessResetCredentials()
+    {
+        $method = AbstractMethodPaypal::load();
+        $isSandbox = (int) Tools::getValue('isSandbox');
+        $method->logOut($isSandbox);
+
+        (new JsonResponse())
+            ->setData(['success' => true])
+            ->send();
+        die;
+    }
+
+    public function ajaxProcessGenerateCredentials()
+    {
+        $response = new JsonResponse();
+        $method = AbstractMethodPaypal::load();
+        $authCode = Tools::getValue('authCode');
+        $sharedId = Tools::getValue('sharedId');
+        $isSandbox = (int) Tools::getValue('isSandbox');
+        $sellerNonce = $method->getSellerNonce($isSandbox);
+        $paypalOnboarding = new PaypalGetAuthToken($authCode, $sharedId, $sellerNonce, $isSandbox);
+        $result = $paypalOnboarding->execute();
+
+        if ($result->isSuccess() == false) {
+            $response->setData(['success' => false, 'message' => $result->getError()->getMessage()])->send();
+            die;
+        }
+
+        $authToken = $result->getAuthToken();
+
+        $partnerId = $isSandbox ? PayPal::PAYPAL_PARTNER_ID_SANDBOX : PayPal::PAYPAL_PARTNER_ID_LIVE;
+        $paypalGetCredentials = new PaypalGetCredentials($authToken, $partnerId, $isSandbox);
+        $result = $paypalGetCredentials->execute();
+
+        if ($result->isSuccess() == false) {
+            $response->setData(['success' => false, 'messeage' => $result->getError()->getMessage()])->send();
+            die;
+        }
+
+        $params = [
+            'clientId' => $result->getClientId(),
+            'secret' => $result->getSecret(),
+            'isSandbox' => $isSandbox,
+        ];
+        $method->setConfig($params);
+
+        $response->setData([
+            'success' => true,
+            'clientid' => $result->getClientId(),
+            'secret' => $result->getSecret(),
+            'isSandbox' => $isSandbox,
+        ])->send();
         die;
     }
 }
