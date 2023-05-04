@@ -53,6 +53,7 @@ use PaypalAddons\classes\PUI\FraudNetForm;
 use PaypalAddons\classes\PUI\FraudSessionId;
 use PaypalAddons\classes\PUI\PuiFunctionality;
 use PaypalAddons\classes\SEPA\SepaButton;
+use PaypalAddons\classes\SEPA\SepaFunctionality;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Shortcut\ShortcutPaymentStep;
 use PaypalAddons\classes\Shortcut\ShortcutSignup;
@@ -750,12 +751,14 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 $payments_options[] = $this->buildAcdcPaymentOption($params);
             }
 
-            if ($this->initApmFunctionality()->isEnabled() && $this->initApmFunctionality()->isAvailable()) {
+            if ($this->initApmFunctionality()->isAvailable()) {
                 $payments_options = array_merge($payments_options, $this->buildApmPaymentOptions($params));
             }
 
             if ($this->paypal_method == 'PPP') {
-                $payments_options[] = $this->renderSepaOption($params);
+                if ($this->initSepaFunctionality()->isEnabled()) {
+                    $payments_options[] = $this->renderSepaOption($params);
+                }
 
                 if ($this->getWebhookOption()->isAvailable() && $this->getWebhookOption()->isEnable()) {
                     if ($this->initPuiFunctionality()->isAvailable(false) && $this->initPuiFunctionality()->isEligibleContext($this->context)) {
@@ -2912,139 +2915,22 @@ class PayPal extends \PaymentModule implements WidgetInterface
             return $map;
         }
 
-        if ($isoCountry == 'BE' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::BANCONTACT,
-                'label' => $this->l('Bancontact'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'BR' && $isoCurrency == 'BRL') {
-            $map[] = [
-                'method' => APM::BOLETOBANCARIO,
-                'label' => $this->l('Boleto Bancario'),
-            ];
-        }
-
-        if ($isoCountry == 'PL' && $isoCurrency == 'PLN') {
-            $map[] = [
-                'method' => APM::BLIK,
-                'label' => $this->l('BLIK'),
-            ];
-
-            $map[] = [
-                'method' => APM::P24,
-                'label' => $this->l('Przelewy24'),
-            ];
-        }
-
-        if ($isoCountry == 'AT' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::EPS,
-                'label' => $this->l('eps'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
         if ($isoCountry == 'DE' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::GIROPAY,
-                'label' => $this->l('giropay'),
-                'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/giropay.svg'),
-            ];
+            if ($this->initApmFunctionality()->isGiropayEnabled()) {
+                $map[] = [
+                    'method' => APM::GIROPAY,
+                    'label' => $this->l('giropay'),
+                    'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/giropay.svg'),
+                ];
+            }
 
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-                'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/sofort.svg'),
-            ];
-        }
-
-        if ($isoCountry == 'NL' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::IDEAL,
-                'label' => $this->l('iDEAL'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-
-            $map[] = [
-                'method' => APM::TRUSTLY,
-                'label' => $this->l('Trustly'),
-            ];
-        }
-
-        if ($isoCountry == 'PT' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::MULTIBANCO,
-                'label' => $this->l('Multibanco'),
-            ];
-        }
-
-        if ($isoCountry == 'IT' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::MYBANK,
-                'label' => $this->l('MyBank'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'MX' && $isoCurrency == 'MXN') {
-            $map[] = [
-                'method' => APM::OXXO,
-                'label' => $this->l('OXXO'),
-            ];
-        }
-
-        if ($isoCountry == 'GB' && $isoCurrency == 'GBP') {
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'ES' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'US' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if (in_array($isoCountry, ['EE', 'FI', 'SE']) && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::TRUSTLY,
-                'label' => $this->l('Trustly'),
-            ];
-        }
-
-        if ($isoCountry == 'SE' && $isoCurrency == 'SEK') {
-            $map[] = [
-                'method' => APM::TRUSTLY,
-                'label' => $this->l('Trustly'),
-            ];
+            if ($this->initApmFunctionality()->isSofortEnabled()) {
+                $map[] = [
+                    'method' => APM::SOFORT,
+                    'label' => $this->l('Sofort'),
+                    'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/sofort.svg'),
+                ];
+            }
         }
 
         return $map;
@@ -3116,5 +3002,10 @@ class PayPal extends \PaymentModule implements WidgetInterface
             "/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i",
             $_SERVER['HTTP_USER_AGENT']
         );
+    }
+
+    protected function initSepaFunctionality()
+    {
+        return new SepaFunctionality();
     }
 }

@@ -24,29 +24,15 @@
  *  @copyright PayPal
  */
 
-namespace PaypalAddons\classes\APM;
+namespace PaypalAddons\classes\SEPA;
 
 use Configuration;
-use Country;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
-use Tools;
 
-class ApmFunctionality
+class SepaFunctionality
 {
-    public function isAvailable()
-    {
-        $isoCountryDefault = Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT'));
-
-        return Tools::strtolower($isoCountryDefault) == 'de';
-    }
-
-    public function isSofortEnabled()
-    {
-        return (int) Configuration::get(PaypalConfigurations::SOFORT_ENABLED);
-    }
-
-    public function isGiropayEnabled()
-    {
-        return (int) Configuration::get(PaypalConfigurations::GIROPAY_ENABLED);
-    }
+   public function isEnabled()
+   {
+       return (int) Configuration::get(PaypalConfigurations::SEPA_ENABLED);
+   }
 }
