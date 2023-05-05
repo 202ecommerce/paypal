@@ -58,10 +58,12 @@ class Steps {
             document.querySelector('[name="is_configured_sandbox"]').value = 0;
             document.querySelector('[name="paypal_clientid_sandbox"]').value = '';
             document.querySelector('[name="paypal_secret_sandbox"]').value = '';
+            document.querySelector('[name="merchant_id_sandbox"]').value = '';
           } else {
             document.querySelector('[name="is_configured_live"]').value = 0;
             document.querySelector('[name="paypal_clientid_live"]').value = '';
             document.querySelector('[name="paypal_secret_live"]').value = '';
+            document.querySelector('[name="merchant_id_live"]').value = '';
           }
         }
 
@@ -99,7 +101,6 @@ class Steps {
     if (this.isSandbox()) {
       liveSection.style.display = 'none';
       sandboxSection.style.display = null;
-
     } else {
       liveSection.style.display = null;
       sandboxSection.style.display = 'none';
@@ -153,10 +154,12 @@ class Steps {
             document.querySelector('[name="is_configured_sandbox"]').value = 1;
             document.querySelector('[name="paypal_clientid_sandbox"]').value = response.clientid;
             document.querySelector('[name="paypal_secret_sandbox"]').value = response.secret;
+            document.querySelector('[name="merchant_id_sandbox"]').value = response.merchantId;
           } else {
             document.querySelector('[name="is_configured_live"]').value = 1;
             document.querySelector('[name="paypal_clientid_live"]').value = response.clientid;
             document.querySelector('[name="paypal_secret_live"]').value = response.secret;
+            document.querySelector('[name="merchant_id_live"]').value = response.merchantId;
           }
         }
 

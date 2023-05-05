@@ -34,6 +34,27 @@ class ResponseGetCredentials extends Response
     /** @var string */
     protected $secret;
 
+    /** @var string */
+    protected $merchantId;
+
+    /**
+     * @return string
+     */
+    public function getMerchantId()
+    {
+        return (string) $this->merchantId;
+    }
+
+    /**
+     * @return self
+     */
+    public function setMerchantId($merchantId)
+    {
+        $this->merchantId = (string) $merchantId;
+
+        return $this;
+    }
+
     /**
      * @return string
      */

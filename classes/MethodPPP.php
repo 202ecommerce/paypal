@@ -138,9 +138,11 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         if ($isSandbox) {
             Configuration::updateValue('PAYPAL_SANDBOX_CLIENTID', $params['clientId']);
             Configuration::updateValue('PAYPAL_SANDBOX_SECRET', $params['secret']);
+            Configuration::updateValue('PAYPAL_MERCHANT_ID_SANDBOX', $params['merchantId']);
         } else {
             Configuration::updateValue('PAYPAL_LIVE_CLIENTID', $params['clientId']);
             Configuration::updateValue('PAYPAL_LIVE_SECRET', $params['secret']);
+            Configuration::updateValue('PAYPAL_MERCHANT_ID_LIVE', $params['merchantId']);
         }
     }
 
@@ -228,6 +230,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             $this->setConfig([
                 'clientId' => '',
                 'secret' => '',
+                'merchantId' => '',
             ]);
             Configuration::updateValue('PAYPAL_CONNECTION_PPP_CONFIGURED', 0);
 
@@ -363,5 +366,14 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     public function acdcGenerateToken()
     {
         return $this->paypalApiManager->getAcdcGenerateTokenRequest()->execute();
+    }
+
+    public function getMerchantId()
+    {
+        if ($this->isSandbox()) {
+            return Configuration::get('PAYPAL_MERCHANT_ID_SANDBOX');
+        } else {
+            return Configuration::get('PAYPAL_MERCHANT_ID_LIVE');
+        }
     }
 }

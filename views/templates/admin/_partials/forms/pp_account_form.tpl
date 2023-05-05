@@ -68,6 +68,13 @@
             'variant' => 'primary',
             'value' => $field.set.paypal_secret_live|default:''
             ]}
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            'type' => 'text',
+            'name' => 'merchant_id_live',
+            'value' => $field.set.merchant_id_live|default:'',
+            'label' => "{l s='Merchant ID' mod='paypal'}",
+            'variant' => 'primary'
+            ]}
         </div>
 
         <div sandbox-section style="display: none">
@@ -84,6 +91,13 @@
             'label' => "{l s='Client\’s secret' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_secret_sandbox|default:''
+            ]}
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            'type' => 'text',
+            'name' => 'merchant_id_sandbox',
+            'value' => $field.set.merchant_id_sandbox|default:'',
+            'label' => "{l s='Merchant ID' mod='paypal'}",
+            'variant' => 'primary'
             ]}
         </div>
       </div>

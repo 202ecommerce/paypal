@@ -123,9 +123,11 @@ class MethodMB extends AbstractMethodPaypal
         if ($isSandbox) {
             Configuration::updateValue('PAYPAL_MB_SANDBOX_CLIENTID', $params['clientId']);
             Configuration::updateValue('PAYPAL_MB_SANDBOX_SECRET', $params['secret']);
+            Configuration::updateValue('PAYPAL_MB_MERCHANT_ID_SANDBOX', $params['merchantId']);
         } else {
             Configuration::updateValue('PAYPAL_MB_LIVE_CLIENTID', $params['clientId']);
             Configuration::updateValue('PAYPAL_MB_LIVE_SECRET', $params['secret']);
+            Configuration::updateValue('PAYPAL_MB_MERCHANT_ID_LIVE', $params['merchantId']);
         }
     }
 
@@ -193,6 +195,7 @@ class MethodMB extends AbstractMethodPaypal
                 $methodEC->setConfig([
                     'clientId' => $this->getClientId(),
                     'secret' => $this->getSecret(),
+                    'merchantId' => $this->getMerchantId(),
                 ]);
             }
         }
@@ -457,5 +460,14 @@ class MethodMB extends AbstractMethodPaypal
     public function getIntent()
     {
         return Configuration::get('PAYPAL_API_INTENT') == 'sale' ? 'CAPTURE' : 'AUTHORIZE';
+    }
+
+    public function getMerchantId()
+    {
+        if ($this->isSandbox()) {
+            return Configuration::get('PAYPAL_MB_MERCHANT_ID_SANDBOX');
+        } else {
+            return Configuration::get('PAYPAL_MB_MERCHANT_ID_LIVE');
+        }
     }
 }

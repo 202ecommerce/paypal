@@ -600,6 +600,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $tplVars['paypal_clientid_sandbox'] = $this->getClientId();
         $tplVars['paypal_secret_sandbox'] = $this->getSecret();
         $tplVars['is_configured_sandbox'] = (int) $this->isConfigured();
+        $tplVars['merchant_id_sandbox'] = $this->getMerchantId();
 
         if ($this instanceof PuiMethodInterface) {
             $tplVars['urlOnboarding_sandbox'] = $this->initSignUpLink()->get();
@@ -611,6 +612,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $tplVars['paypal_clientid_live'] = $this->getClientId();
         $tplVars['paypal_secret_live'] = $this->getSecret();
         $tplVars['is_configured_live'] = (int) $this->isConfigured();
+        $tplVars['merchant_id_live'] = $this->getMerchantId();
 
         if ($this instanceof PuiMethodInterface) {
             $tplVars['urlOnboarding_live'] = $this->initSignUpLink()->get();
@@ -638,6 +640,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             $this->setConfig([
                 'clientId' => pSQL($data['paypal_clientid_live']),
                 'secret' => pSQL($data['paypal_secret_live']),
+                'merchantId' => pSQL($data['merchant_id_live']),
                 'isSandbox' => false,
             ]);
         }
@@ -646,12 +649,16 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             $this->setConfig([
                 'clientId' => pSQL($data['paypal_clientid_sandbox']),
                 'secret' => pSQL($data['paypal_secret_sandbox']),
+                'merchantId' => pSQL($data['merchant_id_sandbox']),
                 'isSandbox' => true,
             ]);
         }
 
         $this->checkCredentials();
     }
+
+    /** @return  string*/
+    abstract public function getMerchantId();
 
     abstract public function setPaymentId($paymentId);
 

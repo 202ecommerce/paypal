@@ -169,6 +169,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $params = [
             'clientId' => $result->getClientId(),
             'secret' => $result->getSecret(),
+            'merchantId' => $result->getMerchantId(),
             'isSandbox' => $isSandbox,
         ];
         $method->setConfig($params);
@@ -177,6 +178,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'success' => true,
             'clientid' => $result->getClientId(),
             'secret' => $result->getSecret(),
+            'merchantId' => $result->getMerchantId(),
             'isSandbox' => $isSandbox,
         ])->send();
         die;

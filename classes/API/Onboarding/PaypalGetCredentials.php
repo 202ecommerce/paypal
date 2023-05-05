@@ -74,6 +74,7 @@ class PaypalGetCredentials
             $returnResponse->setSuccess(true)
                 ->setClientId($responseDecode->client_id)
                 ->setSecret($responseDecode->client_secret)
+                ->setMerchantId($responseDecode->payer_id)
                 ->setData($returnResponse);
         } catch (Throwable $e) {
             $error = new Error();

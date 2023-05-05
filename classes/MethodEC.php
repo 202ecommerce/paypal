@@ -155,9 +155,11 @@ class MethodEC extends AbstractMethodPaypal
         if ($isSandbox) {
             Configuration::updateValue('PAYPAL_EC_CLIENTID_SANDBOX', $params['clientId']);
             Configuration::updateValue('PAYPAL_EC_SECRET_SANDBOX', $params['secret']);
+            Configuration::updateValue('PAYPAL_EC_MERCHANT_ID_SANDBOX', $params['merchantId']);
         } else {
             Configuration::updateValue('PAYPAL_EC_CLIENTID_LIVE', $params['clientId']);
             Configuration::updateValue('PAYPAL_EC_SECRET_LIVE', $params['secret']);
+            Configuration::updateValue('PAYPAL_EC_MERCHANT_ID_LIVE', $params['merchantId']);
         }
     }
 
@@ -233,6 +235,7 @@ class MethodEC extends AbstractMethodPaypal
             $this->setConfig([
                 'clientId' => '',
                 'secret' => '',
+                'merchantId' => '',
             ]);
             Configuration::updateValue('PAYPAL_CONNECTION_EC_CONFIGURED', 0);
 
@@ -300,5 +303,14 @@ class MethodEC extends AbstractMethodPaypal
         }
 
         return 'LOGIN';
+    }
+
+    public function getMerchantId()
+    {
+        if ($this->isSandbox()) {
+            return Configuration::get('PAYPAL_EC_MERCHANT_ID_SANDBOX');
+        } else {
+            return Configuration::get('PAYPAL_EC_MERCHANT_ID_LIVE');
+        }
     }
 }

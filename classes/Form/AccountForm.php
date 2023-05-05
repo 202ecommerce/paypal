@@ -34,14 +34,6 @@ class AccountForm implements FormInterface
             'set' => $this->method->getVarsForAccountForm()
         ];
 
-        if ($this->method instanceof PuiMethodInterface) {
-            if ($this->method->isConfigured()) {
-                $fields['account_form']['set']['isPuiAvailable'] = $this->puiFunctionality->isAvailable();
-            } else {
-                $fields['account_form']['set']['SignUpLinkButton'] = $this->initSignUpLinkButton($this->method);
-            }
-        }
-
         return [
             'legend' => [
                 'title' => $this->module->l('Account', 'AccountForm'),

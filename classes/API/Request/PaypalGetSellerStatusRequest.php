@@ -26,6 +26,7 @@
 
 namespace PaypalAddons\classes\API\Request;
 
+use Configuration;
 use Exception;
 use PayPal;
 use PaypalAddons\classes\API\ExtensionSDK\GetSellerStatus;
@@ -83,12 +84,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
 
     protected function getSellerMerchantId()
     {
-        return $this->initPaypalMerchantId()->get();
-    }
-
-    protected function initPaypalMerchantId()
-    {
-        return new PaypalMerchantId();
+        return $this->method->getMerchantId();
     }
 
     protected function getCapabilities(\PayPalHttp\HttpResponse $data)
