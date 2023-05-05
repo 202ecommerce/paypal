@@ -39,6 +39,7 @@ use PaypalAddons\classes\API\PaypalApiManagerInterface;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\API\Response\ResponseOrderGet;
 use PaypalAddons\classes\API\Response\ResponseOrderRefund;
+use PaypalAddons\classes\PUI\SignupLink;
 use PaypalAddons\classes\Shortcut\ShortcutCart;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Shortcut\ShortcutProduct;
@@ -596,20 +597,35 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $tplVars['country_iso'] = strtoupper($countryDefault->iso_code);
         //Assign values for sandbox mode
         $this->setSandbox(true);
-        $tplVars['urlOnboarding_sandbox'] = $this->getUrlOnboarding();
         $tplVars['paypal_clientid_sandbox'] = $this->getClientId();
         $tplVars['paypal_secret_sandbox'] = $this->getSecret();
         $tplVars['is_configured_sandbox'] = (int) $this->isConfigured();
+
+        if ($this instanceof PuiMethodInterface) {
+            $tplVars['urlOnboarding_sandbox'] = $this->initSignUpLink()->get();
+        } else {
+            $tplVars['urlOnboarding_sandbox'] = $this->getUrlOnboarding();
+        }
         //Assign values for live
         $this->setSandbox(false);
-        $tplVars['urlOnboarding_live'] = $this->getUrlOnboarding();
         $tplVars['paypal_clientid_live'] = $this->getClientId();
         $tplVars['paypal_secret_live'] = $this->getSecret();
         $tplVars['is_configured_live'] = (int) $this->isConfigured();
+
+        if ($this instanceof PuiMethodInterface) {
+            $tplVars['urlOnboarding_live'] = $this->initSignUpLink()->get();
+        } else {
+            $tplVars['urlOnboarding_live'] = $this->getUrlOnboarding();
+        }
         //Return actual mode
         $this->setSandbox($actualSandboxMode);
 
         return $tplVars;
+    }
+
+    protected function initSignUpLink()
+    {
+        return new SignupLink($this);
     }
 
     public function saveAccountForm($data = null)

@@ -52,7 +52,6 @@ class SignupLink
             'partnerId' => $this->getPartnerId(),
             'integrationType' => 'FO',
             'features' => 'PAYMENT,REFUND,ACCESS_MERCHANT_INFORMATION',
-            'returnToPartnerUrl' => \Context::getContext()->link->getAdminLink('AdminPaypalGetCredentials'),
             'displayMode' => 'minibrowser',
             'product' => 'ppcp',
             'secondaryProducts' => 'payment_methods',
