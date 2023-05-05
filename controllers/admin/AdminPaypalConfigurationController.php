@@ -45,11 +45,14 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
     protected $forms = [];
 
+    protected $method;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->initForms();
+        $this->method = AbstractMethodPaypal::load();
     }
 
     protected function initForms()
@@ -92,6 +95,8 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'isShowModalConfiguration' => (int) Configuration::get(PaypalConfigurations::SHOW_MODAL_CONFIGURATION),
             'diagnosticPage' => $this->context->link->getAdminLink('AdminPaypalDiagnostic'),
             'loggerPage' => $this->context->link->getAdminLink('AdminPaypalProcessLogger'),
+            'isConfigured' => $this->method->isConfigured(),
+            'isSandbox' => $this->method->isSandbox(),
         ]);
 
         return $tpl->fetch();

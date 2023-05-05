@@ -38,13 +38,22 @@
               <div>
                 <div class="d-flex align-items-center">
                   <span class="icon-lg mr-1">
-                    <i class="material-icons-outlined text-success">done</i>
+                    {if $isSandbox|default:false}
+                      <i class="material-icons-outlined text-danger">close</i>
+                    {else}
+                        <i class="material-icons-outlined text-success">done</i>
+                    {/if}
                   </span>
                   {l s='Mode production enabled' mod='paypal'}
                 </div>
                 <div class="d-flex align-items-center">
                   <span class="icon-lg mr-1">
-                    <i class="material-icons-outlined text-success">done</i>
+                    {if $isConfigured|default:false}
+                      <i class="material-icons-outlined text-success">done</i>
+                    {else}
+                        <i class="material-icons-outlined text-danger">close</i>
+                    {/if}
+
                   </span>
                   {l s='Account connected' mod='paypal'}
                 </div>
@@ -86,7 +95,7 @@
                     <i class="material-icons-outlined">manage_search</i>
                   </span>
                   {l s='Make a' mod='paypal'}&nbsp;
-                  <a href="{$diagnosticPage|escape:'htmlall':'utf-8'}" class="">
+                  <a href="{$diagnosticPage|escape:'htmlall':'utf-8'}" target="_blank" class="">
                     {l s='diagnostic' mod='paypal'}
                   </a>
                 </div>
@@ -104,7 +113,7 @@
                     <i class="material-icons-outlined">feed</i>
                   </span>
                   {l s='Check the' mod='paypal'}&nbsp;
-                  <a href="{$loggerPage|escape:'htmlall':'utf-8'}" class="">
+                  <a href="{$loggerPage|escape:'htmlall':'utf-8'}" target="_blank" class="">
                     {l s='logs' mod='paypal'}
                   </a>
                 </div>
