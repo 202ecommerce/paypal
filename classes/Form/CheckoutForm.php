@@ -45,6 +45,27 @@ class CheckoutForm implements FormInterface
     {
         $fields = [];
 
+        if ($this->method == 'MB') {
+            $fields[PaypalConfigurations::MB_EC_ENABLED] = [
+                'type' => 'switch',
+                'label' => $this->module->l('Accept PayPal payments', 'AdminPayPalCustomizeCheckoutController'),
+                'name' => PaypalConfigurations::MB_EC_ENABLED,
+                'values' => [
+                    [
+                        'id' => PaypalConfigurations::MB_EC_ENABLED . '_on',
+                        'value' => 1,
+                        'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                    [
+                        'id' => PaypalConfigurations::MB_EC_ENABLED . '_off',
+                        'value' => 0,
+                        'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                ],
+                'value' => (int) Configuration::get(PaypalConfigurations::MB_EC_ENABLED),
+            ];
+        }
+
         if (in_array($this->method, ['EC', 'MB'])) {
             $fields[PaypalConfigurations::INTENT] = [
                 'type' => 'select',
@@ -319,6 +340,11 @@ class CheckoutForm implements FormInterface
                 pSQL($data[PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS])
             );
         }
+
+        Configuration::updateValue(
+            PaypalConfigurations::MB_EC_ENABLED,
+            isset($data[PaypalConfigurations::MB_EC_ENABLED]) ? 1 : 0
+        );
 
         Configuration::updateValue(
             PaypalConfigurations::API_ADVANTAGES,

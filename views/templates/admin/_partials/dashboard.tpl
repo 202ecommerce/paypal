@@ -134,7 +134,7 @@
       <div class="card-body">
           {include
           file="module:paypal/views/templates/admin/_partials/statusBlock.tpl"
-          vars=$technicalChecklistForm.fields.checklist.set
+          vars=$technicalChecklistForm.fields.technicalChecklist.set
           }
       </div>
     </div>
@@ -145,7 +145,10 @@
         {l s='Feature checklist' mod='paypal'}
       </div>
       <div class="card-body">
-        <code>todo: Form integration</code>
+          {include
+            file="module:paypal/views/templates/admin/_partials/featureChecklist.tpl"
+            vars=$featureChecklistForm.fields.featureChecklist.set
+          }
       </div>
     </div>
   </div>

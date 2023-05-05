@@ -25,47 +25,45 @@
  *}
 
 <div>
-  <p>
+  <div>
       {l s='Merchant Country:' mod='paypal'} <b>{$vars.merchantCountry|escape:'htmlall':'UTF-8'}</b>
-  </p>
+  </div>
 
-  <p>
+  <div>
       {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='paypal'}|paypalreplace:['@href1@' => {$vars.localizationUrl}, '@target@' => {'target="blank"'}]}
-  </p>
+  </div>
 
-  <ul class="list-unstyled">
-    <li>
-        {if $vars.sslActivated|default:false}
-          <i class="icon-check text-success"></i>
-            {l s='SSL enabled.' mod='paypal'}
-        {else}
-          <i class="icon-remove text-danger"></i>
-            {l s='SSL should be enabled on your website.' mod='paypal'}
-        {/if}
-    </li>
-
-    <li>
-        {if isset($vars.tlsVersion) && $vars.tlsVersion['status']}
-          <i class="icon-check text-success"></i>
-            {l s='The PHP cURL extension must be enabled on your server.' mod='paypal'}
-        {elseif isset($vars.tlsVersion)}
-          <i class="icon-remove text-danger"></i>
-            {l s='The PHP cURL extension must be enabled on your server. Please contact your hosting provider for more information.' mod='paypal'} {$tlsVersion['error_message']}
-        {/if}
-
-    </li>
-
-      {if $vars.showWebhookState|default:false}
-        <li class="pp__flex">
-            {if $vars.webhookState|default:false}
-              <i class="icon-check text-success"></i>
-            {else}
-              <i class="icon-remove text-danger"></i>
-            {/if}
-            {if isset($vars.webhookStateMsg)}{$vars.webhookStateMsg nofilter}{/if}
-        </li>
+  <div>
+      {if $vars.sslActivated|default:false}
+        <i class="icon-check text-success"></i>
+          {l s='SSL enabled.' mod='paypal'}
+      {else}
+        <i class="icon-remove text-danger"></i>
+          {l s='SSL should be enabled on your website.' mod='paypal'}
       {/if}
-  </ul>
+  </div>
+
+  <div>
+      {if isset($vars.tlsVersion) && $vars.tlsVersion['status']}
+        <i class="icon-check text-success"></i>
+          {l s='The PHP cURL extension must be enabled on your server.' mod='paypal'}
+      {elseif isset($vars.tlsVersion)}
+        <i class="icon-remove text-danger"></i>
+          {l s='The PHP cURL extension must be enabled on your server. Please contact your hosting provider for more information.' mod='paypal'} {$tlsVersion['error_message']}
+      {/if}
+  </div>
+
+    {if $vars.showWebhookState|default:false}
+      <div>
+          {if $vars.webhookState|default:false}
+            <i class="icon-check text-success"></i>
+          {else}
+            <i class="icon-remove text-danger"></i>
+          {/if}
+          {if isset($vars.webhookStateMsg)}{$vars.webhookStateMsg nofilter}{/if}
+      </div>
+    {/if}
+
 </div>
 
 

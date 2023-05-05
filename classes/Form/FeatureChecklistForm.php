@@ -26,71 +26,63 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Context;
-use Module;
+use Configuration;
+use Country;
+use MethodPPP;
 use PaypalAddons\classes\AbstractMethodPaypal;
-use PaypalAddons\classes\Webhook\WebhookOption;
-use PaypalAddons\services\Checker;
+use PaypalAddons\classes\Constants\PaypalConfigurations;
+use PaypalAddons\classes\InstallmentBanner\BNPL\BNPLOption;
+use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
+use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use Tools;
 
-class TechnicalChecklistForm implements FormInterface
+class FeatureChecklistForm implements FormInterface
 {
-    protected $module;
+    protected $bnplOption;
 
     protected $method;
 
-    protected $webhookOption;
-
-    protected $checker;
-
-    protected $context;
-
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->bnplOption = new BNPLOption();
         $this->method = AbstractMethodPaypal::load();
-        $this->webhookOption = new WebhookOption();
-        $this->checker = new Checker();
-        $this->context = Context::getContext();
     }
-
     /**
      * @return array
      */
     public function getDescription()
     {
-        $countryDefault = new \Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
+        $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $vars = [];
 
-        $tpl_vars = [
-            'merchantCountry' => $countryDefault->name,
-            'tlsVersion' => $this->checker->checkTLSVersion(),
-            'accountConfigured' => $this->method == null ? false : $this->method->isConfigured(),
-            'sslActivated' => $this->module->isSslActive(),
-            'localizationUrl' => $this->context->link->getAdminLink('AdminLocalization', true),
-        ];
-
-        if ($this->webhookOption->isEnable() && $this->webhookOption->isEligibleContext()) {
-            $webhookCheck = $this->checker->checkWebhook();
-            $tpl_vars['showWebhookState'] = true;
-            $tpl_vars['webhookState'] = $webhookCheck['state'];
-            $tpl_vars['webhookStateMsg'] = $webhookCheck['message'];
+        if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
+            $vars['isBnplEnabled'] = $this->bnplOption->isEnable();
         }
+
+        $vars['isShortcutCustomized'] = (int) Configuration::get(ShortcutConfiguration::CUSTOMIZE_STYLE);
+
+        if ($this->method instanceof MethodPPP) {
+            $vars['isPuiEnabled'] = (int) Configuration::get(PaypalConfigurations::PUI_ENABLED);
+        }
+
+        $vars['isOrderStatusCustomized'] = (int) Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS);
+        $vars['isShowPaypalBenefits'] = (int) Configuration::get(PaypalConfigurations::API_ADVANTAGES);
 
         return [
             'legend' => [
                 'title' => '',
             ],
             'fields' => [
-                'technicalChecklist' => [
+                'featureChecklist' => [
                     'type' => 'varialble-set',
-                    'set' => $tpl_vars
+                    'set' => $vars
                 ]
             ],
             'submit' => [
                 'title' => '',
                 'name' => '',
             ],
-            'id_form' => 'pp_technical_checklist_form',
+            'id_form' => 'pp_feature_checklist_form',
         ];
     }
 

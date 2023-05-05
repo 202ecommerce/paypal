@@ -6,6 +6,7 @@ use PaypalAddons\classes\API\Onboarding\PaypalGetCredentials;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Form\AccountForm;
 use PaypalAddons\classes\Form\CheckoutForm;
+use PaypalAddons\classes\Form\FeatureChecklistForm;
 use PaypalAddons\classes\Form\FormInstallment;
 use PaypalAddons\classes\Form\OrderStatusForm;
 use PaypalAddons\classes\Form\ShortcutConfigurationForm;
@@ -61,6 +62,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $this->forms['orderStatusForm'] = new OrderStatusForm();
         $this->forms['shortcutConfigurationForm'] = new ShortcutConfigurationForm();
         $this->forms['technicalChecklistForm'] = new TechnicalChecklistForm();
+        $this->forms['featureChecklistForm'] = new FeatureChecklistForm();
     }
 
     public function setMedia($isNewTheme = false)
