@@ -86,7 +86,7 @@
                     <i class="material-icons-outlined">manage_search</i>
                   </span>
                   {l s='Make a' mod='paypal'}&nbsp;
-                  <a href="#" class="">
+                  <a href="{$diagnosticPage|escape:'htmlall':'utf-8'}" class="">
                     {l s='diagnostic' mod='paypal'}
                   </a>
                 </div>
@@ -104,7 +104,7 @@
                     <i class="material-icons-outlined">feed</i>
                   </span>
                   {l s='Check the' mod='paypal'}&nbsp;
-                  <a href="#" class="">
+                  <a href="{$loggerPage|escape:'htmlall':'utf-8'}" class="">
                     {l s='logs' mod='paypal'}
                   </a>
                 </div>

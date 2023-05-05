@@ -90,6 +90,8 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $tpl->assign([
             'moduleDir' => _MODULE_DIR_ . $this->module->name,
             'isShowModalConfiguration' => (int) Configuration::get(PaypalConfigurations::SHOW_MODAL_CONFIGURATION),
+            'diagnosticPage' => $this->context->link->getAdminLink('AdminPaypalDiagnostic'),
+            'loggerPage' => $this->context->link->getAdminLink('AdminPaypalProcessLogger'),
         ]);
 
         return $tpl->fetch();
