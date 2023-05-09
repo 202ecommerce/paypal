@@ -119,7 +119,7 @@
     <target name="composer-install" depends="composer.check" unless="composer.lock.exist.in.gitignore" description="Installing dependencies">
         <echo>Installing dependencies</echo>
         <exec executable="composer" failonerror="true">
-            <arg value="install" />
+            <arg value="install --no-dev --optimize-autoloader --ignore-platform-reqs" />
         </exec>
     </target>
     <target name="composer-update" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Updating dependencies">
