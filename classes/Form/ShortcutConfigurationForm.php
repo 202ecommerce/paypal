@@ -85,6 +85,8 @@ class ShortcutConfigurationForm implements FormInterface
                 'placeholder' => $this->module->l('Height (value from 25 to 55)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
                 'value' => Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART),
+                'data_type' => 'height',
+                'message_error' => $this->module->l('Value from 25 to 55 is required')
             ];
             $fields[ShortcutConfiguration::STYLE_WIDTH_CART] = [
                 'type' => 'text',
@@ -93,6 +95,8 @@ class ShortcutConfigurationForm implements FormInterface
                 'placeholder' => $this->module->l('Width (min 150)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
                 'value' => Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART),
+                'data_type' => 'width',
+                'message_error' => $this->module->l('Minimum 150 px is required')
             ];
             $fields[ShortcutConfiguration::STYLE_LABEL_CART] = $this->getButtonLabelSelect(ShortcutConfiguration::STYLE_LABEL_CART);
             $fields['cart_shortcut_preview'] = [
@@ -460,6 +464,7 @@ class ShortcutConfigurationForm implements FormInterface
                 ]
             ],
             'value' => Configuration::get($name),
+            'data_type' => 'color'
         ];
     }
 
@@ -480,6 +485,7 @@ class ShortcutConfigurationForm implements FormInterface
                 ],
             ],
             'value' => Configuration::get($name),
+            'data_type' => 'shape'
         ];
     }
 
@@ -508,6 +514,7 @@ class ShortcutConfigurationForm implements FormInterface
                 ],
             ],
             'value' => Configuration::get($name),
+            'data_type' => 'label'
         ];
     }
 }

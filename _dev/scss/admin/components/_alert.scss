@@ -29,4 +29,8 @@
     border-color: $primary;
     color: $primary;
   }
+
+  &.hide {
+    display: none;
+  }
 }

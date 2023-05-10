@@ -25,11 +25,13 @@
  *}
 <form id="{$form.id_form}" class="mt-4 {[
   'form-modal' => $isModal
-]|classnames}">
+]|classnames}" data-form-configuration {block name='form_attributes'}{/block}>
   {block name='form_content'}
     {foreach from=$form.fields item=field}
       {if $field.name|default:false}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
+        {block name='form_field'}
+          {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
+        {/block}
       {/if}
     {/foreach}
   {/block}

@@ -23,64 +23,77 @@
  *  @copyright PayPal
  *
  *}
-
-<div>
-  {if isset($vars.isBnplEnabled)}
-    <div>
-        {if $vars.isBnplEnabled}
-          <i class="icon-check text-success"></i>
+<div class="row pb-3 h-100">
+  <div class="col-12 col-lg-9 col-xl-8 pb-4">
+    <ul class="list-unstyled mb-0">
+      {if isset($vars.isBnplEnabled)}
+        <li class="d-flex align-items-center mb-1">
+          {include
+            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=$vars.isBnplEnabled|default:false
+          }
+          {if $vars.isBnplEnabled}
             {l s='Buy now pay later enabled' mod='paypal'}
-        {else}
-          <i class="icon-remove text-danger"></i>
-            {l s='Buy now pay later disabled' mod='paypal'}
-        {/if}
-    </div>
-  {/if}
-
-  <div>
-      {if $vars.isShortcutCustomized|default:false}
-        <i class="icon-check text-success"></i>
-          {l s='Customized shortcut button enabled' mod='paypal'}
-      {else}
-        <i class="icon-remove text-danger"></i>
-          {l s='Customized shortcut button disabled' mod='paypal'}
-      {/if}
-  </div>
-
-    {if isset($vars.isPuiEnabled)}
-      <div>
-          {if $vars.isPuiEnabled}
-            <i class="icon-check text-success"></i>
-              {l s='PUI enabled' mod='paypal'}
           {else}
-            <i class="icon-remove text-danger"></i>
-              {l s='PUI disabled' mod='paypal'}
+            {l s='Buy now pay later disabled' mod='paypal'}
           {/if}
-      </div>
-    {/if}
-
-  <div>
-      {if $vars.isOrderStatusCustomized|default:false}
-        <i class="icon-check text-success"></i>
-          {l s='Customized order status enabled' mod='paypal'}
-      {else}
-        <i class="icon-remove text-danger"></i>
-          {l s='Customized order status disabled' mod='paypal'}
+        </li>
       {/if}
+
+      <li class="d-flex align-items-center mb-1">
+        {include
+          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          isSuccess=$vars.isShortcutCustomized|default:false
+        }
+        {if $vars.isShortcutCustomized|default:false}
+          {l s='Customized shortcut button enabled' mod='paypal'}
+        {else}
+          {l s='Customized shortcut button disabled' mod='paypal'}
+        {/if}
+      </li>
+
+      {if isset($vars.isPuiEnabled)}
+        <li class="d-flex align-items-center mb-1">
+          {include
+            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=$vars.isPuiEnabled|default:false
+          }
+          {if $vars.isPuiEnabled}
+            {l s='PUI enabled' mod='paypal'}
+          {else}
+            {l s='PUI disabled' mod='paypal'}
+          {/if}
+        </li>
+      {/if}
+
+      <li class="d-flex align-items-center mb-1">
+        {include
+          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          isSuccess=$vars.isOrderStatusCustomized|default:false
+        }
+        {if $vars.isOrderStatusCustomized|default:false}
+          {l s='Customized order status enabled' mod='paypal'}
+        {else}
+          {l s='Customized order status disabled' mod='paypal'}
+        {/if}
+      </li>
+
+      <li class="d-flex align-items-center">
+        {include
+          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          isSuccess=$vars.isShowPaypalBenefits|default:false
+        }
+        {if $vars.isShowPaypalBenefits|default:false}
+          {l s='Paypal benefits enabled' mod='paypal'}
+        {else}
+          {l s='Paypal benefits disabled' mod='paypal'}
+        {/if}
+      </li>
+    </ul>
   </div>
 
-  <div>
-      {if $vars.isShowPaypalBenefits|default:false}
-        <i class="icon-check text-success"></i>
-          {l s='Paypal benefits enabled' mod='paypal'}
-      {else}
-        <i class="icon-remove text-danger"></i>
-          {l s='Paypal benefits disabled' mod='paypal'}
-      {/if}
+  <div class="col-12 col-lg-3 col-xl-4 align-items-end d-flex justify-content-end">
+    <button class="btn btn-secondary ml-auto">{l s='Refresh' mod='paypal'}</button>
   </div>
 
 </div>
-
-
-
-

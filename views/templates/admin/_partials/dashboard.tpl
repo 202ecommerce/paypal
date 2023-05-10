@@ -23,7 +23,7 @@
  *  @copyright PayPal
  *
  *}
-<div class="row">
+<div class="row" data-dashboard>
   <div class="col col-12">
     <div class="card shadow">
       <div class="card-body">
@@ -35,30 +35,23 @@
               <p>{l s='This is the first item\'s accordion body. It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.' mod='paypal'}</p>
             </div>
             <div class="d-flex justify-content-between align-items-center mt-4">
-              <div>
-                <div class="d-flex align-items-center">
-                  <span class="icon-lg mr-1">
-                    {if $isSandbox|default:false}
-                      <i class="material-icons-outlined text-danger">close</i>
-                    {else}
-                        <i class="material-icons-outlined text-success">done</i>
-                    {/if}
-                  </span>
+              <ul class="list-unstyled mb-0">
+                <li class="d-flex align-items-center mb-1">
+                  {include
+                    file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+                    isSuccess=$isSandbox|default:false
+                  }
                   {l s='Mode production enabled' mod='paypal'}
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="icon-lg mr-1">
-                    {if $isConfigured|default:false}
-                      <i class="material-icons-outlined text-success">done</i>
-                    {else}
-                        <i class="material-icons-outlined text-danger">close</i>
-                    {/if}
-
-                  </span>
+                </li>
+                <li class="d-flex align-items-center">
+                  {include
+                    file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+                    isSuccess=$isConfigured|default:false
+                  }
                   {l s='Account connected' mod='paypal'}
-                </div>
-              </div>
-              <span class="btn btn-secondary" id="logoutAccount">
+                </li>
+              </ul>
+              <span class="btn btn-secondary" id="logoutAccount" data-section-toggle="account">
                 <span class="icon mr-2">
                   <i class="material-icons-outlined">account_circle</i>
                 </span>
@@ -86,7 +79,7 @@
                     <i class="material-icons-outlined">edit_location_alt</i>
                   </span>
                   {l s='Configure' mod='paypal'}&nbsp;
-                  <a href="#" class="">
+                  <a href="#" data-section-toggle="tracking">
                     {l s='tracking' mod='paypal'}
                   </a>
                 </div>
@@ -104,7 +97,7 @@
                     <i class="material-icons-outlined">toggle_on</i>
                   </span>
                   {l s='Configure the' mod='paypal'}&nbsp;
-                  <a href="#" class="">
+                  <a href="#" data-section-toggle="configuration">
                     {l s='module' mod='paypal'}
                   </a>
                 </div>
@@ -135,30 +128,31 @@
     </div>
   </div>
   <div class="col col-md-6 mt-4">
-
-    <div class="card">
+    <div class="card h-100">
       <div class="card-header">
         {l s='Technical checklist' mod='paypal'}
       </div>
       <div class="card-body">
-          {include
+        {include
           file="module:paypal/views/templates/admin/_partials/statusBlock.tpl"
           vars=$technicalChecklistForm.fields.technicalChecklist.set
-          }
+        }
       </div>
     </div>
   </div>
   <div class="col col-md-6 mt-4">
-    <div class="card">
+    <div class="card h-100">
       <div class="card-header">
         {l s='Feature checklist' mod='paypal'}
       </div>
       <div class="card-body">
-          {include
-            file="module:paypal/views/templates/admin/_partials/featureChecklist.tpl"
-            vars=$featureChecklistForm.fields.featureChecklist.set
-          }
+        {include
+          file="module:paypal/views/templates/admin/_partials/featureChecklist.tpl"
+          vars=$featureChecklistForm.fields.featureChecklist.set
+        }
       </div>
     </div>
   </div>
 </div>
+<button data-btn-section-reset class="btn btn-secondary mb-3 d-none">{l s='Back' mod='paypal'}</button>
+

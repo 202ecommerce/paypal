@@ -26,7 +26,7 @@
 
 .form {
   &-group {
-    @extend .d-flex;
+    display: flex;
     @extend .align-items-start;
 
     .form-control-label {
@@ -54,7 +54,7 @@
   }
 
   &-control {
-    max-width: 388px;
+    max-width: 411px;
 
     &-primary {
       background: $primary !important;

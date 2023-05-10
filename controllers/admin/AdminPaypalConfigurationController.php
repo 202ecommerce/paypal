@@ -14,6 +14,7 @@ use PaypalAddons\classes\Form\TechnicalChecklistForm;
 use PaypalAddons\classes\Form\TrackingParametersForm;
 use PaypalAddons\classes\Form\WhiteListForm;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use PaypalAddons\classes\Shortcut\ShortcutPreview;
 
 /**
  * 2007-2023 PayPal
@@ -71,7 +72,9 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
     public function setMedia($isNewTheme = false)
     {
         parent::setMedia($isNewTheme);
-
+        \Media::addJsDef([
+            'controllerUrl' => \AdminController::$currentIndex . '&token=' . \Tools::getAdminTokenLite($this->controller_name),
+        ]);
         $this->addJS(_PS_MODULE_DIR_ . 'paypal/views/js/admin.js');
         $this->addCSS(_PS_MODULE_DIR_ . 'paypal/views/css/paypal_bo.css');
     }
@@ -182,5 +185,26 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'isSandbox' => $isSandbox,
         ])->send();
         die;
+    }
+
+    public function displayAjaxGetShortcut()
+    {
+        $label = Tools::getValue('label', 'pay');
+        $height = (int) Tools::getValue('height', 35);
+        $width = (int) Tools::getValue('width', 150);
+        $color = Tools::getValue('color', 'gold');
+        $shape = Tools::getValue('shape', 'rect');
+
+        $ShortCut = new ShortcutPreview(
+            $label,
+            $height,
+            $width,
+            $color,
+            $shape
+        );
+
+        $response = new JsonResponse(['content' => $ShortCut->render()]);
+
+        return $response->send();
     }
 }

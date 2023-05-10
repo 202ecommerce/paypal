@@ -27,42 +27,47 @@
 
 {assign var="fieldsInstallmentBNPL" value=['PAYPAL_BNPL_PRODUCT_PAGE', 'PAYPAL_BNPL_PAYMENT_STEP_PAGE', 'PAYPAL_BNPL_CART_PAGE', 'PAYPAL_BNPL_CHECKOUT_PAGE']}
 {assign var="fieldsInstallment" value=['PAYPAL_INSTALLMENT_PRODUCT_PAGE', 'PAYPAL_INSTALLMENT_HOME_PAGE', 'PAYPAL_INSTALLMENT_CATEGORY_PAGE', 'PAYPAL_INSTALLMENT_CART_PAGE', 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE']}
+{assign var="dynamicField" value=$form.fields.PAYPAL_ENABLE_BNPL|default:false}
 
 {block name='form_content'}
-    {if isset($form.fields.PAYPAL_ENABLE_BNPL)}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_BNPL}
-    {/if}
+  {if $dynamicField}
+    {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_BNPL dynamicField=$dynamicField}
+  {/if}
 
-  <div class="form-group row">
+  <div class="form-group row {[
+    'd-none' => $dynamicField && !$dynamicField.value
+  ]|classnames}">
     <label class="form-control-label form-control-label-check col-2" for="PAYPAL_BNPL">{l s='Active on' mod='paypal'}</label>
     <div class="col-10">
       <div class="row no-gutters">
         {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsInstallmentBNPL}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
           {/if}
         {/foreach}
       </div>
     </div>
   </div>
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT dynamicField=$dynamicField && !$dynamicField.value}
 
-  <div class="form-group row">
+  <div class="form-group row {[
+    'd-none' => $dynamicField && !$dynamicField.value
+  ]|classnames}">
     <label class="form-control-label form-control-label-check col-2" for="PAYPAL_INSTALLMENT">{l s='Active on' mod='paypal'}</label>
-    <div class="col-10">
+    <div class="col-10 pr-0">
       <div class="row no-gutters">
         {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsInstallment}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
           {/if}
         {/foreach}
       </div>
     </div>
   </div>
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT dynamicField=$dynamicField}
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$dynamicField}
 
 {/block}

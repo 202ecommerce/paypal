@@ -1,4 +1,4 @@
-/**
+{*
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,17 +22,11 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  *
- */
-.btn {
-  display: flex;
-  @extend .align-items-center;
-  @extend .justify-content-center;
+ *}
+{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
+{assign var="dynamicField" value=$form.fields.PAYPAL_CUSTOMIZE_ORDER_STATUS}
 
-  &-secondary {
-    color: $primary !important;
-  }
+{block name='form_field'}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field dynamicField=$dynamicField}
+{/block}
 
-  @at-root .form-group & {
-    max-width: 411px;
-  }
-}

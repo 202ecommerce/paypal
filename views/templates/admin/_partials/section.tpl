@@ -28,7 +28,9 @@
 {assign var="sectionColInfoClasses" value=$sectionColInfoClasses|default:' col-xl-6'}
 {assign var="isModal" value=$isModal|default:false}
 
-<div class="row{$sectionRowClasses}">
+<section class="row{$sectionRowClasses} {[
+  'd-none' => !$isModal
+]|classnames}" data-section-configuration>
  <div class="col col-12 col-md-8{$sectionColFormClasses}">
    <div class="card">
    {if !$isModal}
@@ -42,7 +44,7 @@
       {if $isModal}
         <div class="h1">{$form.legend.title}</div>
       {/if}
-      {if $form.id_form|in_array:['pp_checkout_form', 'pp_account_form', 'pp_installment_form', 'pp_tracking_form']}
+      {if $form.id_form != 'pp_white_list_form'}
         {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
       {else}
         {include file="module:paypal/views/templates/admin/_partials/forms/form.tpl" form=$form}
@@ -56,4 +58,4 @@
     {include file="module:paypal/views/templates/admin/_partials/block-info.tpl"}
    </div>
  </div>
-</div>
+</section>

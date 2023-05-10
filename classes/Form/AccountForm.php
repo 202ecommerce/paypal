@@ -36,7 +36,7 @@ class AccountForm implements FormInterface
 
         return [
             'legend' => [
-                'title' => $this->module->l('Account', 'AccountForm'),
+                'title' => $this->module->l('PayPal account', 'AccountForm'),
             ],
             'fields' => $fields,
             'submit' => [

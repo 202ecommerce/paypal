@@ -15,7 +15,6 @@ class Steps {
   registerEvents() {
     $(this.btn).on('click', (e) => {
       e.preventDefault();
-
       this.saveProcess(e)
         .then((result) => {
           if (result) {
@@ -23,7 +22,11 @@ class Steps {
             this.updateCurrentBadgeStep();
             this.updateStepsProgress();
           }
-        });
+      });
+
+      if ($(e.currentTarget).attr('data-dismiss') === 'modal') {
+        $(e.currentTarget).closest('.modal').modal('hide');
+      }
     });
 
     document.addEventListener('generateCredentials', (event) => {

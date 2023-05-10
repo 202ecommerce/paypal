@@ -26,9 +26,14 @@
 {assign var="variant" value=$field.variant|default:false}
 {assign var="withColor" value=$withColor|default:false}
 {assign var="isModal" value=$isModal|default:false}
+{assign var="dynamicField" value=$dynamicField|default:false}
 
 {if $field.type !== 'checkbox' && $field.label}
-  <div class="form-group row">
+  <div class="form-group row {[
+    'd-none' => $dynamicField && !$dynamicField.value|default:false && ($field.name != $dynamicField.name|default:false),
+    'form-group-dynamic' => $dynamicField && ($field.name == $dynamicField.name|default:false)
+  ]|classnames}"
+  >
     <label class="form-control-label {[
       'form-control-label-check' => $field.type == 'switch',
       'col-3' => $form.id_form !== 'pp_installment_form',
@@ -54,20 +59,43 @@
           ]|classnames}"
           placeholder="{l s='Placeholder' mod='paypal'}"
           value="{$field.value|default:''}"
+          {if $field.data_type|default:false}
+            data-type="{$field.data_type}"
+          {/if}
         >
 
       {elseif $field.type === 'select'}
         {* Type select *}
-        <select class="form-control custom-select {[
-          'custom-select-primary' => $variant == 'primary'
-        ]|classnames}" name="{$field.name}" id="{$field.name}">
+        <select
+          class="form-control custom-select {[
+            'custom-select-primary' => $variant == 'primary'
+          ]|classnames}"
+          name="{$field.name}"
+          id="{$field.name}"
+          {if $field.data_type|default:false}
+            data-type="{$field.data_type}"
+          {/if}
+          >
           {foreach from=$field.options item=option}
-            <option value="{$option.value|default:''}" {if isset($option.value) && isset($field.value) && $option.value == $field.value} selected {/if}>{$option.title|default:''}</option>
+            <option
+              value="{$option.value|default:''}"
+              {if isset($option.value) && isset($field.value) && $option.value == $field.value} selected {/if}
+              {if $option.color|default:false}data-color="{$option.color}"{/if}
+            >{$option.title|default:''}</option>
           {/foreach}
         </select>
 
         {if $withColor}
-          <span class="color-swatch ml-1" style="background:{$field.options.0.value};"></span>
+          {assign var="selectedColor" value=$field.options.0.color|default:'gray'}
+          {foreach from=$field.options item=option}
+            {if isset($option.value) && isset($field.value) && $option.value == $field.value}
+              {$selectedColor = $option.color}
+            {/if}
+          {/foreach}
+
+          <span class="color-swatch ml-1 {[
+            'border' => $selectedColor == '#fff'
+          ]|classnames}" style="background:{$selectedColor};"></span>
         {/if}
 
       {elseif $field.type === 'switch'}

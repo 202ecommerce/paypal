@@ -289,30 +289,36 @@ class FormInstallment implements FormInterface
         $colorOptions = [
             [
                 'value' => ConfigurationMap::COLOR_GRAY,
-                'title' => $this->module->l('gray', $this->className)
+                'title' => $this->module->l('gray', $this->className),
+                'color' => '#808080'
             ],
             [
                 'value' => ConfigurationMap::COLOR_BLUE,
-                'title' => $this->module->l('blue', $this->className)
+                'title' => $this->module->l('blue', $this->className),
+                'color' => '#0070ba'
             ],
             [
                 'value' => ConfigurationMap::COLOR_BLACK,
-                'title' => $this->module->l('black', $this->className)
+                'title' => $this->module->l('black', $this->className),
+                'color' => '#2c2e2f'
             ],
             [
                 'value' => ConfigurationMap::COLOR_WHITE,
-                'title' => $this->module->l('white', $this->className)
+                'title' => $this->module->l('white', $this->className),
+                'color' => '#fff'
             ],
         ];
 
         if ($isoCountryDefault !== 'de') {
             $colorOptions[] = [
                 'value' => ConfigurationMap::COLOR_MONOCHROME,
-                'title' => $this->module->l('monochrome', $this->className)
+                'title' => $this->module->l('monochrome', $this->className),
+                'color' => '#808080'
             ];
             $colorOptions[] = [
                 'value' => ConfigurationMap::COLOR_GRAYSCALE,
-                'title' => $this->module->l('grayscale', $this->className)
+                'title' => $this->module->l('grayscale', $this->className),
+                'color' => '#808080'
             ];
         }
 

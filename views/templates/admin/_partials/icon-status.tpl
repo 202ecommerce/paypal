@@ -1,4 +1,4 @@
-/**
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -22,17 +22,16 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
  *
- */
-.btn {
-  display: flex;
-  @extend .align-items-center;
-  @extend .justify-content-center;
+ *}
+{assign var="isSuccess" value=$isSuccess|default:false}
 
-  &-secondary {
-    color: $primary !important;
-  }
-
-  @at-root .form-group & {
-    max-width: 411px;
-  }
-}
+<span class="icon-lg mr-1">
+  <i
+    class="material-icons-outlined {[
+      'text-success' => $isSuccess,
+      'text-danger' => !$isSuccess
+    ]|classnames}"
+  >
+    {if $isSuccess}done{else}close{/if}
+  </i>
+</span>

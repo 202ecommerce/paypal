@@ -26,6 +26,8 @@
 
 import '~/bootstrap';
 import Steps from './admin/steps';
+import Form from './admin/form';
+import Section from './admin/section';
 
 $(() => {
   $(window).on('load', () => {
@@ -34,6 +36,12 @@ $(() => {
 
   const steps = new Steps('#modal-configuration-steps');
   steps.init();
+
+  const form = new Form();
+  form.init();
+
+  const section = new Section();
+  section.init();
 });
 
 

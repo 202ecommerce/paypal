@@ -34,6 +34,7 @@
     file="module:paypal/views/templates/admin/_partials/modal-configuration.tpl"
   }
 {else}
+
   {* Account section *}
   {include
     file="module:paypal/views/templates/admin/_partials/section.tpl"
@@ -60,16 +61,16 @@
     sectionColInfoClasses=' '
   }
 
+  {* Shortcut section *}
+    {include
+    file="module:paypal/views/templates/admin/_partials/section.tpl"
+    form=$shortcutConfigurationForm
+  }
+
   {* Order status section *}
   {include
     file="module:paypal/views/templates/admin/_partials/section.tpl"
     form=$orderStatusForm
-  }
-
-  {* Shortcut section *}
-  {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$shortcutConfigurationForm
   }
 
   {* White list section *}

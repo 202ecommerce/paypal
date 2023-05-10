@@ -23,49 +23,59 @@
  *  @copyright PayPal
  *
  *}
-
-<div>
-  <div>
+<div class="row pb-3 h-100">
+  <div class="col-12 col-lg-9 col-xl-8 pb-4">
+    <p>
       {l s='Merchant Country:' mod='paypal'} <b>{$vars.merchantCountry|escape:'htmlall':'UTF-8'}</b>
-  </div>
+    </p>
 
-  <div>
-      {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='paypal'}|paypalreplace:['@href1@' => {$vars.localizationUrl}, '@target@' => {'target="blank"'}]}
-  </div>
+    <p>
+      {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='paypal'}|paypalreplace:['@href1@' =>
+      {$vars.localizationUrl}, '@target@' => {'target="blank"'}]}
+    </p>
 
-  <div>
-      {if $vars.sslActivated|default:false}
-        <i class="icon-check text-success"></i>
+    <ul class="list-unstyled mb-0">
+      <li class="d-flex align-items-center mb-1">
+        {include
+          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          isSuccess=$vars.sslActivated|default:false
+        }
+        {if $vars.sslActivated|default:false}
           {l s='SSL enabled.' mod='paypal'}
-      {else}
-        <i class="icon-remove text-danger"></i>
+        {else}
           {l s='SSL should be enabled on your website.' mod='paypal'}
-      {/if}
-  </div>
+        {/if}
+      </li>
 
-  <div>
-      {if isset($vars.tlsVersion) && $vars.tlsVersion['status']}
-        <i class="icon-check text-success"></i>
-          {l s='The PHP cURL extension must be enabled on your server.' mod='paypal'}
-      {elseif isset($vars.tlsVersion)}
-        <i class="icon-remove text-danger"></i>
-          {l s='The PHP cURL extension must be enabled on your server. Please contact your hosting provider for more information.' mod='paypal'} {$tlsVersion['error_message']}
-      {/if}
-  </div>
-
-    {if $vars.showWebhookState|default:false}
-      <div>
-          {if $vars.webhookState|default:false}
-            <i class="icon-check text-success"></i>
-          {else}
-            <i class="icon-remove text-danger"></i>
+      {if $vars.tlsVersion|default:false}
+        <li class="d-flex align-items-center mb-1">
+          {include
+            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=($vars.tlsVersion|default:false && $vars.tlsVersion['status'])
+          }
+          {if $vars.tlsVersion|default:false && $vars.tlsVersion['status']}
+            {l s='The PHP cURL extension must be enabled on your server.' mod='paypal'}
+          {else $vars.tlsVersion|default:false}
+            {l s='The PHP cURL extension must be enabled on your server. Please contact your hosting provider for more information.' mod='paypal'}
+            {$vars.tlsVersion['error_message']}
           {/if}
+        </li>
+      {/if}
+
+      {if $vars.showWebhookState|default:false}
+        <li class="d-flex align-items-center">
+          {include
+            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=$vars.webhookState|default:false
+          }
           {if isset($vars.webhookStateMsg)}{$vars.webhookStateMsg nofilter}{/if}
-      </div>
-    {/if}
+        </li>
+      {/if}
+    </ul>
+  </div>
+
+  <div class="col-12 col-lg-3 col-xl-4 align-items-end d-flex justify-content-end">
+    <button class="btn btn-secondary ml-auto">{l s='Refresh' mod='paypal'}</button>
+  </div>
 
 </div>
-
-
-
-
