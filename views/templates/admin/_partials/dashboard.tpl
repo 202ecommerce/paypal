@@ -67,15 +67,6 @@
               <div class="row">
                 <div class="col col-md-6 d-flex align-items-center">
                   <span class="icon mr-1">
-                    <i class="material-icons-outlined">mark_chat_unread</i>
-                  </span>
-                  {l s='Check the' mod='paypal'}&nbsp;
-                  <a href="#" class="">
-                    {l s='claims (12)' mod='paypal'}
-                  </a>
-                </div>
-                <div class="col col-md-6 d-flex align-items-center">
-                  <span class="icon mr-1">
                     <i class="material-icons-outlined">edit_location_alt</i>
                   </span>
                   {l s='Configure' mod='paypal'}&nbsp;
