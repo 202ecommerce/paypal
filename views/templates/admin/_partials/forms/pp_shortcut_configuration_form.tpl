@@ -60,7 +60,9 @@
         {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART dynamicField=$dynamicField}
         {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART dynamicField=$dynamicField}
 
-        <div class="form-group row d-none">
+        <div class="form-group row {[
+          'd-none' => $dynamicField && !$dynamicField.value|default:false
+        ]|classnames}">
           <label class="form-control-label col-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART">{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART.label}</label>
           <div class="{[
             'col-7' => !$isModal,
