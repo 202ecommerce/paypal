@@ -242,7 +242,7 @@ class OrderStatusForm implements FormInterface
         }
 
         if (isset($data[WebHookConf::ENABLE])) {
-            $response = (new CreateWebhook())->execute();
+            $response = (new CreateWebhook())->setUpdate(false)->execute();
             Configuration::updateValue(WebHookConf::ENABLE, (int) $response->isSuccess());
             // ToDo: Need show warning if creation of the webhook is failed
         } else {
