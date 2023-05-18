@@ -196,6 +196,10 @@ class OrderStatusForm implements FormInterface
             $data = Tools::getAllValues();
         }
 
+        if (empty($data['orderStatusForm'])) {
+            return false;
+        }
+
         Configuration::updateValue(
             PaypalConfigurations::CUSTOMIZE_ORDER_STATUS,
             isset($data[PaypalConfigurations::CUSTOMIZE_ORDER_STATUS]) ? 1 : 0
