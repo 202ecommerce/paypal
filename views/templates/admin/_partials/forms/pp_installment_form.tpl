@@ -70,4 +70,8 @@
 
   {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$dynamicField}
 
+    {if isset($form.fields.widget_code)}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.widget_code}
+    {/if}
+
 {/block}

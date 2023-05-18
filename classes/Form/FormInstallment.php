@@ -195,6 +195,14 @@ class FormInstallment implements FormInterface
             'value' => Configuration::get(ConfigurationMap::COLOR),
         ];
 
+        $fields['widget_code'] = [
+            'type' => 'widget-code',
+            'code' => '{widget name=\'paypal\' action=\'banner4x\'}',
+            'name' => 'banner-widget-code',
+            'label' => $this->module->l('Widget code', $this->className),
+            'hint' => $this->module->l('By default, PayPal 4x banner is displayed on your web site via PrestaShop native hook. If you choose to use widgets, you will be able to copy widget code and insert it wherever you want in the web site template.', $this->className),
+        ];
+
         $description = [
             'legend' => [
                 'title' => $this->module->l('Buy Now Pay Later', $this->className),
