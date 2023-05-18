@@ -82,7 +82,7 @@ class OrderStatusForm implements FormInterface
             if ($this->method->getIntent() == 'AUTHORIZE') {
                 $fields[PaypalConfigurations::OS_WAITING_VALIDATION] = [
                     'type' => 'select',
-                    'label' => $this->module->l('Payment captured and waiting for validation by webhook', 'AdminPayPalCustomizeCheckoutController'),
+                    'label' => $this->module->l('Payment captured and waiting for validation by admin', 'MethodEC'),
                     'name' => PaypalConfigurations::OS_WAITING_VALIDATION,
                     'desc' => $this->module->l('Default status : Waiting for PayPal payment', 'AdminPayPalCustomizeCheckoutController'),
                     'options' => $orderStatuses,
