@@ -83,11 +83,7 @@
           file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=$vars.isShowPaypalBenefits|default:false
         }
-        {if $vars.isShowPaypalBenefits|default:false}
           {l s='Paypal benefits enabled' mod='paypal'}
-        {else}
-          {l s='Paypal benefits disabled' mod='paypal'}
-        {/if}
       </li>
     </ul>
   </div>
