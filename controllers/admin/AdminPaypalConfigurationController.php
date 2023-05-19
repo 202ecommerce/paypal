@@ -207,4 +207,10 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         return $response->send();
     }
+
+    public function initPageHeaderToolbar()
+    {
+        parent::initPageHeaderToolbar();
+        $this->context->smarty->clearAssign('help_link');
+    }
 }
