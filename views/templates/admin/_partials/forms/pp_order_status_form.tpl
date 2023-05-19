@@ -27,6 +27,11 @@
 {assign var="dynamicField" value=$form.fields.PAYPAL_CUSTOMIZE_ORDER_STATUS}
 
 {block name='form_field'}
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field dynamicField=$dynamicField}
+    {if $field.name == 'PAYPAL_ENABLE_WEBHOOK'}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field dynamicField=false}
+    {else}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field dynamicField=$dynamicField}
+    {/if}
+
 {/block}
 

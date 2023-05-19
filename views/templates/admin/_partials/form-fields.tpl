@@ -33,6 +33,9 @@
     'd-none' => $dynamicField && !$dynamicField.value|default:false && ($field.name != $dynamicField.name|default:false),
     'form-group-dynamic' => $dynamicField && ($field.name == $dynamicField.name|default:false)
   ]|classnames}"
+       {if $dynamicField.name|default:false}
+         group-name="{$dynamicField.name}"
+       {/if}
   >
     <label class="form-control-label {[
       'form-control-label-check' => $field.type == 'switch',

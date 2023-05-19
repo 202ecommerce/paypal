@@ -17,7 +17,8 @@ class Form {
 
   registerEvents() {
     $(`${this.formGroupDynamicSelector} ${this.inputDynamicSelector}`).on('change', (e) => {
-      const $formGroups = $(e.currentTarget).closest(this.formGroupDynamicSelector).siblings();
+      const groupName = e.currentTarget.closest(this.formGroupDynamicSelector).getAttribute('group-name');
+      const $formGroups = $(e.currentTarget).closest(this.formGroupDynamicSelector).siblings(`[group-name="${groupName}"]`);
       if ($(e.currentTarget).prop('checked')) {
         $formGroups.removeClass('d-none');
       } else {

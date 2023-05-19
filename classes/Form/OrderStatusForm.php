@@ -173,7 +173,7 @@ class OrderStatusForm implements FormInterface
                     ],
                 ],
                 'value' => $this->webhookOption->isEnable(),
-                'variant' => 'secondary',
+                'variant' => 'primary',
             ];
         }
 
