@@ -110,7 +110,7 @@ class CheckoutForm implements FormInterface
         ];
         $fields[PaypalConfigurations::BRAND_NAME] = [
             'type' => 'text',
-            'label' => $this->module->l('Brand name shown on bottom right during PayPal checkout', 'AdminPayPalCustomizeCheckoutController'),
+            'label' => $this->module->l('Brand name', 'CheckoutForm'),
             'name' => PaypalConfigurations::BRAND_NAME,
             'value' => Configuration::get(PaypalConfigurations::BRAND_NAME),
             'placeholder' => $this->module->l('Leave it empty to use your Shop name setup on your PayPal account', 'AdminPayPalCustomizeCheckoutController'),

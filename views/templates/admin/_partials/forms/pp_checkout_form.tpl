@@ -49,7 +49,7 @@
   </div>
 
     {foreach from=$form.fields item=field}
-        {if $field.name|in_array:['PAYPAL_CONFIG_BRAND', 'PAYPAL_API_ADVANTAGES', 'PAYPAL_MOVE_BUTTON_AT_END']}
+        {if $field.name|in_array:['PAYPAL_CONFIG_BRAND', 'PAYPAL_PUI_CUSTOMER_SERVICE_INSTRUCTIONS', 'PAYPAL_API_ADVANTAGES', 'PAYPAL_MOVE_BUTTON_AT_END']}
             {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
         {/if}
     {/foreach}
