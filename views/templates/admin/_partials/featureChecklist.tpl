@@ -69,12 +69,12 @@
       <li class="d-flex align-items-center mb-1">
         {include
           file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
-          isSuccess=$vars.isOrderStatusCustomized|default:false
+          isSuccess=true
         }
         {if $vars.isOrderStatusCustomized|default:false}
           {l s='Customized order status enabled' mod='paypal'}
         {else}
-          {l s='Customized order status disabled' mod='paypal'}
+          {l s='Standard order status' mod='paypal'}
         {/if}
       </li>
 
