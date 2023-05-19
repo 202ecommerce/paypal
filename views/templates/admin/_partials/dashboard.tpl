@@ -39,7 +39,7 @@
                 <li class="d-flex align-items-center mb-1">
                   {include
                     file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
-                    isSuccess=$isSandbox|default:false
+                    isSuccess=(false == $isSandbox|default:false)
                   }
                   {l s='Mode production enabled' mod='paypal'}
                 </li>
