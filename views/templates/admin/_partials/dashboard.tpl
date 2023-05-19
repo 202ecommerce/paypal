@@ -123,7 +123,7 @@
       <div class="card-header">
         {l s='Technical checklist' mod='paypal'}
       </div>
-      <div class="card-body">
+      <div class="card-body" technical-checklist-container>
         {include
           file="module:paypal/views/templates/admin/_partials/statusBlock.tpl"
           vars=$technicalChecklistForm.fields.technicalChecklist.set
@@ -136,7 +136,7 @@
       <div class="card-header">
         {l s='Feature checklist' mod='paypal'}
       </div>
-      <div class="card-body">
+      <div class="card-body" feature-checklist-container>
         {include
           file="module:paypal/views/templates/admin/_partials/featureChecklist.tpl"
           vars=$featureChecklistForm.fields.featureChecklist.set

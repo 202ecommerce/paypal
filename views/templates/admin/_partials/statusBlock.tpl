@@ -75,7 +75,7 @@
   </div>
 
   <div class="col-12 col-lg-3 col-xl-4 align-items-end d-flex justify-content-end">
-    <button class="btn btn-secondary ml-auto">{l s='Refresh' mod='paypal'}</button>
+    <button class="btn btn-secondary ml-auto" refresh-technical-checklist>{l s='Refresh' mod='paypal'}</button>
   </div>
 
 </div>

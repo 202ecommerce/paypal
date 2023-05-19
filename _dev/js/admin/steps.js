@@ -41,6 +41,56 @@ class Steps {
     document.querySelector('[logout-button]').addEventListener('click', () => {
       this.resetCredentials();
     });
+    document.querySelector('[technical-checklist-container]').addEventListener('click', (event) => {
+      if (event.target.hasAttribute('refresh-technical-checklist')) {
+        this.refreshTechnicalChecklist();
+      }
+    });
+    document.querySelector('[feature-checklist-container]').addEventListener('click', (event) => {
+      if (event.target.hasAttribute('refresh-feature-checklist')) {
+        this.refreshFeatureChecklist();
+      }
+    });
+  }
+
+  refreshFeatureChecklist() {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'renderFeatureChecklist');
+    document.querySelector('[refresh-feature-checklist]').disabled = true;
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        document.querySelector('[refresh-feature-checklist]').disabled = false;
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          document.querySelector('[feature-checklist-container]').innerHTML = response.content;
+        }
+      });
+  }
+
+  refreshTechnicalChecklist() {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'renderTechnicalChecklist');
+    document.querySelector('[refresh-technical-checklist]').disabled = true;
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        document.querySelector('[refresh-technical-checklist]').disabled = false;
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          document.querySelector('[technical-checklist-container]').innerHTML = response.content;
+        }
+      });
   }
 
   resetCredentials() {

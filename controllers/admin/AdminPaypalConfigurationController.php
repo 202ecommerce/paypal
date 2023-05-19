@@ -191,7 +191,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
     {
         $label = Tools::getValue('label', 'pay');
         $height = (int) Tools::getValue('height', 35);
-        $width = (int) Tools::getValue('width', 150);
+        $width = (int) Tools::getValue('width', 200);
         $color = Tools::getValue('color', 'gold');
         $shape = Tools::getValue('shape', 'rect');
 
@@ -205,7 +205,34 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         $response = new JsonResponse(['content' => $ShortCut->render()]);
 
-        return $response->send();
+        $response->send();
+        die;
+    }
+
+    public function displayAjaxRenderTechnicalChecklist()
+    {
+        $response = new JsonResponse();
+        $template = $this->context->smarty->createTemplate($this->getTemplatePath() . '_partials/statusBlock.tpl');
+        $template->assign('vars', $this->forms['technicalChecklistForm']->getDescription()['fields']['technicalChecklist']['set']);
+        $response->setData([
+            'success' => true,
+            'content' => $template->fetch(),
+        ]);
+        $response->send();
+        die;
+    }
+
+    public function displayAjaxRenderFeatureChecklist()
+    {
+        $response = new JsonResponse();
+        $template = $this->context->smarty->createTemplate($this->getTemplatePath() . '_partials/featureChecklist.tpl');
+        $template->assign('vars', $this->forms['featureChecklistForm']->getDescription()['fields']['featureChecklist']['set']);
+        $response->setData([
+            'success' => true,
+            'content' => $template->fetch(),
+        ]);
+        $response->send();
+        die;
     }
 
     public function initPageHeaderToolbar()
