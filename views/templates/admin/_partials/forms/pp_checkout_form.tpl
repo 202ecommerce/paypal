@@ -28,21 +28,30 @@
 {assign var="fieldsExpressCheckoutShortcut" value=['PAYPAL_EXPRESS_CHECKOUT_SHORTCUT', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_SIGNUP']}
 
 {block name='form_content'}
-  {foreach from=$form.fields item=field}
-    {if !$field.name|in_array:$fieldsExpressCheckoutShortcut}
-      {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
-    {/if}
-  {/foreach}
+
+    {foreach from=$form.fields item=field}
+        {if $field.name|in_array:['PAYPAL_API_INTENT', 'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT']}
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+        {/if}
+    {/foreach}
+
   <div class="form-group row">
     <label class="form-control-label form-control-label-check col-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_test">{l s='Active on' mod='paypal'}</label>
     <div class="col-9">
       <div class="row no-gutters">
-        {foreach from=$form.fields item=field}
-          {if $field.name|in_array:$fieldsExpressCheckoutShortcut}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
-          {/if}
-        {/foreach}
+          {foreach from=$form.fields item=field}
+              {if $field.name|in_array:$fieldsExpressCheckoutShortcut}
+                  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+              {/if}
+          {/foreach}
       </div>
     </div>
   </div>
+
+    {foreach from=$form.fields item=field}
+        {if $field.name|in_array:['PAYPAL_CONFIG_BRAND', 'PAYPAL_API_ADVANTAGES', 'PAYPAL_MOVE_BUTTON_AT_END']}
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+        {/if}
+    {/foreach}
+
 {/block}
