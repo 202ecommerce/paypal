@@ -84,7 +84,7 @@ class ShortcutConfigurationForm implements FormInterface
                 'name' => ShortcutConfiguration::STYLE_HEIGHT_CART,
                 'placeholder' => $this->module->l('Height (value from 25 to 55)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
-                'value' => Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART),
+                'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART) ? (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART) : 35),
                 'data_type' => 'height',
                 'message_error' => $this->module->l('Value from 25 to 55 is required')
             ];
@@ -94,7 +94,7 @@ class ShortcutConfigurationForm implements FormInterface
                 'name' => ShortcutConfiguration::STYLE_WIDTH_CART,
                 'placeholder' => $this->module->l('Width (min 150)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
-                'value' => Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART),
+                'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART) ? (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART) : 200),
                 'data_type' => 'width',
                 'message_error' => $this->module->l('Minimum 150 px is required')
             ];
@@ -103,11 +103,11 @@ class ShortcutConfigurationForm implements FormInterface
                 'type' => 'variable-set',
                 'set' => [
                     'shortcut' => (new ShortcutPreview(
-                        Configuration::get(ShortcutConfiguration::STYLE_LABEL_CART, null, null, null, ShortcutConfiguration::STYLE_LABEL_CHECKOUT),
-                        (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART, null, null, null, 35),
-                        (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART, null, null, null, 200),
-                        Configuration::get(ShortcutConfiguration::STYLE_COLOR_CART, null, null, null, ShortcutConfiguration::STYLE_COLOR_GOLD),
-                        Configuration::get(ShortcutConfiguration::STYLE_SHAPE_CART, null, null, null, ShortcutConfiguration::STYLE_SHAPE_RECT)
+                        Configuration::get(ShortcutConfiguration::STYLE_LABEL_CART) ? Configuration::get(ShortcutConfiguration::STYLE_LABEL_CART) : ShortcutConfiguration::STYLE_LABEL_CHECKOUT,
+                        ((int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART) ? (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART) : 35),
+                        ((int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART) ? (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART) : 200),
+                        Configuration::get(ShortcutConfiguration::STYLE_COLOR_CART) ? Configuration::get(ShortcutConfiguration::STYLE_COLOR_CART) : ShortcutConfiguration::STYLE_COLOR_GOLD,
+                        Configuration::get(ShortcutConfiguration::STYLE_SHAPE_CART) ? Configuration::get(ShortcutConfiguration::STYLE_SHAPE_CART) : ShortcutConfiguration::STYLE_SHAPE_RECT
                     ))->render(),
                 ]
             ];
@@ -173,7 +173,7 @@ class ShortcutConfigurationForm implements FormInterface
                 'name' => ShortcutConfiguration::STYLE_HEIGHT_PRODUCT,
                 'placeholder' => $this->module->l('Height (value from 25 to 55)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
-                'value' => Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_PRODUCT),
+                'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_PRODUCT) ? (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_PRODUCT) : 35),
             ];
             $fields[ShortcutConfiguration::STYLE_WIDTH_PRODUCT] = [
                 'type' => 'text',
@@ -181,18 +181,18 @@ class ShortcutConfigurationForm implements FormInterface
                 'name' => ShortcutConfiguration::STYLE_WIDTH_PRODUCT,
                 'placeholder' => $this->module->l('Width (min 150)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
-                'value' => Configuration::get(ShortcutConfiguration::STYLE_WIDTH_PRODUCT),
+                'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_PRODUCT) ? (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_PRODUCT) : 200),
             ];
             $fields[ShortcutConfiguration::STYLE_LABEL_PRODUCT] = $this->getButtonLabelSelect(ShortcutConfiguration::STYLE_LABEL_PRODUCT);
             $fields['product_shortcut_preview'] = [
                 'type' => 'variable-set',
                 'set' => [
                     'shortcut' => (new ShortcutPreview(
-                        Configuration::get(ShortcutConfiguration::STYLE_LABEL_PRODUCT, null, null, null, ShortcutConfiguration::STYLE_LABEL_BUYNOW),
-                        (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_PRODUCT, null, null, null, 35),
-                        (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_PRODUCT, null, null, null, 200),
-                        Configuration::get(ShortcutConfiguration::STYLE_COLOR_PRODUCT, null, null, null, ShortcutConfiguration::STYLE_COLOR_GOLD),
-                        Configuration::get(ShortcutConfiguration::STYLE_SHAPE_PRODUCT, null, null, null, ShortcutConfiguration::STYLE_SHAPE_RECT)
+                        Configuration::get(ShortcutConfiguration::STYLE_LABEL_PRODUCT) ? Configuration::get(ShortcutConfiguration::STYLE_LABEL_PRODUCT) : ShortcutConfiguration::STYLE_LABEL_BUYNOW,
+                        ((int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_PRODUCT) ? (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_PRODUCT) : 35),
+                        ((int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_PRODUCT) ? (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_PRODUCT) : 200),
+                        Configuration::get(ShortcutConfiguration::STYLE_COLOR_PRODUCT) ? Configuration::get(ShortcutConfiguration::STYLE_COLOR_PRODUCT) : ShortcutConfiguration::STYLE_COLOR_GOLD,
+                        Configuration::get(ShortcutConfiguration::STYLE_SHAPE_PRODUCT) ? Configuration::get(ShortcutConfiguration::STYLE_SHAPE_PRODUCT) : ShortcutConfiguration::STYLE_SHAPE_RECT
                     ))->render(),
                 ]
             ];
@@ -208,7 +208,7 @@ class ShortcutConfigurationForm implements FormInterface
                 'name' => ShortcutConfiguration::STYLE_HEIGHT_SIGNUP,
                 'placeholder' => $this->module->l('Height (value from 25 to 55)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
-                'value' => Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_SIGNUP),
+                'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_SIGNUP) ? (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_SIGNUP) : 35),
             ];
             $fields[ShortcutConfiguration::STYLE_WIDTH_SIGNUP] = [
                 'type' => 'text',
@@ -216,18 +216,18 @@ class ShortcutConfigurationForm implements FormInterface
                 'name' => ShortcutConfiguration::STYLE_WIDTH_SIGNUP,
                 'placeholder' => $this->module->l('Width (min 150)', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
-                'value' => Configuration::get(ShortcutConfiguration::STYLE_WIDTH_SIGNUP),
+                'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_SIGNUP) ? (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_SIGNUP) : 200),
             ];
             $fields[ShortcutConfiguration::STYLE_LABEL_SIGNUP] = $this->getButtonLabelSelect(ShortcutConfiguration::STYLE_LABEL_SIGNUP);
             $fields['signup_shortcut_preview'] = [
                 'type' => 'variable-set',
                 'set' => [
                     'shortcut' => (new ShortcutPreview(
-                        Configuration::get(ShortcutConfiguration::STYLE_LABEL_SIGNUP, null, null, null, ShortcutConfiguration::STYLE_LABEL_CHECKOUT),
-                        (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_SIGNUP, null, null, null, 35),
-                        (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_SIGNUP, null, null, null, 200),
-                        Configuration::get(ShortcutConfiguration::STYLE_COLOR_SIGNUP, null, null, null, ShortcutConfiguration::STYLE_COLOR_GOLD),
-                        Configuration::get(ShortcutConfiguration::STYLE_SHAPE_SIGNUP, null, null, null, ShortcutConfiguration::STYLE_SHAPE_RECT)
+                        Configuration::get(ShortcutConfiguration::STYLE_LABEL_SIGNUP) ? Configuration::get(ShortcutConfiguration::STYLE_LABEL_SIGNUP) : ShortcutConfiguration::STYLE_LABEL_CHECKOUT,
+                        ((int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_SIGNUP) ? (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_SIGNUP) : 35),
+                        ((int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_SIGNUP) ? (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_SIGNUP) : 200),
+                        Configuration::get(ShortcutConfiguration::STYLE_COLOR_SIGNUP) ? Configuration::get(ShortcutConfiguration::STYLE_COLOR_SIGNUP) : ShortcutConfiguration::STYLE_COLOR_GOLD,
+                        Configuration::get(ShortcutConfiguration::STYLE_SHAPE_SIGNUP) ? Configuration::get(ShortcutConfiguration::STYLE_SHAPE_SIGNUP) : ShortcutConfiguration::STYLE_SHAPE_RECT
                     ))->render(),
                 ]
             ];
