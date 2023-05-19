@@ -28,6 +28,7 @@
 {assign var="fieldsInstallmentBNPL" value=['PAYPAL_BNPL_PRODUCT_PAGE', 'PAYPAL_BNPL_PAYMENT_STEP_PAGE', 'PAYPAL_BNPL_CART_PAGE', 'PAYPAL_BNPL_CHECKOUT_PAGE']}
 {assign var="fieldsInstallment" value=['PAYPAL_INSTALLMENT_PRODUCT_PAGE', 'PAYPAL_INSTALLMENT_HOME_PAGE', 'PAYPAL_INSTALLMENT_CATEGORY_PAGE', 'PAYPAL_INSTALLMENT_CART_PAGE', 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE']}
 {assign var="dynamicField" value=$form.fields.PAYPAL_ENABLE_BNPL|default:false}
+{assign var="dynamicFieldBanner" value=$form.fields.PAYPAL_ENABLE_INSTALLMENT|default:false}
 
 {block name='form_content'}
   {if $dynamicField}
@@ -36,7 +37,7 @@
 
   <div class="form-group row {[
     'd-none' => $dynamicField && !$dynamicField.value
-  ]|classnames}">
+  ]|classnames}" {if $dynamicField.name|default:false}group-name="{$dynamicField.name}"{/if}>
     <label class="form-control-label form-control-label-check col-2" for="PAYPAL_BNPL">{l s='Active on' mod='paypal'}</label>
     <div class="col-10">
       <div class="row no-gutters">
@@ -49,11 +50,11 @@
     </div>
   </div>
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT dynamicField=$dynamicField && !$dynamicField.value}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT dynamicField=$dynamicFieldBanner}
 
   <div class="form-group row {[
     'd-none' => $dynamicField && !$dynamicField.value
-  ]|classnames}">
+  ]|classnames}" {if $dynamicField.name|default:false}group-name="{$dynamicFieldBanner.name}"{/if}>
     <label class="form-control-label form-control-label-check col-2" for="PAYPAL_INSTALLMENT">{l s='Active on' mod='paypal'}</label>
     <div class="col-10 pr-0">
       <div class="row no-gutters">
@@ -66,12 +67,12 @@
     </div>
   </div>
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT dynamicField=$dynamicField}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT dynamicField=$dynamicFieldBanner}
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$dynamicField}
+  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$dynamicFieldBanner}
 
     {if isset($form.fields.widget_code)}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.widget_code}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.widget_code dynamicField=$dynamicFieldBanner}
     {/if}
 
 {/block}
