@@ -16,7 +16,12 @@ class Section {
     $(this.sectionToggleSelector).on('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this.showSection(e.currentTarget);
+      this.showSection(e.currentTarget.getAttribute('data-section-toggle'));
+      this.hideDashboard();
+    });
+
+    document.addEventListener('showSection', (event) => {
+      this.showSection(event.detail.section);
       this.hideDashboard();
     });
 
@@ -25,14 +30,14 @@ class Section {
     })
   }
 
-  showSection(element) {
-    const $form = $(this.formSelector).filter(this.getFormSelector(element));
+  showSection(section) {
+    document.location.hash = section;
+    const $form = $(this.formSelector).filter(this.getFormSelector(section));
     $form.closest(this.sectionSelector).removeClass('d-none');
     this.$btnSectionReset.removeClass('d-none');
   }
 
-  getFormSelector(element) {
-    const section = $(element).data('section-toggle');
+  getFormSelector(section) {
 
     let formSelector = false;
 
@@ -72,6 +77,7 @@ class Section {
   reset() {
     this.showDashboard();
     this.hideAllSections();
+    document.location.hash = '';
   }
 
 }

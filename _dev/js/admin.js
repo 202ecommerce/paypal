@@ -42,6 +42,21 @@ $(() => {
 
   const section = new Section();
   section.init();
+
+  if (document.location.hash.slice(1,)) {
+    document.dispatchEvent(
+      (new CustomEvent(
+        'showSection',
+        {
+          bubbles: true,
+          detail: {
+            section: document.location.hash.slice(1,)
+          }
+        }
+      ))
+    );
+  }
+
 });
 
 
