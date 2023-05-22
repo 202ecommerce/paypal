@@ -103,15 +103,13 @@
                 </div>
               </div>
             </div>
-            <div class="alert alert-warning d-flex align-items-center mt-5 mb-0">
-            {strip}
-              <span class="icon mr-1">
-                <i class="material-icons">info</i>
-              </span>
-              {l s='Email address not confirmed, please' mod='paypal'}&nbsp;
-              <a href="#">{l s='resend' mod='paypal'}</a>&nbsp;
-              {l s='email' mod='paypal'}&nbsp;{/strip}
-            </div>
+
+            {if $merchantId|default:false}
+              <div class="alert alert-warning d-flex align-items-center mt-5 mb-0">
+                <span>{$merchantId}</span>
+              </div>
+            {/if}
+
           </div>
         </div>
       </div>

@@ -100,6 +100,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'loggerPage' => $this->context->link->getAdminLink('AdminPaypalProcessLogger'),
             'isConfigured' => $this->method->isConfigured(),
             'isSandbox' => $this->method->isSandbox(),
+            'merchantId' => $this->method->getMerchantId()
         ]);
 
         return $tpl->fetch();
