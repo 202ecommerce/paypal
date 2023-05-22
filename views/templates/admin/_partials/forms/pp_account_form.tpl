@@ -123,7 +123,7 @@
                 <i class="material-icons-outlined">account_circle</i>
               </span>
                   <span>
-                {l s='Connect your PayPal account' mod='paypal'}
+                {l s='Connect or create your PayPal account' mod='paypal'}
               </span>
                 </a>
               </div>
@@ -149,7 +149,7 @@
                 <i class="material-icons-outlined">account_circle</i>
               </span>
                   <span>
-                {l s='Connect your PayPal account' mod='paypal'}
+                {l s='Connect or create your PayPal account' mod='paypal'}
               </span>
                 </a>
               </div>
