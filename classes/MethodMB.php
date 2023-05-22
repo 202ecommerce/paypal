@@ -181,7 +181,7 @@ class MethodMB extends AbstractMethodPaypal
      */
     public function isConfigured($mode = null)
     {
-        if ($this->whiteListService->isEnabled() && !$this->whiteListService->isEligibleContext()) {
+        if (false == $this->whiteListService->isEligibleContext()) {
             return false;
         }
 
