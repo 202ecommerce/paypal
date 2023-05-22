@@ -28,6 +28,7 @@ namespace PaypalAddons\classes\Form;
 
 use Configuration;
 use Country;
+use MethodMB;
 use MethodPPP;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
@@ -67,6 +68,7 @@ class FeatureChecklistForm implements FormInterface
 
         $vars['isOrderStatusCustomized'] = (int) Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS);
         $vars['isShowPaypalBenefits'] = (int) Configuration::get(PaypalConfigurations::API_ADVANTAGES);
+        $vars['isCreditCardEnabled'] = $this->isCreditCardEnabled();
 
         return [
             'legend' => [
@@ -91,5 +93,18 @@ class FeatureChecklistForm implements FormInterface
      */
     public function save($data = null)
     {
+    }
+
+    protected function isCreditCardEnabled()
+    {
+        if ($this->method instanceof MethodPPP) {
+            return (int) Configuration::get(PaypalConfigurations::ACDC_OPTION);
+        }
+
+        if ($this->method instanceof MethodMB) {
+            return true;
+        }
+
+        return false;
     }
 }
