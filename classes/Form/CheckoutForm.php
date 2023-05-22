@@ -152,7 +152,7 @@ class CheckoutForm implements FormInterface
         $fields[ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE] = [
             'type' => 'checkbox',
             'name' => ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE,
-            'label' => $this->module->l('Product Pages', 'blockpreviewbuttoncontext'),
+            'label' => $this->module->l('Product Page', 'blockpreviewbuttoncontext'),
             'value' => 1,
             'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
             'image' => _MODULE_DIR_ . $this->module->name . '/views/img/product_page_button.png',

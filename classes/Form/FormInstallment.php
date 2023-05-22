@@ -78,7 +78,7 @@ class FormInstallment implements FormInterface
             $fields[ConfigurationMap::BNPL_PRODUCT_PAGE] = [
                 'type' => 'checkbox',
                 'name' => ConfigurationMap::BNPL_PRODUCT_PAGE,
-                'label' => $this->module->l('Product Pages', $this->className),
+                'label' => $this->module->l('Product Page', $this->className),
                 'value' => 1,
                 'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE),
                 'image' => _MODULE_DIR_ . $this->module->name . '/views/img/product_page_button.png',
