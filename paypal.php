@@ -291,7 +291,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         require_once realpath(dirname(__FILE__) . '/smarty/plugins') . '/modifier.paypalreplace.php';
         $this->displayName = $this->l('PayPal');
-        $this->description = $this->l('Allow your customers to pay with PayPal - the safest, quickest and easiest way to pay online.');
+        $this->description = $this->l('This free official PayPal module can help you grow your sales by adding PayPal to your store. Allow your customers to pay online with PayPal - the safest, quickest and easiest way');
         $this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
         $this->express_checkout = $this->l('PayPal Express Checkout ');
 

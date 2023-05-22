@@ -26,7 +26,7 @@
 global $_MODULE;
 $_MODULE = [];
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
-$_MODULE['<{paypal}prestashop>paypal_3ba4f49f76f54e9305261bc742a24d9b'] = 'Beneficie da plataforma PayPal Complete Payments e expanda a sua atividade online em dispositivos móveis e a nível internacional. Aceite cartões de crédito, cartões de débito e pagamentos com PayPal.';
+$_MODULE['<{paypal}prestashop>paypal_c4aae7949c5aee2f84ab4652972e7ffe'] = 'Permita que sus clientas paguen en línea con PayPal, la forma más segura, rápida y fácil. Este módulo gratuito do PayPal pode ajudá-lo a aumentar as vendas, adicionando as opções PayPal à sua loja.Permita que seus clientes paguem on-line com PayPal - a maneira mais segura, rápida e fácil.';
 $_MODULE['<{paypal}prestashop>paypal_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Quer mesmo eliminar os seus detalhes?';
 $_MODULE['<{paypal}prestashop>paypal_48aec79eb01dc1fa6eecea2f768e9c03'] = 'PayPal';
 $_MODULE['<{paypal}prestashop>paypal_731754f15074410d6a376c1be5be4f20'] = 'Cartão de Crédito';

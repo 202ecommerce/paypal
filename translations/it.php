@@ -26,7 +26,7 @@
 global $_MODULE;
 $_MODULE = [];
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
-$_MODULE['<{paypal}prestashop>paypal_3ba4f49f76f54e9305261bc742a24d9b'] = 'Sfrutta i vantaggi di PayPal Complete Payments e fai crescere la tua attività online, su dispositivi mobili e all\'estero. Accetta carte di credito, carte di debito e pagamenti PayPal.';
+$_MODULE['<{paypal}prestashop>paypal_c4aae7949c5aee2f84ab4652972e7ffe'] = 'Questo modulo ufficiale gratuito di PayPal può aiutare a incrementare le vendite aggiungendo le opzioni PayPal e Paga in 3 rate al tuo negozio.';
 $_MODULE['<{paypal}prestashop>paypal_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Vuoi davvero eliminare i tuoi dati?';
 $_MODULE['<{paypal}prestashop>paypal_48aec79eb01dc1fa6eecea2f768e9c03'] = 'PayPal Express Checkout ';
 $_MODULE['<{paypal}prestashop>paypal_b209ab078c273a14a042f9efc005979d'] = 'Paga con PayPal';

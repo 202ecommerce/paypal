@@ -26,7 +26,7 @@
 global $_MODULE;
 $_MODULE = [];
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
-$_MODULE['<{paypal}prestashop>paypal_3ba4f49f76f54e9305261bc742a24d9b'] = 'Maak gebruik van het complete betaalplatform van PayPal en laat uw bedrijf groeien  online, op mobiel en internationaal. Accepteer creditcard-, betaalpas- en PayPal-betalingen.';
+$_MODULE['<{paypal}prestashop>paypal_c4aae7949c5aee2f84ab4652972e7ffe'] = 'Deze gratis officiële PayPal-module kan je helpen om meer te verkopen door de PayPal-optie toe te voegen aan je webshop.';
 $_MODULE['<{paypal}prestashop>paypal_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Weet u zeker dat u uw gegevens wilt verwijderen?';
 $_MODULE['<{paypal}prestashop>paypal_48aec79eb01dc1fa6eecea2f768e9c03'] = 'PayPal Express Checkout ';
 $_MODULE['<{paypal}prestashop>paypal_b209ab078c273a14a042f9efc005979d'] = 'Betalen met PayPal';

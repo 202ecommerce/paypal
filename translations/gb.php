@@ -26,7 +26,7 @@
 global $_MODULE;
 $_MODULE = [];
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
-$_MODULE['<{paypal}prestashop>paypal_3ba4f49f76f54e9305261bc742a24d9b'] = 'Allow your customers to pay with PayPal - the safest, quickest and easiest way to pay online.';
+$_MODULE['<{paypal}prestashop>paypal_c4aae7949c5aee2f84ab4652972e7ffe'] = 'This free official PayPal module can help you grow your sales by adding PayPal and PayPal Pay Later options to your store. Allow your customers to pay online with PayPal - the safest, quickest and easiest way.';
 $_MODULE['<{paypal}prestashop>paypal_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Are you sure you want to delete your details?';
 $_MODULE['<{paypal}prestashop>paypal_48aec79eb01dc1fa6eecea2f768e9c03'] = 'PayPal Express Checkout';
 $_MODULE['<{paypal}prestashop>paypal_b209ab078c273a14a042f9efc005979d'] = 'Pay with PayPal';

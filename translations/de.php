@@ -26,7 +26,7 @@
 global $_MODULE;
 $_MODULE = [];
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
-$_MODULE['<{paypal}prestashop>paypal_3ba4f49f76f54e9305261bc742a24d9b'] = 'Nutzen Sie die gesamte Zahlungsplattform von PayPal und kurbeln Sie Ihr Geschäft an  online, unterwegs und international. Akzeptieren sie Kreditkarten- und PayPal-Zahlungen.';
+$_MODULE['<{paypal}prestashop>paypal_c4aae7949c5aee2f84ab4652972e7ffe'] = 'Mit PayPal Checkout profitieren Sie von mehr Zahlarten, optimierter Nutzerfreundlichkeit und zukunftssicherer Technologie.';
 $_MODULE['<{paypal}prestashop>paypal_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Wollen Sie Ihre Daten wirklich löschen?';
 $_MODULE['<{paypal}prestashop>paypal_48aec79eb01dc1fa6eecea2f768e9c03'] = 'PayPal Express Checkout';
 $_MODULE['<{paypal}prestashop>paypal_731754f15074410d6a376c1be5be4f20'] = 'Mit Kreditkarte zahlen';
