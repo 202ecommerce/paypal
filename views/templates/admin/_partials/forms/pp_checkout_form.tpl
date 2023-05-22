@@ -36,7 +36,7 @@
     {/foreach}
 
   <div class="form-group row">
-    <label class="form-control-label form-control-label-check col-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_test">{l s='Active on' mod='paypal'}</label>
+    <label class="form-control-label form-control-label-check col-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_test">{l s='PayPal Express Checkout shortcut on' mod='paypal'}</label>
     <div class="col-9">
       <div class="row no-gutters">
           {foreach from=$form.fields item=field}
