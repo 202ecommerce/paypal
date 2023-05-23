@@ -55,7 +55,7 @@
 
  <div class="col col-12 col-md-4{$sectionColInfoClasses}">
    <div class="card-body">
-    {include file="module:paypal/views/templates/admin/_partials/block-info.tpl"}
+     {$form.help|default:''}
    </div>
  </div>
 </section>

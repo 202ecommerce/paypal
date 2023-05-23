@@ -187,6 +187,7 @@ class OrderStatusForm implements FormInterface
                 'name' => 'orderStatusForm',
             ],
             'id_form' => 'pp_order_status_form',
+            'help' => $this->getHelpInfo(),
         ];
     }
 
@@ -271,5 +272,10 @@ class OrderStatusForm implements FormInterface
         }
 
         return $orderStatuses;
+    }
+
+    protected function getHelpInfo()
+    {
+        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/order-status.tpl');
     }
 }

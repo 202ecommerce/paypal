@@ -80,6 +80,7 @@ class TrackingParametersForm implements FormInterface
                 'name' => 'trackingParametersForm',
             ],
             'id_form' => 'pp_tracking_form',
+            'help' => $this->getHelpInfo(),
         ];
     }
 
@@ -139,5 +140,10 @@ class TrackingParametersForm implements FormInterface
         }
 
         return $list;
+    }
+
+    protected function getHelpInfo()
+    {
+        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/tracking.tpl');
     }
 }

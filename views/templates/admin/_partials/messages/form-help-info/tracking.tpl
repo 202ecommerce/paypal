@@ -1,4 +1,4 @@
-{*
+{**
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -23,12 +23,8 @@
  *  @copyright PayPal
  *
  *}
-<div class="h5">
-  {l s='Where can i find this informations ?' mod='paypal'}
-</div>
+
 <p>
-  {l s='This is the first item\'s accordion body. It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.' mod='paypal'}
+    {l s='Configure tracking settings to apply for PayPal seller protection, in two steps.Select the order status from which the order is handled by the carrier. Associate the Prestashop Carrier with the PayPal Carrier.' mod='paypal'}
 </p>
-<p>
-  {l s='This is the first item\'s accordion body. It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.' mod='paypal'}
-</p>
+

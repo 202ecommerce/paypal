@@ -33,7 +33,7 @@
     {/if}
 
     <div group-name="{$dynamicField.name}">
-        {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_PRODUCT)}
+        {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_CART)}
           <div class="h6">{l s='Cart page' mod='paypal'}</div>
           <hr>
             {include file="module:paypal/views/templates/admin/_partials/shortcut_configuration_section.tpl"

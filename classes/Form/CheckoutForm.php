@@ -324,6 +324,7 @@ class CheckoutForm implements FormInterface
                 'name' => 'checkoutForm',
             ],
             'id_form' => 'pp_checkout_form',
+            'help' => $this->getHelpInfo(),
         ];
     }
 
@@ -426,5 +427,10 @@ class CheckoutForm implements FormInterface
         );
 
         return true;
+    }
+
+    protected function getHelpInfo()
+    {
+        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/checkout.tpl');
     }
 }

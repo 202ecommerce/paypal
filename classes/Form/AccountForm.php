@@ -2,6 +2,7 @@
 
 namespace PaypalAddons\classes\Form;
 
+use Context;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\PUI\PuiFunctionality;
@@ -44,6 +45,7 @@ class AccountForm implements FormInterface
                 'name' => 'accountForm',
             ],
             'id_form' => 'pp_account_form',
+            'help' => $this->getHelpInfo(),
         ];
     }
 
@@ -63,5 +65,10 @@ class AccountForm implements FormInterface
         }
 
         return $this->method->saveAccountForm($data);
+    }
+
+    protected function getHelpInfo()
+    {
+        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/account.tpl');
     }
 }

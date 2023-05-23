@@ -213,6 +213,7 @@ class FormInstallment implements FormInterface
                 'name' => 'installmentForm',
             ],
             'id_form' => 'pp_installment_form',
+            'help' => $this->getHelpInfo(),
         ];
 
         return $description;
@@ -331,5 +332,10 @@ class FormInstallment implements FormInterface
         }
 
         return $colorOptions;
+    }
+
+    protected function getHelpInfo()
+    {
+        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/bnpl.tpl');
     }
 }

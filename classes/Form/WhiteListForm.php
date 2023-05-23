@@ -71,6 +71,7 @@ class WhiteListForm implements FormInterface
                 'name' => 'whiteListForm',
             ],
             'id_form' => 'pp_white_list_form',
+            'help' => $this->getHelpInfo(),
         ];
     }
 
@@ -100,5 +101,10 @@ class WhiteListForm implements FormInterface
     protected function initWhiteListService()
     {
         return new WhiteListService();
+    }
+
+    protected function getHelpInfo()
+    {
+        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/white-list-ip.tpl');
     }
 }

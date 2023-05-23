@@ -3,6 +3,7 @@
 namespace PaypalAddons\classes\Form;
 
 use Configuration;
+use Context;
 use Module;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Shortcut\ShortcutPreview;
@@ -235,6 +236,7 @@ class ShortcutConfigurationForm implements FormInterface
                 'name' => 'SubmitShortcutConfigurationForm',
             ],
             'id_form' => 'pp_shortcut_configuration_form',
+            'help' => $this->getHelpInfo(),
         ];
     }
 
@@ -508,5 +510,10 @@ class ShortcutConfigurationForm implements FormInterface
             'value' => Configuration::get($name),
             'data_type' => 'label'
         ];
+    }
+
+    protected function getHelpInfo()
+    {
+        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/shortcut-configuration.tpl');
     }
 }
