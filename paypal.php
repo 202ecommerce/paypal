@@ -2996,7 +2996,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         if (\Configuration::get('PS_ROUND_TYPE') != \Order::ROUND_ITEM
             || \Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_UP
-            || \Configuration::get('PS_PRICE_DISPLAY_PRECISION') != 2) {
+            || (\Configuration::get('PS_PRICE_DISPLAY_PRECISION') && \Configuration::get('PS_PRICE_DISPLAY_PRECISION') != 2)) {
             $conflicts[] = $this->l('Your rounding settings are not fully compatible with PayPal requirements. In order to avoid some of the transactions to fail, please change the PrestaShop rounding mode.');
         }
 
