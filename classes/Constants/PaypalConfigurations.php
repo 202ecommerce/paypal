@@ -32,6 +32,8 @@ class PaypalConfigurations
 
     const INTENT = 'PAYPAL_API_INTENT';
 
+    const API_CARD = 'PAYPAL_API_CARD';
+
     const MB_EC_ENABLED = 'PAYPAL_MB_EC_ENABLED';
 
     const EXPRESS_CHECKOUT_IN_CONTEXT = 'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT';

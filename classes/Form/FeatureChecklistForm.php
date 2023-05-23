@@ -27,9 +27,11 @@
 namespace PaypalAddons\classes\Form;
 
 use Configuration;
+use Context;
 use Country;
 use MethodMB;
 use MethodPPP;
+use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\InstallmentBanner\BNPL\BNPLOption;
@@ -43,10 +45,13 @@ class FeatureChecklistForm implements FormInterface
 
     protected $method;
 
+    protected $module;
+
     public function __construct()
     {
         $this->bnplOption = new BNPLOption();
         $this->method = AbstractMethodPaypal::load();
+        $this->module = Module::getInstanceByName('paypal');
     }
     /**
      * @return array
@@ -68,7 +73,10 @@ class FeatureChecklistForm implements FormInterface
 
         $vars['isOrderStatusCustomized'] = (int) Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS);
         $vars['isShowPaypalBenefits'] = (int) Configuration::get(PaypalConfigurations::API_ADVANTAGES);
-        $vars['isCreditCardEnabled'] = $this->isCreditCardEnabled();
+
+        if (false === in_array(Tools::strtoupper($isoCountryDefault), $this->module->countriesApiCartUnavailable)) {
+            $vars['isCreditCardEnabled'] = $this->isCreditCardEnabled();
+        }
 
         return [
             'legend' => [
@@ -97,12 +105,12 @@ class FeatureChecklistForm implements FormInterface
 
     protected function isCreditCardEnabled()
     {
+        $isoCountryDefault = Tools::strtoupper(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+
         if ($this->method instanceof MethodPPP) {
             return (int) Configuration::get(PaypalConfigurations::ACDC_OPTION);
-        }
-
-        if ($this->method instanceof MethodMB) {
-            return true;
+        } elseif (false === in_array($isoCountryDefault, $this->module->countriesApiCartUnavailable)) {
+            return (int) Configuration::get(PaypalConfigurations::API_CARD);
         }
 
         return false;

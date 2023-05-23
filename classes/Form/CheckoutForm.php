@@ -43,6 +43,7 @@ class CheckoutForm implements FormInterface
 
     public function getDescription()
     {
+        $countryDefault = new Country(Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
         $fields = [];
 
         if ($this->method == 'MB') {
@@ -213,6 +214,29 @@ class CheckoutForm implements FormInterface
                 ],
                 'value' => (int) Configuration::get(PaypalConfigurations::ACDC_OPTION),
             ];
+        }
+
+        if (in_array($this->method, ['MB', 'EC'])) {
+            if (in_array($countryDefault->iso_code, $this->module->countriesApiCartUnavailable) == false) {
+                $fields[PaypalConfigurations::API_CARD] = [
+                    'type' => 'switch',
+                    'label' => $this->module->l('Accept credit and debit card payment', 'AdminPayPalCustomizeCheckoutController'),
+                    'name' => PaypalConfigurations::API_CARD,
+                    'values' => [
+                        [
+                            'id' => PaypalConfigurations::API_CARD . '_on',
+                            'value' => 1,
+                            'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
+                        ],
+                        [
+                            'id' => PaypalConfigurations::API_CARD . '_off',
+                            'value' => 0,
+                            'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
+                        ],
+                    ],
+                    'value' => (int) Configuration::get(PaypalConfigurations::API_CARD),
+                ];
+            }
         }
 
         if ($this->method === 'PPP') {
@@ -394,6 +418,11 @@ class CheckoutForm implements FormInterface
         Configuration::updateValue(
             PaypalConfigurations::MOVE_BUTTON_AT_END,
             isset($data[PaypalConfigurations::MOVE_BUTTON_AT_END]) ? 1 : 0
+        );
+
+        Configuration::updateValue(
+            PaypalConfigurations::API_CARD,
+            isset($data[PaypalConfigurations::API_CARD]) ? 1 : 0
         );
 
         return true;

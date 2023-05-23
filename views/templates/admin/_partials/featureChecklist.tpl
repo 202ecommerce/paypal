@@ -52,14 +52,16 @@
         {/if}
       </li>
 
-      <li class="d-flex align-items-center mb-1">
-          {include
-          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
-          isSuccess=$vars.isCreditCardEnabled|default:false
-          }
+      {if isset($vars.isCreditCardEnabled)}
+        <li class="d-flex align-items-center mb-1">
+            {include
+            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=$vars.isCreditCardEnabled
+            }
 
-          {l s='Credit card enabled' mod='paypal'}
-      </li>
+            {l s='Credit card enabled' mod='paypal'}
+        </li>
+      {/if}
 
       {if isset($vars.isPuiEnabled)}
         <li class="d-flex align-items-center mb-1">
