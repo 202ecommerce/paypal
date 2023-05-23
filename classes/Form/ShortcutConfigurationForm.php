@@ -42,14 +42,6 @@ class ShortcutConfigurationForm implements FormInterface
             'value' => Configuration::get(ShortcutConfiguration::CUSTOMIZE_STYLE),
         ];
 
-        $fields['widget_code'] = [
-            'type' => 'variable-set',
-            'label' => $this->module->l('Widget code', 'AdminPayPalCustomizeCheckoutController'),
-            'set' => [
-                'widgetCode' => '{widget name=\'paypal\' action=\'paymentshortcut\'}'
-            ]
-        ];
-
         if (Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE)) {
             $fields[ShortcutConfiguration::DISPLAY_MODE_CART] = $this->getDisplayModeSelect(ShortcutConfiguration::DISPLAY_MODE_CART);
             $fields[ShortcutConfiguration::CART_PAGE_HOOK] = [
@@ -140,20 +132,20 @@ class ShortcutConfigurationForm implements FormInterface
             if (version_compare(_PS_VERSION_, '1.7.1', '>=')) {
                 $hooks[] = [
                     'value' => ShortcutConfiguration::HOOK_AFTER_PRODUCT_ADDITIONAL_INFO,
-                    'desc' => $this->module->l('displayProductAdditionalInfo - This hook adds additional information before the reassurance block and product description.'),
+                    'title' => $this->module->l('displayProductAdditionalInfo - This hook adds additional information before the reassurance block and product description.'),
                     'preview' => '/modules/paypal/views/img/shortcut-preview/product-displayProductAdditionalInfo.jpg',
                 ];
 
                 $hooks[] = [
                     'value' => ShortcutConfiguration::HOOK_AFTER_PRODUCT_THUMBS,
-                    'desc' => $this->module->l('displayAfterProductThumbs - This hook displays new elements below product images.'),
+                    'title' => $this->module->l('displayAfterProductThumbs - This hook displays new elements below product images.'),
                     'preview' => '/modules/paypal/views/img/shortcut-preview/product-displayAfterProductThumbs.jpg',
                 ];
             }
 
             $hooks[] = [
                 'value' => ShortcutConfiguration::HOOK_FOOTER_PRODUCT,
-                'desc' => $this->module->l('displayFooterProduct - This hook adds new blocks on the product page just before global site footer.'),
+                'title' => $this->module->l('displayFooterProduct - This hook adds new blocks on the product page just before global site footer.'),
                 'preview' => '/modules/paypal/views/img/shortcut-preview/product-displayProductFooter.jpg',
             ];
 

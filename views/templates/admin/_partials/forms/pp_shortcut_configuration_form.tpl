@@ -28,92 +28,59 @@
 {assign var="dynamicField" value=$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE}
 
 {block name='form_content'}
-  {foreach from=$form.fields item=field}
-    {if $field.name|default:false}
-      {if !$field.name|in_array:$fieldsButtonConfiguration}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field dynamicField=$dynamicField}
-      {/if}
+    {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE)}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE dynamicField=$dynamicField}
     {/if}
-  {/foreach}
 
-  <div customize-style-shortcut-container>
-    <div setting-section>
-
-      {if isset($errors) && false === empty($errors)}
-        {foreach from=$errors item=error}
-          <div class="alert alert-danger">
-            {$error nofilter}
-          </div>
-        {/foreach}
-      {/if}
-
-      <div class="form-group row ">
-        <div class="col-7 offset-3">
-          <div preview-section class="invisible" style="position: relative; pointer-events: none">
-            <div button-container></div>
-            <div class="overlay"></div>
-          </div>
-        </div>
-      </div>
-
-      <div configuration-section class="hidden">
-          {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART)}
-              {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART dynamicField=$dynamicField}
-          {/if}
-
-          {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART)}
-              {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART dynamicField=$dynamicField}
-          {/if}
-
-        {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART) && isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART)}
-          <div class="form-group row {[
-          'd-none' => $dynamicField && !$dynamicField.value|default:false
-          ]|classnames}">
-            <label class="form-control-label col-3" for="PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART">{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART.label}</label>
-            <div class="{[
-            'col-7' => !$isModal,
-            'col-9' => $isModal
-            ]|classnames}">
-              <div class="row" chain-input-container>
-                <div class="col col-6 pr-2">
-                  <input
-                    type="text"
-                    name="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART.name}"
-                    id="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART.name}"
-                    class="form-control"
-                    placeholder="{l s='Placeholder' mod='paypal'}"
-                    value="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART.value|default:''}"
-                    data-type="width"
-                    data-msg-error="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART.message_error}"
-                  >
-                  <div class="text-muted small mt-1">Placeholder</div>
-                </div>
-                <div class="col col-6 pl-2">
-                  <input
-                    type="text"
-                    name="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART.name}"
-                    id="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART.name}"
-                    class="form-control"
-                    placeholder="{l s='Placeholder' mod='paypal'}"
-                    value="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART.value|default:''}"
-                    data-type="height"
-                    data-msg-error="{$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART.message_error}"
-                  >
-                  <div class="text-muted small mt-1">Placeholder</div>
-                </div>
-                <div class="col col-12" msg-container></div>
-              </div>
-            </div>
-          </div>
+    <div group-name="{$dynamicField.name}">
+        {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_PRODUCT)}
+          <div class="h6">{l s='Cart page' mod='paypal'}</div>
+          <hr>
+            {include file="module:paypal/views/templates/admin/_partials/shortcut_configuration_section.tpl"
+              displayMode=$form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_CART
+              hooks=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_HOOK_CART
+              widget_type='cart'
+              color=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART
+              shape=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART
+              height=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART
+              width=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART
+              label=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_LABEL_CART
+              preview=$form.fields.cart_shortcut_preview.set.shortcut|default:''
+            }
         {/if}
 
-          {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_LABEL_CART)}
-              {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_LABEL_CART dynamicField=$dynamicField}
-          {/if}
+        {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_PRODUCT)}
+          <div class="h6">{l s='Product page' mod='paypal'}</div>
+          <hr>
+            {include file="module:paypal/views/templates/admin/_partials/shortcut_configuration_section.tpl"
+              displayMode=$form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_PRODUCT
+              hooks=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_HOOK_PRODUCT
+              widget_type='product'
+              color=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_PRODUCT
+              shape=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_PRODUCT
+              height=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_PRODUCT
+              width=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_PRODUCT
+              label=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_LABEL_PRODUCT
+              preview=$form.fields.product_shortcut_preview.set.shortcut|default:''
+            }
+        {/if}
 
-      </div>
+        {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_SIGNUP)}
+          <div class="h6">{l s='Signup page' mod='paypal'}</div>
+          <hr>
+            {include file="module:paypal/views/templates/admin/_partials/shortcut_configuration_section.tpl"
+              displayMode=$form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_SIGNUP
+              widget_type='signup'
+              color=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_SIGNUP
+              shape=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_SIGNUP
+              height=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_SIGNUP
+              width=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_SIGNUP
+              label=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_LABEL_SIGNUP
+              preview=$form.fields.signup_shortcut_preview.set.shortcut|default:''
+            }
+        {/if}
     </div>
-  </div>
+
 {/block}
 
 

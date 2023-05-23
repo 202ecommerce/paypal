@@ -5,13 +5,10 @@ class Form {
     this.formGroupDynamicSelector = '.form-group-dynamic';
     this.inputDynamicSelector = '.custom-control-input';
     this.inputInstallementColor = '[name="PAYPAL_INSTALLMENT_COLOR"]';
-    this.shortcutContainerSelector = '[customize-style-shortcut-container]';
-
   }
 
   init() {
     this.registerEvents();
-    this.initShortcutButton()
   }
 
 
@@ -30,7 +27,7 @@ class Form {
       this.updateSwatchColor(e.currentTarget);
     });
 
-    $('[customize-style-shortcut-container] .form-control').on('change', () => this.updatePreviewButton());
+    $('[customize-style-shortcut-container] .form-control').on('change', (e) => this.updatePreviewButton(e));
     $('[data-type="height"]').on('change', (e) => this.checkHeight(e));
     $('[data-type="width"]').on('change', (e) => this.checkWidth(e));
   }
@@ -46,23 +43,19 @@ class Form {
     }
   }
 
-  initShortcutButton() {
-    this.updatePreviewButton();
-  }
+  updatePreviewButton(e) {
+    const container = $(e.target).closest('[customize-style-shortcut-container]');
 
-  updatePreviewButton() {
-    if ($('[msg-container] .alert').length > 0) {
+    if (container.find('[msg-container]').find('.alert').length > 0) {
       return false;
     }
 
-    const container = $(this.shortcutContainerSelector);
     const preview = container.find('[preview-section]').find('[button-container]');
-    const configurations = container.find('[configuration-section]');
-    const color = configurations.find('[data-type="color"]').val();
-    const shape = configurations.find('[data-type="shape"]').val();
-    const label = configurations.find('[data-type="label"]').val();
-    const width = configurations.find('[data-type="width"]').val();
-    const height = configurations.find('[data-type="height"]').val();
+    const color = container.find('[data-type="color"]').val();
+    const shape = container.find('[data-type="shape"]').val();
+    const label = container.find('[data-type="label"]').val();
+    const width = container.find('[data-type="width"]').val();
+    const height = container.find('[data-type="height"]').val();
 
     $.ajax({
       url: controllerUrl,
