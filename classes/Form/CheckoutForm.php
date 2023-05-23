@@ -177,7 +177,7 @@ class CheckoutForm implements FormInterface
 
         $fields[PaypalConfigurations::MOVE_BUTTON_AT_END] = [
             'type' => 'switch',
-            'label' => $this->module->l('Location', 'CheckoutForm'),
+            'label' => $this->module->l('Put the PayPal button at the end of the order page', 'CheckoutForm'),
             'desc' => $this->module->l('Put the PayPal button at the end of the order page', 'AdminPayPalCustomizeCheckoutController'),
             'name' => PaypalConfigurations::MOVE_BUTTON_AT_END,
             'value' => (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
