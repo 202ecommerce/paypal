@@ -32,7 +32,7 @@
         {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE dynamicField=$dynamicField}
     {/if}
 
-    <div group-name="{$dynamicField.name}">
+    <div group-name="{$dynamicField.name}" class="d-none">
         {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_CART)}
           <div class="h6">{l s='Cart page' mod='paypal'}</div>
           <hr>

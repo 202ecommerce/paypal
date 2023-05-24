@@ -23,12 +23,13 @@
  *  @copyright PayPal
  *
  *}
+
 {if isset($displayMode) && $displayMode}
-    {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$displayMode}
+    {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$displayMode dynamicField=false}
 {/if}
 
 {if isset($hooks) && $hooks}
-    {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$hooks}
+    {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$hooks dynamicField=false}
 {/if}
 
 {if isset($widget_type) && $widget_type}
@@ -39,6 +40,7 @@
           'code' => '{widget name=\'paypal\' action=\'paymentshortcut\'}',
           'name' => 'widget-code-'|cat:$widget_type
       ]
+      dynamicField=false
     }
 {/if}
 
@@ -53,11 +55,11 @@
   </div>
 
     {if isset($color) && $color}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$color}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$color dynamicField=false}
     {/if}
 
     {if isset($shape) && $shape}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$shape}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$shape dynamicField=false}
     {/if}
 
     {if isset($height) && isset($width) && $height && $width}
@@ -101,7 +103,7 @@
     {/if}
 
     {if isset($label) && $label}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$label}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$label dynamicField=false}
     {/if}
 
 </div>
