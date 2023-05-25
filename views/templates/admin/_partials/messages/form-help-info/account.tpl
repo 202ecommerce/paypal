@@ -33,10 +33,10 @@
 </p>
 
 <p>
-  {{l s='[b]Sandbox[/b] mode allows you a mock link to test the flow between Prestashop and PayPal. You can test as long as needed. If you want to create an account, please click [a @href1@]here[/a].' mod='paypal'}|paypalreplace:['@href1@' => 'https://www.paypal.com/to/cshelp/article/how-do-i-create-a-sandbox-test-account-ts1408', '@target@' => {'target="blank"'}]}
+  {{l s='[b]Sandbox[/b] mode allows you a mock link to test the flow between Prestashop and PayPal. You can test as long as needed. If you want to create an account, please use the [a @href1@]link[/a] directly to the account creation.' mod='paypal'}|paypalreplace:['@href1@' => 'https://www.paypal.com/to/cshelp/article/how-do-i-create-a-sandbox-test-account-ts1408', '@target@' => {'target="blank"'}]}
 </p>
 <p>
-    {{l s='[b]Production[/b] mode allows you to sell our products online and be paid by customers.If you want to create an account, please click [a @href1@]here[/a].' mod='paypal'}|paypalreplace:['@href1@' => 'https://www.paypal.com/', '@target@' => {'target="blank"'}]}
+    {{l s='[b]Production[/b] mode allows you to sell our products online and be paid by customers.If you want to create an account, please click use the [a @href1@]link[/a] directly to the account creation.' mod='paypal'}|paypalreplace:['@href1@' => 'https://www.paypal.com/', '@target@' => {'target="blank"'}]}
 </p>
 <p>
   {{l s='[b]Note:[/b] You need to switch to the “Production” mode to activate your payment solution.' mod='paypal'}|paypalreplace:[]}

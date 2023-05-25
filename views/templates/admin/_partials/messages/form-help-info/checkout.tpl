@@ -26,16 +26,13 @@
 
 
 <p>
-    {{l s='[b]Sale:[/b] the money moves instantly from the buyer’s account to the seller’s account at the time of payment.' mod='paypal'}|paypalreplace:[]}
+    {{l s='[b]Payment Action:Sale:[/b] the money moves instantly from the buyer’s account to the seller’s account at the time of payment.' mod='paypal'}|paypalreplace:[]}
 </p>
 <p>
-  {{l s='[b]Authorization/capture:[/b] The authorized mode is a deferred mode of payment that requires the funds to be collected manually when you want to transfer the money. This mode is used if you want to ensure that you have the merchandise before depositing the money' mod='paypal'}|paypalreplace:[]}
+  {{l s='[b]Payment Action:Authorization/capture:[/b] The authorized mode is a deferred mode of payment that requires the funds to be collected manually when you want to transfer the money. This mode is used if you want to ensure that you have the merchandise before depositing the money' mod='paypal'}|paypalreplace:[]}
 </p>
 <p>
     {{l s='[b]PayPal In-Context:[/b] opens in a pop-up window, allowing your buyers to finalize their payment without leaving your website. Optimized, modern and reassuring experience which benefits from the same security standards than during a redirection to the PayPal website.' mod='paypal'}|paypalreplace:[]}
-</p>
-<p>
-    {{l s='[b]Brand name[/b] shown on top left during PayPal checkout: A label that overrides the business name in the PayPal account on the PayPal pages. If you are using PayPal Checkout redirect you can also customize your shop logo. The logo can be changed via your business profile settings.' mod='paypal'}|paypalreplace:[]}
 </p>
 <p>
     {{l s='[b]Customer service[/b] instruction is a required message for using Pay upon invoice methode.' mod='paypal'}|paypalreplace:[]}
@@ -45,4 +42,7 @@
 </p>
 <p>
     {{l s='[b]PayPal shortcuts[/b] allow a faster checkout for your buyers. PayPal automatically provides you with the client\'s shipping and billing information.' mod='paypal'}|paypalreplace:[]}
+</p>
+<p>
+    {{l s='[b]Brand name[/b] shown on top left during PayPal checkout: A label that overrides the business name in the PayPal account on the PayPal pages. If you are using PayPal Checkout redirect you can also customize your shop logo. The logo can be changed via your business profile settings.' mod='paypal'}|paypalreplace:[]}
 </p>
