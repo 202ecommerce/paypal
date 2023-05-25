@@ -505,7 +505,7 @@ $_MODULE['<{paypal}prestashop>messageforcustomerone_e8fdd95502f3d9eef321833fe60a
 $_MODULE['<{paypal}prestashop>messageforcustomertwo_e8fdd95502f3d9eef321833fe60aed0c'] = 'Mode Sandbox: Toutes les transactions seront fictives';
 $_MODULE['<{paypal}prestashop>adminpaypalcontroller_7e4ed5efc0f056eb2b36609af35177d3'] = 'Mode « bac à sable »';
 $_MODULE['<{paypal}prestashop>paypalordercreaterequest_2605fbb693837be42d0cd0e701cb5aa3'] = 'Traitement de';
-$_MODULE['<{paypal}prestashop>forminstallment_a731897be50d002773a0ee7fc7a62c3e'] = 'Informez vos clients de l’option de payer en 4x PayPal en affichant des bannières sur votre site.';
+$_MODULE['<{paypal}prestashop>forminstallment_a731897be50d002773a0ee7fc7a62c3e'] = 'Utilisez nos bannières 4X Paiment PayPal pour en faire la promotion sur votre site.';
 $_MODULE['<{paypal}prestashop>forminstallment_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{paypal}prestashop>forminstallment_638e1f70e3be66cd373e5b7e98b80bec'] = 'Activer l\'affichage des bannières 4x';
 $_MODULE['<{paypal}prestashop>forminstallment_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
@@ -555,7 +555,11 @@ $_MODULE['<{paypal}prestashop>forminstallment_381805411dac8b454d0de986ef0eaf3d']
 $_MODULE['<{paypal}prestashop>forminstallment_4d312c672b84eeb1b903e5cda7c65fb9'] = 'L\'option \"4X PayPal\" est active sur';
 $_MODULE['<{paypal}prestashop>forminstallment_9176dcc49f1dd25a41f0e96adebf91f8'] = 'Activez l\'affichage des bannières';
 $_MODULE['<{paypal}prestashop>bnplpagedisplayingsetting_d53f3fd73815da5fd604769249c6968c'] = 'Paiement par étapes dans la caisse';
-$_MODULE['<{paypal}prestashop>bnpl-payment-step_6842756c67a29c72c89e0a019e0fbc6f'] = 'Veuillez cliquer sur le bouton \"Payer en X fois\".';
-$_MODULE['<{paypal}prestashop>shortcut-payment-step_f9952e95d55801d9b0742431aefc1d3e'] = 'Veuillez cliquer sur le bouton \"Payer avec PayPal\".';
+$_MODULE['<{paypal}prestashop>bnpl-payment-step_6842756c67a29c72c89e0a019e0fbc6f'] = 'Veuillez cliquer sur le bouton Payer 4X PayPal.';
+$_MODULE['<{paypal}prestashop>shortcut-payment-step_f9952e95d55801d9b0742431aefc1d3e'] = 'Veuillez cliquer sur le bouton Payer avec PayPal.';
 $_MODULE['<{paypal}prestashop>adminpaypalcustomizecheckoutcontroller_d4350ae4398468173e2d732aafdde5e1'] = 'Nom de la marque affiché en bas à droite lors du paiement PayPal';
 $_MODULE['<{paypal}prestashop>paypal_a5798511a026181ecf457aa003eebbbc'] = '4X PayPal';
+$_MODULE['<{paypal}prestashop>trackingparametersform_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
+$_MODULE['<{paypal}prestashop>whitelistform_3d4176b5773ebb35988eab171f78be02'] = 'Liste des IPs autorisées';
+$_MODULE['<{paypal}prestashop>whitelistform_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
+$_MODULE['<{paypal}prestashop>statusblock_32d5facdc889dd6e687606994a04bce9'] = 'L\'extention PHP cURL est activé sur votre serveur';
