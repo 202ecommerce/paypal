@@ -18,8 +18,9 @@ class Steps {
       this.updateCurrentBadgeStep();
       this.updateStepsProgress();
 
-      if ($(e.detail.form).find(this.btn).attr('data-dismiss') === 'modal') {
+      if (this.getCurrentStepIndex() == -1) {
         $(e.detail.form).closest('.modal').modal('hide');
+        document.location.reload();
       }
     });
     $(document).on('click', this.btn, (e) => {
@@ -30,6 +31,7 @@ class Steps {
 
       if ($(e.currentTarget).attr('data-dismiss') === 'modal') {
         $(e.currentTarget).closest('.modal').modal('hide');
+        document.location.reload();
       }
     });
   }
