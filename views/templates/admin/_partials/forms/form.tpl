@@ -41,11 +41,11 @@
       {block name='form_footer_buttons'}
         {if $isModal}
           <div class="d-flex justify-content-between flex-fill mr-3">
-            <button data-btn-action="prev" class="btn btn-secondary d-none">{l s='Back' mod='paypal'}</button>
+            <button data-btn-action="prev" class="btn btn-secondary">{l s='Back' mod='paypal'}</button>
             <button data-btn-action="next" class="btn btn-outline-primary">{l s='Skip this step' mod='paypal'}</button>
           </div>
         {/if}
-        <button data-btn-action="next" save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
+        <button save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
       {/block}
     </div>
   {/block}

@@ -13,7 +13,7 @@ class Section {
 
 
   registerEvents() {
-    $(this.sectionToggleSelector).on('click', (e) => {
+    $(document).on('click', this.sectionToggleSelector, (e) => {
       e.preventDefault();
       e.stopPropagation();
       this.showSection(e.currentTarget.getAttribute('data-section-toggle'));

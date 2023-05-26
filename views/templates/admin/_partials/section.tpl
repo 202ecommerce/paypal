@@ -44,11 +44,13 @@
       {if $isModal}
         <div class="h1">{$form.legend.title}</div>
       {/if}
-      {if $form.id_form != 'pp_white_list_form'}
-        {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
-      {else}
-        {include file="module:paypal/views/templates/admin/_partials/forms/form.tpl" form=$form}
-      {/if}
+        <div form-container="{$form.id_form}">
+            {if $form.id_form != 'pp_white_list_form'}
+                {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
+            {else}
+                {include file="module:paypal/views/templates/admin/_partials/forms/form.tpl" form=$form}
+            {/if}
+        </div>
      </div>
    </div>
  </div>

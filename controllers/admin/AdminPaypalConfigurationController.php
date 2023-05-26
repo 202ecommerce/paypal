@@ -108,7 +108,6 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
     public function ajaxProcessSaveForm()
     {
-        //ToDo: refacto
         Configuration::updateValue(PaypalConfigurations::SHOW_MODAL_CONFIGURATION, 0);
         $data = [];
         $response = new JsonResponse();
@@ -188,7 +187,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         die;
     }
 
-    public function displayAjaxGetShortcut()
+    public function ajaxProcessGetShortcut()
     {
         $label = Tools::getValue('label', 'pay');
         $height = (int) Tools::getValue('height', 35);
@@ -210,7 +209,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         die;
     }
 
-    public function displayAjaxRenderTechnicalChecklist()
+    public function ajaxProcessRenderTechnicalChecklist()
     {
         $response = new JsonResponse();
         $template = $this->context->smarty->createTemplate($this->getTemplatePath() . '_partials/statusBlock.tpl');
@@ -223,7 +222,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         die;
     }
 
-    public function displayAjaxRenderFeatureChecklist()
+    public function ajaxProcessRenderFeatureChecklist()
     {
         $response = new JsonResponse();
         $template = $this->context->smarty->createTemplate($this->getTemplatePath() . '_partials/featureChecklist.tpl');
@@ -232,6 +231,38 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'success' => true,
             'content' => $template->fetch(),
         ]);
+        $response->send();
+        die;
+    }
+
+    public function ajaxProcessGetForms()
+    {
+        $response = new JsonResponse();
+        $responseBody = [
+            'success' => true,
+            'forms' => [],
+        ];
+
+        foreach ($this->forms as $form) {
+            $desc = $form->getDescription();
+
+            if ($desc['id_form'] == 'pp_white_list_form') {
+                $tmpPath = $this->getTemplatePath() . '_partials/forms/form.tpl';
+            } else {
+                $tmpPath = $this->getTemplatePath() . '_partials/forms/' . $desc['id_form'] . '.tpl';
+            }
+
+            if (false === file_exists($tmpPath)) {
+                continue;
+            }
+
+            $template = $this->context->smarty->createTemplate($tmpPath);
+            $template->assign('form', $desc);
+            $template->assign('isModal', (int) Tools::getValue('isModal'));
+            $responseBody['forms'][$desc['id_form']] = $template->fetch();
+        }
+
+        $response->setData($responseBody);
         $response->send();
         die;
     }

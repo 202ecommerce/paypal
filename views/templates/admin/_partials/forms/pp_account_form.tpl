@@ -228,5 +228,5 @@
   {if $isModal}
     <button data-btn-action="prev" class="btn btn-secondary d-none">{l s='Back' mod='paypal'}</button>
   {/if}
-  <button data-btn-action="next" save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
+  <button save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
 {/block}

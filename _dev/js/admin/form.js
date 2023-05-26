@@ -5,6 +5,7 @@ class Form {
     this.formGroupDynamicSelector = '.form-group-dynamic';
     this.inputDynamicSelector = '.custom-control-input';
     this.inputInstallementColor = '[name="PAYPAL_INSTALLMENT_COLOR"]';
+    this.controller = document.location;
   }
 
   init() {
@@ -13,7 +14,7 @@ class Form {
 
 
   registerEvents() {
-    $(`${this.formGroupDynamicSelector} ${this.inputDynamicSelector}`).on('change', (e) => {
+    $(document).on('change', `${this.formGroupDynamicSelector} ${this.inputDynamicSelector}`, (e) => {
       const groupName = e.currentTarget.closest(this.formGroupDynamicSelector).getAttribute('group-name');
       const $formGroups = $(e.currentTarget).closest(this.formGroupDynamicSelector).siblings(`[group-name="${groupName}"]`);
       if ($(e.currentTarget).prop('checked')) {
@@ -27,9 +28,53 @@ class Form {
       this.updateSwatchColor(e.currentTarget);
     });
 
-    $('[customize-style-shortcut-container] .form-control').on('change', (e) => this.updatePreviewButton(e));
-    $('[data-type="height"]').on('change', (e) => this.checkHeight(e));
-    $('[data-type="width"]').on('change', (e) => this.checkWidth(e));
+    $(document).on('change', '[customize-style-shortcut-container] .form-control', (e) => this.updatePreviewButton(e));
+    $(document).on('change', '[data-type="height"]', (e) => this.checkHeight(e));
+    $(document).on('change', '[data-type="width"]', (e) => this.checkWidth(e));
+    $(document).on('click', '[logout-button]', () => this.resetCredentials());
+
+    document.addEventListener('generateCredentials', (event) => {
+      this.generateCredentials(event.detail);
+    });
+    document.addEventListener('updateCredentials', () => {
+      this.updateCredentials();
+    });
+    document.addEventListener('updateButtonSection', () => {
+      this.updateButtonSection();
+    });
+    document.addEventListener('click', (event) => {
+      if (event.target.hasAttribute('refresh-technical-checklist')) {
+        this.refreshTechnicalChecklist();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (event.target.hasAttribute('refresh-feature-checklist')) {
+        this.refreshFeatureChecklist();
+      }
+    });
+
+    $(document).on('click', '[save-form]', (e) => {
+      e.preventDefault();
+
+      this.saveProcess(e)
+        .then((result) => {
+          if (result) {
+            this.refreshForms(e.target.closest('form').classList.contains('form-modal'));
+            document.dispatchEvent(
+              (new CustomEvent(
+                'afterFormSaved',
+                {
+                  bubbles: true,
+                  detail: {
+                    form: e.target.closest('form'),
+                  }
+                }
+              ))
+            );
+          }
+        });
+
+    });
   }
 
   updateSwatchColor(element) {
@@ -129,6 +174,216 @@ class Form {
    msgContainer.html(msg);
    return true;
  }
+
+  resetCredentials() {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'resetCredentials');
+    url.searchParams.append('isSandbox', this.isSandbox() ? 1 : 0);
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          if (this.isSandbox()) {
+            document.querySelector('[name="is_configured_sandbox"]').value = 0;
+            document.querySelector('[name="paypal_clientid_sandbox"]').value = '';
+            document.querySelector('[name="paypal_secret_sandbox"]').value = '';
+            document.querySelector('[name="merchant_id_sandbox"]').value = '';
+          } else {
+            document.querySelector('[name="is_configured_live"]').value = 0;
+            document.querySelector('[name="paypal_clientid_live"]').value = '';
+            document.querySelector('[name="paypal_secret_live"]').value = '';
+            document.querySelector('[name="merchant_id_live"]').value = '';
+          }
+        }
+
+        this.updateButtonSection();
+      });
+  }
+
+  updateButtonSection() {
+    const liveSection = document.querySelector('[onboarding-button-section] [live-section]');
+    const sandboxSection = document.querySelector('[onboarding-button-section] [sandbox-section]');
+    const logoutSection = document.querySelector('[onboarding-button-section] [logout-section]');
+
+    if (this.isConfigured()) {
+      liveSection.style.display = 'none';
+      sandboxSection.style.display = 'none';
+      logoutSection.style.display = null;
+      return;
+    }
+
+    if (this.isSandbox()) {
+      liveSection.style.display = 'none';
+      sandboxSection.style.display = null;
+      logoutSection.style.display = 'none';
+    } else {
+      liveSection.style.display = null;
+      sandboxSection.style.display = 'none';
+      logoutSection.style.display = 'none';
+    }
+  }
+
+  updateCredentials() {
+    const liveSection = document.querySelector('[credential-section] [live-section]');
+    const sandboxSection = document.querySelector('[credential-section] [sandbox-section]');
+
+    if (this.isSandbox()) {
+      liveSection.style.display = 'none';
+      sandboxSection.style.display = null;
+    } else {
+      liveSection.style.display = null;
+      sandboxSection.style.display = 'none';
+    }
+  }
+
+  saveProcess(event) {
+    return new Promise((resolve, reject) => {
+      event.target.disabled = true;
+      const formData = new FormData(event.currentTarget.closest('form'));
+      const url = new URL(this.controller);
+      formData.append(event.currentTarget.getAttribute('name'), 1);
+      url.searchParams.append('ajax', 1);
+      url.searchParams.append('action', 'saveForm');
+
+      fetch(url.toString(), {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => {
+          event.target.disabled = false;
+          return response.json();
+        })
+        .then((response) => {
+          resolve(response.success == true);
+        });
+    });
+  }
+
+  generateCredentials(data) {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'generateCredentials');
+    url.searchParams.append('authCode', data.authCode);
+    url.searchParams.append('sharedId', data.sharedId);
+    url.searchParams.append('isSandbox', this.isSandbox() ? 1 : 0);
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          if (response.isSandbox) {
+            document.querySelector('[name="is_configured_sandbox"]').value = 1;
+            document.querySelector('[name="paypal_clientid_sandbox"]').value = response.clientid;
+            document.querySelector('[name="paypal_secret_sandbox"]').value = response.secret;
+            document.querySelector('[name="merchant_id_sandbox"]').value = response.merchantId;
+          } else {
+            document.querySelector('[name="is_configured_live"]').value = 1;
+            document.querySelector('[name="paypal_clientid_live"]').value = response.clientid;
+            document.querySelector('[name="paypal_secret_live"]').value = response.secret;
+            document.querySelector('[name="merchant_id_live"]').value = response.merchantId;
+          }
+        }
+
+        this.updateButtonSection();
+      });
+  }
+
+  isSandbox() {
+    const mode = document.querySelector('#pp_account_form [name="mode"]');
+
+    if (mode) {
+      return mode.value == 'SANDBOX';
+    }
+
+    return false;
+  }
+
+  isConfigured() {
+    if (this.isSandbox()) {
+      return document.querySelector('[name="is_configured_sandbox"]').value == 1;
+    }
+
+    return document.querySelector('[name="is_configured_live"]').value == 1;
+  }
+
+  refreshFeatureChecklist() {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'renderFeatureChecklist');
+    document.querySelector('[refresh-feature-checklist]').disabled = true;
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        document.querySelector('[refresh-feature-checklist]').disabled = false;
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          document.querySelector('[feature-checklist-container]').innerHTML = response.content;
+        }
+      });
+  }
+
+  refreshTechnicalChecklist() {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'renderTechnicalChecklist');
+    document.querySelector('[refresh-technical-checklist]').disabled = true;
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        document.querySelector('[refresh-technical-checklist]').disabled = false;
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success) {
+          document.querySelector('[technical-checklist-container]').innerHTML = response.content;
+        }
+      });
+  }
+
+  refreshForms(isModal=false) {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'getForms');
+    url.searchParams.append('isModal', (isModal ? '1' : '0'));
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success == false) {
+          return;
+        }
+
+        for (const idForm in response.forms) {
+          const container = $(`[form-container="${idForm}"]`);
+
+          if (container.length == 0) {
+            continue;
+          }
+
+          container.html(response.forms[idForm]);
+        }
+      });
+  }
 }
 
 export default Form;
