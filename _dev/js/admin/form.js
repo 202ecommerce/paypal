@@ -12,7 +12,6 @@ class Form {
     this.registerEvents();
   }
 
-
   registerEvents() {
     $(document).on('change', `${this.formGroupDynamicSelector} ${this.inputDynamicSelector}`, (e) => {
       const groupName = e.currentTarget.closest(this.formGroupDynamicSelector).getAttribute('group-name');
@@ -32,6 +31,7 @@ class Form {
     $(document).on('change', '[data-type="height"]', (e) => this.checkHeight(e));
     $(document).on('change', '[data-type="width"]', (e) => this.checkWidth(e));
     $(document).on('click', '[logout-button]', () => this.resetCredentials());
+    $(document).on('input', '[name="PAYPAL_WHITE_LIST_IP"]', (e) => this.onUpdateIP(e));
 
     document.addEventListener('generateCredentials', (event) => {
       this.generateCredentials(event.detail);
@@ -383,6 +383,15 @@ class Form {
           container.html(response.forms[idForm]);
         }
       });
+  }
+
+  onUpdateIP(e) {
+    e.currentTarget.value = e.currentTarget.value
+      .split('')
+      .filter((symbol) => {
+        return ['0','1','2','3','4','5','6','7','8','9','.',','].indexOf(symbol) >= 0;
+      })
+      .join('');
   }
 }
 
