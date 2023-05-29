@@ -53,8 +53,8 @@
   {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT dynamicField=$dynamicFieldBanner}
 
   <div class="form-group row {[
-    'd-none' => $dynamicField && !$dynamicField.value
-  ]|classnames}" {if $dynamicField.name|default:false}group-name="{$dynamicFieldBanner.name}"{/if}>
+    'd-none' => $dynamicFieldBanner && !$dynamicFieldBanner.value
+  ]|classnames}" {if $dynamicFieldBanner.name|default:false}group-name="{$dynamicFieldBanner.name}"{/if}>
     <label class="form-control-label form-control-label-check col-2" for="PAYPAL_INSTALLMENT">{l s='Active on' mod='paypal'}</label>
     <div class="col-10 pr-0">
       <div class="row no-gutters">
@@ -67,12 +67,16 @@
     </div>
   </div>
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT dynamicField=$dynamicFieldBanner}
+    <div class="{[
+    'd-none' => $dynamicFieldBanner && !$dynamicFieldBanner.value
+    ]|classnames}" {if $dynamicFieldBanner.name|default:false}group-name="{$dynamicFieldBanner.name}"{/if}>
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$dynamicFieldBanner}
+        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
 
-    {if isset($form.fields.widget_code)}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.widget_code dynamicField=$dynamicFieldBanner}
-    {/if}
+        {if isset($form.fields.widget_code)}
+            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.widget_code dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
+        {/if}
+    </div>
 
 {/block}

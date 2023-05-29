@@ -14,6 +14,10 @@ class Steps {
 
   registerEvents() {
     $(document).on('afterFormSaved', (e) => {
+      if (e.detail.form.classList.contains('form-modal') == false) {
+        return;
+      }
+
       this.setAction('next');
       this.updateCurrentBadgeStep();
       this.updateStepsProgress();
