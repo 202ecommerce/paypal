@@ -25,8 +25,7 @@
  *}
 <form id="{$form.id_form}" class="mt-4 {[
   'form-modal' => $isModal
-]|classnames}" data-form-configuration {block name='form_attributes'}{/block}
-onsubmit="function (e) { e.preventDefault(); e.stopPropagation();}">
+]|classnames}" data-form-configuration {block name='form_attributes'}{/block}>
   {block name='form_content'}
     {foreach from=$form.fields item=field}
       {if $field.name|default:false}

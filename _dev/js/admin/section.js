@@ -4,13 +4,13 @@ class Section {
     this.sectionSelector = sectionSelector;
     this.formSelector = '[data-form-configuration]';
     this.$dashboard = $('[data-dashboard]');
-    this.$btnSectionReset = $('[data-btn-section-reset]');
+    this.$btnSectionReset = '[data-btn-section-reset]';
+    this.controller = document.location.href;
   }
 
   init() {
     this.registerEvents();
   }
-
 
   registerEvents() {
     $(document).on('click', this.sectionToggleSelector, (e) => {
@@ -25,16 +25,22 @@ class Section {
       this.hideDashboard();
     });
 
-    this.$btnSectionReset.on('click', () => {
+    $(document).on('click', this.$btnSectionReset, () => {
       this.reset();
-    })
+    });
+
+    document.addEventListener('afterFormSaved', (e) => {
+      if (e.detail.form.id === 'pp_account_form') {
+        this.refreshWelcomeBoard();
+      }
+    });
   }
 
   showSection(section) {
     document.location.hash = section;
     const $form = $(this.formSelector).filter(this.getFormSelector(section));
     $form.closest(this.sectionSelector).removeClass('d-none');
-    this.$btnSectionReset.removeClass('d-none');
+    $(this.$btnSectionReset).removeClass('d-none');
   }
 
   getFormSelector(section) {
@@ -71,13 +77,33 @@ class Section {
 
   hideAllSections() {
     $(this.formSelector).closest(this.sectionSelector).addClass('d-none');
-    this.$btnSectionReset.addClass('d-none');
+    $(this.$btnSectionReset).addClass('d-none');
   }
 
   reset() {
     this.showDashboard();
     this.hideAllSections();
     document.location.hash = '';
+  }
+
+  refreshWelcomeBoard() {
+    const url = new URL(this.controller);
+    url.searchParams.append('ajax', 1);
+    url.searchParams.append('action', 'getWelcomeBoard');
+
+    fetch(url.toString(), {
+      method: 'GET',
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.success == false) {
+          return;
+        }
+
+        document.querySelector('[welcome-board]').outerHTML = response.content;
+      });
   }
 
 }

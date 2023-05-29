@@ -246,6 +246,10 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         foreach ($this->forms as $form) {
             $desc = $form->getDescription();
 
+            if ($desc['id_form'] == 'pp_account_form') {
+                continue;
+            }
+
             if ($desc['id_form'] == 'pp_white_list_form') {
                 $tmpPath = $this->getTemplatePath() . '_partials/forms/form.tpl';
             } else {
@@ -263,6 +267,25 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         }
 
         $response->setData($responseBody);
+        $response->send();
+        die;
+    }
+
+    public function ajaxProcessGetWelcomeBoard()
+    {
+        $response = new JsonResponse();
+        $template = $this->context->smarty->createTemplate($this->getTemplatePath() . '_partials/welcome-board.tpl');
+        $template->assign([
+            'diagnosticPage' => $this->context->link->getAdminLink('AdminPaypalDiagnostic'),
+            'loggerPage' => $this->context->link->getAdminLink('AdminPaypalProcessLogger'),
+            'isConfigured' => $this->method->isConfigured(),
+            'isSandbox' => $this->method->isSandbox(),
+            'merchantId' => $this->method->getMerchantId(),
+        ]);
+        $response->setData([
+            'success' => true,
+            'content' => $template->fetch(),
+        ]);
         $response->send();
         die;
     }

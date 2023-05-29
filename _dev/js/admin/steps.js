@@ -5,7 +5,7 @@ class Steps {
     this.content = '[data-step-content]';
     this.currentStepBadge = '[data-badge-current-step]';
     this.stepsProgress = '[data-steps-progress]';
-    this.controller = document.location;
+    this.controller = document.location.href;
   }
 
   init() {

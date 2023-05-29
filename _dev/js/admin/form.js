@@ -5,7 +5,7 @@ class Form {
     this.formGroupDynamicSelector = '.form-group-dynamic';
     this.inputDynamicSelector = '.custom-control-input';
     this.inputInstallementColor = '[name="PAYPAL_INSTALLMENT_COLOR"]';
-    this.controller = document.location;
+    this.controller = document.location.href;
   }
 
   init() {
