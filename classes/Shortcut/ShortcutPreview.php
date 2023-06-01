@@ -196,4 +196,13 @@ class ShortcutPreview extends ShortcutAbstract
 
         return $this;
     }
+
+    public function render()
+    {
+        if ($this->method->isConfigured() === false) {
+            return '';
+        }
+
+        return parent::render();
+    }
 }
