@@ -96,6 +96,14 @@
         }
           {l s='Paypal benefits enabled' mod='paypal'}
       </li>
+
+      <li class="d-flex align-items-center">
+          {include
+          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          isSuccess=true
+          }
+          {l s='Tracking enabled' mod='paypal'}
+      </li>
     </ul>
   </div>
 
