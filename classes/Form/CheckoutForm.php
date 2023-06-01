@@ -431,6 +431,8 @@ class CheckoutForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/checkout.tpl');
+        return Context::getContext()->smarty
+            ->assign('isShowCustomerInstruction', $this->method == 'PPP')
+            ->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/checkout.tpl');
     }
 }

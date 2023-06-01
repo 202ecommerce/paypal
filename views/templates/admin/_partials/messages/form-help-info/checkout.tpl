@@ -34,9 +34,13 @@
 <p>
     {{l s='[b]PayPal In-Context:[/b] opens in a pop-up window, allowing your buyers to finalize their payment without leaving your website. Optimized, modern and reassuring experience which benefits from the same security standards than during a redirection to the PayPal website.' mod='paypal'}|paypalreplace:[]}
 </p>
-<p>
-    {{l s='[b]Customer service[/b] instruction is a required message for using Pay upon invoice methode.' mod='paypal'}|paypalreplace:[]}
-</p>
+
+{if $isShowCustomerInstruction|default:false}
+  <p>
+      {{l s='[b]Customer service[/b] instruction is a required message for using Pay upon invoice methode.' mod='paypal'}|paypalreplace:[]}
+  </p>
+{/if}
+
 <p>
     {{l s='[b]Show PayPal benefits to your customers:[/b] you can increase your conversion rate by presenting PayPal benefits to your customers on payment methods selection page.' mod='paypal'}|paypalreplace:[]}
 </p>
