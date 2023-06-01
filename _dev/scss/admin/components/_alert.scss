@@ -24,6 +24,8 @@
  *
  */
 .alert {
+  margin-top: $alert-margin-top;
+
   &-warning {
     background-color: $warning;
     border-color: $primary;

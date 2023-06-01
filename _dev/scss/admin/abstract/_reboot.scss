@@ -31,7 +31,8 @@
   .form-group {
     float: unset;
     width: unset;
-    
+    margin-bottom: $form-group-margin-bottom;
+
     > div {
       float: unset;
     }

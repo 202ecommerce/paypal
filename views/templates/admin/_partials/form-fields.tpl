@@ -60,7 +60,9 @@
           class="form-control {[
             'form-control-primary' => $variant == 'primary'
           ]|classnames}"
-          placeholder="{l s='Placeholder' mod='paypal'}"
+          {if $field.placeholder|default:false}
+            placeholder="{$field.placeholder}"
+          {/if}
           value="{$field.value|default:''}"
           {if $field.data_type|default:false}
             data-type="{$field.data_type}"
@@ -145,7 +147,7 @@
 {if $field.type !== 'checkbox' && $field.label}
       </div>
 
-      <div class="text-muted small mt-1">{l s='Placeholder' mod='paypal'}</div>
+      {* <div class="text-muted small mt-1">{l s='Placeholder' mod='paypal'}</div> *}
 
       {* to do: show hint *}
 

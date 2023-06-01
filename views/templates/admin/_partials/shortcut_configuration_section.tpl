@@ -76,12 +76,14 @@
                 name="{$width.name}"
                 id="{$width.name}"
                 class="form-control"
-                placeholder="{l s='Placeholder' mod='paypal'}"
+                {if $width.placeholder|default:false}
+                  placeholder="{$width.placeholder}"
+                {/if}
                 value="{$width.value|default:''}"
                 data-type="width"
                 data-msg-error="{l s='Minimum 150 px is required' mod='paypal'}"
               >
-              <div class="text-muted small mt-1">Placeholder</div>
+              <div class="text-muted small mt-1">{l s='Width' mod='paypal'}</div>
             </div>
             <div class="col col-6 pl-2">
               <input
@@ -89,12 +91,14 @@
                 name="{$height.name}"
                 id="{$height.name}"
                 class="form-control"
-                placeholder="{l s='Placeholder' mod='paypal'}"
+                {if $height.placeholder|default:false}
+                  placeholder="{$height.placeholder}"
+                {/if}
                 value="{$height.value|default:''}"
                 data-type="height"
                 data-msg-error="{l s='Value from 25 to 55 is required' mod='paypal'}"
               >
-              <div class="text-muted small mt-1">Placeholder</div>
+              <div class="text-muted small mt-1">{l s='Height' mod='paypal'}</div>
             </div>
             <div class="col col-12" msg-container></div>
           </div>

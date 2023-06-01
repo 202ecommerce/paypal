@@ -113,6 +113,8 @@ $custom-checkbox-indicator-border-radius: 50% !default;
 $custom-control-indicator-checked-color: $white !default;
 $custom-checkbox-indicator-icon-checked: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='12' viewBox='0 0 16 12'><path stroke-width='2' stroke-linecap='square' stroke='#{$custom-control-indicator-checked-color}' fill='transparent' d='M14.0044 1.5356L5.52795 10.0209L1.99609 6.48535'/></svg>") !default;
 
+$form-group-margin-bottom: 1rem !default;
+
 // Tables
 $table-border-color: $gray-400 !default;
 $table-border-width: 2px !default;
@@ -121,7 +123,8 @@ $table-cell-padding: .5625rem !default;
 // Alerts
 $alert-padding-y: 8.5px !default;
 $alert-padding-x: 1rem !default;
-$alert-margin-bottom: 1rem !default;
+$alert-margin-bottom: .5rem !default;
+$alert-margin-top: $alert-margin-bottom !default;
 
 // Shadow
 $box-shadow: 0 .25rem .5rem rgba($black, .25) !default;
