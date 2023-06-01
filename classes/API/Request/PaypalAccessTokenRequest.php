@@ -53,8 +53,17 @@ class PaypalAccessTokenRequest extends RequestAbstract
             }
         } catch (HttpException $e) {
             $error = new Error();
-            $resultDecoded = json_decode($e->getMessage());
-            $error->setMessage($resultDecoded->error_description)->setErrorCode($e->getCode());
+            $resultDecoded = json_decode($e->getMessage(), true);
+
+            if (isset($resultDecoded['error_description'])) {
+                $error->setMessage($resultDecoded['error_description']);
+            } elseif (isset($resultDecoded['message'])) {
+                $error->setMessage($resultDecoded['message']);
+            } else {
+                $error->setMessage($e->getMessage());
+            }
+
+            $error->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
         } catch (Throwable $e) {
