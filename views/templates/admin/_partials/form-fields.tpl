@@ -146,14 +146,6 @@
 
 {if $field.type !== 'checkbox' && $field.label}
       </div>
-
-      {* <div class="text-muted small mt-1">{l s='Placeholder' mod='paypal'}</div> *}
-
-      {* to do: show hint *}
-
-      {* {if $field.hint|default:false}
-        <div class="small">{$field.hint}</div>
-      {/if} *}
     </div>
   </div>
 {/if}
