@@ -210,6 +210,7 @@ class Form {
     const liveSection = document.querySelector('[onboarding-button-section] [live-section]');
     const sandboxSection = document.querySelector('[onboarding-button-section] [sandbox-section]');
     const logoutSection = document.querySelector('[onboarding-button-section] [logout-section]');
+    this.updateMerchantLabel();
 
     if (this.isConfigured()) {
       liveSection.style.display = 'none';
@@ -239,6 +240,33 @@ class Form {
     } else {
       liveSection.style.display = null;
       sandboxSection.style.display = 'none';
+    }
+
+    this.updateMerchantLabel();
+  }
+
+  updateMerchantLabel() {
+    const labelSandbox = document.querySelector('[merchant-label-sandbox]');
+    const labelLive = document.querySelector('[merchant-label-live]');
+
+    if (labelLive === null || labelSandbox === null) {
+      return;
+    }
+
+    if (!this.isConfigured()) {
+      labelSandbox.style.display = 'none';
+      labelLive.style.display = 'none';
+      return;
+    }
+
+    if (this.isSandbox()) {
+      labelSandbox.querySelector('[merchant-id]').textContent = document.querySelector('[name="merchant_id_sandbox"]').value;
+      labelSandbox.style.display = null;
+      labelLive.style.display = 'none';
+    } else {
+      labelLive.querySelector('[merchant-id]').textContent = document.querySelector('[name="merchant_id_live"]').value;
+      labelLive.style.display = null;
+      labelSandbox.style.display = 'none';
     }
   }
 

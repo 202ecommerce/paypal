@@ -226,7 +226,16 @@
 
 {block name='form_footer_buttons'}
   {if $isModal}
-    <button data-btn-action="prev" class="btn btn-secondary d-none">{l s='Back' mod='paypal'}</button>
+    <div>
+      <div merchant-label-sandbox class="alert alert-warning mt-0" style="display: none">
+          {l s='You are connected with the accound:' mod='paypal'}
+        <b merchant-id></b>
+      </div>
+      <div merchant-label-live class="alert alert-warning mt-0" style="display: none">
+          {l s='You are connected with the accound:' mod='paypal'}
+        <b merchant-id></b>
+      </div>
+    </div>
   {/if}
   <button save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
 {/block}
