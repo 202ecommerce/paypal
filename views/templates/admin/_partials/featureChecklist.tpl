@@ -94,7 +94,7 @@
           file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=$vars.isShowPaypalBenefits|default:false
         }
-          {l s='Paypal benefits enabled' mod='paypal'}
+          {l s='PayPal benefits enabled' mod='paypal'}
       </li>
 
       <li class="d-flex align-items-center">
