@@ -23,7 +23,7 @@ class Form {
       }
     });
 
-    $(this.inputInstallementColor).on('change', (e) => {
+    $(document).on('change', this.inputInstallementColor, (e) => {
       this.updateSwatchColor(e.currentTarget);
     });
 
