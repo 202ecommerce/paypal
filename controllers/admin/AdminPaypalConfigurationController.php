@@ -13,6 +13,7 @@ use PaypalAddons\classes\Form\ShortcutConfigurationForm;
 use PaypalAddons\classes\Form\TechnicalChecklistForm;
 use PaypalAddons\classes\Form\TrackingParametersForm;
 use PaypalAddons\classes\Form\WhiteListForm;
+use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PaypalAddons\classes\Shortcut\ShortcutPreview;
 
@@ -58,9 +59,14 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
     protected function initForms()
     {
+        $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
         $this->forms['checkoutForm'] = new CheckoutForm();
         $this->forms['trackingForm'] = new TrackingParametersForm();
-        $this->forms['formInstallment'] = new FormInstallment();
+
+        if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
+            $this->forms['formInstallment'] = new FormInstallment();
+        }
+
         $this->forms['whiteListForm'] = new WhiteListForm();
         $this->forms['accountForm'] = new AccountForm();
         $this->forms['orderStatusForm'] = new OrderStatusForm();

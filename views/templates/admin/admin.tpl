@@ -36,47 +36,64 @@
 {else}
 
   {* Account section *}
-  {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$accountForm
-  }
+    {if isset($accountForm)}
+        {include
+          file="module:paypal/views/templates/admin/_partials/section.tpl"
+          form=$accountForm
+        }
+    {/if}
 
   {* Tracking section *}
-  {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$trackingForm
-  }
+  {if isset($trackingForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$trackingForm
+      }
+  {/if}
 
   {* Checkout section *}
-  {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$checkoutForm
-  }
+  {if isset($checkoutForm)}
+      {include
+        file="module:paypal/views/templates/admin/_partials/section.tpl"
+        form=$checkoutForm
+      }
+  {/if}
+
 
   {* Installment section *}
-  {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$formInstallment
-    sectionColFormClasses=' '
-    sectionColInfoClasses=' '
-  }
+  {if isset($formInstallment)}
+      {include
+        file="module:paypal/views/templates/admin/_partials/section.tpl"
+        form=$formInstallment
+        sectionColFormClasses=' '
+        sectionColInfoClasses=' '
+      }
+  {/if}
 
-  {* Shortcut section *}
-    {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$shortcutConfigurationForm
-  }
+    {* Shortcut section *}
+  {if isset($shortcutConfigurationForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$shortcutConfigurationForm
+      }
+  {/if}
+
 
   {* Order status section *}
-  {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$orderStatusForm
-  }
+  {if isset($orderStatusForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$orderStatusForm
+      }
+  {/if}
 
   {* White list section *}
-  {include
-    file="module:paypal/views/templates/admin/_partials/section.tpl"
-    form=$whiteListForm
-  }
+  {if isset($whiteListForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$whiteListForm
+      }
+  {/if}
+
 
 {/if}
