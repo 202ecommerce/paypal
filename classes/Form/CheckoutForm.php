@@ -239,6 +239,48 @@ class CheckoutForm implements FormInterface
             }
         }
 
+        if ($this->method == 'MB') {
+            $fields[PaypalConfigurations::VAULTING] = [
+                'type' => 'switch',
+                'label' => $this->module->l('Enable "Remember my cards" feature', 'AdminPayPalCustomizeCheckoutController'),
+                'name' => PaypalConfigurations::VAULTING,
+                'hint' => $this->module->l('The Vault is used to process payments so your customers don\'t need to re-enter their information each time they make a purchase from you.', 'AdminPayPalCustomizeCheckoutController'),
+                'values' => [
+                    [
+                        'id' => PaypalConfigurations::VAULTING . '_on',
+                        'value' => 1,
+                        'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                    [
+                        'id' => PaypalConfigurations::VAULTING . '_off',
+                        'value' => 0,
+                        'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                ],
+                'value' => (int) Configuration::get(PaypalConfigurations::VAULTING),
+            ];
+
+            $fields[PaypalConfigurations::MERCHANT_INSTALLMENT] = [
+                'type' => 'switch',
+                'label' => $this->module->l('Payments with installments', 'AdminPayPalCustomizeCheckoutController'),
+                'name' => PaypalConfigurations::MERCHANT_INSTALLMENT,
+                'hint' => $this->module->l('Enable this option if you want to enable installments. If enabled, your clients will be able to change the number of installments (by default, 1x payment will be offered). This option can be available only for registered users.', 'AdminPayPalCustomizeCheckoutController'),
+                'values' => [
+                    [
+                        'id' => PaypalConfigurations::MERCHANT_INSTALLMENT . '_on',
+                        'value' => 1,
+                        'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                    [
+                        'id' => PaypalConfigurations::MERCHANT_INSTALLMENT . '_off',
+                        'value' => 0,
+                        'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                ],
+                'value' => (int) Configuration::get(PaypalConfigurations::MERCHANT_INSTALLMENT),
+            ];
+        }
+
         if ($this->method === 'PPP') {
             $fields[PaypalConfigurations::PUI_ENABLED] = [
                 'type' => 'switch',
@@ -424,6 +466,16 @@ class CheckoutForm implements FormInterface
         Configuration::updateValue(
             PaypalConfigurations::API_CARD,
             isset($data[PaypalConfigurations::API_CARD]) ? 1 : 0
+        );
+
+        Configuration::updateValue(
+            PaypalConfigurations::VAULTING,
+            isset($data[PaypalConfigurations::VAULTING]) ? 1 : 0
+        );
+
+        Configuration::updateValue(
+            PaypalConfigurations::MERCHANT_INSTALLMENT,
+            isset($data[PaypalConfigurations::MERCHANT_INSTALLMENT]) ? 1 : 0
         );
 
         return true;
