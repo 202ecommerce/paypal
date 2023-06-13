@@ -720,12 +720,10 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 break;
             case 'MB':
                 if (in_array($this->context->currency->iso_code, $this->currencyMB)) {
-                    if ((int) Configuration::get('PAYPAL_MB_EC_ENABLED')) {
-                        $methodEC = AbstractMethodPaypal::load('EC');
-                        if ($methodEC->isConfigured()) {
-                            $paymentOptionsEc = $this->renderEcPaymentOptions($params);
-                            $payments_options = array_merge($payments_options, $paymentOptionsEc);
-                        }
+                    $methodEC = AbstractMethodPaypal::load('EC');
+                    if ($methodEC->isConfigured()) {
+                        $paymentOptionsEc = $this->renderEcPaymentOptions($params);
+                        $payments_options = array_merge($payments_options, $paymentOptionsEc);
                     }
 
                     if ($method->isConfigured() && (int) Configuration::get('PAYPAL_API_CARD') && (in_array($isoCountryDefault, $this->countriesApiCartUnavailable) == false)) {
