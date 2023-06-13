@@ -29,5 +29,5 @@
 </p>
 
 <p>
-  {l s='If some elements added via other modules are displayed on the same hook, you can manage the position of the PayPal Official module via « Design - Positions ». By default, PayPal shortcuts are displayed on your web site via PrestaShop native hook. If you choose to use PrestaShop widgets, you will be able to copy widget code and insert it wherever you want in the product template.' mod='paypal'}
+  {l s='If some elements added via other modules are displayed on the same hook, you can manage the position of the PayPal Official module via « Design - Positions ». By default, PayPal shortcuts are displayed on your website via PrestaShop native hook. If you choose to use PrestaShop widgets, you will be able to copy the widget code and insert it wherever you want in the product template.' mod='paypal'}
 </p>

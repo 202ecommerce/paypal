@@ -42,11 +42,11 @@
 {/if}
 
 <p>
-    {{l s='[b]Show PayPal benefits to your customers:[/b] you can increase your conversion rate by presenting PayPal benefits to your customers on payment methods selection page.' mod='paypal'}|paypalreplace:[]}
+    {{l s='[b]Show PayPal benefits to your customers:[/b] you can increase your conversion rate by presenting PayPal benefits to your customers on the payment methods selection page.' mod='paypal'}|paypalreplace:[]}
 </p>
 <p>
     {{l s='[b]PayPal shortcuts[/b] allow a faster checkout for your buyers. PayPal automatically provides you with the client\'s shipping and billing information.' mod='paypal'}|paypalreplace:[]}
 </p>
 <p>
-    {{l s='[b]Brand name[/b] shown on top left during PayPal checkout: A label that overrides the business name in the PayPal account on the PayPal pages. If you are using PayPal Checkout redirect you can also customize your shop logo. The logo can be changed via your business profile settings.' mod='paypal'}|paypalreplace:[]}
+    {{l s='[b]Brand name[/b] shown on top left during PayPal checkout: A label that overrides the business name in the PayPal account on the PayPal pages. If you are using PayPal Checkout, redirect you can also customize your shop logo. The logo can be changed via your business profile settings.' mod='paypal'}|paypalreplace:[]}
 </p>

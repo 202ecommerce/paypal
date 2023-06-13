@@ -25,6 +25,6 @@
  *}
 
 <p>
-    {l s='You can test your PayPal module on production mode too. You can allow the module’s  access to a list of IP addresses. Tape the IP in the blue field for the test time. and delete it after validation of the test.' mod='paypal'}
+    {l s='You can test your PayPal module on production mode too. You can allow the module’s  access to a list of IP addresses. Tape the IP in the blue field for the test time and delete it after validation of the test.' mod='paypal'}
 </p>
 
