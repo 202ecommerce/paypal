@@ -104,7 +104,7 @@ class CheckoutForm implements FormInterface
                 [
                     'value' => '0',
                     'title' => $this->module->l('REDIRECT', 'AdminPayPalCustomizeCheckoutController'),
-                ]
+                ],
             ],
             'value' => Configuration::get(PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT),
             'variant' => 'primary',

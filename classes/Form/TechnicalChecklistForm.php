@@ -31,7 +31,6 @@ use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalAddons\services\Checker;
-use Tools;
 
 class TechnicalChecklistForm implements FormInterface
 {
@@ -83,8 +82,8 @@ class TechnicalChecklistForm implements FormInterface
             'fields' => [
                 'technicalChecklist' => [
                     'type' => 'varialble-set',
-                    'set' => $tpl_vars
-                ]
+                    'set' => $tpl_vars,
+                ],
             ],
             'submit' => [
                 'title' => '',

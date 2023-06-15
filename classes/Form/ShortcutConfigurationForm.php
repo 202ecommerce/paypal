@@ -79,7 +79,7 @@ class ShortcutConfigurationForm implements FormInterface
                 'required' => true,
                 'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART) ? (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART) : 35),
                 'data_type' => 'height',
-                'message_error' => $this->module->l('Value from 25 to 55 is required')
+                'message_error' => $this->module->l('Value from 25 to 55 is required'),
             ];
             $fields[ShortcutConfiguration::STYLE_WIDTH_CART] = [
                 'type' => 'text',
@@ -89,7 +89,7 @@ class ShortcutConfigurationForm implements FormInterface
                 'required' => true,
                 'value' => ((int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART) ? (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART) : 200),
                 'data_type' => 'width',
-                'message_error' => $this->module->l('Minimum 150 px is required')
+                'message_error' => $this->module->l('Minimum 150 px is required'),
             ];
             $fields[ShortcutConfiguration::STYLE_LABEL_CART] = $this->getButtonLabelSelect(ShortcutConfiguration::STYLE_LABEL_CART);
             $fields['cart_shortcut_preview'] = [
@@ -102,7 +102,7 @@ class ShortcutConfigurationForm implements FormInterface
                         Configuration::get(ShortcutConfiguration::STYLE_COLOR_CART) ? Configuration::get(ShortcutConfiguration::STYLE_COLOR_CART) : ShortcutConfiguration::STYLE_COLOR_GOLD,
                         Configuration::get(ShortcutConfiguration::STYLE_SHAPE_CART) ? Configuration::get(ShortcutConfiguration::STYLE_SHAPE_CART) : ShortcutConfiguration::STYLE_SHAPE_RECT
                     ))->render(),
-                ]
+                ],
             ];
         }
 
@@ -187,7 +187,7 @@ class ShortcutConfigurationForm implements FormInterface
                         Configuration::get(ShortcutConfiguration::STYLE_COLOR_PRODUCT) ? Configuration::get(ShortcutConfiguration::STYLE_COLOR_PRODUCT) : ShortcutConfiguration::STYLE_COLOR_GOLD,
                         Configuration::get(ShortcutConfiguration::STYLE_SHAPE_PRODUCT) ? Configuration::get(ShortcutConfiguration::STYLE_SHAPE_PRODUCT) : ShortcutConfiguration::STYLE_SHAPE_RECT
                     ))->render(),
-                ]
+                ],
             ];
         }
 
@@ -222,7 +222,7 @@ class ShortcutConfigurationForm implements FormInterface
                         Configuration::get(ShortcutConfiguration::STYLE_COLOR_SIGNUP) ? Configuration::get(ShortcutConfiguration::STYLE_COLOR_SIGNUP) : ShortcutConfiguration::STYLE_COLOR_GOLD,
                         Configuration::get(ShortcutConfiguration::STYLE_SHAPE_SIGNUP) ? Configuration::get(ShortcutConfiguration::STYLE_SHAPE_SIGNUP) : ShortcutConfiguration::STYLE_SHAPE_RECT
                     ))->render(),
-                ]
+                ],
             ];
         }
 
@@ -255,7 +255,7 @@ class ShortcutConfigurationForm implements FormInterface
                 [
                     'value' => ShortcutConfiguration::DISPLAY_MODE_TYPE_WIDGET,
                     'title' => $this->module->l('PrestaShop widget', 'AdminPayPalCustomizeCheckoutController'),
-                ]
+                ],
             ],
             'value' => Configuration::get($name),
         ];
@@ -455,10 +455,10 @@ class ShortcutConfigurationForm implements FormInterface
                 [
                     'value' => ShortcutConfiguration::STYLE_COLOR_BLACK,
                     'title' => $this->module->l('Black (second alternative)', 'AdminPayPalCustomizeCheckoutController'),
-                ]
+                ],
             ],
             'value' => Configuration::get($name),
-            'data_type' => 'color'
+            'data_type' => 'color',
         ];
     }
 
@@ -479,7 +479,7 @@ class ShortcutConfigurationForm implements FormInterface
                 ],
             ],
             'value' => Configuration::get($name),
-            'data_type' => 'shape'
+            'data_type' => 'shape',
         ];
     }
 
@@ -508,7 +508,7 @@ class ShortcutConfigurationForm implements FormInterface
                 ],
             ],
             'value' => Configuration::get($name),
-            'data_type' => 'label'
+            'data_type' => 'label',
         ];
     }
 

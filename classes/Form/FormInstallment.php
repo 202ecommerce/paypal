@@ -30,8 +30,6 @@ use Configuration;
 use Context;
 use Country;
 use Module;
-use PaypalAddons\classes\Form\Field\Select;
-use PaypalAddons\classes\Form\Field\SelectOption;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use Tools;
 
@@ -299,22 +297,22 @@ class FormInstallment implements FormInterface
             [
                 'value' => ConfigurationMap::COLOR_GRAY,
                 'title' => $this->module->l('gray', $this->className),
-                'color' => '#808080'
+                'color' => '#808080',
             ],
             [
                 'value' => ConfigurationMap::COLOR_BLUE,
                 'title' => $this->module->l('blue', $this->className),
-                'color' => '#0070ba'
+                'color' => '#0070ba',
             ],
             [
                 'value' => ConfigurationMap::COLOR_BLACK,
                 'title' => $this->module->l('black', $this->className),
-                'color' => '#2c2e2f'
+                'color' => '#2c2e2f',
             ],
             [
                 'value' => ConfigurationMap::COLOR_WHITE,
                 'title' => $this->module->l('white', $this->className),
-                'color' => '#fff'
+                'color' => '#fff',
             ],
         ];
 
@@ -322,12 +320,12 @@ class FormInstallment implements FormInterface
             $colorOptions[] = [
                 'value' => ConfigurationMap::COLOR_MONOCHROME,
                 'title' => $this->module->l('monochrome', $this->className),
-                'color' => '#808080'
+                'color' => '#808080',
             ];
             $colorOptions[] = [
                 'value' => ConfigurationMap::COLOR_GRAYSCALE,
                 'title' => $this->module->l('grayscale', $this->className),
-                'color' => '#808080'
+                'color' => '#808080',
             ];
         }
 

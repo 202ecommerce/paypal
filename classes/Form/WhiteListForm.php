@@ -64,8 +64,8 @@ class WhiteListForm implements FormInterface
                     'value' => implode(';', $this->initWhiteListService()->getListIP()),
                     'hint' => $request->getClientIp(),
                     'variant' => 'primary',
-                    'placeholder' => Tools::getRemoteAddr()
-                ]
+                    'placeholder' => Tools::getRemoteAddr(),
+                ],
             ],
             'submit' => [
                 'title' => $this->module->l('Save', $this->className),

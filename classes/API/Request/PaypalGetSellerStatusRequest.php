@@ -26,12 +26,10 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Configuration;
 use Exception;
 use PayPal;
 use PaypalAddons\classes\API\ExtensionSDK\GetSellerStatus;
 use PaypalAddons\classes\API\Response\Error;
-use PaypalAddons\services\Core\PaypalMerchantId;
 use Throwable;
 use Tools;
 

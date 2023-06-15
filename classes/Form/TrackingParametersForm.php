@@ -72,7 +72,7 @@ class TrackingParametersForm implements FormInterface
                     'set' => [
                         'mapService' => $this->initTrackingParametersService(),
                         'carriers' => Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS),
-                    ]
+                    ],
                 ],
             ],
             'submit' => [

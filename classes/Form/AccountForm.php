@@ -32,7 +32,7 @@ class AccountForm implements FormInterface
 
         $fields['account_form'] = [
             'type' => 'variable-set',
-            'set' => $this->method->getVarsForAccountForm()
+            'set' => $this->method->getVarsForAccountForm(),
         ];
 
         return [

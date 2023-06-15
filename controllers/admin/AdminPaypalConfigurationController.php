@@ -14,8 +14,8 @@ use PaypalAddons\classes\Form\TechnicalChecklistForm;
 use PaypalAddons\classes\Form\TrackingParametersForm;
 use PaypalAddons\classes\Form\WhiteListForm;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use PaypalAddons\classes\Shortcut\ShortcutPreview;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * 2007-2023 PayPal
@@ -94,7 +94,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
     protected function renderConfiguration()
     {
         $tpl = $this->context->smarty->createTemplate($this->getTemplatePath() . 'admin.tpl');
-        /** @var \PaypalAddons\classes\Form\FormInterface $form*/
+        /** @var \PaypalAddons\classes\Form\FormInterface $form */
         foreach ($this->forms as $formName => $form) {
             $tpl->assign($formName, $form->getDescription());
         }
@@ -106,7 +106,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'loggerPage' => $this->context->link->getAdminLink('AdminPaypalProcessLogger'),
             'isConfigured' => $this->method->isConfigured(),
             'isSandbox' => $this->method->isSandbox(),
-            'merchantId' => $this->method->getMerchantId()
+            'merchantId' => $this->method->getMerchantId(),
         ]);
 
         return $tpl->fetch();
@@ -119,7 +119,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $response = new JsonResponse();
 
         try {
-            /** @var \PaypalAddons\classes\Form\FormInterface $form*/
+            /** @var \PaypalAddons\classes\Form\FormInterface $form */
             foreach ($this->forms as $form) {
                 $form->save();
             }
@@ -133,7 +133,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         $response->setData($data);
         $response->send();
-        die;
+        exit;
     }
 
     public function ajaxProcessResetCredentials()
@@ -145,7 +145,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         (new JsonResponse())
             ->setData(['success' => true])
             ->send();
-        die;
+        exit;
     }
 
     public function ajaxProcessGenerateCredentials()
@@ -161,7 +161,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         if ($result->isSuccess() == false) {
             $response->setData(['success' => false, 'message' => $result->getError()->getMessage()])->send();
-            die;
+            exit;
         }
 
         $authToken = $result->getAuthToken();
@@ -172,7 +172,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         if ($result->isSuccess() == false) {
             $response->setData(['success' => false, 'messeage' => $result->getError()->getMessage()])->send();
-            die;
+            exit;
         }
 
         $params = [
@@ -190,7 +190,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'merchantId' => $result->getMerchantId(),
             'isSandbox' => $isSandbox,
         ])->send();
-        die;
+        exit;
     }
 
     public function ajaxProcessGetShortcut()
@@ -212,7 +212,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $response = new JsonResponse(['content' => $ShortCut->render()]);
 
         $response->send();
-        die;
+        exit;
     }
 
     public function ajaxProcessRenderTechnicalChecklist()
@@ -225,7 +225,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'content' => $template->fetch(),
         ]);
         $response->send();
-        die;
+        exit;
     }
 
     public function ajaxProcessRenderFeatureChecklist()
@@ -238,7 +238,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'content' => $template->fetch(),
         ]);
         $response->send();
-        die;
+        exit;
     }
 
     public function ajaxProcessGetForms()
@@ -274,7 +274,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
 
         $response->setData($responseBody);
         $response->send();
-        die;
+        exit;
     }
 
     public function ajaxProcessGetWelcomeBoard()
@@ -293,7 +293,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
             'content' => $template->fetch(),
         ]);
         $response->send();
-        die;
+        exit;
     }
 
     public function initPageHeaderToolbar()

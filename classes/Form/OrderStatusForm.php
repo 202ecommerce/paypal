@@ -6,7 +6,6 @@ use Configuration;
 use Context;
 use MethodEC;
 use MethodMB;
-use MethodPPP;
 use Module;
 use OrderState;
 use PaypalAddons\classes\AbstractMethodPaypal;
@@ -54,7 +53,7 @@ class OrderStatusForm implements FormInterface
                     'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                 ],
             ],
-            'value' => (int) Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS)
+            'value' => (int) Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS),
         ];
         $fields[PaypalConfigurations::OS_REFUNDED] = [
             'type' => 'select',
@@ -63,7 +62,7 @@ class OrderStatusForm implements FormInterface
             'hint' => $this->module->l('You can refund the orders paid via PayPal directly via your PrestaShop BackOffice. Here you can choose the order status that triggers the refund on PayPal. Choose the option "no actions" if you would like to change the order status without triggering the automatic refund on PayPal.', 'AdminPayPalCustomizeCheckoutController'),
             'desc' => $this->module->l('Default status : Refunded', 'AdminPayPalCustomizeCheckoutController'),
             'options' => $orderStatuses,
-            'value' => (int) Configuration::get(PaypalConfigurations::OS_REFUNDED)
+            'value' => (int) Configuration::get(PaypalConfigurations::OS_REFUNDED),
         ];
 
         if ($this->method->getIntent() == 'CAPTURE') {
@@ -245,11 +244,10 @@ class OrderStatusForm implements FormInterface
         if (isset($data[WebHookConf::ENABLE])) {
             $response = (new CreateWebhook())->setUpdate(false)->execute();
             Configuration::updateValue(WebHookConf::ENABLE, (int) $response->isSuccess());
-            // ToDo: Need show warning if creation of the webhook is failed
+        // ToDo: Need show warning if creation of the webhook is failed
         } else {
             Configuration::updateValue(WebHookConf::ENABLE, 0);
         }
-
 
         return true;
     }

@@ -26,7 +26,6 @@
 
 namespace PaypalAddons\services;
 
-
 use Context;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;

@@ -31,8 +31,8 @@ use PaypalAddons\classes\Constants\PaypalConfigurations;
 
 class SepaFunctionality
 {
-   public function isEnabled()
-   {
-       return (int) Configuration::get(PaypalConfigurations::SEPA_ENABLED);
-   }
+    public function isEnabled()
+    {
+        return (int) Configuration::get(PaypalConfigurations::SEPA_ENABLED);
+    }
 }

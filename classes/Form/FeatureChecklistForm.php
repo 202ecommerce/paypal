@@ -27,9 +27,7 @@
 namespace PaypalAddons\classes\Form;
 
 use Configuration;
-use Context;
 use Country;
-use MethodMB;
 use MethodPPP;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
@@ -53,6 +51,7 @@ class FeatureChecklistForm implements FormInterface
         $this->method = AbstractMethodPaypal::load();
         $this->module = Module::getInstanceByName('paypal');
     }
+
     /**
      * @return array
      */
@@ -85,8 +84,8 @@ class FeatureChecklistForm implements FormInterface
             'fields' => [
                 'featureChecklist' => [
                     'type' => 'varialble-set',
-                    'set' => $vars
-                ]
+                    'set' => $vars,
+                ],
             ],
             'submit' => [
                 'title' => '',
