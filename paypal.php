@@ -328,8 +328,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
             'PAYPAL_API_ADVANTAGES' => 1,
             'PAYPAL_API_CARD' => 1,
             'PAYPAL_METHOD' => '',
-            'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT' => 0,
-            'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART' => 1,
             'PAYPAL_CRON_TIME' => '',
             'PAYPAL_BY_BRAINTREE' => 0,
             'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT' => 1,

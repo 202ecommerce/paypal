@@ -28,7 +28,6 @@ namespace PaypalAddons\classes\PUI;
 
 use PayPal;
 use PaypalAddons\classes\AbstractMethodPaypal;
-use PaypalAddons\services\Core\PaypalMerchantId;
 
 class SignupLink
 {
@@ -62,11 +61,6 @@ class SignupLink
         ];
 
         return $urlLink . http_build_query($params);
-    }
-
-    protected function initMerchantId()
-    {
-        return new PaypalMerchantId();
     }
 
     protected function getPartnerClientId()
