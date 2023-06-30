@@ -24,17 +24,29 @@
  *
  */
 
-// Utils
-@import "abstract/variables";
+// PrestaShop UI kit
+// @import "~prestakit/dist/css/bootstrap-prestashop-ui-kit";
+
+// Abstract
+@import "admin/abstract/variables";
+@import "admin/abstract/reboot";
+
+// Vendors
+@import "~bootstrap/scss/bootstrap";
+@import "~material-icons/iconfont/outlined";
+@import "~material-icons/iconfont/filled";
+
+// Base
+@import "admin/base/fonts";
+@import "admin/base/type";
 
 // Components
-@import "components/nav";
-@import "components/spinner";
-
-// Helpers
-@import "helpers/borders";
-@import "helpers/display";
-@import "helpers/spacing";
-
-// Pages
-@import "pages/admin";
+@import "admin/components/alert";
+@import "admin/components/form";
+@import "admin/components/custom-form";
+@import "admin/components/card";
+@import "admin/components/buttons";
+@import "admin/components/icon";
+@import "admin/components/table";
+@import "admin/components/color-swatch";
+@import "admin/components/progress";

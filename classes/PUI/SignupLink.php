@@ -28,7 +28,6 @@ namespace PaypalAddons\classes\PUI;
 
 use PayPal;
 use PaypalAddons\classes\AbstractMethodPaypal;
-use PaypalAddons\services\Core\PaypalMerchantId;
 
 class SignupLink
 {
@@ -52,7 +51,6 @@ class SignupLink
             'partnerId' => $this->getPartnerId(),
             'integrationType' => 'FO',
             'features' => 'PAYMENT,REFUND,ACCESS_MERCHANT_INFORMATION',
-            'returnToPartnerUrl' => \Context::getContext()->link->getAdminLink('AdminPaypalGetCredentials'),
             'displayMode' => 'minibrowser',
             'product' => 'ppcp',
             'secondaryProducts' => 'payment_methods',
@@ -63,11 +61,6 @@ class SignupLink
         ];
 
         return $urlLink . http_build_query($params);
-    }
-
-    protected function initMerchantId()
-    {
-        return new PaypalMerchantId();
     }
 
     protected function getPartnerClientId()

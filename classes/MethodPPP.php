@@ -74,17 +74,29 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     protected $payment_method = 'PayPal';
 
-    public $advancedFormParametres = [
-        'paypal_os_accepted_two',
-    ];
-
     /** @var WhiteListService */
     protected $whiteListService;
 
     public function __construct()
     {
-        $this->paypalApiManager = new PaypalApiManager($this);
         $this->whiteListService = new WhiteListService();
+        $this->initApiManager();
+    }
+
+    protected function initApiManager()
+    {
+        $this->paypalApiManager = new PaypalApiManager($this);
+
+        return $this;
+    }
+
+    public function setSandbox($isSandbox)
+    {
+        parent::setSandbox($isSandbox);
+        $this->initApiManager();
+        $this->checkCredentials();
+
+        return $this;
     }
 
     /**
@@ -117,12 +129,20 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
      */
     public function setConfig($params)
     {
-        if ($this->isSandbox()) {
+        if (isset($params['isSandbox'])) {
+            $isSandbox = $params['isSandbox'];
+        } else {
+            $isSandbox = $this->isSandbox();
+        }
+
+        if ($isSandbox) {
             Configuration::updateValue('PAYPAL_SANDBOX_CLIENTID', $params['clientId']);
             Configuration::updateValue('PAYPAL_SANDBOX_SECRET', $params['secret']);
+            Configuration::updateValue('PAYPAL_MERCHANT_ID_SANDBOX', $params['merchantId']);
         } else {
             Configuration::updateValue('PAYPAL_LIVE_CLIENTID', $params['clientId']);
             Configuration::updateValue('PAYPAL_LIVE_SECRET', $params['secret']);
+            Configuration::updateValue('PAYPAL_MERCHANT_ID_LIVE', $params['merchantId']);
         }
     }
 
@@ -149,7 +169,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
      */
     public function isConfigured()
     {
-        if ($this->whiteListService->isEnabled() && !$this->whiteListService->isEligibleContext()) {
+        if (false == $this->whiteListService->isEligibleContext()) {
             return false;
         }
 
@@ -200,38 +220,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         return true;
     }
 
-    public function getTplVars()
-    {
-        $tplVars = [];
-
-        $tplVars['accountConfigured'] = $this->isConfigured();
-        $tplVars['urlOnboarding'] = $this->getUrlOnboarding();
-        $tplVars['paypalOnboardingLib'] = $this->isSandbox() ?
-            'https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js' :
-            'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
-
-        return $tplVars;
-
-        $sandboxMode = (int) Configuration::get('PAYPAL_SANDBOX');
-
-        if ($sandboxMode) {
-            $tpl_vars = [
-                'paypal_sandbox_clientid' => Configuration::get('PAYPAL_SANDBOX_CLIENTID'),
-                'paypal_sandbox_secret' => Configuration::get('PAYPAL_SANDBOX_SECRET'),
-            ];
-        } else {
-            $tpl_vars = [
-                'paypal_live_secret' => Configuration::get('PAYPAL_LIVE_SECRET'),
-                'paypal_live_clientid' => Configuration::get('PAYPAL_LIVE_CLIENTID'),
-            ];
-        }
-
-        $tpl_vars['accountConfigured'] = $this->isConfigured();
-        $tpl_vars['sandboxMode'] = $sandboxMode;
-
-        return $tpl_vars;
-    }
-
     public function checkCredentials()
     {
         $response = $this->paypalApiManager->getAccessTokenRequest()->execute();
@@ -242,6 +230,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             $this->setConfig([
                 'clientId' => '',
                 'secret' => '',
+                'merchantId' => '',
             ]);
             Configuration::updateValue('PAYPAL_CONNECTION_PPP_CONFIGURED', 0);
 
@@ -249,28 +238,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
                 $this->errors[] = $response->getError()->getMessage();
             }
         }
-    }
-
-    public function getAdvancedFormInputs()
-    {
-        $inputs = [];
-        $module = Module::getInstanceByName($this->name);
-        $orderStatuses = $module->getOrderStatuses();
-
-        $inputs[] = [
-            'type' => 'select',
-            'label' => $module->l('Payment accepted and transaction completed', get_class($this)),
-            'name' => 'paypal_os_accepted_two',
-            'hint' => $module->l('You are currently using the Sale mode (the authorization and capture occur at the same time as the sale). So the payement is accepted instantly and the new order is created in the "Payment accepted" status. You can customize the status for orders with completed transactions. Ex : you can create an additional status "Payment accepted via PayPal" and set it as the default status.', get_class($this)),
-            'desc' => $module->l('Default status : Payment accepted', get_class($this)),
-            'options' => [
-                'query' => $orderStatuses,
-                'id' => 'id',
-                'name' => 'name',
-            ],
-        ];
-
-        return $inputs;
     }
 
     public function getClientId($sandbox = null)
@@ -399,5 +366,14 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     public function acdcGenerateToken()
     {
         return $this->paypalApiManager->getAcdcGenerateTokenRequest()->execute();
+    }
+
+    public function getMerchantId()
+    {
+        if ($this->isSandbox()) {
+            return Configuration::get('PAYPAL_MERCHANT_ID_SANDBOX');
+        } else {
+            return Configuration::get('PAYPAL_MERCHANT_ID_LIVE');
+        }
     }
 }

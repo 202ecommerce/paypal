@@ -53,6 +53,7 @@ use PaypalAddons\classes\PUI\FraudNetForm;
 use PaypalAddons\classes\PUI\FraudSessionId;
 use PaypalAddons\classes\PUI\PuiFunctionality;
 use PaypalAddons\classes\SEPA\SepaButton;
+use PaypalAddons\classes\SEPA\SepaFunctionality;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Shortcut\ShortcutPaymentStep;
 use PaypalAddons\classes\Shortcut\ShortcutSignup;
@@ -263,116 +264,12 @@ class PayPal extends \PaymentModule implements WidgetInterface
     public $moduleAdminControllers = [
         [
             'name' => [
-                'en' => 'PayPal Official',
-                'fr' => 'PayPal Officiel',
-            ],
-            'class_name' => 'AdminParentPaypalConfiguration',
-            'parent_class_name' => 'SELL',
-            'visible' => false,
-            'icon' => 'payment',
-        ],
-        [
-            'name' => [
                 'en' => 'Configuration',
                 'fr' => 'Configuration',
             ],
             'class_name' => 'AdminPaypalConfiguration',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
-            'visible' => false,
-        ],
-        [
-            'name' => [
-                'en' => 'Setup',
-                'fr' => 'Paramètres',
-                'pt' => 'Definições',
-                'pl' => 'Ustawienia',
-                'nl' => 'Instellingen',
-                'it' => 'Impostazioni',
-                'es' => 'Configuración',
-                'de' => 'Einstellungen',
-                'mx' => 'Configuración',
-                'br' => 'Definições',
-            ],
-            'class_name' => 'AdminPayPalSetup',
-            'parent_class_name' => 'AdminPayPalConfiguration',
+            'parent_class_name' => 'paypal',
             'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Experience',
-                'fr' => 'Expérience',
-                'de' => 'User Experience',
-                'pt' => 'Experiência',
-                'pl' => 'Doświadczenie',
-                'nl' => 'Ervaring',
-                'it' => 'Percorso Cliente',
-                'es' => 'Experiencia',
-                'mx' => 'Experiencia',
-                'br' => 'Experiência',
-            ],
-            'class_name' => 'AdminPayPalCustomizeCheckout',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Pay in X times',
-                'fr' => 'Paiement en X fois',
-                'de' => 'Pay in X times',
-            ],
-            'class_name' => 'AdminPayPalInstallment',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Help',
-                'fr' => 'Aide',
-                'pt' => 'Ajuda',
-                'pl' => 'Pomoc',
-                'nl' => 'Hulp',
-                'it' => 'Aiuto',
-                'es' => 'Ayuda',
-                'de' => 'Hilfe',
-                'mx' => 'Ayuda',
-                'br' => 'Ajuda',
-            ],
-            'class_name' => 'AdminPayPalHelp',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Logs',
-                'fr' => 'Logs',
-                'de' => 'Logs',
-                'pt' => 'Logs',
-                'pl' => 'Dzienniki',
-                'nl' => 'Logs',
-                'it' => 'Logs',
-                'es' => 'Logs',
-                'mx' => 'Logs',
-                'br' => 'Logs',
-            ],
-            'class_name' => 'AdminPayPalLogs',
-            'parent_class_name' => 'AdminPayPalConfiguration',
-            'visible' => true,
-        ],
-        [
-            'name' => [
-                'en' => 'Get Credentials',
-            ],
-            'class_name' => 'AdminPaypalGetCredentials',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
-            'visible' => false,
-        ],
-        [
-            'name' => [
-                'en' => 'PUI listener',
-            ],
-            'class_name' => 'AdminPayPalPUIListener',
-            'parent_class_name' => 'AdminParentPaypalConfiguration',
-            'visible' => false,
         ],
     ];
 
@@ -394,7 +291,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         require_once realpath(dirname(__FILE__) . '/smarty/plugins') . '/modifier.paypalreplace.php';
         $this->displayName = $this->l('PayPal');
-        $this->description = $this->l('Allow your customers to pay with PayPal - the safest, quickest and easiest way to pay online.');
+        $this->description = $this->l('This free official PayPal module can help you grow your sales by adding PayPal to your store. Allow your customers to pay online with PayPal - the safest, quickest and easiest way');
         $this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
         $this->express_checkout = $this->l('PayPal Express Checkout ');
 
@@ -431,8 +328,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
             'PAYPAL_API_ADVANTAGES' => 1,
             'PAYPAL_API_CARD' => 1,
             'PAYPAL_METHOD' => '',
-            'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT' => 0,
-            'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART' => 1,
             'PAYPAL_CRON_TIME' => '',
             'PAYPAL_BY_BRAINTREE' => 0,
             'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT' => 1,
@@ -452,8 +347,20 @@ class PayPal extends \PaymentModule implements WidgetInterface
             \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::ENABLE_BNPL => 1,
             \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CART_PAGE => 1,
             \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE => 1,
+            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CHECKOUT_PAGE => 1,
+            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PRODUCT_PAGE => 1,
+            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::PRODUCT_PAGE => 1,
+            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::CATEGORY_PAGE => 0,
+            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::HOME_PAGE => 0,
+            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::CHECKOUT_PAGE => 1,
+            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::CART_PAGE => 1,
+            ConfigurationMap::ENABLE_INSTALLMENT => 1,
+            ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE => 1,
+            ShortcutConfiguration::SHOW_ON_CART_PAGE => 1,
+            ShortcutConfiguration::SHOW_ON_SIGNUP_STEP => 1,
             'PAYPAL_NOT_SHOW_PS_CHECKOUT' => json_encode([$this->version, 0]),
             WebHookConf::ENABLE => 1,
+            PaypalConfigurations::SHOW_MODAL_CONFIGURATION => 1,
         ];
 
         if (version_compare(_PS_VERSION_, '1.7.6', '<')) {
@@ -748,7 +655,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     public function getContent()
     {
-        return Tools::redirectAdmin($this->context->link->getAdminLink('AdminPayPalSetup'));
+        return Tools::redirectAdmin($this->context->link->getAdminLink('AdminPaypalConfiguration'));
     }
 
     protected function initVenmoFunctionality()
@@ -812,12 +719,10 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 break;
             case 'MB':
                 if (in_array($this->context->currency->iso_code, $this->currencyMB)) {
-                    if ((int) Configuration::get('PAYPAL_MB_EC_ENABLED')) {
-                        $methodEC = AbstractMethodPaypal::load('EC');
-                        if ($methodEC->isConfigured()) {
-                            $paymentOptionsEc = $this->renderEcPaymentOptions($params);
-                            $payments_options = array_merge($payments_options, $paymentOptionsEc);
-                        }
+                    $methodEC = AbstractMethodPaypal::load('EC');
+                    if ($methodEC->isConfigured()) {
+                        $paymentOptionsEc = $this->renderEcPaymentOptions($params);
+                        $payments_options = array_merge($payments_options, $paymentOptionsEc);
                     }
 
                     if ($method->isConfigured() && (int) Configuration::get('PAYPAL_API_CARD') && (in_array($isoCountryDefault, $this->countriesApiCartUnavailable) == false)) {
@@ -853,12 +758,14 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 $payments_options[] = $this->buildAcdcPaymentOption($params);
             }
 
-            if ($this->initApmFunctionality()->isEnabled() && $this->initApmFunctionality()->isAvailable()) {
+            if ($this->initApmFunctionality()->isAvailable()) {
                 $payments_options = array_merge($payments_options, $this->buildApmPaymentOptions($params));
             }
 
             if ($this->paypal_method == 'PPP') {
-                $payments_options[] = $this->renderSepaOption($params);
+                if ($this->initSepaFunctionality()->isEnabled()) {
+                    $payments_options[] = $this->renderSepaOption($params);
+                }
 
                 if ($this->getWebhookOption()->isAvailable() && $this->getWebhookOption()->isEnable()) {
                     if ($this->initPuiFunctionality()->isAvailable(false) && $this->initPuiFunctionality()->isEligibleContext($this->context)) {
@@ -2774,26 +2681,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return $result;
     }
 
-    public function getOrderStatuses()
-    {
-        $orderStatuses = [
-            [
-                'id' => 0,
-                'name' => $this->l('No action'),
-            ],
-        ];
-        $prestashopOrderStatuses = OrderState::getOrderStates($this->context->language->id);
-
-        foreach ($prestashopOrderStatuses as $prestashopOrderStatus) {
-            $orderStatuses[] = [
-                'id' => $prestashopOrderStatus['id_order_state'],
-                'name' => $prestashopOrderStatus['name'],
-            ];
-        }
-
-        return $orderStatuses;
-    }
-
     public function showPsCheckoutMessage()
     {
         $countryDefault = new Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
@@ -3035,139 +2922,22 @@ class PayPal extends \PaymentModule implements WidgetInterface
             return $map;
         }
 
-        if ($isoCountry == 'BE' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::BANCONTACT,
-                'label' => $this->l('Bancontact'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'BR' && $isoCurrency == 'BRL') {
-            $map[] = [
-                'method' => APM::BOLETOBANCARIO,
-                'label' => $this->l('Boleto Bancario'),
-            ];
-        }
-
-        if ($isoCountry == 'PL' && $isoCurrency == 'PLN') {
-            $map[] = [
-                'method' => APM::BLIK,
-                'label' => $this->l('BLIK'),
-            ];
-
-            $map[] = [
-                'method' => APM::P24,
-                'label' => $this->l('Przelewy24'),
-            ];
-        }
-
-        if ($isoCountry == 'AT' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::EPS,
-                'label' => $this->l('eps'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
         if ($isoCountry == 'DE' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::GIROPAY,
-                'label' => $this->l('giropay'),
-                'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/giropay.svg'),
-            ];
+            if ($this->initApmFunctionality()->isGiropayEnabled()) {
+                $map[] = [
+                    'method' => APM::GIROPAY,
+                    'label' => $this->l('giropay'),
+                    'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/giropay.svg'),
+                ];
+            }
 
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-                'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/sofort.svg'),
-            ];
-        }
-
-        if ($isoCountry == 'NL' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::IDEAL,
-                'label' => $this->l('iDEAL'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-
-            $map[] = [
-                'method' => APM::TRUSTLY,
-                'label' => $this->l('Trustly'),
-            ];
-        }
-
-        if ($isoCountry == 'PT' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::MULTIBANCO,
-                'label' => $this->l('Multibanco'),
-            ];
-        }
-
-        if ($isoCountry == 'IT' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::MYBANK,
-                'label' => $this->l('MyBank'),
-            ];
-
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'MX' && $isoCurrency == 'MXN') {
-            $map[] = [
-                'method' => APM::OXXO,
-                'label' => $this->l('OXXO'),
-            ];
-        }
-
-        if ($isoCountry == 'GB' && $isoCurrency == 'GBP') {
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'ES' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if ($isoCountry == 'US' && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::SOFORT,
-                'label' => $this->l('Sofort'),
-            ];
-        }
-
-        if (in_array($isoCountry, ['EE', 'FI', 'SE']) && $isoCurrency == 'EUR') {
-            $map[] = [
-                'method' => APM::TRUSTLY,
-                'label' => $this->l('Trustly'),
-            ];
-        }
-
-        if ($isoCountry == 'SE' && $isoCurrency == 'SEK') {
-            $map[] = [
-                'method' => APM::TRUSTLY,
-                'label' => $this->l('Trustly'),
-            ];
+            if ($this->initApmFunctionality()->isSofortEnabled()) {
+                $map[] = [
+                    'method' => APM::SOFORT,
+                    'label' => $this->l('Sofort'),
+                    'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/sofort.svg'),
+                ];
+            }
         }
 
         return $map;
@@ -3226,7 +2996,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         if (\Configuration::get('PS_ROUND_TYPE') != \Order::ROUND_ITEM
             || \Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_UP
-            || \Configuration::get('PS_PRICE_DISPLAY_PRECISION') != 2) {
+            || (\Configuration::get('PS_PRICE_DISPLAY_PRECISION') && \Configuration::get('PS_PRICE_DISPLAY_PRECISION') != 2)) {
             $conflicts[] = $this->l('Your rounding settings are not fully compatible with PayPal requirements. In order to avoid some of the transactions to fail, please change the PrestaShop rounding mode.');
         }
 
@@ -3239,5 +3009,10 @@ class PayPal extends \PaymentModule implements WidgetInterface
             "/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i",
             $_SERVER['HTTP_USER_AGENT']
         );
+    }
+
+    protected function initSepaFunctionality()
+    {
+        return new SepaFunctionality();
     }
 }

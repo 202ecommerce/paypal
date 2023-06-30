@@ -222,15 +222,19 @@ const PayPalMB = {
 
 
 $(document).ready(() => {
+    if ($('.payment-options input[name="payment-option"]:checked').attr('data-module-name') == "paypal_plus_mb") {
+      PayPalMB.initCheckout();
+    }
+
     $('.payment-options input[name="payment-option"]').click((event) => {
         let paymentOption = $(event.target);
         if (paymentOption.attr('data-module-name') == "paypal_plus_mb") {
             PayPalMB.initCheckout();
         }
+    });
 
-        prestashop.on("updatedCart", () => {
-            PayPalMB.initCheckout();
-        });
+    prestashop.on("updatedCart", () => {
+      PayPalMB.initCheckout();
     });
 
     // Order payment button action for paypal plus

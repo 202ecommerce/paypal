@@ -1,4 +1,4 @@
-{**
+{*
  * 2007-2023 PayPal
  *
  * NOTICE OF LICENSE
@@ -23,60 +23,77 @@
  *  @copyright PayPal
  *
  *}
+{* Dashboard *}
+{include
+  file="module:paypal/views/templates/admin/_partials/dashboard.tpl"
+  form=$trackingForm
+}
 
-{if isset($isModeSandbox) && $isModeSandbox}
-  <style>
-    .page-head {
-      background-color: #585757 !important;
-    }
+{if $isShowModalConfiguration|default:false}
+  {include
+    file="module:paypal/views/templates/admin/_partials/modal-configuration.tpl"
+  }
+{else}
 
-    .bootstrap .page-head .toolbarBox .btn-toolbar .toolbar_btn i {
-      color: #fff !important;
-    }
-
-    .bootstrap .page-head ul.breadcrumb {
-      color: #fff !important;
-    }
-
-    .bootstrap .page-head ul.page-breadcrumb li:before {
-      color: #fff !important;
-    }
-
-    .bootstrap .page-head ul.page-breadcrumb li a {
-      color: #fff !important;
-    }
-
-    .page-head .wrapper h1 {
-      color: #fff !important;
-    }
-
-    .bootstrap .page-head .toolbarBox .btn-toolbar .toolbar_btn {
-      color: #fff !important;
-    }
-
-    {if version_compare($psVersion, '1.7.4', '<')}
-
-    .page-head .page-title {
-      color: #fff !important;
-    }
-
-    .page-head .page-head-tabs a{
-      color: #fff !important;
-    }
-
-    .page-head .page-head-tabs a.current{
-      border-bottom: 3px solid #fff !important;
-    }
-
+  {* Account section *}
+    {if isset($accountForm)}
+        {include
+          file="module:paypal/views/templates/admin/_partials/section.tpl"
+          form=$accountForm
+        }
     {/if}
 
+  {* Tracking section *}
+  {if isset($trackingForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$trackingForm
+      }
+  {/if}
 
-  </style>
+  {* Checkout section *}
+  {if isset($checkoutForm)}
+      {include
+        file="module:paypal/views/templates/admin/_partials/section.tpl"
+        form=$checkoutForm
+      }
+  {/if}
+
+
+  {* Installment section *}
+  {if isset($formInstallment)}
+      {include
+        file="module:paypal/views/templates/admin/_partials/section.tpl"
+        form=$formInstallment
+        sectionColFormClasses=' '
+        sectionColInfoClasses=' '
+      }
+  {/if}
+
+    {* Shortcut section *}
+  {if isset($shortcutConfigurationForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$shortcutConfigurationForm
+      }
+  {/if}
+
+
+  {* Order status section *}
+  {if isset($orderStatusForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$orderStatusForm
+      }
+  {/if}
+
+  {* White list section *}
+  {if isset($whiteListForm)}
+      {include
+      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      form=$whiteListForm
+      }
+  {/if}
+
+
 {/if}
-
-{block name='content'}
-    {if isset($content)}
-        {$content nofilter}
-    {/if}
-{/block}
-

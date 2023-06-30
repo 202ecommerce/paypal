@@ -30,7 +30,6 @@ use Exception;
 use PayPal;
 use PaypalAddons\classes\API\ExtensionSDK\GetSellerStatus;
 use PaypalAddons\classes\API\Response\Error;
-use PaypalAddons\services\Core\PaypalMerchantId;
 use Throwable;
 use Tools;
 
@@ -83,12 +82,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
 
     protected function getSellerMerchantId()
     {
-        return $this->initPaypalMerchantId()->get();
-    }
-
-    protected function initPaypalMerchantId()
-    {
-        return new PaypalMerchantId();
+        return $this->method->getMerchantId();
     }
 
     protected function getCapabilities(\PayPalHttp\HttpResponse $data)

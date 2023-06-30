@@ -25,10 +25,10 @@
  *}
 
 <script>
- {if isset($JSvars)}    
+ {if isset($JSvars)}
    {foreach from=$JSvars key=varName item=varValue}
        {assign var="isNotJSVarsvalue" value=($varName == '0' && $varValue == '1')}
-       {if $isNotJSVarsvalue === false}        
+       {if $isNotJSVarsvalue === false}
            var {$varName} = {$varValue|json_encode nofilter};
        {/if}
    {/foreach}
@@ -42,7 +42,6 @@
               addScripts();
           } else {
               document.addEventListener('readystatechange', function () {
-                  console.log(document.readyState);
                   if (document.readyState == 'complete') {
                       addScripts();
                   }

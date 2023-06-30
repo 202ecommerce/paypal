@@ -1,0 +1,98 @@
+/**
+ * 2007-2023 PayPal
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author 2007-2023 PayPal
+ *  @author 202 ecommerce <tech@202-ecommerce.com>
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ *  @copyright PayPal
+ *
+ */
+
+.nobootstrap {
+  background-color: unset !important;
+  min-width: unset !important;
+
+  .form-group {
+    float: unset;
+    width: unset;
+    margin-bottom: $form-group-margin-bottom;
+
+    > div {
+      float: unset;
+    }
+  }
+
+  fieldset {
+    background-color: unset;
+    border: unset;
+    color: unset;
+    margin: unset;
+    padding: unset;
+  }
+
+  label {
+    color: unset;
+    float: unset;
+    font-weight: unset;
+    padding: unset;
+    text-align: unset;
+    text-shadow: unset;
+    width: unset;
+  }
+
+  input[type="text"] {
+    @extend .form-control;
+    box-shadow: none;
+  }
+
+  select {
+    @extend .custom-select;
+  }
+
+  tr th {
+    background-color: unset !important;
+    color: unset;
+    font-size: unset;
+    border: none !important;
+  }
+
+  tr td {
+    border-bottom: unset;
+    color: unset;
+  }
+
+  table {
+    background-color: unset;
+    border: unset !important;
+    border-radius: unset;
+    padding: unset;
+  }
+
+  a {
+    color: $link-color;
+  }
+}
+
+.page-sidebar.mobile #content.nobootstrap {
+  margin-left: unset;
+}
+
+.page-sidebar-closed:not(.mobile) #content.nobootstrap {
+  padding-left: 50px;
+}

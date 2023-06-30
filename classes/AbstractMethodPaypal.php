@@ -27,7 +27,9 @@
 namespace PaypalAddons\classes;
 
 use Cart;
+use Configuration;
 use Context;
+use Country;
 use Currency;
 use Customer;
 use Exception;
@@ -37,6 +39,7 @@ use PaypalAddons\classes\API\PaypalApiManagerInterface;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\API\Response\ResponseOrderGet;
 use PaypalAddons\classes\API\Response\ResponseOrderRefund;
+use PaypalAddons\classes\PUI\SignupLink;
 use PaypalAddons\classes\Shortcut\ShortcutCart;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Shortcut\ShortcutProduct;
@@ -106,6 +109,13 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $this->isSandbox = (bool) \Configuration::get('PAYPAL_SANDBOX');
 
         return $this->isSandbox;
+    }
+
+    public function setSandbox($isSandbox)
+    {
+        $this->isSandbox = (int) $isSandbox;
+
+        return $this;
     }
 
     /**
@@ -338,24 +348,27 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         return empty(\Configuration::get('PAYPAL_CONFIG_BRAND')) == false ? \Configuration::get('PAYPAL_CONFIG_BRAND') : \Configuration::get('PS_SHOP_NAME');
     }
 
-    protected function getUrlOnboarding()
+    protected function getUrlOnboarding($sandbox = null)
     {
+        if (is_null($sandbox)) {
+            $sandbox = $this->isSandbox();
+        }
+
         $urlLink = '';
 
-        if ($this->isSandbox()) {
+        if ($sandbox) {
             $urlLink .= 'https://www.sandbox.paypal.com/merchantsignup/partner/onboardingentry?';
         } else {
             $urlLink .= 'https://www.paypal.com/merchantsignup/partner/onboardingentry?';
         }
 
         $params = [
-            'partnerClientId' => $this->isSandbox() ? \PayPal::PAYPAL_PARTNER_CLIENT_ID_SANDBOX : \PayPal::PAYPAL_PARTNER_CLIENT_ID_LIVE,
-            'partnerId' => $this->isSandbox() ? \PayPal::PAYPAL_PARTNER_ID_SANDBOX : \PayPal::PAYPAL_PARTNER_ID_LIVE,
+            'partnerClientId' => $sandbox ? \PayPal::PAYPAL_PARTNER_CLIENT_ID_SANDBOX : \PayPal::PAYPAL_PARTNER_CLIENT_ID_LIVE,
+            'partnerId' => $sandbox ? \PayPal::PAYPAL_PARTNER_ID_SANDBOX : \PayPal::PAYPAL_PARTNER_ID_LIVE,
             'integrationType' => 'FO',
             'features' => 'PAYMENT,REFUND',
-            'returnToPartnerUrl' => \Context::getContext()->link->getAdminLink('AdminPaypalGetCredentials'),
             'displayMode' => 'minibrowser',
-            'sellerNonce' => $this->getSellerNonce(),
+            'sellerNonce' => $this->getSellerNonce($sandbox),
         ];
 
         return $urlLink . http_build_query($params);
@@ -364,9 +377,13 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @return string
      */
-    public function getSellerNonce()
+    public function getSellerNonce($isSandbox = null)
     {
-        if ($this->isSandbox()) {
+        if (is_null($isSandbox)) {
+            $isSandbox = $this->isSandbox();
+        }
+
+        if ($isSandbox) {
             $id = \PayPal::PAYPAL_PARTNER_ID_SANDBOX;
         } else {
             $id = \PayPal::PAYPAL_PARTNER_ID_LIVE;
@@ -570,16 +587,89 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         return new StatusMapping();
     }
 
+    public function getVarsForAccountForm()
+    {
+        $tplVars = [];
+        $countryDefault = new Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
+        $actualSandboxMode = $this->isSandbox();
+
+        $tplVars['mode'] = $actualSandboxMode ? 'SANDBOX' : 'LIVE';
+        $tplVars['country_iso'] = strtoupper($countryDefault->iso_code);
+        //Assign values for sandbox mode
+        $this->setSandbox(true);
+        $tplVars['paypal_clientid_sandbox'] = $this->getClientId();
+        $tplVars['paypal_secret_sandbox'] = $this->getSecret();
+        $tplVars['is_configured_sandbox'] = (int) $this->isConfigured();
+        $tplVars['merchant_id_sandbox'] = $this->getMerchantId();
+
+        if ($this instanceof PuiMethodInterface) {
+            $tplVars['urlOnboarding_sandbox'] = $this->initSignUpLink()->get();
+        } else {
+            $tplVars['urlOnboarding_sandbox'] = $this->getUrlOnboarding();
+        }
+        //Assign values for live
+        $this->setSandbox(false);
+        $tplVars['paypal_clientid_live'] = $this->getClientId();
+        $tplVars['paypal_secret_live'] = $this->getSecret();
+        $tplVars['is_configured_live'] = (int) $this->isConfigured();
+        $tplVars['merchant_id_live'] = $this->getMerchantId();
+
+        if ($this instanceof PuiMethodInterface) {
+            $tplVars['urlOnboarding_live'] = $this->initSignUpLink()->get();
+        } else {
+            $tplVars['urlOnboarding_live'] = $this->getUrlOnboarding();
+        }
+        //Return actual mode
+        $this->setSandbox($actualSandboxMode);
+
+        return $tplVars;
+    }
+
+    protected function initSignUpLink()
+    {
+        return new SignupLink($this);
+    }
+
+    public function saveAccountForm($data = null)
+    {
+        if (isset($data['mode'])) {
+            Configuration::updateValue('PAYPAL_SANDBOX', $data['mode'] == 'SANDBOX');
+        }
+
+        if (isset($data['paypal_clientid_live']) && isset($data['paypal_secret_live'])) {
+            $this->setConfig([
+                'clientId' => pSQL($data['paypal_clientid_live']),
+                'secret' => pSQL($data['paypal_secret_live']),
+                'merchantId' => pSQL($data['merchant_id_live']),
+                'isSandbox' => false,
+            ]);
+        }
+
+        if (isset($data['paypal_clientid_live']) && isset($data['paypal_secret_live'])) {
+            $this->setConfig([
+                'clientId' => pSQL($data['paypal_clientid_sandbox']),
+                'secret' => pSQL($data['paypal_secret_sandbox']),
+                'merchantId' => pSQL($data['merchant_id_sandbox']),
+                'isSandbox' => true,
+            ]);
+        }
+
+        $this->checkCredentials();
+    }
+
+    /** @return  string*/
+    abstract public function getMerchantId();
+
     abstract public function setPaymentId($paymentId);
 
     /** @return  string*/
     abstract public function getPaymentId();
 
     /** @return  string*/
-    abstract public function getClientId($sandbox);
+    abstract public function getClientId($sandbox = null);
 
     /** @return  string*/
-    abstract public function getSecret($sandbox);
+    abstract public function getSecret($sandbox = null);
 
     /** @return  string*/
     abstract public function getReturnUrl();
@@ -595,4 +685,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     /** @return  bool*/
     abstract public function isConfigured();
+
+    abstract public function checkCredentials();
+
+    abstract public function logOut($sandbox = null);
 }

@@ -1,0 +1,150 @@
+/**
+ * 2007-2023 PayPal
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author 2007-2023 PayPal
+ *  @author 202 ecommerce <tech@202-ecommerce.com>
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ *  @copyright PayPal
+ *
+ */
+// Colors
+$black: #000 !default;
+$blue: #0D3883 !default;
+$blue-light: #D3F1F7 !default;
+$yellow: #EFBB48 !default;
+$cyen: #25B9D7 !default;
+
+$white: #fff !default;
+$gray-200: #EAEBEC !default;
+$gray-300: #BBCDD2 !default;
+$gray-400: #D9D9D9 !default;
+$gray-500: #6C868E !default;
+$gray-700: #363A41 !default;
+
+$primary: $blue !default;
+$primary-light: $blue-light !default;
+$secondary: $yellow !default;
+$info: $cyen !default;
+
+$text-muted: $gray-500 !default;
+
+// Base
+$body-color: $black !default;
+$body-bg: $gray-200 !default;
+
+// Grid
+$grid-gutter-width: 40px !default;
+
+// Typography
+$font-family-sans-serif: "Open Sans" !default;
+$font-weight-normal: 400 !default;
+$font-weight-semibold: 600 !default;
+$font-weight-bold: 700 !default;
+$font-size-base: .875rem !default; // 14px
+$paragraph-margin-bottom: .5rem;
+
+// Links
+$link-color: $info !default;
+
+// Icons
+$material-icons-font-path: '~material-icons/iconfont/' !default;
+$icon-container-base-size: 17px !default;
+$icon-base-font-size: $icon-container-base-size !default;
+$icon-container-lg-size: 24px !default;
+$icon-lg-font-size: $icon-container-lg-size !default;
+
+// Headings
+$h1-font-size: 1.5rem !default;
+$h5-font-size: 1.25rem !default;
+$headings-font-weight: $font-weight-semibold !default;
+$h1-font-weight: $font-weight-bold !default;
+
+$headings-margin-bottom: 1rem !default;
+
+// Cards
+$card-spacer-y: 1rem !default;
+$card-spacer-x: 1rem !default;
+$card-border-width: 0 !default;
+$card-cap-bg: $primary !default;
+$card-cap-color: $white !default;
+$card-header-spacer-y: .625rem !default;
+$card-header-spacer-x: .625rem !default;
+$card-header-font-size: 1rem !default; // 16px
+
+// Buttons
+$input-btn-padding-y: .5rem !default;
+$input-btn-padding-x: 1rem !default;
+$input-btn-font-size: .875rem !default; // 14px
+$input-btn-line-height: 1.5 !default;
+
+$btn-font-weight: $font-weight-semibold !default;
+
+// Forms
+$custom-control-label-color: $gray-700 !default;
+$custom-control-label-font-size: .8125rem !default;
+$input-border-color: $primary !default;
+$input-placeholder-color: $gray-500 !default;
+
+$custom-control-indicator-border-color: $gray-300 !default;
+$custom-control-indicator-size: 1.3125rem !default;
+$custom-select-indicator-color: $gray-500 !default;
+$custom-select-bg-size: 9px 16px !default; // In pixels because image dimensions
+$custom-select-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='9' height='12' viewBox='0 0 9 12'><path fill='#{$custom-select-indicator-color}' d='M1.12109 7.19995C0.519531 7.19995 0.21875 7.91089 0.65625 8.32104L3.91016 11.575C4.15625 11.8484 4.56641 11.8484 4.83984 11.575L8.09375 8.32104C8.50391 7.91089 8.20312 7.19995 7.62891 7.19995H1.12109ZM8.09375 4.32886L4.83984 1.07495C4.56641 0.828857 4.15625 0.828857 3.91016 1.07495L0.65625 4.32886C0.21875 4.76636 0.519531 5.44995 1.12109 5.44995H7.62891C8.20312 5.44995 8.50391 4.76636 8.09375 4.32886Z'/></svg>") !default;
+$custom-select-primary-bg: $primary !default;
+$custom-select-primary-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='9' height='12' viewBox='0 0 9 12'><path fill='#{$primary-light}' d='M1.12109 7.19995C0.519531 7.19995 0.21875 7.91089 0.65625 8.32104L3.91016 11.575C4.15625 11.8484 4.56641 11.8484 4.83984 11.575L8.09375 8.32104C8.50391 7.91089 8.20312 7.19995 7.62891 7.19995H1.12109ZM8.09375 4.32886L4.83984 1.07495C4.56641 0.828857 4.15625 0.828857 3.91016 1.07495L0.65625 4.32886C0.21875 4.76636 0.519531 5.44995 1.12109 5.44995H7.62891C8.20312 5.44995 8.50391 4.76636 8.09375 4.32886Z'/></svg>") !default;
+
+$custom-checkbox-indicator-border-radius: 50% !default;
+$custom-control-indicator-checked-color: $white !default;
+$custom-checkbox-indicator-icon-checked: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='12' viewBox='0 0 16 12'><path stroke-width='2' stroke-linecap='square' stroke='#{$custom-control-indicator-checked-color}' fill='transparent' d='M14.0044 1.5356L5.52795 10.0209L1.99609 6.48535'/></svg>") !default;
+
+$form-group-margin-bottom: 1rem !default;
+
+// Tables
+$table-border-color: $gray-400 !default;
+$table-border-width: 2px !default;
+$table-cell-padding: .5625rem !default;
+
+// Alerts
+$alert-padding-y: 8.5px !default;
+$alert-padding-x: 1rem !default;
+$alert-margin-bottom: .5rem !default;
+$alert-margin-top: $alert-margin-bottom !default;
+
+// Shadow
+$box-shadow: 0 .25rem .5rem rgba($black, .25) !default;
+
+// Color-swatch
+$color-swatch-width: 2.375rem !default;
+$color-swatch-height: $color-swatch-width !default;
+
+// Modals
+$modal-lg: 1125px !default;
+
+// Badges
+$badge-font-size: 13px !default;
+$badge-font-weight: $font-weight-normal !default;
+$badge-padding-y: 3px !default;
+$badge-padding-x: 5px !default;
+
+// Progress bars
+$progress-height: .5rem !default;
+$progress-bg: $white !default;
+$progress-border-color: $gray-300 !default;
+$progress-bar-color: $primary !default;
+$progress-bar-bg: $secondary !default;

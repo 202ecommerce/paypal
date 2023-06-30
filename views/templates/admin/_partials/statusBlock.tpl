@@ -23,63 +23,59 @@
  *  @copyright PayPal
  *
  *}
-
-<div>
+<div class="row pb-3 h-100">
+  <div class="col-12 col-lg-9 col-xl-8 pb-4">
     <p>
-        {l s='Merchant Country:' mod='paypal'} <b>{$merchantCountry|escape:'htmlall':'UTF-8'}</b>
+      {l s='Merchant Country:' mod='paypal'} <b>{$vars.merchantCountry|escape:'htmlall':'UTF-8'}</b>
     </p>
 
     <p>
-      {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='paypal'}|paypalreplace:['@href1@' => {$link->getAdminLink('AdminLocalization', true)}, '@target@' => {'target="blank"'}]}
+      {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='paypal'}|paypalreplace:['@href1@' =>
+      {$vars.localizationUrl}, '@target@' => {'target="blank"'}]}
     </p>
 
-    <p>
-        <span class="btn btn-default" id="btn-check-requirements">{l s='Check requirements' mod='paypal'}</span>
-    </p>
-
-    <ul class="list-unstyled">
-        <li>
-            {if isset($sslActivated) && $sslActivated}
-                <i class="icon-check text-success"></i>
-                {l s='SSL enabled.' mod='paypal'}
-            {else}
-                <i class="icon-remove text-danger"></i>
-                {l s='SSL should be enabled on your website.' mod='paypal'}
-            {/if}
-        </li>
-
-        <li>
-            {if isset($tlsVersion) && $tlsVersion['status']}
-                <i class="icon-check text-success"></i>
-                {l s='The PHP cURL extension must be enabled on your server.' mod='paypal'}
-            {elseif isset($tlsVersion) && $tlsVersion['status'] == false}
-                <i class="icon-remove text-danger"></i>
-                {l s='The PHP cURL extension must be enabled on your server. Please contact your hosting provider for more information.' mod='paypal'} {$tlsVersion['error_message']}
-            {/if}
-
-        </li>
-
-        <li>
-            {if isset($accountConfigured) && $accountConfigured}
-                <i class="icon-check text-success"></i>
-            {else}
-                <i class="icon-remove text-danger"></i>
-            {/if}
-            {l s='You must connect your PayPal account' mod='paypal'}
-        </li>
-
-        {if isset($showWebhookState) && $showWebhookState}
-          <li class="pp__flex">
-              {if isset($webhookState) && $webhookState}
-                <i class="icon-check text-success"></i>
-              {else}
-                <i class="icon-remove text-danger"></i>
-              {/if}
-              {if isset($webhookStateMsg)}{$webhookStateMsg nofilter}{/if}
-          </li>
+    <ul class="list-unstyled mb-0">
+      <li class="d-flex mb-1">
+        {include
+          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          isSuccess=$vars.sslActivated|default:false
+        }
+        {if $vars.sslActivated|default:false}
+          {l s='SSL enabled.' mod='paypal'}
+        {else}
+          {l s='SSL should be enabled on your website.' mod='paypal'}
         {/if}
+      </li>
+
+      {if $vars.tlsVersion|default:false}
+        <li class="d-flex mb-1">
+          {include
+            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=($vars.tlsVersion|default:false && $vars.tlsVersion['status'])
+          }
+          {if $vars.tlsVersion|default:false && $vars.tlsVersion['status']}
+            {l s='The PHP cURL extension must be enabled on your server.' mod='paypal'}
+          {else $vars.tlsVersion|default:false}
+            {l s='The PHP cURL extension must be enabled on your server. Please contact your hosting provider for more information.' mod='paypal'}
+            {$vars.tlsVersion['error_message']}
+          {/if}
+        </li>
+      {/if}
+
+      {if $vars.showWebhookState|default:false}
+        <li class="d-flex">
+          {include
+            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=$vars.webhookState|default:false
+          }
+          {if isset($vars.webhookStateMsg)}{$vars.webhookStateMsg nofilter}{/if}
+        </li>
+      {/if}
     </ul>
+  </div>
+
+  <div class="col-12 col-lg-3 col-xl-4 align-items-end d-flex justify-content-end">
+    <button class="btn btn-secondary ml-auto" refresh-technical-checklist>{l s='Refresh' mod='paypal'}</button>
+  </div>
+
 </div>
-
-
-

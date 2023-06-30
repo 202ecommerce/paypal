@@ -23,7 +23,6 @@
  *  @copyright PayPal
  *
  */
-
 const path = require('path');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -45,18 +44,15 @@ const config = {
     'js/shortcut_payment': './_dev/js/shortcut_payment.js',
     'js/shortcut': './_dev/js/shortcut.js',
     'js/bnpl': './_dev/js/bnpl.js',
-    'js/adminSetup': './_dev/js/adminSetup.js',
-    'js/adminCheckout': './_dev/js/adminCheckout.js',
-    'js/helpAdmin': './_dev/js/helpAdmin.js',
     'js/payment_mb': './_dev/js/payment_mb.js',
     'js/paypal-info': './_dev/js/paypal-info.js',
-    'js/adminInstallment': './_dev/js/adminInstallment.js',
     'js/Venmo': './_dev/js/Venmo.js',
     'js/apmButton': './_dev/js/apmButton.js',
     'js/sepaButton': './_dev/js/sepaButton.js',
     'js/acdc': './_dev/js/acdc.js',
     'js/tools': './_dev/js/tools.js',
     'js/diagnostic/diagnostic': './_dev/js/diagnostic/diagnostic.js',
+    'js/admin': './_dev/js/admin.js',
 
     'css/paypal_bo': './_dev/scss/paypal_bo.scss',
     'css/paypal_fo': './_dev/scss/paypal_fo.scss',
@@ -92,7 +88,14 @@ const config = {
           {loader: 'sass-loader'},
         ],
       },
-
+      {
+        // Extract fonts in `/assets/fonts/`.
+        test: /.(woff(2)?|eot|ttf)(\?[a-z0-9=.]+)?$/,
+        type:'asset/resource',
+        generator: {
+          filename: "fonts/[name][ext]"
+        },
+      }
     ],
   },
 
@@ -120,13 +123,18 @@ module.exports = (env, argv) => {
   // Production specific settings
   if (argv.mode === 'production') {
     const terserPlugin = new TerserPlugin({
-      cache: true,
-      extractComments: /^\**!|@preserve|@license|@cc_on/i, // Remove comments except those containing @preserve|@license|@cc_on
+      // Remove comments except those containing @preserve|@license|@cc_on
+      extractComments: /^\**!|@preserve|@license|@cc_on/i,
       parallel: true,
       terserOptions: {
-        drop_console: true,
+        compress: {
+          pure_funcs: [
+            'console.log'
+          ]
+        }
       },
     });
+
 
     config.optimization.minimizer.push(terserPlugin);
   }
