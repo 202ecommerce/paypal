@@ -11,6 +11,7 @@ class Steps {
 
   init() {
     this.registerEvents();
+    this.$stepsContainer.find(this.maxStepBadge).html($(this.content).length);
   }
 
   registerEvents() {
@@ -63,7 +64,6 @@ class Steps {
     const currentStepIndex = this.getCurrentStepIndex();
     if (currentStepIndex <= this.getLastStepIndex()) {
       this.$stepsContainer.find(this.currentStepBadge).html(currentStepIndex + 1);
-      this.$stepsContainer.find(this.maxStepBadge).html($(this.content).length);
     }
   }
 
