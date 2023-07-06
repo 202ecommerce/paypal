@@ -4,6 +4,7 @@ class Steps {
     this.btn = '[data-btn-action]';
     this.content = '[data-step-content]';
     this.currentStepBadge = '[data-badge-current-step]';
+    this.maxStepBadge = '[data-badge-max-step]';
     this.stepsProgress = '[data-steps-progress]';
     this.controller = document.location.href;
   }
@@ -62,6 +63,7 @@ class Steps {
     const currentStepIndex = this.getCurrentStepIndex();
     if (currentStepIndex <= this.getLastStepIndex()) {
       this.$stepsContainer.find(this.currentStepBadge).html(currentStepIndex + 1);
+      this.$stepsContainer.find(this.maxStepBadge).html($(this.content).length);
     }
   }
 
