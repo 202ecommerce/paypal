@@ -46,6 +46,7 @@ use PaypalAddons\classes\Shortcut\ShortcutProduct;
 use PaypalAddons\classes\Shortcut\ShortcutSignup;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalAddons\services\Order\RefundAmountCalculator;
+use PaypalAddons\services\PaypalContext;
 use PaypalAddons\services\StatusMapping;
 use PaypalPPBTlib\AbstractMethod;
 use PrestaShopLogger;
@@ -153,6 +154,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      */
     public function initApm($method)
     {
+        PaypalContext::getContext()->set('processing_instruction', 'ORDER_COMPLETE_ON_PAYMENT_APPROVAL');
         $response = $this->init();
         $confirmation = $this->paypalApiManager->getConfirmPaymentSourceRequest($response->getPaymentId(), $method)->execute();
 

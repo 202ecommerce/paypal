@@ -33,6 +33,7 @@ use Module;
 use Paypal;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\services\FormatterPaypal;
+use PaypalAddons\services\PaypalContext;
 
 class OrderCreateBody implements BuilderInterface
 {
@@ -99,6 +100,10 @@ class OrderCreateBody implements BuilderInterface
 
         if (empty($shippingInfo) == false && $this->isShortcut() == false) {
             $body['purchase_units'][0]['shipping'] = $shippingInfo;
+        }
+
+        if ($this->getProcessingInstruction()) {
+            $body['processing_instruction'] = $this->getProcessingInstruction();
         }
 
         return $body;
@@ -484,5 +489,10 @@ class OrderCreateBody implements BuilderInterface
     protected function getTotalShipping()
     {
         return $this->context->cart->getOrderTotal($this->isUseTax(), \Cart::ONLY_SHIPPING);
+    }
+
+    protected function getProcessingInstruction()
+    {
+        return PaypalContext::getContext()->get('processing_instruction', '');
     }
 }
