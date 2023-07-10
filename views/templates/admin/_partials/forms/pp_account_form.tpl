@@ -175,6 +175,24 @@
               </div>
             </div>
 
+              {if $isModal}
+                <div class="form-group row">
+                  <div class="offset-3 {[
+                  'col-7' => !$isModal,
+                  'col-9' => $isModal
+                  ]|classnames}">
+                    <div merchant-label-sandbox class="alert alert-warning mt-0" style="display: none">
+                        {l s='You are connected with the account:' mod='paypal'}
+                      <b merchant-id></b>
+                    </div>
+                    <div merchant-label-live class="alert alert-warning mt-0" style="display: none">
+                        {l s='You are connected with the account:' mod='paypal'}
+                      <b merchant-id></b>
+                    </div>
+                  </div>
+                </div>
+              {/if}
+
           </div>
 
         </div>
@@ -225,17 +243,5 @@
 {/block}
 
 {block name='form_footer_buttons'}
-  {if $isModal}
-    <div>
-      <div merchant-label-sandbox class="alert alert-warning mt-0" style="display: none">
-          {l s='You are connected with the accound:' mod='paypal'}
-        <b merchant-id></b>
-      </div>
-      <div merchant-label-live class="alert alert-warning mt-0" style="display: none">
-          {l s='You are connected with the accound:' mod='paypal'}
-        <b merchant-id></b>
-      </div>
-    </div>
-  {/if}
   <button save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
 {/block}
