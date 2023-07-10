@@ -32,6 +32,10 @@ use PaypalAddons\classes\Exception\RefundCalculationException;
 use PaypalOrder;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaymentTotalAmount
 {
     /**

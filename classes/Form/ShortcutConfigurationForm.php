@@ -9,6 +9,10 @@ use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Shortcut\ShortcutPreview;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ShortcutConfigurationForm implements FormInterface
 {
     /** @var \Paypal */

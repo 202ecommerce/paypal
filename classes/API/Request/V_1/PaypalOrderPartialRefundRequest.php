@@ -32,6 +32,10 @@ use PayPal\Api\Sale;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalOrder;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderPartialRefundRequest extends PaypalOrderRefundRequest
 {
     /** @var float */

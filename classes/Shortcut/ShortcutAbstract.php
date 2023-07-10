@@ -34,6 +34,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\services\PaypalMedia;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class ShortcutAbstract
 {
     /** @var Context */

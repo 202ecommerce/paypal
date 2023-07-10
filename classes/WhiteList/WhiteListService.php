@@ -32,6 +32,10 @@ use PaypalAddons\classes\Constants\WhiteList;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WhiteListService
 {
     public function isEnabled()

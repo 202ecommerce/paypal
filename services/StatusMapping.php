@@ -34,6 +34,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\WebHookType;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class StatusMapping
 {
     /**

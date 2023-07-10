@@ -32,6 +32,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ShortcutPaymentStep extends ShortcutAbstract
 {
     public function __construct()

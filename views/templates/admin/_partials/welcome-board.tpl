@@ -31,25 +31,26 @@
           <div class="card-body h-100 d-flex flex-column justify-content-between">
             <div>
               <div class="h5">{l s='Welcome on PayPal Dashboard' mod='paypal'}</div>
-              <p>{l s='This is the first item\'s accordion body. It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.' mod='paypal'}</p>
+              <div>
+                <ul class="list-unstyled mb-0">
+                  <li class="d-flex align-items-center mb-1">
+                      {include
+                      file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+                      isSuccess=(false == $isSandbox|default:false)
+                      }
+                      {l s='Mode production enabled' mod='paypal'}
+                  </li>
+                  <li class="d-flex align-items-center">
+                      {include
+                      file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+                      isSuccess=$isConfigured|default:false
+                      }
+                      {l s='Account connected' mod='paypal'}
+                  </li>
+                </ul>
+              </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mt-4">
-              <ul class="list-unstyled mb-0">
-                <li class="d-flex align-items-center mb-1">
-                    {include
-                    file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
-                    isSuccess=(false == $isSandbox|default:false)
-                    }
-                    {l s='Mode production enabled' mod='paypal'}
-                </li>
-                <li class="d-flex align-items-center">
-                    {include
-                    file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
-                    isSuccess=$isConfigured|default:false
-                    }
-                    {l s='Account connected' mod='paypal'}
-                </li>
-              </ul>
               <span class="btn btn-secondary" id="logoutAccount" data-section-toggle="account">
                 <span class="icon mr-2">
                   <i class="material-icons-outlined">account_circle</i>
@@ -105,7 +106,7 @@
 
               {if $merchantId|default:false}
                 <div class="alert alert-warning d-flex align-items-center mt-5 mb-0">
-                    {l s='You are connected with the accound:' mod='paypal'} <b>{$merchantId}</b>
+                    {l s='You are connected with the account:' mod='paypal'} <b>{$merchantId}</b>
                 </div>
               {/if}
 

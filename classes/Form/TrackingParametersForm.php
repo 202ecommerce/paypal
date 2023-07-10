@@ -33,6 +33,10 @@ use PaypalAddons\classes\Constants\TrackingParameters as TrackingParametersMap;
 use PaypalAddons\services\TrackingParameters;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class TrackingParametersForm implements FormInterface
 {
     protected $module;

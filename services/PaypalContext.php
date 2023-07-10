@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\services;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalContext
 {
     protected $dataset = [];

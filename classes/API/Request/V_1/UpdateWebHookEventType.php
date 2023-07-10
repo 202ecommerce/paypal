@@ -36,6 +36,10 @@ use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\Constants\WebHookType;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class UpdateWebHookEventType extends RequestAbstract
 {
     /** @var Webhook */

@@ -34,6 +34,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PUI;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PuiFunctionality
 {
     protected $method;

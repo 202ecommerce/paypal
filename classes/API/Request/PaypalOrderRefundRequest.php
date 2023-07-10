@@ -40,6 +40,10 @@ use PayPalHttp\HttpException;
 use Throwable;
 use Validate;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderRefundRequest extends RequestAbstract
 {
     protected $paypalOrder;

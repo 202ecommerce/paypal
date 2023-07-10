@@ -49,6 +49,10 @@ use State;
 use Throwable;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderCreateRequest extends RequestAbstractMB
 {
     /** @var Amount */

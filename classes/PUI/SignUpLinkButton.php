@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\PUI;
 use Context;
 use PaypalAddons\classes\PuiMethodInterface;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class SignUpLinkButton
 {
     protected $context;

@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Widget;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class DummyWidget extends AbstractWidget
 {
     /**

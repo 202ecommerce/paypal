@@ -28,6 +28,10 @@ namespace PaypalAddons\services;
 
 require_once dirname(__FILE__) . '/../classes/PaypalIpn.php';
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServicePaypalIpn
 {
     /**

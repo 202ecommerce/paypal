@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\InstallmentBanner\BNPL;
 use Configuration;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class BNPLOption
 {
     public function isEnable()

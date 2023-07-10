@@ -27,6 +27,10 @@
 use PaypalAddons\services\ServicePaypalLog;
 use PaypalPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class PaypalLog.
  */

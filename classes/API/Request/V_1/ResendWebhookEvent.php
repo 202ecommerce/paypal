@@ -33,6 +33,10 @@ use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ResendWebhookEvent extends RequestAbstract
 {
     /** @var WebhookEvent */

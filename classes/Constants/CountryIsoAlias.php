@@ -27,6 +27,10 @@
 
 namespace PaypalAddons\classes\Constants;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CountryIsoAlias
 {
     /**

@@ -27,6 +27,10 @@
 use PaypalAddons\services\PaymentData;
 use PaypalPPBTlib\CommonAbstarctModuleFrontController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class PaypalAbstarctModuleFrontController
  */

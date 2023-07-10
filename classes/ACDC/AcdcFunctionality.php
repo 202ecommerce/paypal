@@ -31,6 +31,10 @@ use Country;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AcdcFunctionality
 {
     public function isAvailable()

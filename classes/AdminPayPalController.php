@@ -36,6 +36,10 @@ use PaypalPPBTlib\Install\ModuleInstaller;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminPayPalController extends \ModuleAdminController
 {
     protected $parametres = [];

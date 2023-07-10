@@ -28,6 +28,10 @@ namespace PaypalAddons\services;
 
 use Media;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalMedia
 {
     /**

@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\InstallmentBanner\BNPL;
 use Configuration;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class BNPLCart extends BNPLAbstract
 {
     protected function getTemplatePath()

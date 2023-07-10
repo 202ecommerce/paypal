@@ -34,6 +34,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\APM;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ApmCollection
 {
     /** @var Context */

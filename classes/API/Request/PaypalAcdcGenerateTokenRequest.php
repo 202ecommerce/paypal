@@ -33,6 +33,10 @@ use PaypalAddons\classes\API\Response\ResponseAcdcGenerateToken;
 use PayPalHttp\HttpException;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalAcdcGenerateTokenRequest extends RequestAbstract
 {
     public function execute()

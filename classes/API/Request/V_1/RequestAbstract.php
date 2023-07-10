@@ -32,6 +32,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Request\RequestInteface;
 use PaypalAddons\services\FormatterPaypal;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class RequestAbstract implements RequestInteface
 {
     /** @var AbstractMethodPaypal */

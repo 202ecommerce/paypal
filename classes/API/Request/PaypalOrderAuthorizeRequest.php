@@ -35,6 +35,10 @@ use PayPalCheckoutSdk\Orders\OrdersAuthorizeRequest;
 use PayPalHttp\HttpException;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderAuthorizeRequest extends RequestAbstract
 {
     /** @var string */

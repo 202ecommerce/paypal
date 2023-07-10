@@ -28,6 +28,10 @@ namespace PaypalAddons\classes\Webhook;
 
 use Context;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebhookHandlerUrl
 {
     public function get()

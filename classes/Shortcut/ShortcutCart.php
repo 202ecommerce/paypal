@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\Shortcut;
 use Configuration;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ShortcutCart extends ShortcutAbstract
 {
     protected function getTemplatePath()

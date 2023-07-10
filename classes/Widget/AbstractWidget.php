@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\Widget;
 use Context;
 use Module;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class AbstractWidget
 {
     /** @var Module */

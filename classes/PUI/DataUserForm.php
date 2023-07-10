@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\PUI;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class DataUserForm
 {
     /** @var string */

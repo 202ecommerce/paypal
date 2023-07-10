@@ -10,6 +10,10 @@ use PaypalAddons\classes\PUI\SignUpLinkButton;
 use PaypalAddons\classes\PuiMethodInterface;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AccountForm implements FormInterface
 {
     /** @var \Paypal */

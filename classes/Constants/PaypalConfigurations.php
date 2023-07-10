@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Constants;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalConfigurations
 {
     const CUSTOMIZE_ORDER_STATUS = 'PAYPAL_CUSTOMIZE_ORDER_STATUS';

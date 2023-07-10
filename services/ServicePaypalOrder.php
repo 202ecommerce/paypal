@@ -33,6 +33,10 @@ use Order;
 require_once dirname(__FILE__) . '/../classes/PaypalOrder.php';
 require_once dirname(__FILE__) . '/../classes/PaypalCapture.php';
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServicePaypalOrder
 {
     /**

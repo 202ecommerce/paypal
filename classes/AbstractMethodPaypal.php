@@ -53,6 +53,10 @@ use Throwable;
 use Tools;
 use Validate;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class AbstractMethodPaypal extends AbstractMethod
 {
     /** @var bool */

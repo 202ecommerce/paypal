@@ -29,6 +29,10 @@ namespace PaypalAddons\services;
 use Order;
 use OrderPayment;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ActualizeTotalPaid
 {
     /**

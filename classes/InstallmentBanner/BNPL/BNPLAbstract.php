@@ -34,6 +34,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class BNPLAbstract
 {
     /** @var Context */

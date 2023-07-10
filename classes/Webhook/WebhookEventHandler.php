@@ -49,6 +49,10 @@ use Throwable;
 use Tools;
 use Validate;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebhookEventHandler
 {
     protected $servicePaypalOrder;

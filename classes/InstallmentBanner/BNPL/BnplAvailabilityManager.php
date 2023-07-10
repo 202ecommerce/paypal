@@ -31,6 +31,10 @@ use Context;
 use Country;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class BnplAvailabilityManager
 {
     /** @var Context */

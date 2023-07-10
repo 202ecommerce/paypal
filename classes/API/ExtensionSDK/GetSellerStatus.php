@@ -28,6 +28,10 @@ namespace PaypalAddons\classes\API\ExtensionSDK;
 
 use PayPalHttp\HttpRequest;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class GetSellerStatus extends HttpRequest
 {
     public function __construct($partnerMerchantId, $sellerMerchantId)

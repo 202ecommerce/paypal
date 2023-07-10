@@ -31,6 +31,10 @@ use MethodMB;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\WebHookConf;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebhookOption
 {
     /**

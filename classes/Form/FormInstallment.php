@@ -33,6 +33,10 @@ use Module;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FormInstallment implements FormInterface
 {
     /** @var \Paypal */

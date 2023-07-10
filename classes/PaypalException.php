@@ -28,6 +28,10 @@ namespace PaypalAddons\classes;
 
 use Exception;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class PaypalException
  * Custom exception with additional long message parameter

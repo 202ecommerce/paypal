@@ -32,6 +32,10 @@ use OrderController;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use ProductController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ShortcutWidget extends AbstractWidget
 {
     /**

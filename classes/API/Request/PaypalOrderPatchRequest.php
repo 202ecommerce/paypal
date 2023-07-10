@@ -36,6 +36,10 @@ use PayPalCheckoutSdk\Orders\OrdersPatchRequest;
 use PayPalHttp\HttpException;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderPatchRequest extends PaypalOrderCreateRequest
 {
     /** @var string */

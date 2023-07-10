@@ -34,6 +34,10 @@ use PaypalAddons\classes\API\Request\V_1\PaypalOrderCreateRequest;
 use PaypalAddons\classes\API\Request\V_1\PaypalOrderPartialRefundRequest;
 use PaypalAddons\classes\API\Request\V_1\PaypalOrderRefundRequest;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalApiManagerMB implements PaypalApiManagerInterface
 {
     /** @var AbstractMethodPaypal */

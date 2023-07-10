@@ -33,6 +33,10 @@ use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseGetAuthToken;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalGetAuthToken
 {
     /** @var */

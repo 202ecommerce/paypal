@@ -37,6 +37,10 @@ use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 use PayPalHttp\HttpException;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderGetRequest extends RequestAbstract
 {
     protected $idPayment;

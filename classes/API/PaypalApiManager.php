@@ -45,6 +45,10 @@ use PaypalAddons\classes\API\Request\PaypalOrderRefundRequest;
 use PaypalAddons\classes\API\Request\PaypalPartnerReferralsRequest;
 use PaypalAddons\classes\API\Request\PaypalUpdateTrackingInfoRequest;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalApiManager implements PaypalApiManagerInterface
 {
     /** @var AbstractMethodPaypal */

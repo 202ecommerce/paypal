@@ -15,6 +15,10 @@ use PaypalAddons\classes\Webhook\CreateWebhook;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderStatusForm implements FormInterface
 {
     /** @var \Paypal */

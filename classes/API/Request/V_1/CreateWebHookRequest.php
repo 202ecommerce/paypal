@@ -35,6 +35,10 @@ use PaypalAddons\classes\Constants\WebHookType;
 use PaypalAddons\classes\Webhook\WebhookHandlerUrl;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CreateWebHookRequest extends RequestAbstract
 {
     public function execute()

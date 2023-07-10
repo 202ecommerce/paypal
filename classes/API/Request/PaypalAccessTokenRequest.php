@@ -33,6 +33,10 @@ use PayPalCheckoutSdk\Core\AccessTokenRequest;
 use PayPalHttp\HttpException;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalAccessTokenRequest extends RequestAbstract
 {
     public function execute()

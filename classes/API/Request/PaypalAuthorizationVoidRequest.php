@@ -35,6 +35,10 @@ use PayPalCheckoutSdk\Payments\AuthorizationsVoidRequest;
 use PayPalHttp\HttpException;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalAuthorizationVoidRequest extends RequestAbstract
 {
     /** @var \PaypalOrder */

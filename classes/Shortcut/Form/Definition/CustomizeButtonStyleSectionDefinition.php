@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Shortcut\Form\Definition;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CustomizeButtonStyleSectionDefinition
 {
     /** @var string */

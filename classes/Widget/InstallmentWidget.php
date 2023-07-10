@@ -33,6 +33,10 @@ use OrderController;
 use PaypalAddons\classes\InstallmentBanner\BannerManager;
 use ProductController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class InstallmentWidget extends AbstractWidget
 {
     /**

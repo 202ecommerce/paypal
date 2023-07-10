@@ -32,6 +32,10 @@ use PaypalAddons\classes\Webhook\WebhookEventHandler;
 use PaypalAddons\services\ServicePaypalOrder;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class PaypalAbstarctModuleFrontController
  */

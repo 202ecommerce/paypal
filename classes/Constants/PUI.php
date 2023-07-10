@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Constants;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PUI
 {
     const PARTNER_REFERRAL_ACTION_URL = 'PAYPAL_PARTNER_REFERRAL_ACTION_URL';

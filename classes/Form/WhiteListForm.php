@@ -33,6 +33,10 @@ use PaypalAddons\classes\WhiteList\WhiteListService;
 use Symfony\Component\HttpFoundation\Request;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WhiteListForm implements FormInterface
 {
     protected $module;

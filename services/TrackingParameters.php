@@ -33,6 +33,10 @@ use PaypalAddons\classes\Constants\TrackingParameters as Map;
 use PrestaShopLogger;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class TrackingParameters
 {
     /** @var array */

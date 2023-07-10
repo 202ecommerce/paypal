@@ -31,6 +31,10 @@ use PaypalPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 
 require_once dirname(__FILE__) . '/../classes/PaypalOrder.php';
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServicePaypalLog
 {
     /**

@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\API\Request\V_1;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class RequestAbstractMB extends RequestAbstract
 {
     public function getApiContext($mode_order = null)

@@ -33,6 +33,10 @@ use PaypalAddons\classes\API\Request\V_1\GetWebHooks;
 use PaypalAddons\classes\API\Request\V_1\UpdateWebHookEventType;
 use PaypalAddons\classes\API\Response\Response;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CreateWebhook
 {
     /** @var AbstractMethodPaypal */

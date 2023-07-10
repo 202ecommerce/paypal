@@ -30,6 +30,10 @@ use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\Constants\WebhookHandler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebhookAvailability
 {
     /**

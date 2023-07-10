@@ -32,6 +32,10 @@ use PaypalAddons\classes\API\Response\Error as PaypalError;
 use PaypalAddons\classes\API\Response\Response;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class GetWebHooks extends RequestAbstract
 {
     public function execute()

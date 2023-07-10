@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Constants;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebhookHandler
 {
     const STATUS_AVAILABLE = 202;

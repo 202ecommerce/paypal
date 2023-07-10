@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\PUI;
 use PayPal;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class SignupLink
 {
     protected $method;

@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\Webhook;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Request\V_1\ValidateWebhookEventRequest;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class RequestValidator
 {
     public function validateIPN($data)

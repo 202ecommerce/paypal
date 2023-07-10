@@ -29,6 +29,10 @@ namespace PaypalAddons\classes;
 use Configuration;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalPaymentMode
 {
     /**

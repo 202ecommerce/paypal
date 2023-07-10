@@ -30,6 +30,10 @@ use PaypalAddons\classes\PUI\DataUserForm;
 use PaypalAddons\classes\PuiMethodInterface;
 use PaypalAddons\classes\WhiteList\WhiteListService;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class MethodPPP
  *

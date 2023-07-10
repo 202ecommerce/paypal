@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Constants;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WhiteList
 {
     const ENABLED = 'PAYPAL_WHITE_LIST_ENABLED';

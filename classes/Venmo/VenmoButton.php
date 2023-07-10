@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\Venmo;
 use Context;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class VenmoButton
 {
     protected $context;

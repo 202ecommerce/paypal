@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\API\Response;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Response
 {
     /** @var bool */

@@ -27,6 +27,10 @@ require_once _PS_MODULE_DIR_ . 'paypal/vendor/autoload.php';
 
 use PaypalPPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminPaypalProcessLoggerController extends AdminProcessLoggerController
 {
     public function __construct()

@@ -28,6 +28,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\PaypalApiManager;
 use PaypalAddons\classes\WhiteList\WhiteListService;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class MethodEC.
  *

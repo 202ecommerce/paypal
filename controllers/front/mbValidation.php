@@ -26,6 +26,10 @@
 
 use PaypalAddons\classes\AbstractMethodPaypal;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Validate PPP payment
  */

@@ -33,6 +33,10 @@ use PaypalAddons\classes\API\Response\Error;
 use Throwable;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalGetSellerStatusRequest extends RequestAbstract
 {
     public function execute()

@@ -28,6 +28,10 @@ namespace PaypalAddons\classes\Shortcut;
 
 use Configuration;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ShortcutSignup extends ShortcutCart
 {
     /** @var bool */

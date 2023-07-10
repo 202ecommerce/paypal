@@ -28,6 +28,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\PUI\DataUserForm;
 use PaypalAddons\services\PaypalContext;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Prepare EC payment
  */

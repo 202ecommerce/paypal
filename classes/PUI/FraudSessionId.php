@@ -30,6 +30,10 @@ use Context;
 use Customer;
 use Validate;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FraudSessionId
 {
     /**

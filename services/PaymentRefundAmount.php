@@ -36,6 +36,10 @@ use PaypalWebhook;
 use PrestaShopCollection;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaymentRefundAmount
 {
     /**

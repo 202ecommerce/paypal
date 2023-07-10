@@ -30,6 +30,10 @@ use Exception;
 use Throwable;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CurrencyConverter
 {
     /**

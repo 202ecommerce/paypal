@@ -28,6 +28,10 @@ namespace PaypalAddons\classes\PUI;
 
 use PaypalAddons\classes\AbstractMethodPaypal;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PsMerchantId
 {
     /** @var AbstractMethodPaypal */

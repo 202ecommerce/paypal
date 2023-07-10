@@ -28,6 +28,10 @@ namespace PaypalAddons\classes\API\Request;
 
 use PaypalAddons\services\Builder\OrderPuiCreateBody;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderPuiCreateRequest extends PaypalOrderCreateRequest
 {
     protected function initBodyBuilder()

@@ -37,6 +37,10 @@ use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FeatureChecklistForm implements FormInterface
 {
     protected $bnplOption;

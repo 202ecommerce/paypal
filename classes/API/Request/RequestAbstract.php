@@ -31,6 +31,10 @@ use PaypalAddons\services\FormatterPaypal;
 use PaypalAddons\services\PaypalContext;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class RequestAbstract implements RequestInteface
 {
     /** PayPalHttpClient*/

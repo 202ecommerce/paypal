@@ -32,6 +32,10 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalAddons\services\Checker;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class TechnicalChecklistForm implements FormInterface
 {
     protected $module;

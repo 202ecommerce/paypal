@@ -31,6 +31,10 @@ use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
 use PaypalAddons\classes\API\Response\ResponseOrderCapture;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderCaptureRequest extends RequestAbstractMB
 {
     public function execute()

@@ -28,6 +28,10 @@ namespace PaypalAddons\classes\Webhook;
 
 use Configuration;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class IpnPaypalListener
 {
     /**

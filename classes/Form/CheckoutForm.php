@@ -11,6 +11,10 @@ use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CheckoutForm implements FormInterface
 {
     /** @var \Paypal */

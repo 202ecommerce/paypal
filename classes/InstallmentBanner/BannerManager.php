@@ -33,6 +33,10 @@ use PaypalAddons\services\CurrencyConverter;
 use ProductController;
 use Validate;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class BannerManager
 {
     /** @var Banner */

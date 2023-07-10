@@ -31,6 +31,10 @@ use Throwable;
 
 require_once dirname(__FILE__) . '/../classes/PaypalVaulting.php';
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServicePaypalVaulting
 {
     /**

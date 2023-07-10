@@ -34,6 +34,10 @@ use PaypalAddons\classes\API\Response\ResponseCreateProfileExperience;
 use Throwable;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CreateProfileExperienceRequest extends RequestAbstractMB
 {
     /**

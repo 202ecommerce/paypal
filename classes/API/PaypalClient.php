@@ -31,6 +31,10 @@ use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalClient
 {
     protected $method;

@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Shortcut;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ShortcutPreview extends ShortcutAbstract
 {
     /** @var string */

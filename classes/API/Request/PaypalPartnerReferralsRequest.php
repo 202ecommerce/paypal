@@ -36,6 +36,10 @@ use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalHttp\HttpException;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalPartnerReferralsRequest extends RequestAbstract
 {
     protected $bodyBuilder;

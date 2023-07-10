@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Constants;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class TrackingParameters
 {
     const CARRIER_MAP = 'PAYPAL_TRACKING_CARRIER_MAP';

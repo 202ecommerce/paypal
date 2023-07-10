@@ -32,6 +32,10 @@ use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FraudNetForm
 {
     protected $context;

@@ -29,6 +29,10 @@ use PaypalAddons\classes\API\PaypalApiManagerMB;
 use PaypalAddons\classes\WhiteList\WhiteListService;
 use PaypalAddons\services\ServicePaypalVaulting;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class MethodPPP
  *

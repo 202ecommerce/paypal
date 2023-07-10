@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\Webhook;
 use Configuration;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebhookId
 {
     /** @var AbstractMethodPaypal */

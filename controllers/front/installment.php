@@ -26,6 +26,10 @@
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Manage errors.
  */

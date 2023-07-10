@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\classes\Constants;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebHookType
 {
     const AUTHORIZATION_VOIDED = 'PAYMENT.AUTHORIZATION.VOIDED';

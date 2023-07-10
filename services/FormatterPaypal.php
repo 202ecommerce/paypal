@@ -26,6 +26,10 @@
 
 namespace PaypalAddons\services;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FormatterPaypal
 {
     public function formatPaypalString($str)

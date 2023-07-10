@@ -40,6 +40,10 @@ use PaypalAddons\classes\API\Response\ResponseOrderRefund;
 use PaypalOrder;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderRefundRequest extends RequestAbstractMB
 {
     /** @var PaypalOrder */

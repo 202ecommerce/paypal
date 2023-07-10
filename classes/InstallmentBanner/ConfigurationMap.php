@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\InstallmentBanner;
 use Configuration;
 use Country;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ConfigurationMap
 {
     const ENABLE_INSTALLMENT = 'PAYPAL_ENABLE_INSTALLMENT';

@@ -31,6 +31,10 @@ use Context;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Banner
 {
     /** @var \PayPal */

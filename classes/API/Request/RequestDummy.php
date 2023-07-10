@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\API\Request;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class RequestDummy implements RequestInteface
 {
     public function execute()

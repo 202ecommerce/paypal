@@ -29,6 +29,10 @@ namespace PaypalAddons\classes\API\Request;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PaypalOrderPartialRefundRequest extends PaypalOrderRefundRequest
 {
     protected $amount;
