@@ -10,7 +10,7 @@
         "build": "webpack --mode production --devtool source-map --progress",
         "doc-build": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml",
         "doc-watch": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml -w -b",
-        "fetch-paypal-carriers": "node ./_dev/modules/fetch-paypal-carriers/main.js ./paypal-carriers.json"
+        "fetch-paypal-carriers": "node ./202/_dev/modules/fetch-paypal-carriers/main.js ./paypal-carriers.json"
     },
     "repository": {
         "type": "git",
