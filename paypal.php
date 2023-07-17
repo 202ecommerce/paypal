@@ -228,7 +228,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         'actionOrderStatusUpdate',
         'displayHeader',
         'displayFooterProduct',
-        'actionBeforeCartUpdateQty',
+        'actionCartUpdateQuantityBefore',
         'displayReassurance',
         'displayInvoiceLegalFreeText',
         'displayShoppingCartFooter',
@@ -1769,7 +1769,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return $paypal_msg . $this->display(__FILE__, 'views/templates/hook/paypal_order.tpl');
     }
 
-    public function hookActionBeforeCartUpdateQty($params)
+    public function hookActionCartUpdateQuantityBefore($params)
     {
         $this->resetCookiePaymentInfo();
     }
