@@ -61,7 +61,7 @@ class PaypalCapture extends ObjectModel
             'id_capture' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
             'id_paypal_order' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             'capture_amount' => ['type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2],
-            'result' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'result' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 250],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
             'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
         ],

@@ -59,8 +59,8 @@ class PaypalVaulting extends ObjectModel
         'multilang' => false,
         'fields' => [
             'id_customer' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
-            'rememberedCards' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
-            'profile_key' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'rememberedCards' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 150],
+            'profile_key' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 150],
             'sandbox' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
             'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],

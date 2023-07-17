@@ -53,8 +53,8 @@ class PaypalIpn extends ObjectModel
         'multilang' => false,
         'fields' => [
             'id_transaction' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName'],
-            'status' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
-            'response' => ['type' => self::TYPE_HTML, 'validate' => 'isString'],
+            'status' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 50],
+            'response' => ['type' => self::TYPE_HTML, 'validate' => 'isCleanHtml'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
         ],
         'collation' => 'utf8_general_ci',
