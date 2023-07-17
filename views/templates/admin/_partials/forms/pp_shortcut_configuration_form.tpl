@@ -23,20 +23,20 @@
  *  @copyright PayPal
  *
  *}
-{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
-{assign var="fieldsButtonConfiguration" value=['PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_LABEL_CART']}
-{assign var="dynamicField" value=$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE}
+{extends file="./form.tpl"}
 
 {block name='form_content'}
+  {assign var="fieldsButtonConfiguration" value=['PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_HEIGHT_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_LABEL_CART']}
+  {assign var="dynamicField" value=$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE}
     {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE)}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE dynamicField=$dynamicField}
+        {include file="../form-fields.tpl" field=$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE dynamicField=$dynamicField}
     {/if}
 
     <div group-name="{$dynamicField.name}" {if !$form.fields.PAYPAL_EXPRESS_CHECKOUT_CUSTOMIZE_SHORTCUT_STYLE.value|default:false}class="d-none"{/if}>
         {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_CART)}
           <div class="h6">{l s='Cart page' mod='paypal'}</div>
           <hr>
-            {include file="module:paypal/views/templates/admin/_partials/shortcut_configuration_section.tpl"
+            {include file="../shortcut_configuration_section.tpl"
               displayMode=$form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_CART
               hooks=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_HOOK_CART
               widget_type='cart'
@@ -52,7 +52,7 @@
         {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_PRODUCT)}
           <div class="h6">{l s='Product page' mod='paypal'}</div>
           <hr>
-            {include file="module:paypal/views/templates/admin/_partials/shortcut_configuration_section.tpl"
+            {include file="../shortcut_configuration_section.tpl"
               displayMode=$form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_PRODUCT
               hooks=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_HOOK_PRODUCT
               widget_type='product'
@@ -68,7 +68,7 @@
         {if isset($form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_SIGNUP)}
           <div class="h6">{l s='Signup page' mod='paypal'}</div>
           <hr>
-            {include file="module:paypal/views/templates/admin/_partials/shortcut_configuration_section.tpl"
+            {include file="../shortcut_configuration_section.tpl"
               displayMode=$form.fields.PAYPAL_EXPRESS_CHECKOUT_DISPLAY_MODE_SIGNUP
               widget_type='signup'
               color=$form.fields.PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_SIGNUP

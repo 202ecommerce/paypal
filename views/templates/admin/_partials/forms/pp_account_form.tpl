@@ -23,10 +23,12 @@
  *  @copyright PayPal
  *
  *}
-{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
 {assign var="isModal" value=$isModal|default:false}
 
-{block name='form_content'}
+
+<form id="{$form.id_form}" class="mt-4 {[
+  'form-modal' => $isModal
+]|classnames}" data-form-configuration {block name='form_attributes'}{/block}>
   {foreach from=$form.fields key=fieldKey item=field}
     {if $fieldKey == 'account_form'}
       {assign var="isShowCredentials" value=in_array($field.set.country_iso, ['MX', 'BR', 'JP', 'IN'])}
@@ -34,7 +36,7 @@
       <input type="hidden" name="is_configured_live" value="{$field.set.is_configured_live}">
       <input type="hidden" name="is_configured_sandbox" value="{$field.set.is_configured_sandbox}">
 
-      {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+      {include file="../form-fields.tpl" field=[
         'type' => 'select',
         'name' => 'mode',
         'value' => $field.set.mode|default:'',
@@ -54,21 +56,21 @@
 
       <div credential-section>
         <div live-section style="display: none">
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            {include file="../form-fields.tpl" field=[
             'type' => 'text',
             'name' => 'paypal_clientid_live',
             'label' => "{l s='Client\’s ID' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_clientid_live|default:''
             ]}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            {include file="../form-fields.tpl" field=[
             'type' => 'text',
             'name' => 'paypal_secret_live',
             'label' => "{l s='Client\’s secret' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_secret_live|default:''
             ]}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            {include file="../form-fields.tpl" field=[
             'type' => 'text',
             'name' => 'merchant_id_live',
             'value' => $field.set.merchant_id_live|default:'',
@@ -78,21 +80,21 @@
         </div>
 
         <div sandbox-section style="display: none">
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            {include file="../form-fields.tpl" field=[
             'type' => 'text',
             'name' => 'paypal_clientid_sandbox',
             'label' => "{l s='Client\’s ID' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_clientid_sandbox|default:''
             ]}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            {include file="../form-fields.tpl" field=[
             'type' => 'text',
             'name' => 'paypal_secret_sandbox',
             'label' => "{l s='Client\’s secret' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_secret_sandbox|default:''
             ]}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=[
+            {include file="../form-fields.tpl" field=[
             'type' => 'text',
             'name' => 'merchant_id_sandbox',
             'value' => $field.set.merchant_id_sandbox|default:'',
@@ -222,8 +224,6 @@
 
   </script>
 
-{/block}
-
 {block name='form_footer_buttons'}
   {if $isModal}
     <div>
@@ -239,3 +239,4 @@
   {/if}
   <button save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
 {/block}
+</form>

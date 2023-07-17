@@ -23,15 +23,13 @@
  *  @copyright PayPal
  *
  *}
-{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
-
-{assign var="fieldsExpressCheckoutShortcut" value=['PAYPAL_EXPRESS_CHECKOUT_SHORTCUT', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_SIGNUP']}
+{extends file="./form.tpl"}
 
 {block name='form_content'}
 
     {foreach from=$form.fields item=field}
         {if $field.name|in_array:['PAYPAL_API_INTENT', 'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT']}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+            {include file="../form-fields.tpl" field=$field }
         {/if}
     {/foreach}
 
@@ -40,8 +38,8 @@
     <div class="col-9">
       <div class="row no-gutters">
           {foreach from=$form.fields item=field}
-              {if $field.name|in_array:$fieldsExpressCheckoutShortcut}
-                  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+              {if $field.name|in_array:['PAYPAL_EXPRESS_CHECKOUT_SHORTCUT', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART', 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_SIGNUP']}
+                  {include file="../form-fields.tpl" field=$field }
               {/if}
           {/foreach}
       </div>
@@ -53,7 +51,7 @@
             {if $field.name == 'PAYPAL_MOVE_BUTTON_AT_END' && $isShowModalConfiguration|default:false}
                 {continue}
             {/if}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field }
+            {include file="../form-fields.tpl" field=$field }
         {/if}
     {/foreach}
 

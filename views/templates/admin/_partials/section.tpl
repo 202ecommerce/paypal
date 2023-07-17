@@ -46,9 +46,9 @@
       {/if}
         <div form-container="{$form.id_form}">
             {if $form.id_form != 'pp_white_list_form'}
-                {include file="module:paypal/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
+                {include file=$moduleFullDir|cat:"/views/templates/admin/_partials/forms/"|cat:$form.id_form|cat:".tpl" form=$form}
             {else}
-                {include file="module:paypal/views/templates/admin/_partials/forms/form.tpl" form=$form}
+                {include file=$moduleFullDir|cat:"/views/templates/admin/_partials/forms/form.tpl" form=$form}
             {/if}
         </div>
      </div>

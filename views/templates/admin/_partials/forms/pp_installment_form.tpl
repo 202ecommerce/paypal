@@ -23,16 +23,16 @@
  *  @copyright PayPal
  *
  *}
-{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
-
-{assign var="fieldsInstallmentBNPL" value=['PAYPAL_BNPL_PRODUCT_PAGE', 'PAYPAL_BNPL_PAYMENT_STEP_PAGE', 'PAYPAL_BNPL_CART_PAGE', 'PAYPAL_BNPL_CHECKOUT_PAGE']}
-{assign var="fieldsInstallment" value=['PAYPAL_INSTALLMENT_PRODUCT_PAGE', 'PAYPAL_INSTALLMENT_HOME_PAGE', 'PAYPAL_INSTALLMENT_CATEGORY_PAGE', 'PAYPAL_INSTALLMENT_CART_PAGE', 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE']}
-{assign var="dynamicField" value=$form.fields.PAYPAL_ENABLE_BNPL|default:false}
-{assign var="dynamicFieldBanner" value=$form.fields.PAYPAL_ENABLE_INSTALLMENT|default:false}
+{extends file="./form.tpl"}
 
 {block name='form_content'}
+
+  {assign var="fieldsInstallmentBNPL" value=['PAYPAL_BNPL_PRODUCT_PAGE', 'PAYPAL_BNPL_PAYMENT_STEP_PAGE', 'PAYPAL_BNPL_CART_PAGE', 'PAYPAL_BNPL_CHECKOUT_PAGE']}
+  {assign var="fieldsInstallment" value=['PAYPAL_INSTALLMENT_PRODUCT_PAGE', 'PAYPAL_INSTALLMENT_HOME_PAGE', 'PAYPAL_INSTALLMENT_CATEGORY_PAGE', 'PAYPAL_INSTALLMENT_CART_PAGE', 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE']}
+  {assign var="dynamicField" value=$form.fields.PAYPAL_ENABLE_BNPL|default:false}
+  {assign var="dynamicFieldBanner" value=$form.fields.PAYPAL_ENABLE_INSTALLMENT|default:false}
   {if $dynamicField}
-    {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_BNPL dynamicField=$dynamicField}
+    {include file="../form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_BNPL dynamicField=$dynamicField}
   {/if}
 
   <div class="form-group row {[
@@ -43,14 +43,14 @@
       <div class="row no-gutters">
         {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsInstallmentBNPL}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
+            {include file="../form-fields.tpl" field=$field}
           {/if}
         {/foreach}
       </div>
     </div>
   </div>
 
-  {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT dynamicField=$dynamicFieldBanner}
+  {include file="../form-fields.tpl" field=$form.fields.PAYPAL_ENABLE_INSTALLMENT dynamicField=$dynamicFieldBanner}
 
   <div class="form-group row {[
     'd-none' => $dynamicFieldBanner && !$dynamicFieldBanner.value
@@ -60,7 +60,7 @@
       <div class="row no-gutters">
         {foreach from=$form.fields item=field}
           {if $field.name|in_array:$fieldsInstallment}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
+            {include file="../form-fields.tpl" field=$field}
           {/if}
         {/foreach}
       </div>
@@ -70,12 +70,12 @@
     <div class="{[
     'd-none' => $dynamicFieldBanner && !$dynamicFieldBanner.value
     ]|classnames}" {if $dynamicFieldBanner.name|default:false}group-name="{$dynamicFieldBanner.name}"{/if}>
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
+        {include file="../form-fields.tpl" field=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
 
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
+        {include file="../form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_COLOR withColor=true dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
 
         {if isset($form.fields.widget_code)}
-            {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$form.fields.widget_code dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
+            {include file="../form-fields.tpl" field=$form.fields.widget_code dynamicField=$form.fields.PAYPAL_ADVANCED_OPTIONS_INSTALLMENT}
         {/if}
     </div>
 

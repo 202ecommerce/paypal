@@ -30,7 +30,7 @@
     {foreach from=$form.fields item=field}
       {if $field.name|default:false}
         {block name='form_field'}
-          {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field}
+          {include file="../form-fields.tpl" field=$field}
         {/block}
       {/if}
     {/foreach}

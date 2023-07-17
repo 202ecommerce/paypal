@@ -37,51 +37,53 @@
             <div class="progress">
               <div class="progress-bar" data-steps-progress role="progressbar" style="width: 0;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
-            <span class="badge bg-warning text-primary ml-auto mt-4">{l s='Step :' mod='paypal'} <span data-badge-current-step>1</span> {l s='out of' mod='paypal'} 6</span>
+            <span class="badge bg-warning text-primary ml-auto mt-4">{l s='Step :' mod='paypal'} <span data-badge-current-step>1</span> {l s='out of' mod='paypal'} <span data-badge-max-step></span></span>
           </div>
         </div>
       </div>
       <div>
         <div data-step-content>
           {include
-            file="module:paypal/views/templates/admin/_partials/section.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
             form=$accountForm
             isModal=true
           }
         </div>
         <div class="d-none" data-step-content>
           {include
-            file="module:paypal/views/templates/admin/_partials/section.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
             form=$checkoutForm
             isModal=true
           }
         </div>
+        {if isset($formInstallment)}
+          <div class="d-none" data-step-content>
+            {include
+              file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
+              form=$formInstallment
+              sectionColFormClasses=' '
+              sectionColInfoClasses=' '
+              isModal=true
+            }
+          </div>
+        {/if}
         <div class="d-none" data-step-content>
           {include
-            file="module:paypal/views/templates/admin/_partials/section.tpl"
-            form=$formInstallment
-            sectionColFormClasses=' '
-            sectionColInfoClasses=' '
-            isModal=true
-          }
-        </div>
-        <div class="d-none" data-step-content>
-          {include
-            file="module:paypal/views/templates/admin/_partials/section.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
             form=$shortcutConfigurationForm
             isModal=true
           }
         </div>
         <div class="d-none" data-step-content>
           {include
-            file="module:paypal/views/templates/admin/_partials/section.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
             form=$orderStatusForm
             isModal=true
           }
         </div>
         <div class="d-none" data-step-content>
           {include
-            file="module:paypal/views/templates/admin/_partials/section.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
             form=$whiteListForm
             isModal=true
           }

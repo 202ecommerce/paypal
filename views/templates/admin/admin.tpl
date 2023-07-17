@@ -25,20 +25,20 @@
  *}
 {* Dashboard *}
 {include
-  file="module:paypal/views/templates/admin/_partials/dashboard.tpl"
+  file=$moduleFullDir|cat:"/views/templates/admin/_partials/dashboard.tpl"
   form=$trackingForm
 }
 
 {if $isShowModalConfiguration|default:false}
   {include
-    file="module:paypal/views/templates/admin/_partials/modal-configuration.tpl"
+    file=$moduleFullDir|cat:"/views/templates/admin/_partials/modal-configuration.tpl"
   }
 {else}
 
   {* Account section *}
     {if isset($accountForm)}
         {include
-          file="module:paypal/views/templates/admin/_partials/section.tpl"
+          file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
           form=$accountForm
         }
     {/if}
@@ -46,7 +46,7 @@
   {* Tracking section *}
   {if isset($trackingForm)}
       {include
-      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
       form=$trackingForm
       }
   {/if}
@@ -54,7 +54,7 @@
   {* Checkout section *}
   {if isset($checkoutForm)}
       {include
-        file="module:paypal/views/templates/admin/_partials/section.tpl"
+        file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
         form=$checkoutForm
       }
   {/if}
@@ -63,7 +63,7 @@
   {* Installment section *}
   {if isset($formInstallment)}
       {include
-        file="module:paypal/views/templates/admin/_partials/section.tpl"
+        file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
         form=$formInstallment
         sectionColFormClasses=' '
         sectionColInfoClasses=' '
@@ -73,7 +73,7 @@
     {* Shortcut section *}
   {if isset($shortcutConfigurationForm)}
       {include
-      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
       form=$shortcutConfigurationForm
       }
   {/if}
@@ -82,7 +82,7 @@
   {* Order status section *}
   {if isset($orderStatusForm)}
       {include
-      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
       form=$orderStatusForm
       }
   {/if}
@@ -90,7 +90,7 @@
   {* White list section *}
   {if isset($whiteListForm)}
       {include
-      file="module:paypal/views/templates/admin/_partials/section.tpl"
+      file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
       form=$whiteListForm
       }
   {/if}

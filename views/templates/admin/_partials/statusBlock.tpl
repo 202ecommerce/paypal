@@ -37,7 +37,7 @@
     <ul class="list-unstyled mb-0">
       <li class="d-flex mb-1">
         {include
-          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=$vars.sslActivated|default:false
         }
         {if $vars.sslActivated|default:false}
@@ -50,7 +50,7 @@
       {if $vars.tlsVersion|default:false}
         <li class="d-flex mb-1">
           {include
-            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
             isSuccess=($vars.tlsVersion|default:false && $vars.tlsVersion['status'])
           }
           {if $vars.tlsVersion|default:false && $vars.tlsVersion['status']}
@@ -65,7 +65,7 @@
       {if $vars.showWebhookState|default:false}
         <li class="d-flex">
           {include
-            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
             isSuccess=$vars.webhookState|default:false
           }
           {if isset($vars.webhookStateMsg)}{$vars.webhookStateMsg nofilter}{/if}

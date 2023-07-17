@@ -4,17 +4,19 @@ class Steps {
     this.btn = '[data-btn-action]';
     this.content = '[data-step-content]';
     this.currentStepBadge = '[data-badge-current-step]';
+    this.maxStepBadge = '[data-badge-max-step]';
     this.stepsProgress = '[data-steps-progress]';
     this.controller = document.location.href;
   }
 
   init() {
     this.registerEvents();
+    this.$stepsContainer.find(this.maxStepBadge).html($(this.content).length);
   }
 
   registerEvents() {
     $(document).on('afterFormSaved', (e) => {
-      if (e.detail.form.classList.contains('form-modal') == false) {
+      if (e.originalEvent.detail.form.classList.contains('form-modal') == false) {
         return;
       }
 
@@ -23,7 +25,7 @@ class Steps {
       this.updateStepsProgress();
 
       if (this.getCurrentStepIndex() == -1) {
-        $(e.detail.form).closest('.modal').modal('hide');
+        $(e.originalEvent.detail.form).closest('.modal').modal('hide');
         document.location.reload();
       }
     });

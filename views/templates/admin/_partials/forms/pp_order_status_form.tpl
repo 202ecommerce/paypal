@@ -23,14 +23,14 @@
  *  @copyright PayPal
  *
  *}
-{extends file="module:paypal/views/templates/admin/_partials/forms/form.tpl"}
-{assign var="dynamicField" value=$form.fields.PAYPAL_CUSTOMIZE_ORDER_STATUS}
+{extends file="./form.tpl"}
 
 {block name='form_field'}
+    {assign var="dynamicField" value=$form.fields.PAYPAL_CUSTOMIZE_ORDER_STATUS}
     {if $field.name == 'PAYPAL_ENABLE_WEBHOOK'}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field dynamicField=false}
+        {include file="../form-fields.tpl" field=$field dynamicField=false}
     {else}
-        {include file="module:paypal/views/templates/admin/_partials/form-fields.tpl" field=$field dynamicField=$dynamicField}
+        {include file="../form-fields.tpl" field=$field dynamicField=$dynamicField}
     {/if}
 
 {/block}

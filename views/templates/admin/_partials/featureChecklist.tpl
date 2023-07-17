@@ -29,7 +29,7 @@
       {if isset($vars.isBnplEnabled)}
         <li class="d-flex align-items-center mb-1">
           {include
-            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
             isSuccess=$vars.isBnplEnabled|default:false
           }
           {if $vars.isBnplEnabled}
@@ -42,7 +42,7 @@
 
       <li class="d-flex align-items-center mb-1">
         {include
-          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=$vars.isShortcutCustomized|default:false
         }
         {if $vars.isShortcutCustomized|default:false}
@@ -55,7 +55,7 @@
       {if isset($vars.isCreditCardEnabled)}
         <li class="d-flex align-items-center mb-1">
             {include
-            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
             isSuccess=$vars.isCreditCardEnabled
             }
 
@@ -66,7 +66,7 @@
       {if isset($vars.isPuiEnabled)}
         <li class="d-flex align-items-center mb-1">
           {include
-            file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
             isSuccess=$vars.isPuiEnabled|default:false
           }
           {if $vars.isPuiEnabled}
@@ -79,7 +79,7 @@
 
       <li class="d-flex align-items-center mb-1">
         {include
-          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=true
         }
         {if $vars.isOrderStatusCustomized|default:false}
@@ -91,7 +91,7 @@
 
       <li class="d-flex align-items-center">
         {include
-          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=$vars.isShowPaypalBenefits|default:false
         }
           {l s='PayPal benefits enabled' mod='paypal'}
@@ -99,7 +99,7 @@
 
       <li class="d-flex align-items-center">
           {include
-          file="module:paypal/views/templates/admin/_partials/icon-status.tpl"
+          file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=true
           }
           {l s='Tracking enabled' mod='paypal'}
