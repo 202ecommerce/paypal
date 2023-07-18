@@ -23,12 +23,11 @@
  *  @copyright PayPal
  *
  *}
+{extends file="./form.tpl"}
 {assign var="isModal" value=$isModal|default:false}
 
 
-<form id="{$form.id_form}" class="mt-4 {[
-  'form-modal' => $isModal
-]|classnames}" data-form-configuration {block name='form_attributes'}{/block}>
+{block name='form_content'}
   {foreach from=$form.fields key=fieldKey item=field}
     {if $fieldKey == 'account_form'}
       {assign var="isShowCredentials" value=in_array($field.set.country_iso, ['MX', 'BR', 'JP', 'IN'])}
@@ -241,8 +240,8 @@
 
 
   </script>
+{/block}
 
 {block name='form_footer_buttons'}
   <button save-form class="btn btn-secondary ml-auto" name={$form.submit.name}>{$form.submit.title}</button>
 {/block}
-</form>
