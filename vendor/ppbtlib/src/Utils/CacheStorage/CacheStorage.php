@@ -177,9 +177,9 @@ class CacheStorage
      */
     public function set($key, $content, $params = [], $optional = [])
     {
-        $content = str_replace(['<?php', '<?', '?>'], '', $content);
         $fileName = $this->getKeyFileName($key);
         $content = $this->buildCacheContent($content, $params, $optional);
+        $content = str_replace(['<?php', '<?', '?>'], '', $content);
         $filename = $fileName . uniqid('', true) . '.tmp';
         $dateGeneration = date('Y-m-d H:i:s');
         file_put_contents($filename, "<?php\r\r//Generated $dateGeneration\r\rreturn " . $content . ';', LOCK_EX);
