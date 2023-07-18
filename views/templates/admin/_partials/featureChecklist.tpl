@@ -40,17 +40,15 @@
         </li>
       {/if}
 
-      <li class="d-flex align-items-center mb-1">
-        {include
-          file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
-          isSuccess=$vars.isShortcutCustomized|default:false
-        }
-        {if $vars.isShortcutCustomized|default:false}
-          {l s='Customized shortcut button enabled' mod='paypal'}
-        {else}
-          {l s='Customized shortcut button disabled' mod='paypal'}
-        {/if}
-      </li>
+      {if $vars.isShortcutCustomized|default:false}
+        <li class="d-flex align-items-center mb-1">
+            {include
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
+            isSuccess=true
+            }
+            {l s='Customized shortcut button enabled' mod='paypal'}
+        </li>
+      {/if}
 
       {if isset($vars.isCreditCardEnabled)}
         <li class="d-flex align-items-center mb-1">
