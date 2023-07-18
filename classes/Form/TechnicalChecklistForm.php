@@ -72,11 +72,17 @@ class TechnicalChecklistForm implements FormInterface
             'localizationUrl' => $this->context->link->getAdminLink('AdminLocalization', true),
         ];
 
-        if ($this->webhookOption->isEnable() && $this->webhookOption->isEligibleContext()) {
-            $webhookCheck = $this->checker->checkWebhook();
+        if ($this->webhookOption->isEligibleContext()) {
             $tpl_vars['showWebhookState'] = true;
-            $tpl_vars['webhookState'] = $webhookCheck['state'];
-            $tpl_vars['webhookStateMsg'] = $webhookCheck['message'];
+
+            if ($this->webhookOption->isEnable()) {
+                $webhookCheck = $this->checker->checkWebhook();
+                $tpl_vars['isWebhookEnabled'] = true;
+                $tpl_vars['webhookState'] = $webhookCheck['state'];
+                $tpl_vars['webhookStateMsg'] = $webhookCheck['message'];
+            } else {
+                $tpl_vars['isWebhookEnabled'] = false;
+            }
         }
 
         return [
