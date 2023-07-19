@@ -36,7 +36,9 @@ use Exception;
 use Module;
 use PayPal;
 use PaypalAddons\classes\API\PaypalApiManagerInterface;
+use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
+use PaypalAddons\classes\API\Response\ResponseOrderCapture;
 use PaypalAddons\classes\API\Response\ResponseOrderGet;
 use PaypalAddons\classes\API\Response\ResponseOrderRefund;
 use PaypalAddons\classes\PUI\SignupLink;
@@ -188,11 +190,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             throw new Exception('The elements in the shopping cart were changed. Please try to pay again.');
         }
 
-        if ($this->getIntent() == 'CAPTURE') {
-            $response = $this->paypalApiManager->getOrderCaptureRequest($this->getPaymentId())->execute();
-        } else {
-            $response = $this->paypalApiManager->getOrderAuthorizeRequest($this->getPaymentId())->execute();
-        }
+        $response = $this->completePayment();
 
         if ($response->isSuccess() == false) {
             throw new Exception($response->getError()->getMessage());
@@ -214,6 +212,48 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             false,
             $customer->secure_key
         );
+    }
+
+    /**
+     * @return ResponseOrderCapture
+     */
+    protected function completePayment()
+    {
+        /** @var ResponseOrderGet $getOrderResponse */
+        $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($this->getPaymentId())->execute();
+
+        if ($getOrderResponse->getStatus() === 'APPROVED') {
+            if ($this->getIntent() == 'CAPTURE') {
+                return $this->paypalApiManager->getOrderCaptureRequest($this->getPaymentId())->execute();
+            } else {
+                return $this->paypalApiManager->getOrderAuthorizeRequest($this->getPaymentId())->execute();
+            }
+        }
+
+        $response = new ResponseOrderCapture();
+
+        if ($getOrderResponse->getStatus() !== 'COMPLETED') {
+            $error = new Error();
+            $error->setMessage('Payment was not approved');
+            $response->setError($error)->setSuccess(false);
+
+            return $response;
+        }
+
+        $response->setSuccess(true)
+            ->setData($getOrderResponse->getData())
+            ->setPaymentId($this->getPaymentId())
+            ->setTransactionId($getOrderResponse->getTransactionId())
+            ->setCurrency($getOrderResponse->getPurchaseUnit()->getCurrency())
+            ->setCapture($this->getIntent() !== 'CAPTURE')
+            ->setTotalPaid($getOrderResponse->getPurchaseUnit()->getAmount())
+            ->setStatus($getOrderResponse->getStatus())
+            ->setPaymentMethod($getOrderResponse->getPaymentMethod())
+            ->setPaymentTool($getOrderResponse->getPaymentTool())
+            ->setMethod($getOrderResponse->getMethod())
+            ->setDateTransaction($getOrderResponse->getDateTransaction());
+
+        return $response;
     }
 
     /**

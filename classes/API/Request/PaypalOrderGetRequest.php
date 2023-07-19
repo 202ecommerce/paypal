@@ -59,7 +59,6 @@ class PaypalOrderGetRequest extends RequestAbstract
             $orderGetRequest = new OrdersGetRequest($this->idPayment);
             $orderGetRequest->headers = array_merge($this->getHeaders(), $orderGetRequest->headers);
             $exec = $this->client->execute($orderGetRequest);
-
             if (in_array($exec->statusCode, [200, 201, 202])) {
                 $response->setSuccess(true)
                     ->setData($exec);
@@ -79,6 +78,12 @@ class PaypalOrderGetRequest extends RequestAbstract
                 $response->setPurchaseUnit($this->getPurchaseUnit($exec));
                 $response->setStatus($this->getStatus($exec));
                 $response->setDepositBankDetails($this->getDepositBankDetails($exec));
+
+                $response->setTransactionId($this->getTransactionId($exec))
+                    ->setPaymentMethod($this->getPaymentMethod($exec))
+                    ->setPaymentTool($this->getPaymentTool())
+                    ->setMethod($this->getMethodTransaction())
+                    ->setDateTransaction($this->getDateTransaction($exec));
             } else {
                 $error = new Error();
                 $resultDecoded = json_decode($exec->message);
@@ -240,5 +245,64 @@ class PaypalOrderGetRequest extends RequestAbstract
         }
 
         return $bankDetails;
+    }
+
+    protected function getTransactionId($exec)
+    {
+        if (false === empty($exec->result->purchase_units[0]->payments->captures[0]->id)) {
+            return $exec->result->purchase_units[0]->payments->captures[0]->id;
+        }
+
+        if (false === empty($exec->result->purchase_units[0]->payments->authorizations[0]->id)) {
+            return $exec->result->purchase_units[0]->payments->authorizations[0]->id;
+        }
+
+        return '';
+    }
+
+    protected function getPaymentTool()
+    {
+        return '';
+    }
+
+    protected function getPaymentMethod($exec)
+    {
+        if (false === empty($exec->result->payment_source->sofort)) {
+            return 'sofort';
+        }
+
+        if (false === empty($exec->result->payment_source->giropay)) {
+            return 'giropay';
+        }
+
+        return 'paypal';
+    }
+
+    protected function getDateTransaction($exec)
+    {
+        $payments = $exec->result->purchase_units[0]->payments;
+        $transaction = $payments->captures[0];
+        $date = \DateTime::createFromFormat(\DateTime::ATOM, $transaction->create_time);
+
+        return $date;
+    }
+
+    protected function getMethodTransaction()
+    {
+        switch (get_class($this->method)) {
+            case 'MethodEC':
+                $method = 'EC';
+                break;
+            case 'MethodMB':
+                $method = 'MB';
+                break;
+            case 'MethodPPP':
+                $method = 'PPP';
+                break;
+            default:
+                $method = '';
+        }
+
+        return $method;
     }
 }
