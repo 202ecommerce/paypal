@@ -24,147 +24,153 @@
  *
  *}
 {extends file="./form.tpl"}
-{assign var="isModal" value=$isModal|default:false}
-
 
 {block name='form_content'}
-  {foreach from=$form.fields key=fieldKey item=field}
-    {if $fieldKey == 'account_form'}
-      {assign var="isShowCredentials" value=in_array($field.set.country_iso, ['MX', 'BR', 'JP', 'IN'])}
-
-      <input type="hidden" name="is_configured_live" value="{$field.set.is_configured_live}">
-      <input type="hidden" name="is_configured_sandbox" value="{$field.set.is_configured_sandbox}">
-
-      {include file="../form-fields.tpl" field=[
-        'type' => 'select',
-        'name' => 'mode',
-        'value' => $field.set.mode|default:'',
-        'options' => [
-          [
+    {assign var="isModal" value=$isModal|default:false}
+    {foreach from=$form.fields key=fieldKey item=field}
+        {if $fieldKey == 'account_form'}
+            {assign var="isShowCredentials" value=in_array($field.set.country_iso, ['MX', 'BR', 'JP', 'IN'])}
+            {assign var='selectMode' value=[
+            'type' => 'select',
+            'name' => 'mode',
+            'value' => $field.set.mode|default:'',
+            'options' => [
+            [
             'value' => 'LIVE',
             'title' => "{l s='Production' mod='paypal'}"
-          ],
-          [
+            ],
+            [
             'value' => 'SANDBOX',
             'title' => "{l s='Sandbox' mod='paypal'}"
-          ]
-        ],
-        'label' => "{l s='Mode' mod='paypal'}",
-        'variant' => 'primary'
-      ]}
-
-      <div credential-section>
-        <div live-section style="display: none">
-            {include file="../form-fields.tpl" field=[
+            ]
+            ],
+            'label' => "{l s='Mode' mod='paypal'}",
+            'variant' => 'primary'
+            ]}
+            {assign var='clientIdLive' value=[
             'type' => 'text',
             'name' => 'paypal_clientid_live',
             'label' => "{l s='Client\’s ID' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_clientid_live|default:''
             ]}
-            {include file="../form-fields.tpl" field=[
+            {assign var='clientSecretLive' value=[
             'type' => 'text',
             'name' => 'paypal_secret_live',
             'label' => "{l s='Client\’s secret' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_secret_live|default:''
             ]}
-            {include file="../form-fields.tpl" field=[
+            {assign var='merchantIdLive' value=[
             'type' => 'text',
             'name' => 'merchant_id_live',
             'value' => $field.set.merchant_id_live|default:'',
             'label' => "{l s='Merchant ID' mod='paypal'}",
             'variant' => 'primary'
             ]}
-        </div>
-
-        <div sandbox-section style="display: none">
-            {include file="../form-fields.tpl" field=[
+            {assign var='clientIdSandbox' value=[
             'type' => 'text',
             'name' => 'paypal_clientid_sandbox',
             'label' => "{l s='Client\’s ID' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_clientid_sandbox|default:''
             ]}
-            {include file="../form-fields.tpl" field=[
+            {assign var='clientSecretSandbox' value=[
             'type' => 'text',
             'name' => 'paypal_secret_sandbox',
             'label' => "{l s='Client\’s secret' mod='paypal'}",
             'variant' => 'primary',
             'value' => $field.set.paypal_secret_sandbox|default:''
             ]}
-            {include file="../form-fields.tpl" field=[
+            {assign var='merchantIdSandbox' value=[
             'type' => 'text',
             'name' => 'merchant_id_sandbox',
             'value' => $field.set.merchant_id_sandbox|default:'',
             'label' => "{l s='Merchant ID' mod='paypal'}",
             'variant' => 'primary'
             ]}
-        </div>
-      </div>
+
+          <input type="hidden" name="is_configured_live" value="{$field.set.is_configured_live}">
+          <input type="hidden" name="is_configured_sandbox" value="{$field.set.is_configured_sandbox}">
+
+            {include file="../form-fields.tpl" field=$selectMode}
+
+          <div credential-section>
+            <div live-section style="display: none">
+                {include file="../form-fields.tpl" field=$clientIdLive}
+                {include file="../form-fields.tpl" field=$clientSecretLive}
+                {include file="../form-fields.tpl" field=$merchantIdLive}
+            </div>
+
+            <div sandbox-section style="display: none">
+                {include file="../form-fields.tpl" field=$clientIdSandbox}
+                {include file="../form-fields.tpl" field=$clientSecretSandbox}
+                {include file="../form-fields.tpl" field=$merchantIdSandbox}
+            </div>
+          </div>
 
 
-        <div onboarding-button-section>
+          <div onboarding-button-section>
 
-          <div live-section style="display: none">
+            <div live-section style="display: none">
 
-            <div class="form-group row">
-              <div class="offset-3 {[
-              'col-7' => !$isModal,
-              'col-9' => $isModal
-              ]|classnames}">
-                <a
-                  href="{$field.set.urlOnboarding_live}"
-                  class="btn btn-secondary btn-block"
-                  target="_blank"
-                  data-paypal-button
-                  data-paypal-onboard-complete="onboardCallback"
-                >
+              <div class="form-group row">
+                <div class="offset-3 {[
+                'col-7' => !$isModal,
+                'col-9' => $isModal
+                ]|classnames}">
+                  <a
+                    href="{$field.set.urlOnboarding_live}"
+                    class="btn btn-secondary btn-block"
+                    target="_blank"
+                    data-paypal-button
+                    data-paypal-onboard-complete="onboardCallback"
+                  >
               <span class="icon mr-2">
                 <i class="material-icons-outlined">account_circle</i>
               </span>
-                  <span>
+                    <span>
                 {l s='Connect or create your PayPal account' mod='paypal'}
               </span>
-                </a>
+                  </a>
+                </div>
               </div>
+
             </div>
 
-          </div>
+            <div sandbox-section style="display: none">
 
-          <div sandbox-section style="display: none">
-
-            <div class="form-group row">
-              <div class="offset-3 {[
-              'col-7' => !$isModal,
-              'col-9' => $isModal
-              ]|classnames}">
-                <a
-                  href="{$field.set.urlOnboarding_sandbox}"
-                  class="btn btn-secondary btn-block"
-                  target="_blank"
-                  data-paypal-button
-                  data-paypal-onboard-complete="onboardCallback"
-                >
+              <div class="form-group row">
+                <div class="offset-3 {[
+                'col-7' => !$isModal,
+                'col-9' => $isModal
+                ]|classnames}">
+                  <a
+                    href="{$field.set.urlOnboarding_sandbox}"
+                    class="btn btn-secondary btn-block"
+                    target="_blank"
+                    data-paypal-button
+                    data-paypal-onboard-complete="onboardCallback"
+                  >
               <span class="icon mr-2">
                 <i class="material-icons-outlined">account_circle</i>
               </span>
-                  <span>
+                    <span>
                 {l s='Connect or create your PayPal account' mod='paypal'}
               </span>
-                </a>
+                  </a>
+                </div>
               </div>
+
             </div>
 
-          </div>
+            <div logout-section style="display: none">
 
-          <div logout-section style="display: none">
-
-            <div class="form-group row">
-              <div class="offset-3 {[
-              'col-7' => !$isModal,
-              'col-9' => $isModal
-              ]|classnames}">
+              <div class="form-group row">
+                <div class="offset-3 {[
+                'col-7' => !$isModal,
+                'col-9' => $isModal
+                ]|classnames}">
               <span class="btn btn-secondary btn-block" logout-button>
               <span class="icon mr-2">
                 <i class="material-icons-outlined">account_circle</i>
@@ -173,33 +179,33 @@
                 {l s='Logout' mod='paypal'}
               </span>
               </span>
+                </div>
               </div>
-            </div>
 
-              {if $isModal}
-                <div class="form-group row">
-                  <div class="offset-3 {[
-                  'col-7' => !$isModal,
-                  'col-9' => $isModal
-                  ]|classnames}">
-                    <div merchant-label-sandbox class="alert alert-warning mt-0" style="display: none">
-                        {l s='You are connected with the account:' mod='paypal'}
-                      <b merchant-id></b>
-                    </div>
-                    <div merchant-label-live class="alert alert-warning mt-0" style="display: none">
-                        {l s='You are connected with the account:' mod='paypal'}
-                      <b merchant-id></b>
+                {if $isModal}
+                  <div class="form-group row">
+                    <div class="offset-3 {[
+                    'col-7' => !$isModal,
+                    'col-9' => $isModal
+                    ]|classnames}">
+                      <div merchant-label-sandbox class="alert alert-warning mt-0" style="display: none">
+                          {l s='You are connected with the account:' mod='paypal'}
+                        <b merchant-id></b>
+                      </div>
+                      <div merchant-label-live class="alert alert-warning mt-0" style="display: none">
+                          {l s='You are connected with the account:' mod='paypal'}
+                        <b merchant-id></b>
+                      </div>
                     </div>
                   </div>
-                </div>
-              {/if}
+                {/if}
+
+            </div>
 
           </div>
 
-        </div>
-
-    {/if}
-  {/foreach}
+        {/if}
+    {/foreach}
 
   <script>
     function onboardCallback(authCode, sharedId) {
