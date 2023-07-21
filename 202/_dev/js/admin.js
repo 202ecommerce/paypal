@@ -29,10 +29,8 @@ import Steps from './admin/steps';
 import Form from './admin/form';
 import Section from './admin/section';
 
-$(() => {
-  $(window).on('load', () => {
-    $('#modal-configuration').modal('show');
-  })
+window.addEventListener('load', () => {
+  $('#modal-configuration').modal('show');
 
   const steps = new Steps('#modal-configuration-steps');
   steps.init();
@@ -56,7 +54,5 @@ $(() => {
       ))
     );
   }
-
 });
-
 
