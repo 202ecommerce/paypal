@@ -33,6 +33,7 @@ use Country;
 use Currency;
 use Customer;
 use Exception;
+use MethodMB;
 use Module;
 use PayPal;
 use PaypalAddons\classes\API\PaypalApiManagerInterface;
@@ -222,7 +223,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         /** @var ResponseOrderGet $getOrderResponse */
         $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($this->getPaymentId())->execute();
 
-        if ($getOrderResponse->getStatus() === 'APPROVED') {
+        if ($this instanceof MethodMB || $getOrderResponse->getStatus() === 'APPROVED') {
             if ($this->getIntent() == 'CAPTURE') {
                 return $this->paypalApiManager->getOrderCaptureRequest($this->getPaymentId())->execute();
             } else {
