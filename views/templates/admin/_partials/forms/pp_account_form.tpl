@@ -167,9 +167,19 @@
             <div logout-section style="display: none">
 
               <div class="form-group row">
-                <div class="offset-3 {[
+                {if !$isModal}
+                  <label class="form-control-label col-3">
+                      {include
+                      file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
+                      isSuccess=true
+                      }
+                  </label>
+                {/if}
+
+                <div class="{[
                 'col-7' => !$isModal,
-                'col-9' => $isModal
+                'col-9' => $isModal,
+                'offset-3' => $isModal
                 ]|classnames}">
               <span class="btn btn-secondary btn-block" logout-button>
               <span class="icon mr-2">
