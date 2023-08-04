@@ -23,7 +23,6 @@
  *  @copyright PayPal
  *
  *}
-{* {json_encode($messages)} *}
 {foreach from=$messages item=message}
     {$message|escape:'htmlall':'UTF-8'}<br />
 {/foreach}
