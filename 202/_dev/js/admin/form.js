@@ -320,10 +320,22 @@ class Form {
             document.querySelector('[name="paypal_secret_live"]').value = response.secret;
             document.querySelector('[name="merchant_id_live"]').value = response.merchantId;
           }
+        } else {
+          this.errorMessage(response);
         }
 
         this.updateButtonSection();
       });
+  }
+
+  errorMessage(response) {
+    let messageSection = '#paypal_error_ajax';
+    let prependTo = '[onboarding-button-section]';
+    if (!$(messageSection).length || $(messageSection).length <= 0) {
+      const htmlDiv = '<div id="paypal_error_ajax" class="alert alert-danger"></div>';
+      $(prependTo).append(htmlDiv);
+    }
+    $(messageSection).html(response.message);
   }
 
   isSandbox() {

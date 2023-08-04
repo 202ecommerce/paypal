@@ -214,6 +214,8 @@ $_MODULE['<{paypal}prestashop>adminpaypalcontroller_2c4493f4907a8c500557d79dd978
 $_MODULE['<{paypal}prestashop>adminpaypalcontroller_d8e95938c82a618f755c13b35d4277c4'] = 'Estás usando una versión anterior de cURL. Actualiza tu extensión cURL a la versión 7.34.0 o superior.';
 $_MODULE['<{paypal}prestashop>adminpaypalcontroller_38dc1dc4db247b4c01b26636e6bf9666'] = 'La versión de TLS no es compatible';
 $_MODULE['<{paypal}prestashop>adminpaypalcontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Actualización realizada correctamente.';
+$_MODULE['<{paypal}prestashop>adminpaypalconfigurationcontroller_5a4ee3dd035d8deb0d2ac20207e6fae8'] = 'Se ha producido un error al vincular su cuenta PayPal';
+$_MODULE['<{paypal}prestashop>adminpaypalconfigurationcontroller_46d27bd77ba9412d8515682b635cd01a'] = 'Para más información:';
 $_MODULE['<{paypal}prestashop>createprofileexperiencerequest_51a9f5fc2e4d9b1c8aa4a60a7c725243'] = 'Se ha producido un error al crear tu experiencia web. Comprueba tus credenciales.';
 $_MODULE['<{paypal}prestashop>methodppp_51a9f5fc2e4d9b1c8aa4a60a7c725243'] = 'Se ha producido un error al crear tu experiencia web. Comprueba tus credenciales.';
 $_MODULE['<{paypal}prestashop>adminprocessloggercontroller_d3b206d196cd6be3a2764c1fb90b200f'] = 'Eliminar selección';

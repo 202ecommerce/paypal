@@ -164,8 +164,18 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $paypalOnboarding = new PaypalGetAuthToken($authCode, $sharedId, $sellerNonce, $isSandbox);
         $result = $paypalOnboarding->execute();
 
+        $locale = \Context::getContext()->language->locale;
+        $errorMessage = $this->module->l(
+            'An error occured while trying to link your PayPal\'s account',
+            'AdminPaypalConfigurationController',
+            $locale
+        );
+        $errorMessage .= '<br />' . $this->module->l('More details: ', 'AdminPaypalConfigurationController', $locale) . '<br />';
         if ($result->isSuccess() == false) {
-            $response->setData(['success' => false, 'message' => $result->getError()->getMessage()])->send();
+            $response->setData([
+                'success' => false,
+                'message' => $errorMessage . $result->getError()->getMessage()
+            ])->send();
             exit;
         }
 
@@ -176,7 +186,10 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         $result = $paypalGetCredentials->execute();
 
         if ($result->isSuccess() == false) {
-            $response->setData(['success' => false, 'messeage' => $result->getError()->getMessage()])->send();
+            $response->setData([
+                'success' => false,
+                'message' => $result->getError()->getMessage()]
+            )->send();
             exit;
         }
 
