@@ -174,7 +174,7 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         if ($result->isSuccess() == false) {
             $response->setData([
                 'success' => false,
-                'message' => $errorMessage . $result->getError()->getMessage()
+                'message' => $errorMessage . $result->getError()->getMessage(),
             ])->send();
             exit;
         }
@@ -188,8 +188,8 @@ class AdminPaypalConfigurationController extends \ModuleAdminController
         if ($result->isSuccess() == false) {
             $response->setData([
                 'success' => false,
-                'message' => $result->getError()->getMessage()]
-            )->send();
+                'message' => $result->getError()->getMessage(),
+            ])->send();
             exit;
         }
 
