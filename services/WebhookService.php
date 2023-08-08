@@ -80,6 +80,7 @@ class WebhookService
     {
         $webhooks = [];
         $query = (new DbQuery())
+            ->select('id_paypal_webhook')
             ->from(\PaypalWebhook::$definition['table'])
             ->where('id_paypal_order = ' . (int) $paypalOrder->id)
             ->where('id_webhook IS NULL OR id_webhook = ""');
@@ -108,9 +109,10 @@ class WebhookService
 
         foreach ($result as $row) {
             try {
-                $webhook = new \PaypalWebhook();
-                $webhook->hydrate($row);
-                $webhooks[] = $webhook;
+                $webhook = new \PaypalWebhook($row['id_paypal_webhook']);
+                if (Validate::isLoadedObject($webhook) === true) {
+                    $webhooks[] = $webhook;
+                }
             } catch (Throwable $e) {
             } catch (Exception $e) {
             }
