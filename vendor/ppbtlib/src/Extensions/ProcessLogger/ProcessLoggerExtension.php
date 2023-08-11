@@ -128,6 +128,7 @@ class ProcessLoggerExtension extends AbstractModuleExtension
         }
 
         $collectionLogs = new \PrestaShopCollection($class_logger);
+        $collectionLogs->where('id_order', '=', $order->id);
         $collectionLogs
             ->orderBy('date_add', 'desc');
 
