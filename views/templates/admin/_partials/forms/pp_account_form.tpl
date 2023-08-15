@@ -170,7 +170,7 @@
                 {if !$isModal}
                   <label class="form-control-label col-3">
                       {include
-                      file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
+                      file="../icon-status.tpl"
                       isSuccess=true
                       }
                   </label>
