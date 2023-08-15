@@ -97,6 +97,10 @@ class PaypalCaptureAuthorizeRequest extends RequestAbstract
     {
         $date = \DateTime::createFromFormat(\DateTime::ATOM, $exec->result->create_time);
 
+        if (!$date) {
+            $date = new \DateTime();
+        }
+
         return $date->format('Y-m-d H:i:s');
     }
 }

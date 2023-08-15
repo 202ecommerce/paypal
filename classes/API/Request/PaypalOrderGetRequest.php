@@ -284,6 +284,10 @@ class PaypalOrderGetRequest extends RequestAbstract
         $transaction = $payments->captures[0];
         $date = \DateTime::createFromFormat(\DateTime::ATOM, $transaction->create_time);
 
+        if (!$date) {
+            $date = new \DateTime();
+        }
+
         return $date;
     }
 

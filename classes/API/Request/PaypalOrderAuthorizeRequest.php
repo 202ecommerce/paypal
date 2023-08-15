@@ -135,6 +135,10 @@ class PaypalOrderAuthorizeRequest extends RequestAbstract
         $transaction = $payemnts->authorizations[0];
         $date = \DateTime::createFromFormat(\DateTime::ATOM, $transaction->create_time);
 
+        if (!$date) {
+            $date = new \DateTime();
+        }
+
         return $date;
     }
 

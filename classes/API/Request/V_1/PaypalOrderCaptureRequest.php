@@ -177,6 +177,10 @@ class PaypalOrderCaptureRequest extends RequestAbstractMB
     {
         $date = \DateTime::createFromFormat(\DateTime::ISO8601, $payment->update_time);
 
+        if (!$date) {
+            $date = new \DateTime();
+        }
+
         return $date;
     }
 }

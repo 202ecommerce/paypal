@@ -101,6 +101,10 @@ class PaypalOrderRefundRequest extends RequestAbstractMB
     {
         $date = DateTime::createFromFormat(DateTime::ISO8601, $detailedRefund->update_time);
 
+        if (!$date) {
+            $date = new DateTime();
+        }
+
         return $date->format('Y-m-d TH:i:s');
     }
 
