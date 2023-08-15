@@ -65,7 +65,7 @@ class PaypalWebhook extends ObjectModel
         'fields' => [
             'id_paypal_order' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             'id_webhook' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 50],
-            'event_type' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 20],
+            'event_type' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 50],
             'data' => ['type' => self::TYPE_HTML, 'validate' => 'isCleanHtml'],
             'id_state' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
