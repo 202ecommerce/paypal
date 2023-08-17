@@ -30,6 +30,7 @@ use Db;
 use DbQuery;
 use Exception;
 use Throwable;
+use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
