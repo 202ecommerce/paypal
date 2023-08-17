@@ -38,6 +38,7 @@ function upgrade_module_6_0_3($module)
 {
     $installer = new \PaypalPPBTlib\Install\ModuleInstaller($module);
     $installer->installObjectModels();
+    Db::getInstance()->delete(PaypalWebhook::$definition['table'], 'id_webhook IS NULL OR id_webhook =""');
 
     return true;
 }
