@@ -78,6 +78,8 @@ class PaypalAddTrackingInfoRequest extends RequestAbstract
 
             if (false == empty($resultDecoded['message'])) {
                 $error->setMessage($resultDecoded['message']);
+            } else {
+                $error->setMessage($e->getMessage());
             }
 
             $response->setSuccess(false)
