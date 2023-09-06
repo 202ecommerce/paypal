@@ -9,6 +9,7 @@ use Module;
 use PaypalAddons\classes\ACDC\AcdcFunctionality;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
+use PaypalAddons\classes\Venmo\VenmoFunctionality;
 use Tools;
 
 if (!defined('_PS_VERSION_')) {
@@ -24,11 +25,14 @@ class CheckoutForm implements FormInterface
 
     protected $acdcFunctionality;
 
+    protected $venmoFunctionality;
+
     public function __construct()
     {
         $this->module = Module::getInstanceByName('paypal');
         $countryDefault = new Country(Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
         $this->acdcFunctionality = new AcdcFunctionality();
+        $this->venmoFunctionality = new VenmoFunctionality();
 
         switch ($countryDefault->iso_code) {
             case 'DE':
@@ -217,6 +221,28 @@ class CheckoutForm implements FormInterface
                     ],
                 ],
                 'value' => (int) Configuration::get(PaypalConfigurations::ACDC_OPTION),
+            ];
+        }
+
+        if ($this->venmoFunctionality->isAvailable()) {
+            $fields[PaypalConfigurations::VENMO_OPTION] = [
+                'type' => 'switch',
+                'label' => $this->module->l('Venmo', 'AdminPayPalCustomizeCheckoutController'),
+                'name' => PaypalConfigurations::VENMO_OPTION,
+                'is_bool' => true,
+                'values' => [
+                    [
+                        'id' => PaypalConfigurations::VENMO_OPTION . '_on',
+                        'value' => 1,
+                        'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                    [
+                        'id' => PaypalConfigurations::VENMO_OPTION . '_off',
+                        'value' => 0,
+                        'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
+                    ],
+                ],
+                'value' => (int) Configuration::get(PaypalConfigurations::VENMO_OPTION),
             ];
         }
 
@@ -440,6 +466,11 @@ class CheckoutForm implements FormInterface
         Configuration::updateValue(
             PaypalConfigurations::ACDC_OPTION,
             isset($data[PaypalConfigurations::ACDC_OPTION]) ? 1 : 0
+        );
+
+        Configuration::updateValue(
+            PaypalConfigurations::VENMO_OPTION,
+            isset($data[PaypalConfigurations::VENMO_OPTION]) ? 1 : 0
         );
 
         Configuration::updateValue(
