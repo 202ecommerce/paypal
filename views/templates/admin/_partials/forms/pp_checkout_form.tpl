@@ -28,7 +28,7 @@
 {block name='form_content'}
 
     {foreach from=$form.fields item=field}
-        {if $field.name|in_array:['PAYPAL_API_INTENT', 'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT']}
+        {if $field.name|in_array:['PAYPAL_API_INTENT', 'PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT', 'PAYPAL_MB_EC_ENABLED']}
             {include file="../form-fields.tpl" field=$field }
         {/if}
     {/foreach}
