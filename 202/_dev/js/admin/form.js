@@ -6,6 +6,7 @@ class Form {
     this.inputDynamicSelector = '.custom-control-input';
     this.inputInstallementColor = '[name="PAYPAL_INSTALLMENT_COLOR"]';
     this.controller = document.location.href;
+    this.generateCredentialsEventDone = false;
   }
 
   init() {
@@ -294,12 +295,16 @@ class Form {
   }
 
   generateCredentials(data) {
+    if (this.generateCredentialsEventDone === true) {
+      return false;
+    }
     const url = new URL(this.controller);
     url.searchParams.append('ajax', 1);
     url.searchParams.append('action', 'generateCredentials');
     url.searchParams.append('authCode', data.authCode);
     url.searchParams.append('sharedId', data.sharedId);
     url.searchParams.append('isSandbox', this.isSandbox() ? 1 : 0);
+    this.generateCredentialsEventDone = true;
 
     fetch(url.toString(), {
       method: 'GET',
@@ -325,6 +330,7 @@ class Form {
         }
 
         this.updateButtonSection();
+        this.generateCredentialsEventDone = false;
       });
   }
 
