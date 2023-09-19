@@ -73,6 +73,7 @@ export const Tools = {
     Tools.disable(disabledElement);
 
     checkBox.addEventListener('click', function() {
+      Tools.showElementsIfChecked();
       if (checkBox.checked) {
         Tools.enable(disabledElement);
       } else {
@@ -81,6 +82,7 @@ export const Tools = {
     });
 
     $('.payment-option').click(function() {
+      Tools.showElementsIfChecked();
       if (checkBox.checked) {
         Tools.enable(disabledElement);
       } else {
@@ -186,6 +188,25 @@ export const Tools = {
           isShow = true;
         }
       });
+
+      if (isShow) {
+        showElement.style.display = 'block';
+      } else {
+        showElement.style.display = 'none';
+      }
+    });
+  },
+
+  showElementsIfChecked() {
+    Object.keys(window.paypalToolsShowElemenList).forEach(function(showElementSelector) {
+      console.log(showElementSelector);
+      let isShow = false;
+      window.paypalToolsShowElemenList[showElementSelector].forEach(function(elem) {
+        if (elem.checked) {
+          isShow = true;
+        }
+      });
+      const showElement = document.querySelector(showElementSelector);
 
       if (isShow) {
         showElement.style.display = 'block';
