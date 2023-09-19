@@ -73,6 +73,7 @@ export const Tools = {
     Tools.disable(disabledElement);
 
     checkBox.addEventListener('click', function() {
+      Tools.hideElementTillChecked();
       Tools.showElementsIfChecked();
       if (checkBox.checked) {
         Tools.enable(disabledElement);
@@ -82,7 +83,6 @@ export const Tools = {
     });
 
     $('.payment-option').click(function() {
-      Tools.showElementsIfChecked();
       if (checkBox.checked) {
         Tools.enable(disabledElement);
       } else {
@@ -137,20 +137,8 @@ export const Tools = {
       return;
     }
 
-    options.addEventListener('input', function(event) {
-      let isHide = false;
-      window.paypalToolsHiddenElemenList[hideElementSelector].forEach(function(elem) {
-        if (elem.checked) {
-          isHide = true;
-        }
-      });
-
-      if (isHide) {
-        hideElement.style.visibility = 'hidden';
-      } else {
-        hideElement.style.visibility = 'initial';
-      }
-    })
+    Tools.hideElementTillChecked();
+    options.addEventListener('input', Tools.hideElementTillChecked);
   },
 
   showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector) {
@@ -181,20 +169,8 @@ export const Tools = {
       return;
     }
 
-    options.addEventListener('input', function(event) {
-      let isShow = false;
-      window.paypalToolsShowElemenList[showElementSelector].forEach(function(elem) {
-        if (elem.checked) {
-          isShow = true;
-        }
-      });
-
-      if (isShow) {
-        showElement.style.display = 'block';
-      } else {
-        showElement.style.display = 'none';
-      }
-    });
+    Tools.showElementsIfChecked();
+    options.addEventListener('input', Tools.showElementsIfChecked);
   },
 
   showElementsIfChecked() {
@@ -211,6 +187,24 @@ export const Tools = {
         showElement.style.display = 'block';
       } else {
         showElement.style.display = 'none';
+      }
+    });
+  },
+
+  hideElementTillChecked() {
+    Object.keys(window.paypalToolsHiddenElemenList).forEach(function(hideElementSelector) {
+      let isHide = false;
+      const hideElement = document.querySelector(hideElementSelector);
+      window.paypalToolsHiddenElemenList[hideElementSelector].forEach(function(elem) {
+        if (elem.checked) {
+          isHide = true;
+        }
+      });
+
+      if (isHide) {
+        hideElement.style.visibility = 'hidden';
+      } else {
+        hideElement.style.visibility = 'initial';
       }
     });
   },
