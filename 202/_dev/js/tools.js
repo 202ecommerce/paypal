@@ -199,7 +199,6 @@ export const Tools = {
 
   showElementsIfChecked() {
     Object.keys(window.paypalToolsShowElemenList).forEach(function(showElementSelector) {
-      console.log(showElementSelector);
       let isShow = false;
       window.paypalToolsShowElemenList[showElementSelector].forEach(function(elem) {
         if (elem.checked) {
