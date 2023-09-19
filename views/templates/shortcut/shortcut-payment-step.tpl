@@ -71,6 +71,10 @@
                   document.querySelector('[paypal-ec-wrong-button-message]').style.display = 'block';
               }
           });
+
+          $("#conditions_to_approve\\[terms-and-conditions\\]").change(function(event) {
+              checkPaymentOptionPayPal();
+          });
       });
 
       if (typeof Shortcut != "undefined") {
@@ -89,6 +93,7 @@
             '[data-module-name="paypal"]',
             '[paypal-button-container]'
           );
+          checkPaymentOptionPayPal();
       } else {
           document.addEventListener('paypal-after-init-shortcut-button', function (event) {
               Shortcut.addMarkTo(
@@ -107,6 +112,20 @@
                 '[paypal-button-container]'
               );
           })
+          checkPaymentOptionPayPal();
+      }
+
+      function checkPaymentOptionPayPal() {
+          if(Shortcut.isMoveButtonAtEnd) {
+            $('#payment-confirmation').css('visibility', '');
+          }
+          let selectedOption = $('input[name=payment-option]:checked');
+          if (selectedOption.attr("data-module-name") == "paypal") {
+            $('[paypal-button-container]').css('display', 'block');
+            if(Shortcut.isMoveButtonAtEnd) {
+              $('#payment-confirmation').css('visibility', 'hidden');
+            }
+          }
       }
   </script>
 {/block}
