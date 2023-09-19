@@ -384,10 +384,14 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     public function getCustomFieldInformation(Cart $cart)
     {
         $module = \Module::getInstanceByName($this->name);
-        $return = $module->l('Cart ID: ', get_class($this)) . $cart->id . '.';
+        $return = (string) _PS_VERSION_ . '_' . (string) $module->version . '_' . \phpversion() . '_';
+        if (Tools::getValue('sc') !== false) {
+            $return .= '_ESC_';
+        }
+        $return .= $module->l('Cart ID: ', get_class($this)) . $cart->id . '_';
         $return .= $module->l('Shop name: ', get_class($this)) . \Configuration::get('PS_SHOP_NAME', null, $cart->id_shop);
 
-        return $return;
+        return \substr($return, 0, 137);
     }
 
     public function getBrandName()
