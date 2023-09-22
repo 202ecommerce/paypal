@@ -280,9 +280,11 @@ class PaypalOrderGetRequest extends RequestAbstract
 
     protected function getDateTransaction($exec)
     {
-        $payments = $exec->result->purchase_units[0]->payments;
-        $transaction = $payments->captures[0];
-        $date = \DateTime::createFromFormat(\DateTime::ATOM, $transaction->create_time);
+        if (empty($exec->result->purchase_units[0]->payments->captures[0])) {
+            return new \DateTime();
+        }
+
+        $date = \DateTime::createFromFormat(\DateTime::ATOM, $exec->result->purchase_units[0]->payments->captures[0]->create_time);
 
         if (!$date) {
             $date = new \DateTime();
