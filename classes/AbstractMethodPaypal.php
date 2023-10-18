@@ -37,7 +37,6 @@ use MethodMB;
 use Module;
 use PayPal;
 use PaypalAddons\classes\API\PaypalApiManagerInterface;
-use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\API\Response\ResponseOrderCapture;
 use PaypalAddons\classes\API\Response\ResponseOrderGet;
@@ -223,7 +222,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         /** @var ResponseOrderGet $getOrderResponse */
         $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($this->getPaymentId())->execute();
 
-        if ($this instanceof MethodMB || $getOrderResponse->getStatus() === 'APPROVED') {
+        if ($this instanceof MethodMB || $getOrderResponse->getStatus() !== 'COMPLETED') {
             if ($this->getIntent() == 'CAPTURE') {
                 return $this->paypalApiManager->getOrderCaptureRequest($this->getPaymentId())->execute();
             } else {
@@ -232,14 +231,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         }
 
         $response = new ResponseOrderCapture();
-
-        if ($getOrderResponse->getStatus() !== 'COMPLETED') {
-            $error = new Error();
-            $error->setMessage('Payment was not approved');
-            $response->setError($error)->setSuccess(false);
-
-            return $response;
-        }
 
         $response->setSuccess(true)
             ->setData($getOrderResponse->getData())
