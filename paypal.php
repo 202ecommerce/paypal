@@ -99,6 +99,16 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
 
+    const SCA_LIABILITY_SHIFT_POSSIBLE = 'POSSIBLE';
+
+    const SCA_LIABILITY_SHIFT_NO = 'NO';
+
+    const SCA_BANK_NOT_READY = 'N';
+
+    const SCA_UNAVAILABLE = 'U';
+
+    const SCA_BYPASSED = 'B';
+
     public static $dev = true;
     public $express_checkout;
     public $message;

@@ -204,7 +204,7 @@ ACDC.prototype.submitHostedFields = function(cardFields) {
   })
     .then(function(res) {
       if (res.liabilityShift != undefined) {
-        if (res.liabilityShift !== "POSSIBLE") {
+        if (res.liabilityShift === "UNKNOWN") {
           // 3D Secure is failed
           if (typeof this.messages['3DS_FAILED'] != 'undefined') {
             this.setError(this.messages['3DS_FAILED']);
