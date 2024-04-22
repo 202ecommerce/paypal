@@ -109,9 +109,9 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
                 'messagingConfig' => Configuration::get(ConfigurationMap::MESSENGING_CONFIG, null, null, null, '{}'),
             ],
         ]);
-        $this->addJS(_PS_MODULE_DIR_ . 'paypal/views/js/admin.js');
+        $this->addJS(_MODULE_DIR_ . 'paypal/views/js/admin.js');
         $this->addJS('https://www.paypalobjects.com/merchant-library/merchant-configurator.js', false);
-        $this->addCSS(_PS_MODULE_DIR_ . 'paypal/views/css/paypal_bo.css');
+        $this->addCSS(_MODULE_DIR_ . 'paypal/views/css/paypal_bo.css');
     }
 
     public function initContent()
