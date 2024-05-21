@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -67,6 +67,10 @@ $_MODULE['<{paypal}prestashop>paypal_bec758a8de99a38d16087f2196b48103'] = 'BIC';
 $_MODULE['<{paypal}prestashop>paypal_94f34a1bf4a7ce662b73f1893dcf9c30'] = 'Amount due / currency';
 $_MODULE['<{paypal}prestashop>paypal_8954ee128da85cc61168898695ea0a3b'] = 'Payment due date';
 $_MODULE['<{paypal}prestashop>paypal_63d5049791d9d79d86e9a108b0a999ca'] = 'Reference';
+$_MODULE['<{paypal}prestashop>paypal_0b32cbdbe68f4eaf14060355be0cfde8'] = '(3DS : Success)';
+$_MODULE['<{paypal}prestashop>paypal_ace6d7b5184bc1e53edf5cc4aa3e90b1'] = '(3DS : Not passed)';
+$_MODULE['<{paypal}prestashop>paypal_b3cdc3bf5cc1832a2e7f11962d30b877'] = '(3DS : Failed)';
+$_MODULE['<{paypal}prestashop>paypal_6e7b5ffa29f97a9080de04c173b553a7'] = '(3DS : Unknown)';
 $_MODULE['<{paypal}prestashop>adminpaypalcontroller_4bbd4f1aa67855053aecbcbbaa33d4d9'] = 'Your PayPal account is currently configured to accept payments in the Sandbox ';
 $_MODULE['<{paypal}prestashop>adminpaypalcontroller_a3016160c7a837dc134314e6191a7c46'] = 'test environment';
 $_MODULE['<{paypal}prestashop>adminpaypalcontroller_e97db78085f532d60c2156f86248b985'] = 'Any transaction will be fictitious. Disable the option to accept actual payments (production environment) and log in with your PayPal credentials';

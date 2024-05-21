@@ -1,5 +1,5 @@
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -17,7 +17,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -38,6 +38,8 @@ const ACDC = function(conf) {
   this.isMoveButtonAtEnd = conf['isMoveButtonAtEnd'] === undefined ? null : conf['isMoveButtonAtEnd'];
 
   this.buttonForm = conf['buttonForm'] === undefined ? null : conf['buttonForm'];
+
+  this.isCardFields = conf['isCardFields'] === undefined ? false : conf['isCardFields'];
 };
 
 ACDC.prototype.initButton = function() {
@@ -69,7 +71,7 @@ ACDC.prototype.getIdOrder = function() {
     headers: {
       'content-type': 'application/json;charset=utf-8'
     },
-    body: JSON.stringify({page: 'cart', addAddress: 1})
+    body: JSON.stringify({page: 'cart', addAddress: 1, sca_verification: (this.isCardFields ? 'SCA_WHEN_REQUIRED' : '')}),
   }).then(function(res) {
     return res.json();
   }).then(function(data) {
@@ -106,6 +108,104 @@ ACDC.prototype.getPaypalButtonsContainer = function() {
   document.querySelector('#payment-confirmation').after(container);
 
   return container;
+};
+
+ACDC.prototype.initFields = function() {
+  if (this.isCardFields) {
+    this.initCardFields();
+  } else {
+    this.initHostedFields();
+  }
+};
+
+ACDC.prototype.initCardFields = function() {
+  Tools.disableTillConsenting(
+    this.buttonForm,
+    document.getElementById('conditions_to_approve[terms-and-conditions]')
+  );
+
+  const cardFields = totPaypalAcdcSdk.CardFields({
+    createOrder: () => {
+      return this.getIdOrder();
+    },
+    onApprove: (data) => {
+      this.buttonForm.removeAttribute('disabled');
+      return this.sendData({orderID: data.orderID});
+    },
+    onError: (error) => {
+      this.buttonForm.removeAttribute('disabled');
+      this.setError(this.messages['VALIDATION_ERR'] !== undefined ? this.messages['VALIDATION_ERR'] : 'Validation error');
+    },
+    style: {
+      '.valid': {
+        'color': 'green'
+      },
+      '.invalid': {
+        'color': 'red'
+      },
+      'input': {
+        'padding': '5px 10px'
+      }
+    }
+  });
+
+  if (cardFields.isEligible() === false) {
+    return;
+  }
+
+  if (this.isMoveButtonAtEnd) {
+    let paypalButtonsContainer = this.getPaypalButtonsContainer();
+    paypalButtonsContainer.append(this.buttonForm);
+    this.buttonForm.style.display = 'none';
+  }
+
+  const numberField = cardFields.NumberField({
+    placeholder: '4111 1111 1111 1111'
+  });
+
+  const expireField = cardFields.ExpiryField({
+    placeholder: 'MM/YY'
+  });
+
+  const cvvField = cardFields.CVVField({
+    placeholder: '123'
+  });
+
+  numberField.render(document.getElementById('card-number'));
+  expireField.render(document.getElementById('expiration-date'));
+  cvvField.render(document.getElementById('cvv'));
+
+  this.buttonForm.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    cardFields.getState()
+      .then((data) => {
+        if (data.isFormValid) {
+          this.buttonForm.setAttribute('disabled', true);
+          return cardFields.submit();
+        }
+
+        for (let nameField in data.fields) {
+          if (data.fields[nameField]['isEmpty']) {
+            let message = '';
+
+            switch (nameField) {
+              case 'cardCvvField':
+                message = this.messages['CVV_IS_EMPTY'] !== undefined ? this.messages['CVV_IS_EMPTY'] : '';
+                break;
+              case 'cardNumberField':
+                message = this.messages['NUMBER_IS_EMPTY'] !== undefined ? this.messages['NUMBER_IS_EMPTY'] : '';
+                break;
+              case 'cardExpiryField':
+                message = this.messages['DATE_IS_EMPTY'] !== undefined ? this.messages['DATE_IS_EMPTY'] : '';
+                break;
+            }
+            this.setError(message);
+          }
+        }
+      });
+  });
 };
 
 ACDC.prototype.initHostedFields = function() {

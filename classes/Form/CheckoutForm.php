@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -56,14 +56,17 @@ class CheckoutForm implements FormInterface
     protected $vaultingFunctionality;
 
     protected $venmoFunctionality;
+    /** @var bool */
+    protected $advancedMode;
 
-    public function __construct()
+    public function __construct($advancedMode = false)
     {
         $this->module = Module::getInstanceByName('paypal');
         $countryDefault = new Country(Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
         $this->acdcFunctionality = new AcdcFunctionality();
         $this->vaultingFunctionality = new VaultingFunctionality();
         $this->venmoFunctionality = new VenmoFunctionality();
+        $this->advancedMode = $advancedMode;
 
         switch ($countryDefault->iso_code) {
             case 'DE':
@@ -252,6 +255,7 @@ class CheckoutForm implements FormInterface
                     ],
                 ],
                 'value' => (int) Configuration::get(PaypalConfigurations::ACDC_OPTION),
+                'disabled' => (int) Configuration::get(PaypalConfigurations::ACDC_OPTION) && !$this->advancedMode,
             ];
         }
 
@@ -397,25 +401,14 @@ class CheckoutForm implements FormInterface
                 ],
                 'value' => (int) Configuration::get(PaypalConfigurations::GIROPAY_ENABLED),
             ];
-            // Do not show the 'Sofort' feature the new clients. Make this feature available only for those, who has already activated it
+
             if ((int) Configuration::get(PaypalConfigurations::SOFORT_ENABLED)) {
                 $fields[PaypalConfigurations::SOFORT_ENABLED] = [
-                    'type' => 'switch',
-                    'label' => $this->module->l('Sofort', 'CheckoutForm'),
                     'name' => PaypalConfigurations::SOFORT_ENABLED,
-                    'values' => [
-                        [
-                            'id' => PaypalConfigurations::SOFORT_ENABLED . '_on',
-                            'value' => 1,
-                            'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
-                        ],
-                        [
-                            'id' => PaypalConfigurations::SOFORT_ENABLED . '_off',
-                            'value' => 0,
-                            'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
-                        ],
+                    'type' => 'variable-set',
+                    'set' => [
+                        'message' => $this->module->l('Klarna, the owner of Sofort (a pay by bank payment solution), has made the strategic decision to entirely switch off Sofort.', 'CheckoutForm'),
                     ],
-                    'value' => (int) Configuration::get(PaypalConfigurations::SOFORT_ENABLED),
                 ];
             }
         }
@@ -536,11 +529,6 @@ class CheckoutForm implements FormInterface
         Configuration::updateValue(
             PaypalConfigurations::GIROPAY_ENABLED,
             isset($data[PaypalConfigurations::GIROPAY_ENABLED]) ? 1 : 0
-        );
-
-        Configuration::updateValue(
-            PaypalConfigurations::SOFORT_ENABLED,
-            isset($data[PaypalConfigurations::SOFORT_ENABLED]) ? 1 : 0
         );
 
         Configuration::updateValue(

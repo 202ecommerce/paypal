@@ -117,7 +117,8 @@
         <div class="custom-control custom-switch {[
           'custom-switch-secondary' => $variant == 'secondary'
         ]|classnames}">
-          <input type="checkbox" class="custom-control-input" id="{$field.name|escape:'htmlall':'UTF-8'}" name="{$field.name|escape:'htmlall':'UTF-8'}" value="1" {if $field.value|default:false}checked{/if}>
+          <input type="checkbox" class="custom-control-input" id="{$field.name|escape:'htmlall':'UTF-8'}" name="{$field.name|escape:'htmlall':'UTF-8'}" value="1" {if $field.value|default:false}checked{/if} {if $field.disabled|default:false}disabled{/if}>
+            {if $field.disabled|default:false}<input type="hidden" name="{$field.name|escape:'htmlall':'UTF-8'}" value="{$field.value|default:''|escape:'htmlall':'UTF-8'}">{/if}
           <label class="custom-control-label form-control-label-check" for="{$field.name|escape:'htmlall':'UTF-8'}">{l s='Enabled' mod='paypal'}</label>
         </div>
       {elseif $field.type === 'checkbox'}

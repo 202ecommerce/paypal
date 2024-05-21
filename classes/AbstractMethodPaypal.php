@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -283,6 +283,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         /** @var ResponseOrderGet $getOrderResponse */
         $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($this->getPaymentId())->execute();
         $response = new ResponseOrderCapture();
+        $scaState = null;
         // Make sure that the order is eligible for capture when the buyer was passed by security customer authentication
         if (!empty($getOrderResponse->getData()->result->payment_source->card->authentication_result)) {
             $authResult = $getOrderResponse->getData()->result->payment_source->card->authentication_result;
@@ -291,6 +292,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             if (!empty($authResult->liability_shift)) {
                 if ($authResult->liability_shift === PayPal::SCA_LIABILITY_SHIFT_POSSIBLE) {
                     $isSuccessSCA = true;
+                    $scaState = PayPal::SCA_STATE_SUCCESS;
+                    $response->setScaState(PayPal::SCA_STATE_SUCCESS);
                 }
                 if ($authResult->liability_shift === PayPal::SCA_LIABILITY_SHIFT_NO) {
                     if (!empty($authResult->three_d_secure->enrollment_status)) {
@@ -302,6 +305,11 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                                 PayPal::SCA_BYPASSED,
                             ]
                         );
+
+                        if ($isSuccessSCA) {
+                            $scaState = PayPal::SCA_STATE_NOT_PASSED;
+                            $response->setScaState(PayPal::SCA_STATE_NOT_PASSED);
+                        }
                     }
                 }
             }
@@ -310,17 +318,25 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 $error = new Error();
                 $error->setMessage('3DS verification is failed');
                 $response->setError($error)->setSuccess(false);
+                $response->setScaState(PayPal::SCA_STATE_FAILED);
 
                 return $response;
             }
+        } else {
+            $scaState = PayPal::SCA_STATE_UNKNOWN;
+            $response->setScaState(PayPal::SCA_STATE_UNKNOWN);
         }
 
         if ($this instanceof MethodMB || $getOrderResponse->getStatus() !== 'COMPLETED') {
             if ($this->getIntent() == 'CAPTURE') {
-                return $this->paypalApiManager->getOrderCaptureRequest($this->getPaymentId())->execute();
+                $response = $this->paypalApiManager->getOrderCaptureRequest($this->getPaymentId())->execute();
             } else {
-                return $this->paypalApiManager->getOrderAuthorizeRequest($this->getPaymentId())->execute();
+                $response = $this->paypalApiManager->getOrderAuthorizeRequest($this->getPaymentId())->execute();
             }
+
+            $response->setScaState($scaState);
+
+            return $response;
         }
 
         $response->setSuccess(true)
@@ -357,6 +373,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             'transaction_id' => $data->getTransactionId(),
             'capture' => $data->isCapture(),
             'intent' => $this->getIntent(),
+            'scaState' => $data->getScaState(),
         ];
 
         $this->transaction_detail = $transaction_detail;

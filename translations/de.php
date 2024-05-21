@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -526,6 +526,7 @@ $_MODULE['<{paypal}prestashop>checkoutform_40ee9b910ed357c1bb65d1de4dc4e1d4'] = 
 $_MODULE['<{paypal}prestashop>checkoutform_6ee1cc1d3eaf785b045b990369403ecb'] = 'Akzeptieren Sie Kreditkartenzahlungen';
 $_MODULE['<{paypal}prestashop>checkoutform_6ff063fbc860a79759a7369ac32cee22'] = 'Zur Kasse';
 $_MODULE['<{paypal}prestashop>checkoutform_c9cc8cce247e49bae79f15173ce97354'] = 'Speichern';
+$_MODULE['<{paypal}prestashop>checkoutform_0df1f242abe64bf87f320ea5ff6b13f9'] = 'Klarna, der Eigentümer von Sofort (einer Zahlungslösung per Bank), hat die strategische Entscheidung getroffen, Sofort vollständig abzuschalten.';
 $_MODULE['<{paypal}prestashop>forminstallment_235e8d1a54ecddcf1d3ff533331ed416'] = 'Produkt-Seite';
 $_MODULE['<{paypal}prestashop>forminstallment_d53f3fd73815da5fd604769249c6968c'] = 'Schritt-für-Schritt-Zahlung im Checkout';
 $_MODULE['<{paypal}prestashop>forminstallment_468a21d1076328f1b4cd946b72e2d5cd'] = 'Warenkorb';
