@@ -1,5 +1,5 @@
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -17,7 +17,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -30,7 +30,7 @@ export const Tools = {
   getAlert(message, typeAlert) {
     const alert = document.createElement('div');
     let messageNode = document.createElement('div');
-    messageNode.innerHTML = message;
+    messageNode.innerText = message;
     alert.className = `alert alert-${typeAlert}`;
     alert.appendChild(messageNode);
     return alert;

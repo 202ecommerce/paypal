@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -43,11 +43,6 @@ class ApmFunctionality
         $isoCountryDefault = Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
         return Tools::strtolower($isoCountryDefault) == 'de';
-    }
-
-    public function isSofortEnabled()
-    {
-        return (int) Configuration::get(PaypalConfigurations::SOFORT_ENABLED);
     }
 
     public function isGiropayEnabled()

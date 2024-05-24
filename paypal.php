@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -116,7 +116,21 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const SCA_BYPASSED = 'B';
 
+    const SCA_STATE_SUCCESS = 1;
+
+    const SCA_STATE_UNKNOWN = 2;
+
+    const SCA_STATE_FAILED = 3;
+
+    const SCA_STATE_NOT_PASSED = 4;
+
     const ACCESS_TOKEN = 'PAYPAL_ACCESS_TOKEN';
+
+    const USE_CARD_FIELDS = 'PAYPAL_USE_CARD_FIELDS';
+
+    const SCA_WHEN_REQUIRED = 'SCA_WHEN_REQUIRED';
+
+    const SCA_ALWAYS = 'SCA_ALWAYS';
 
     public static $dev = true;
     public $express_checkout;
@@ -393,6 +407,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
             PaypalConfigurations::SEPA_ENABLED => 1,
             PaypalConfigurations::GIROPAY_ENABLED => 1,
             PaypalConfigurations::ACDC_OPTION => 1,
+            self::USE_CARD_FIELDS => 1,
         ];
 
         if (version_compare(_PS_VERSION_, '1.7.6', '<')) {
@@ -1605,6 +1620,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
         $adminEmployee = new Employee(_PS_ADMIN_PROFILE_);
         $order = new Order($this->currentOrder);
+        $adminLang = new Language($adminEmployee->id_lang);
         $orderState = new OrderState($order->current_state, $adminEmployee->id_lang);
 
         if (is_string($orderState->name)) {
@@ -1613,6 +1629,22 @@ class PayPal extends \PaymentModule implements WidgetInterface
             $message = (isset($orderState->name[$order->id_lang]) ? $orderState->name[$order->id_lang] : current($orderState->name));
         } else {
             $message = $this->l('Order creation is successful');
+        }
+
+        if (isset($transaction['scaState'])) {
+            switch ((int) $transaction['scaState']) {
+                case self::SCA_STATE_SUCCESS:
+                    $message .= ' ' . $this->l('(3DS : Success)', false, $adminLang->locale);
+                    break;
+                case self::SCA_STATE_NOT_PASSED:
+                    $message .= ' ' . $this->l('(3DS : Not passed)', false, $adminLang->locale);
+                    break;
+                case self::SCA_STATE_FAILED:
+                    $message .= ' ' . $this->l('(3DS : Failed)', false, $adminLang->locale);
+                    break;
+                default:
+                    $message .= ' ' . $this->l('(3DS : Unknown)', false, $adminLang->locale);
+            }
         }
 
         ProcessLoggerHandler::openLogger();
@@ -3011,14 +3043,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
                     'method' => APM::GIROPAY,
                     'label' => $this->l('giropay'),
                     'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/giropay.svg'),
-                ];
-            }
-
-            if ($this->initApmFunctionality()->isSofortEnabled()) {
-                $map[] = [
-                    'method' => APM::SOFORT,
-                    'label' => $this->l('Sofort'),
-                    'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/sofort.svg'),
                 ];
             }
         }

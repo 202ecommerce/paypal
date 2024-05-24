@@ -47,11 +47,15 @@
   </div>
 
     {foreach from=$form.fields item=field}
-        {if $field.name|in_array:['PAYPAL_CONFIG_BRAND', 'PAYPAL_PUI_CUSTOMER_SERVICE_INSTRUCTIONS', 'PAYPAL_API_ADVANTAGES', 'PAYPAL_MOVE_BUTTON_AT_END', 'PAYPAL_ACDC_OPTION', 'PAYPAL_PUI_ENABLED', 'PAYPAL_SEPA_ENABLED', 'PAYPAL_GIROPAY_ENABLED', 'PAYPAL_SOFORT_ENABLED', 'PAYPAL_API_CARD', 'PAYPAL_VAULTING', 'PAYPAL_MERCHANT_INSTALLMENT', 'PAYPAL_ACCOUNT_VAULTING', 'PAYPAL_VENMO_ENABLED']}
+        {if $field.name|in_array:['PAYPAL_CONFIG_BRAND', 'PAYPAL_PUI_CUSTOMER_SERVICE_INSTRUCTIONS', 'PAYPAL_API_ADVANTAGES', 'PAYPAL_MOVE_BUTTON_AT_END', 'PAYPAL_ACDC_OPTION', 'PAYPAL_PUI_ENABLED', 'PAYPAL_SEPA_ENABLED', 'PAYPAL_GIROPAY_ENABLED', 'PAYPAL_API_CARD', 'PAYPAL_VAULTING', 'PAYPAL_MERCHANT_INSTALLMENT', 'PAYPAL_ACCOUNT_VAULTING', 'PAYPAL_VENMO_ENABLED']}
             {if $field.name == 'PAYPAL_MOVE_BUTTON_AT_END' && $isShowModalConfiguration|default:false}
                 {continue}
             {/if}
             {include file="../form-fields.tpl" field=$field }
+        {/if}
+
+        {if $field.name === 'PAYPAL_SOFORT_ENABLED' && $field.set.message|default:false}
+          <div class="alert alert-info">{$field.set.message}</div>
         {/if}
     {/foreach}
 

@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -67,6 +67,10 @@ $_MODULE['<{paypal}prestashop>paypal_bec758a8de99a38d16087f2196b48103'] = 'BIC';
 $_MODULE['<{paypal}prestashop>paypal_94f34a1bf4a7ce662b73f1893dcf9c30'] = 'Montant dû/devise';
 $_MODULE['<{paypal}prestashop>paypal_8954ee128da85cc61168898695ea0a3b'] = 'Date d\'échéance du paiement';
 $_MODULE['<{paypal}prestashop>paypal_63d5049791d9d79d86e9a108b0a999ca'] = 'Référence';
+$_MODULE['<{paypal}prestashop>paypal_0b32cbdbe68f4eaf14060355be0cfde8'] = '(3DS : Accepté)';
+$_MODULE['<{paypal}prestashop>paypal_ace6d7b5184bc1e53edf5cc4aa3e90b1'] = '(3DS : Non supporté)';
+$_MODULE['<{paypal}prestashop>paypal_b3cdc3bf5cc1832a2e7f11962d30b877'] = '(3DS : Refusé)';
+$_MODULE['<{paypal}prestashop>paypal_6e7b5ffa29f97a9080de04c173b553a7'] = '(3DS : Inconnu)';
 $_MODULE['<{paypal}prestashop>paypal_31fa93f80722eee634318801ffb7ee07'] = 'Paramètres sont mis à jour. Vos paramètres d\'arrondi sont compatibles avec PayPal !';
 $_MODULE['<{paypal}prestashop>cart_shortcut_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Payer avec PayPal';
 $_MODULE['<{paypal}prestashop>cart_shortcut_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
@@ -593,6 +597,7 @@ $_MODULE['<{paypal}prestashop>checkoutform_1981089a58ccc371526094328e8f3b0a'] = 
 $_MODULE['<{paypal}prestashop>checkoutform_6ee1cc1d3eaf785b045b990369403ecb'] = 'Accepter les paiements par carte de crédit ou de débit';
 $_MODULE['<{paypal}prestashop>checkoutform_6ff063fbc860a79759a7369ac32cee22'] = 'Checkout ';
 $_MODULE['<{paypal}prestashop>checkoutform_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
+$_MODULE['<{paypal}prestashop>checkoutform_0df1f242abe64bf87f320ea5ff6b13f9'] = 'Klarna, propriétaire de Sofort (une solution de paiement par virement), a pris la décision stratégique de désactiver complètement Sofort.';
 $_MODULE['<{paypal}prestashop>forminstallment_235e8d1a54ecddcf1d3ff533331ed416'] = 'Page produit';
 $_MODULE['<{paypal}prestashop>forminstallment_d53f3fd73815da5fd604769249c6968c'] = 'Paiement par étapes dans la caisse';
 $_MODULE['<{paypal}prestashop>forminstallment_468a21d1076328f1b4cd946b72e2d5cd'] = 'Panier';

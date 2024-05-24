@@ -1,6 +1,6 @@
 <?php
 /*
- * 2007-2024 PayPal
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2024 PayPal
+ *  @author Since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  @copyright PayPal
@@ -29,6 +29,7 @@ namespace PaypalAddons\classes\ACDC;
 
 use Configuration;
 use Context;
+use PayPal;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 
@@ -57,9 +58,19 @@ class AcdcPaymentMethod
 
     public function render()
     {
-        $this->context->smarty->assign($this->getTplVars());
-        //todo: to implement
-        return $this->context->smarty->fetch('module:paypal/views/templates/acdc/payment-option.tpl');
+        $tmp = $this->context->smarty->createTemplate($this->getTemplatePath());
+        $tmp->assign($this->getTplVars());
+
+        return $tmp->fetch();
+    }
+
+    protected function getTemplatePath()
+    {
+        if ($this->isCardFields()) {
+            return 'module:paypal/views/templates/acdc/payment-option-card-fields.tpl';
+        } else {
+            return 'module:paypal/views/templates/acdc/payment-option.tpl';
+        }
     }
 
     protected function getTplVars()
@@ -68,6 +79,7 @@ class AcdcPaymentMethod
             'psPaypalDir' => _PS_MODULE_DIR_ . 'paypal',
             'JSvars' => [
                 PaypalConfigurations::MOVE_BUTTON_AT_END => (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+                'isCardFields' => $this->isCardFields(),
             ],
             'JSscripts' => $this->getScripts(),
         ];
@@ -79,14 +91,21 @@ class AcdcPaymentMethod
     {
         $scripts = [];
 
-        $srcLib = $this->method->getUrlJsSdkLib(['components' => 'buttons,hosted-fields,marks']);
+        if ($this->isCardFields()) {
+            $srcLib = $this->method->getUrlJsSdkLib(['components' => 'card-fields,marks']);
+        } else {
+            $srcLib = $this->method->getUrlJsSdkLib(['components' => 'hosted-fields,marks']);
+        }
 
         $scripts['tot-paypal-acdc-sdk'] = [
             'src' => $srcLib,
             'data-namespace' => 'totPaypalAcdcSdk',
             'data-partner-attribution-id' => $this->getPartnerId(),
-            'data-client-token' => $this->getClientToken(),
         ];
+
+        if (!$this->isCardFields()) {
+            $scripts['tot-paypal-acdc-sdk']['data-client-token'] = $this->getClientToken();
+        }
 
         $scripts['acdc'] = [
             'src' => __PS_BASE_URI__ . 'modules/paypal/views/js/acdc.js',
@@ -109,5 +128,10 @@ class AcdcPaymentMethod
         }
 
         return '';
+    }
+
+    protected function isCardFields()
+    {
+        return (int) Configuration::get(PayPal::USE_CARD_FIELDS);
     }
 }
