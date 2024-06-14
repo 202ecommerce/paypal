@@ -48,7 +48,6 @@ use PaypalAddons\classes\InstallmentBanner\BNPL\BNPLOption;
 use PaypalAddons\classes\InstallmentBanner\BNPL\BNPLPaymentStep;
 use PaypalAddons\classes\InstallmentBanner\BNPL\BNPLProduct;
 use PaypalAddons\classes\InstallmentBanner\BNPL\BNPLSignup;
-use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap as InstallmentConfiguration;
 use PaypalAddons\classes\PaypalPaymentMode;
 use PaypalAddons\classes\PUI\FraudNetForm;
@@ -386,17 +385,17 @@ class PayPal extends \PaymentModule implements WidgetInterface
             PaypalConfigurations::OS_PROCESSING => (int) Configuration::get('PAYPAL_OS_WAITING'),
             PaypalConfigurations::OS_VALIDATION_ERROR => (int) Configuration::get('PS_OS_CANCELED'),
             PaypalConfigurations::OS_REFUNDED_PAYPAL => (int) Configuration::get('PS_OS_REFUND'),
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::ENABLE_BNPL => 1,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CART_PAGE => 1,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE => 1,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CHECKOUT_PAGE => 1,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PRODUCT_PAGE => 1,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::PRODUCT_PAGE => 1,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::CATEGORY_PAGE => 0,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::HOME_PAGE => 0,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::CHECKOUT_PAGE => 1,
-            \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::CART_PAGE => 1,
-            ConfigurationMap::ENABLE_INSTALLMENT => 1,
+            InstallmentConfiguration::ENABLE_BNPL => 1,
+            InstallmentConfiguration::BNPL_CART_PAGE => 1,
+            InstallmentConfiguration::BNPL_PAYMENT_STEP_PAGE => 1,
+            InstallmentConfiguration::BNPL_CHECKOUT_PAGE => 1,
+            InstallmentConfiguration::BNPL_PRODUCT_PAGE => 1,
+            InstallmentConfiguration::PRODUCT_PAGE => 1,
+            InstallmentConfiguration::CATEGORY_PAGE => 0,
+            InstallmentConfiguration::HOME_PAGE => 0,
+            InstallmentConfiguration::CHECKOUT_PAGE => 1,
+            InstallmentConfiguration::CART_PAGE => 1,
+            InstallmentConfiguration::ENABLE_INSTALLMENT => 1,
             ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE => 1,
             ShortcutConfiguration::SHOW_ON_CART_PAGE => 1,
             ShortcutConfiguration::SHOW_ON_SIGNUP_STEP => 1,
@@ -718,6 +717,30 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return new VenmoFunctionality();
     }
 
+    public function isShortcutEnabled()
+    {
+        if (Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE)) {
+            return true;
+        }
+        if (Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE)) {
+            return true;
+        }
+        if (Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP)) {
+            return true;
+        }
+        if (Configuration::get(InstallmentConfiguration::BNPL_PRODUCT_PAGE)) {
+            return true;
+        }
+        if (Configuration::get(InstallmentConfiguration::BNPL_CART_PAGE)) {
+            return true;
+        }
+        if (Configuration::get(InstallmentConfiguration::BNPL_CHECKOUT_PAGE)) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param $params
      *
@@ -762,7 +785,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 break;
             case 'PPP':
                 if ($method->isConfigured()) {
-                    if ((Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') || Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART')) && isset($this->context->cookie->paypal_pSc)) {
+                    if ($this->isShortcutEnabled() && isset($this->context->cookie->paypal_pSc)) {
                         $payment_option = new PaymentOption();
                         $action_text = $this->l('Pay with paypal plus shortcut');
                         $payment_option->setCallToActionText($action_text);
@@ -1121,7 +1144,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         $paymentOption->setAdditionalInformation($additionalInformation);
         $paymentOptions[] = $paymentOption;
 
-        if ((Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') || Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_CART') || Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_SIGNUP')) && isset($this->context->cookie->paypal_ecs)) {
+        if ($this->isShortcutEnabled() && isset($this->context->cookie->paypal_ecs)) {
             $paymentOption = new PaymentOption();
             $action_text = $this->l('Pay with paypal express checkout');
             $paymentOption->setCallToActionText($action_text);
@@ -1172,8 +1195,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 return $returnContent;
             }
 
-            if ((Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE) || Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE) || Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP))
-                && (isset($this->context->cookie->paypal_ecs) || isset($this->context->cookie->paypal_pSc))) {
+            if ($this->isShortcutEnabled() && (isset($this->context->cookie->paypal_ecs) || isset($this->context->cookie->paypal_pSc))) {
                 $this->context->controller->registerJavascript($this->name . '-paypal-ec-sc', 'modules/' . $this->name . '/views/js/shortcut_payment.js');
                 $resources[] = _MODULE_DIR_ . $this->name . '/views/js/shortcut_payment.js' . '?v=' . $this->version;
                 if (isset($this->context->cookie->paypal_ecs)) {
@@ -1371,7 +1393,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
             return '';
         }
 
-        if ($data['sourcePage'] == ConfigurationMap::PAGE_TYPE_PAYMENT_STEP) {
+        if ($data['sourcePage'] == InstallmentConfiguration::PAGE_TYPE_PAYMENT_STEP) {
             if ($bnplOption->displayOnPaymentStep() == false) {
                 return '';
             }
@@ -3006,7 +3028,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
             )
         );
         $paymentOption->setModuleName('paypal_bnpl');
-        $paymentOption->setAdditionalInformation($this->renderBnpl(['sourcePage' => ConfigurationMap::PAGE_TYPE_PAYMENT_STEP]));
+        $paymentOption->setAdditionalInformation($this->renderBnpl(['sourcePage' => InstallmentConfiguration::PAGE_TYPE_PAYMENT_STEP]));
 
         return $paymentOption;
     }
