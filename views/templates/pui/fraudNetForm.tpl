@@ -109,7 +109,7 @@
               required
               class="form-control"
               type="date"
-              data-date={l s='DD.MM.YYYY' mod='paypal'}
+              data-date={if isset($userData) && $userData->getBirth('d.m.Y')}{$userData->getBirth('d.m.Y')}{else}{l s='DD.MM.YYYY' mod='paypal'}{/if}
               max="{$currentDate nofilter}"
               name="paypal_pui_birhday"
               id="paypal_pui_birhday"
@@ -167,7 +167,9 @@
               class="form-control"
               type="tel"
               name="paypal_pui_phone"
+              value="{if isset($userData)}{$userData->getPhone()}{/if}"
               id="paypal_pui_phone">
+
     </div>
   </div>
 
@@ -204,6 +206,12 @@
               separateDialCode: true
           }
       );
+
+      if (paypalPuiPhone.getSelectedCountryData().iso2 !== 'de') {
+        paypalPuiPhone.telInput.value = null;
+        paypalPuiPhone.setCountry('de');
+      }
+
       document.querySelector('form[pui-form]').addEventListener('submit', function(e) {
           if (paypalPuiPhone.getValidationError() == 0) {
               return;

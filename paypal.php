@@ -131,6 +131,8 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const SCA_ALWAYS = 'SCA_ALWAYS';
 
+    const PS_CUSTOMER_DATE_FORMAT = 'Y-m-d';
+
     public static $dev = true;
     public $express_checkout;
     public $message;

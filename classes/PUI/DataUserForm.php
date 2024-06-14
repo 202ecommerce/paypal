@@ -27,6 +27,9 @@
 
 namespace PaypalAddons\classes\PUI;
 
+use DateTime;
+use PayPal;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -131,9 +134,15 @@ class DataUserForm
     /**
      * @return string
      */
-    public function getBirth()
+    public function getBirth($format = PayPal::PS_CUSTOMER_DATE_FORMAT)
     {
-        return (string) $this->birth;
+        $date = DateTime::createFromFormat(PayPal::PS_CUSTOMER_DATE_FORMAT, (string) $this->birth);
+
+        if (!$date) {
+            return '';
+        }
+
+        return $date->format($format);
     }
 
     /**
