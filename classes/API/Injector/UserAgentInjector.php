@@ -70,8 +70,8 @@ class UserAgentInjector implements InjectorInterface
             _PS_VERSION_,
             $this->module->version,
             PHP_VERSION,
-            str_replace(' ', '_', php_uname('s') . ' ' . php_uname('r')),
-            php_uname('m')
+            function_exists('php_uname') ? str_replace(' ', '_', php_uname('s') . ' ' . php_uname('r')) : 'Undefined',
+            function_exists('php_uname') ? php_uname('m') : 'Undefined'
         );
     }
 }
