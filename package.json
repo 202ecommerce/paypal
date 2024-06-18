@@ -39,7 +39,7 @@
         "eslint-plugin-html": "^7.1.0",
         "eslint-plugin-import": "^2.25.2",
         "expose-loader": "^4.0.0",
-        "lighthouse": "^9.6.8",
+        "lighthouse": "^12.1.0",
         "material-icons": "^1.10.8",
         "mini-css-extract-plugin": "^2.7.2",
         "node-sass": "^8.0.0",
