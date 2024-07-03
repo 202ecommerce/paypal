@@ -179,6 +179,7 @@ class HttpClient implements ClientInterface
 
         $response->setContent($data);
         $response->setCode($code);
+        $response->setHeaders($headers);
 
         return $response;
     }
