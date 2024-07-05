@@ -3156,4 +3156,9 @@ class PayPal extends \PaymentModule implements WidgetInterface
     {
         return new ServicePaypalVaulting();
     }
+
+    public function isConsiderGiftProductAsDiscount()
+    {
+        return version_compare(_PS_VERSION_, '1.7.4.4', '>=') && version_compare(_PS_VERSION_, '1.7.6', '<');
+    }
 }
