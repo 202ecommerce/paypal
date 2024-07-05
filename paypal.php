@@ -34,9 +34,6 @@ include_once _PS_MODULE_DIR_ . 'paypal/vendor/autoload.php';
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\ACDC\AcdcFunctionality;
 use PaypalAddons\classes\ACDC\AcdcPaymentMethod;
-use PaypalAddons\classes\APM\ApmCollection;
-use PaypalAddons\classes\APM\ApmFunctionality;
-use PaypalAddons\classes\Constants\APM;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\Constants\WebHookConf;
@@ -406,7 +403,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
             PaypalConfigurations::SHOW_MODAL_CONFIGURATION => 1,
             PaypalConfigurations::PUI_ENABLED => 1,
             PaypalConfigurations::SEPA_ENABLED => 1,
-            PaypalConfigurations::GIROPAY_ENABLED => 1,
             PaypalConfigurations::ACDC_OPTION => 1,
             self::USE_CARD_FIELDS => 1,
         ];
@@ -840,10 +836,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
                 $payments_options[] = $this->buildAcdcPaymentOption($params);
             }
 
-            if ($this->initApmFunctionality()->isAvailable()) {
-                $payments_options = array_merge($payments_options, $this->buildApmPaymentOptions($params));
-            }
-
             if ($this->paypal_method == 'PPP') {
                 if ($this->initSepaFunctionality()->isEnabled()) {
                     $payments_options[] = $this->renderSepaOption($params);
@@ -965,53 +957,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
     public function getFraudNetForm()
     {
         return new FraudNetForm();
-    }
-
-    protected function initApmFunctionality()
-    {
-        return new ApmFunctionality();
-    }
-
-    protected function buildApmPaymentOptions($params)
-    {
-        $paymentOptions = [];
-        $optionsMap = $this->buildOptionsMapAccordingToContext();
-
-        foreach ($optionsMap as $optionMap) {
-            $paymentOption = new PaymentOption();
-            $paymentOption->setCallToActionText($optionMap['label']);
-            $paymentOption->setModuleName('paypal_' . $optionMap['method']);
-
-            if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
-                $paymentOption->setAdditionalInformation($this->initApmCollection([$optionMap['method']])->render());
-            } else {
-                $paymentOption->setAction(
-                    $this->context->link->getModuleLink(
-                        $this->name,
-                        'ecInit',
-                        [
-                            'credit_card' => '0',
-                            'methodType' => 'PPP',
-                            'apmMethod' => $optionMap['method'],
-                        ],
-                        true
-                    )
-                );
-
-                if (isset($optionMap['logo'])) {
-                    $paymentOption->setLogo($optionMap['logo']);
-                }
-            }
-
-            $paymentOptions[] = $paymentOption;
-        }
-
-        return $paymentOptions;
-    }
-
-    protected function initApmCollection($method = null)
-    {
-        return new ApmCollection($method);
     }
 
     protected function initAcdcFunctionality()
@@ -3043,35 +2988,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
     protected function initPuiFunctionality()
     {
         return new PuiFunctionality();
-    }
-
-    protected function buildOptionsMapAccordingToContext()
-    {
-        $map = [];
-
-        if (empty($this->context->cart->id_address_delivery)) {
-            return $map;
-        }
-
-        $addressDelivery = new Address($this->context->cart->id_address_delivery);
-        $isoCountry = Tools::strtoupper((string) Country::getIsoById($addressDelivery->id_country));
-        $isoCurrency = Tools::strtoupper((string) $this->context->currency->iso_code);
-
-        if (empty($isoCountry) || empty($isoCurrency)) {
-            return $map;
-        }
-
-        if ($isoCountry == 'DE' && $isoCurrency == 'EUR') {
-            if ($this->initApmFunctionality()->isGiropayEnabled()) {
-                $map[] = [
-                    'method' => APM::GIROPAY,
-                    'label' => $this->l('giropay'),
-                    'logo' => Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/giropay.svg'),
-                ];
-            }
-        }
-
-        return $map;
     }
 
     public function hookActionAdminOrdersTrackingNumberUpdate($params)
