@@ -383,24 +383,6 @@ class CheckoutForm implements FormInterface
                 ],
                 'value' => (int) Configuration::get(PaypalConfigurations::SEPA_ENABLED),
             ];
-            $fields[PaypalConfigurations::GIROPAY_ENABLED] = [
-                'type' => 'switch',
-                'label' => $this->module->l('Giropay', 'CheckoutForm'),
-                'name' => PaypalConfigurations::GIROPAY_ENABLED,
-                'values' => [
-                    [
-                        'id' => PaypalConfigurations::GIROPAY_ENABLED . '_on',
-                        'value' => 1,
-                        'label' => $this->module->l('Enabled', 'AdminPayPalCustomizeCheckoutController'),
-                    ],
-                    [
-                        'id' => PaypalConfigurations::GIROPAY_ENABLED . '_off',
-                        'value' => 0,
-                        'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
-                    ],
-                ],
-                'value' => (int) Configuration::get(PaypalConfigurations::GIROPAY_ENABLED),
-            ];
 
             if ((int) Configuration::get(PaypalConfigurations::SOFORT_ENABLED)) {
                 $fields[PaypalConfigurations::SOFORT_ENABLED] = [
@@ -524,11 +506,6 @@ class CheckoutForm implements FormInterface
         Configuration::updateValue(
             PaypalConfigurations::PUI_ENABLED,
             isset($data[PaypalConfigurations::PUI_ENABLED]) ? 1 : 0
-        );
-
-        Configuration::updateValue(
-            PaypalConfigurations::GIROPAY_ENABLED,
-            isset($data[PaypalConfigurations::GIROPAY_ENABLED]) ? 1 : 0
         );
 
         Configuration::updateValue(
