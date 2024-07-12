@@ -234,15 +234,19 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $vaultingFunctionality = $this->initVaultingFunctionality();
 
         if (!Validate::isLoadedObject($customer)) {
-            throw new Exception('Customer is not loaded object');
+            throw new PaypalException(PaypalException::INVALID_CUSTOMER, 'Customer is not loaded object');
         }
-
-        if ($this->getPaymentId() == false) {
-            throw new Exception('Payment ID isn\'t setted');
+        if (empty($this->getPaymentId())) {
+            throw new PaypalException(PaypalException::ARGUMENT_MISSING, 'Payment ID isn\'t setted');
         }
-
         if (false === $this->isCorrectCart($cart, $this->getPaymentId())) {
-            throw new Exception('The elements in the shopping cart were changed. Please try to pay again.');
+            throw new PaypalException(PaypalException::CART_CHANGED, 'The elements in the shopping cart were changed. Please try to pay again.');
+        }
+        if ($cart->isAllProductsInStock() !== true ||
+            (method_exists($cart, 'checkAllProductsAreStillAvailableInThisState') && $cart->checkAllProductsAreStillAvailableInThisState() !== true) ||
+            (method_exists($cart, 'checkAllProductsHaveMinimalQuantities') && $cart->checkAllProductsHaveMinimalQuantities() !== true)
+        ) {
+            throw new PaypalException(PaypalException::PRODUCT_UNAVAILABLE, sprintf('Cart with id %d contains products unavailable. Cannot capture the order.', (int) $cart->id));
         }
 
         $response = $this->completePayment();
