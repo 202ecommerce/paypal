@@ -369,7 +369,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 ->setDateTransaction($getOrderResponse->getDateTransaction());
         }
 
-        $response->setScaState(PayPal::SCA_STATE_UNKNOWN);
+        $response->setScaState($scaState);
 
         if ($this->getIntent() == 'CAPTURE') {
             if (empty($getOrderResponse->getData()->result->purchase_units[0]->payments->captures)) {
