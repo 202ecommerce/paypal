@@ -47,6 +47,16 @@ class PaypalException extends Exception
 
     const ARGUMENT_MISSING = 1004;
 
+    const PAYMENT_EXISTS = 1005;
+
+    const CAPTURE_FAIL = 1006;
+
+    const SCA_FAIL = 1007;
+
+    const PAYMENT_ID_INVALID = 1008;
+
+    const CAPTURE_PENDING = 1009;
+
     /** @var string Long detailed error message */
     private $message_long;
 
