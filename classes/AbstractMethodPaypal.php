@@ -257,7 +257,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $response = $this->completePayment();
 
         if ($response->isSuccess() === false) {
-            throw new Exception($response->getError()->getMessage());
+            throw new Exception($response->getError()->getMessage(), $response->getError()->getCode());
         }
 
         if ($vaultingFunctionality->isAvailable() && $vaultingFunctionality->isEnabled()) {
@@ -270,7 +270,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $currency = $context->currency;
         $total = $response->getTotalPaid();
         $paypal = Module::getInstanceByName($this->name);
-        $order_state = $this->getOrderStatus();
+        $order_state = $this->getOrderStatus($response->getStatus());
         $paypal->validateOrder(
             $cart->id,
             $order_state,
@@ -372,7 +372,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $response->setScaState($scaState);
 
         if ($this->getIntent() == 'CAPTURE') {
-            if (empty($getOrderResponse->getData()->result->purchase_units[0]->payments->captures)) {
+            if (empty($response->getData()->result->purchase_units[0]->payments->captures)) {
                 $error = new Error();
                 $error
                     ->setErrorCode(PaypalException::CAPTURE_FAIL)
@@ -382,7 +382,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 return $response;
             }
 
-            foreach ($getOrderResponse->getData()->result->purchase_units[0]->payments->captures as $capture) {
+            foreach ($response->getData()->result->purchase_units[0]->payments->captures as $capture) {
                 if (false === in_array($capture->status, [PayPal::CAPTURE_STATUS_COMPLETED, PayPal::CAPTURE_STATUS_PENDING])) {
                     $error = new Error();
                     $error
@@ -393,11 +393,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                     return $response;
                 }
                 if ($capture->status === PayPal::CAPTURE_STATUS_PENDING) {
-                    $error = new Error();
-                    $error
-                        ->setErrorCode(PaypalException::CAPTURE_PENDING)
-                        ->setMessage('Capture is Pending');
-                    $response->setError($error)->setSuccess(false);
+                    $response->setStatus(PayPal::CAPTURE_STATUS_PENDING);
                 }
             }
         }
@@ -755,7 +751,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @return int id of the order status
      **/
-    public function getOrderStatus()
+    public function getOrderStatus($captureState = PayPal::CAPTURE_STATUS_COMPLETED)
     {
         if ($this->getWebhookOption()->isEnable() && $this->getWebhookOption()->isAvailable()) {
             return $this->getStatusMapping()->getWaitValidationStatus();
@@ -765,15 +761,19 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             return $this->getStatusMapping()->getWaitValidationStatus();
         }
 
-        return $this->getStatusMapping()->getAcceptedStatus();
+        if ($captureState === PayPal::CAPTURE_STATUS_COMPLETED) {
+            return $this->getStatusMapping()->getAcceptedStatus();
+        }
+
+        return $this->getStatusMapping()->getWaitValidationStatus();
     }
 
-    public function updateOrderTrackingInfo(\PaypalOrder $paypalOrder)
+    public function updateOrderTrackingInfo(PaypalOrder $paypalOrder)
     {
         return $this->paypalApiManager->getUpdateTrackingInfoRequest($paypalOrder)->execute();
     }
 
-    public function addOrderTrackingInfo(\PaypalOrder $paypalOrder)
+    public function addOrderTrackingInfo(PaypalOrder $paypalOrder)
     {
         return $this->paypalApiManager->getAddTrackingInfoRequest($paypalOrder)->execute();
     }
