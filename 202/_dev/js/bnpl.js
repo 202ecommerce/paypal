@@ -107,7 +107,7 @@ const BNPL = {
       BNPL.button.style.display = 'none';
     }
 
-    totPaypalBnplSdkButtons.Buttons({
+    const paypalButton = totPaypalBnplSdkButtons.Buttons({
       fundingSource: totPaypalBnplSdkButtons.FUNDING.PAYLATER,
 
       style: {
@@ -124,8 +124,23 @@ const BNPL = {
         BNPL.sendData(data);
       },
 
-    }).render(this.button);
+    });
 
+    if (!paypalButton.isEligible()) {
+      const paymentOption = document.querySelector('[data-module-name="paypal_bnpl"]');
+
+      if (paymentOption) {
+        const paymentOptionRow = paymentOption.closest('.payment-option');
+
+        if (paymentOptionRow) {
+          paymentOptionRow.style.display = 'none';
+        }
+      }
+
+      return;
+    }
+
+    paypalButton.render(this.button);
     let event = new Event('paypal-after-init-bnpl-button');
     document.dispatchEvent(event);
   },

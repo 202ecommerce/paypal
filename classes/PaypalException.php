@@ -39,6 +39,14 @@ if (!defined('_PS_VERSION_')) {
  */
 class PaypalException extends Exception
 {
+    const CART_CHANGED = 1001;
+
+    const PRODUCT_UNAVAILABLE = 1002;
+
+    const INVALID_CUSTOMER = 1003;
+
+    const ARGUMENT_MISSING = 1004;
+
     /** @var string Long detailed error message */
     private $message_long;
 

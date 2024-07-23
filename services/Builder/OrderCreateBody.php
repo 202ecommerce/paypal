@@ -487,7 +487,7 @@ class OrderCreateBody implements BuilderInterface
     {
         $discountTotal = $this->context->cart->getOrderTotal($this->isUseTax(), \Cart::ONLY_DISCOUNTS);
 
-        if (version_compare(_PS_VERSION_, '1.7.5', '>=') && version_compare(_PS_VERSION_, '1.7.6', '<')) {
+        if ($this->module->isConsiderGiftProductAsDiscount()) {
             $summaryDetails = $this->context->cart->getSummaryDetails();
             $gifts = isset($summaryDetails['gift_products']) ? $summaryDetails['gift_products'] : [];
 

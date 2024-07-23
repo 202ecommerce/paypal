@@ -47,7 +47,7 @@ class HttpResponse
     }
 
     /** @return self*/
-    public function setCode(int $code)
+    public function setCode($code)
     {
         $this->code = $code;
 

@@ -37,4 +37,17 @@ class FormatterPaypal
     {
         return \Tools::substr($str, 0, 126);
     }
+
+    public function formatPhoneNumber($phone)
+    {
+        return implode(
+            '',
+            array_filter(
+                str_split($phone),
+                function ($number) {
+                    return in_array($number, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+                }
+            )
+        );
+    }
 }

@@ -27,6 +27,10 @@
 
 namespace PaypalAddons\classes\PUI;
 
+use DateTime;
+use PayPal;
+use PaypalAddons\services\FormatterPaypal;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -47,6 +51,15 @@ class DataUserForm
 
     /** @var string */
     protected $birth;
+    /**
+     * @var FormatterPaypal
+     */
+    protected $formatter;
+
+    public function __construct()
+    {
+        $this->formatter = new FormatterPaypal();
+    }
 
     /**
      * @return string
@@ -103,7 +116,7 @@ class DataUserForm
      */
     public function setPhone($phone)
     {
-        $this->phone = (string) $phone;
+        $this->phone = $this->formatter->formatPhoneNumber((string) $phone);
 
         return $this;
     }
@@ -131,9 +144,15 @@ class DataUserForm
     /**
      * @return string
      */
-    public function getBirth()
+    public function getBirth($format = PayPal::PS_CUSTOMER_DATE_FORMAT)
     {
-        return (string) $this->birth;
+        $date = DateTime::createFromFormat(PayPal::PS_CUSTOMER_DATE_FORMAT, (string) $this->birth);
+
+        if (!$date) {
+            return '';
+        }
+
+        return $date->format($format);
     }
 
     /**

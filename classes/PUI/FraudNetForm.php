@@ -29,6 +29,7 @@ namespace PaypalAddons\classes\PUI;
 
 use Address;
 use Context;
+use Customer;
 use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use Throwable;
@@ -83,11 +84,14 @@ class FraudNetForm
     protected function getUserData()
     {
         $billingAddress = new Address($this->context->cart->id_address_invoice);
+        $customer = new Customer($billingAddress->id_customer);
         $userData = new DataUserForm();
 
         $userData->setFirstName($this->context->customer->firstname);
         $userData->setLastName($this->context->customer->lastname);
         $userData->setEmail($this->context->customer->email);
+        $userData->setPhone($billingAddress->phone);
+        $userData->setBirth($customer->birthday);
         $userData->setPhone($billingAddress->phone);
 
         return $userData;

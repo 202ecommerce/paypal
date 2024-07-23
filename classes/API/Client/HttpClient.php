@@ -101,6 +101,8 @@ class HttpClient implements ClientInterface
         $options[CURLOPT_RETURNTRANSFER] = true;
         $options[CURLOPT_HEADER] = false;
         $options[CURLOPT_SSLVERSION] = CURL_SSLVERSION_TLSv1_2;
+        $options[CURLOPT_CONNECTTIMEOUT] = 0;
+        $options[CURLOPT_TIMEOUT] = 10;
 
         if (false === empty($request->getBody())) {
             $options[CURLOPT_POSTFIELDS] = $request->getBody();
@@ -179,6 +181,7 @@ class HttpClient implements ClientInterface
 
         $response->setContent($data);
         $response->setCode($code);
+        $response->setHeaders($headers);
 
         return $response;
     }
