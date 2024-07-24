@@ -61,13 +61,32 @@ class PayPalValidateBnplModuleFrontController extends ModuleFrontController
             return;
         }
 
-        $transaction = $this->getTransactionFromRequest();
+        $input = json_decode(Tools::getValue('paymentData', ''), true);
         $cart = $this->context->cart;
+
+        if (empty($input['orderID']) || !$this->validateOrderID($input['orderID'])) {
+            return $this->redirectToErrorPage(new Exception('Payment data is not valid.'));
+        }
+        if (false === Validate::isLoadedObject($cart)) {
+            return $this->redirectToErrorPage(new Exception('Cart is not valid.'));
+        }
+
+        $response = $this->client->execute(new OrdersCaptureRequest($input['orderID']));
+
+        if ($response->getCode() > 299 || $response->getCode() < 200) {
+            return $this->redirectToErrorPage(new Exception('Capture is failed.'));
+        }
+
+        if ($response instanceof HttpJsonResponse) {
+            $transaction = $this->preapreTransaction($response->toArray());
+        } else {
+            $transaction = $this->preapreTransaction([]);
+        }
 
         try {
             $this->module->validateOrder(
                 $cart->id,
-                $this->getIdOrderState(),
+                $this->getIdOrderState($transaction->getPaymentStatus()),
                 $transaction->getTotalPaid(),
                 $this->module->displayName,
                 $this->module->l('Payment accepted.'),
@@ -91,15 +110,13 @@ class PayPalValidateBnplModuleFrontController extends ModuleFrontController
         Tools::redirect('index.php?' . http_build_query($queryParams));
     }
 
-    protected function getTransactionFromRequest()
+    protected function preapreTransaction($paymentData)
     {
         $transaction = new Transaction();
 
-        if (empty(Tools::getValue('paymentData'))) {
+        if (empty($paymentData)) {
             return $transaction;
         }
-
-        $paymentData = json_decode(Tools::getValue('paymentData'), true);
 
         if (false === empty($paymentData['purchase_units'][0]['payments']['captures'][0]['id'])) {
             $transaction->setIdTransaction($paymentData['purchase_units'][0]['payments']['captures'][0]['id']);
@@ -128,9 +145,13 @@ class PayPalValidateBnplModuleFrontController extends ModuleFrontController
         return $transaction;
     }
 
-    protected function getIdOrderState()
+    protected function getIdOrderState($paymentStatus = PayPal::CAPTURE_STATUS_COMPLETED)
     {
-        return (int) Configuration::get('PS_OS_PAYMENT');
+        if ($paymentStatus === PayPal::CAPTURE_STATUS_COMPLETED) {
+            return (int) Configuration::get('PS_OS_PAYMENT');
+        }
+
+        return (int) Configuration::get('PS_OS_PAYPAL');
     }
 
     protected function redirectToErrorPage($e)
@@ -172,39 +193,13 @@ class PayPalValidateBnplModuleFrontController extends ModuleFrontController
         die(json_encode($return));
     }
 
-    public function displayAjaxCaptureOrder()
+    protected function validateOrderID($orderID)
     {
-        $order = json_decode(Tools::getValue('order'), true);
-        $return = [
-            'success' => false,
-        ];
-
-        if ($this->validateOrderID($order)) {
-            $response = $this->client->execute(new OrdersCaptureRequest($order['orderID']));
-
-            if ($response->getCode() < 300 && $response->getCode() > 199) {
-                $return['success'] = true;
-
-                if ($response instanceof HttpJsonResponse) {
-                    $return = array_merge($return, $response->toArray());
-                }
-            }
-        }
-
-        die(json_encode($return));
-    }
-
-    protected function validateOrderID($order)
-    {
-        if (empty($order['orderID'])) {
+        if (Validate::isCleanHtml($orderID) === false) {
             return false;
         }
 
-        if (Validate::isCleanHtml($order['orderID']) === false) {
-            return false;
-        }
-
-        if (mb_strlen($order['orderID']) > 36) {
+        if (mb_strlen($orderID) > 36) {
             return false;
         }
 
