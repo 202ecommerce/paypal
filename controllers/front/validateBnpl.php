@@ -61,7 +61,12 @@ class PayPalValidateBnplModuleFrontController extends ModuleFrontController
             return;
         }
 
-        $input = json_decode(Tools::getValue('paymentData', ''), true);
+        $input = Tools::getValue('paymentData', '');
+
+        if (is_string($input)) {
+            $input = json_decode($input, true);
+        }
+
         $cart = $this->context->cart;
 
         if (empty($input['orderID']) || !$this->validateOrderID($input['orderID'])) {
