@@ -49,12 +49,7 @@ BNPL.prototype.render = function (container, order, onIsNotEligible) {
         }.bind(this),
 
         onApprove: function(data, actions) {
-            return this.captureOrder(data)
-                .then(function(detail) {
-                    if (detail.success) {
-                        this.validateOrder(detail);
-                    }
-                }.bind(this))
+            return this.validateOrder(data)
         }.bind(this)
     });
 
@@ -86,23 +81,6 @@ BNPL.prototype.getIdOrder = function() {
             if (response.success) {
                 return response.idOrder;
             }
-        });
-}
-
-BNPL.prototype.captureOrder = function(data) {
-    if (this.validationController === null) {
-        return;
-    }
-
-    var url = new URL(this.validationController);
-    var form = new FormData();
-    url.searchParams.append('ajax', '1');
-    url.searchParams.append('action', 'CaptureOrder');
-    form.append('order', JSON.stringify(data));
-
-    return fetch(url, {method: 'POST', body: form})
-        .then(function(response) {
-            return response.json();
         });
 }
 

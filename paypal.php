@@ -82,6 +82,7 @@ define('_PAYPAL_TRANSLATIONS_XML_', 'translations.xml');
 
 class PayPal extends PaymentModule
 {
+    const CAPTURE_STATUS_COMPLETED = 'COMPLETED';
     protected $_html = '';
     public $_errors = [];
     public $context;
