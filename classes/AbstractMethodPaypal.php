@@ -63,6 +63,7 @@ use PaypalAddons\services\Order\RefundAmountCalculator;
 use PaypalAddons\services\PaypalContext;
 use PaypalAddons\services\ServicePaypalVaulting;
 use PaypalAddons\services\StatusMapping;
+use PaypalOrder;
 use PaypalPPBTlib\AbstractMethod;
 use PrestaShopLogger;
 use Throwable;
@@ -242,6 +243,10 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         if (false === $this->isCorrectCart($cart, $this->getPaymentId())) {
             throw new PaypalException(PaypalException::CART_CHANGED, 'The elements in the shopping cart were changed. Please try to pay again.');
         }
+        if (PaypalOrder::paymentExists($this->getPaymentId())) {
+            throw new PaypalException(PaypalException::PAYMENT_EXISTS, 'Payment exists.');
+        }
+
         if ($cart->isAllProductsInStock() !== true ||
             (method_exists($cart, 'checkAllProductsAreStillAvailableInThisState') && $cart->checkAllProductsAreStillAvailableInThisState() !== true) ||
             (method_exists($cart, 'checkAllProductsHaveMinimalQuantities') && $cart->checkAllProductsHaveMinimalQuantities() !== true)
@@ -251,8 +256,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
         $response = $this->completePayment();
 
-        if ($response->isSuccess() == false) {
-            throw new Exception($response->getError()->getMessage());
+        if ($response->isSuccess() === false) {
+            throw new Exception($response->getError()->getMessage(), $response->getError()->getCode());
         }
 
         if ($vaultingFunctionality->isAvailable() && $vaultingFunctionality->isEnabled()) {
@@ -265,7 +270,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $currency = $context->currency;
         $total = $response->getTotalPaid();
         $paypal = Module::getInstanceByName($this->name);
-        $order_state = $this->getOrderStatus();
+        $order_state = $this->getOrderStatus($response->getStatus());
         $paypal->validateOrder(
             $cart->id,
             $order_state,
@@ -288,6 +293,17 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($this->getPaymentId())->execute();
         $response = new ResponseOrderCapture();
         $scaState = null;
+
+        if ($getOrderResponse->isSuccess() === false) {
+            $error = new Error();
+            $error
+                ->setErrorCode(PaypalException::PAYMENT_ID_INVALID)
+                ->setMessage('Payment ID is invalid');
+            $response->setError($error)->setSuccess(false);
+            $response->setScaState(PayPal::SCA_STATE_FAILED);
+
+            return $response;
+        }
         // Make sure that the order is eligible for capture when the buyer was passed by security customer authentication
         if (!empty($getOrderResponse->getData()->result->payment_source->card->authentication_result)) {
             $authResult = $getOrderResponse->getData()->result->payment_source->card->authentication_result;
@@ -320,7 +336,9 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
             if ($isSuccessSCA === false) {
                 $error = new Error();
-                $error->setMessage('3DS verification is failed');
+                $error
+                    ->setErrorCode(PaypalException::SCA_FAIL)
+                    ->setMessage('3DS verification is failed');
                 $response->setError($error)->setSuccess(false);
                 $response->setScaState(PayPal::SCA_STATE_FAILED);
 
@@ -328,7 +346,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             }
         } else {
             $scaState = PayPal::SCA_STATE_UNKNOWN;
-            $response->setScaState(PayPal::SCA_STATE_UNKNOWN);
         }
 
         if ($this instanceof MethodMB || $getOrderResponse->getStatus() !== 'COMPLETED') {
@@ -337,24 +354,49 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             } else {
                 $response = $this->paypalApiManager->getOrderAuthorizeRequest($this->getPaymentId())->execute();
             }
-
-            $response->setScaState($scaState);
-
-            return $response;
+        } else {
+            $response->setSuccess(true)
+                ->setData($getOrderResponse->getData())
+                ->setPaymentId($this->getPaymentId())
+                ->setTransactionId($getOrderResponse->getTransactionId())
+                ->setCurrency($getOrderResponse->getPurchaseUnit()->getCurrency())
+                ->setCapture($this->getIntent() !== 'CAPTURE')
+                ->setTotalPaid($getOrderResponse->getPurchaseUnit()->getAmount())
+                ->setStatus($getOrderResponse->getStatus())
+                ->setPaymentMethod($getOrderResponse->getPaymentMethod())
+                ->setPaymentTool($getOrderResponse->getPaymentTool())
+                ->setMethod($getOrderResponse->getMethod())
+                ->setDateTransaction($getOrderResponse->getDateTransaction());
         }
 
-        $response->setSuccess(true)
-            ->setData($getOrderResponse->getData())
-            ->setPaymentId($this->getPaymentId())
-            ->setTransactionId($getOrderResponse->getTransactionId())
-            ->setCurrency($getOrderResponse->getPurchaseUnit()->getCurrency())
-            ->setCapture($this->getIntent() !== 'CAPTURE')
-            ->setTotalPaid($getOrderResponse->getPurchaseUnit()->getAmount())
-            ->setStatus($getOrderResponse->getStatus())
-            ->setPaymentMethod($getOrderResponse->getPaymentMethod())
-            ->setPaymentTool($getOrderResponse->getPaymentTool())
-            ->setMethod($getOrderResponse->getMethod())
-            ->setDateTransaction($getOrderResponse->getDateTransaction());
+        $response->setScaState($scaState);
+
+        if ($this->getIntent() == 'CAPTURE') {
+            if (empty($response->getData()->result->purchase_units[0]->payments->captures)) {
+                $error = new Error();
+                $error
+                    ->setErrorCode(PaypalException::CAPTURE_FAIL)
+                    ->setMessage('Failed to capture payment');
+                $response->setError($error)->setSuccess(false);
+
+                return $response;
+            }
+
+            foreach ($response->getData()->result->purchase_units[0]->payments->captures as $capture) {
+                if (false === in_array($capture->status, [PayPal::CAPTURE_STATUS_COMPLETED, PayPal::CAPTURE_STATUS_PENDING])) {
+                    $error = new Error();
+                    $error
+                        ->setErrorCode(PaypalException::CAPTURE_FAIL)
+                        ->setMessage('Failed to capture payment');
+                    $response->setError($error)->setSuccess(false);
+
+                    return $response;
+                }
+                if ($capture->status === PayPal::CAPTURE_STATUS_PENDING) {
+                    $response->setStatus(PayPal::CAPTURE_STATUS_PENDING);
+                }
+            }
+        }
 
         return $response;
     }
@@ -709,7 +751,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @return int id of the order status
      **/
-    public function getOrderStatus()
+    public function getOrderStatus($captureState = PayPal::CAPTURE_STATUS_COMPLETED)
     {
         if ($this->getWebhookOption()->isEnable() && $this->getWebhookOption()->isAvailable()) {
             return $this->getStatusMapping()->getWaitValidationStatus();
@@ -719,15 +761,19 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             return $this->getStatusMapping()->getWaitValidationStatus();
         }
 
-        return $this->getStatusMapping()->getAcceptedStatus();
+        if ($captureState === PayPal::CAPTURE_STATUS_COMPLETED) {
+            return $this->getStatusMapping()->getAcceptedStatus();
+        }
+
+        return $this->getStatusMapping()->getWaitValidationStatus();
     }
 
-    public function updateOrderTrackingInfo(\PaypalOrder $paypalOrder)
+    public function updateOrderTrackingInfo(PaypalOrder $paypalOrder)
     {
         return $this->paypalApiManager->getUpdateTrackingInfoRequest($paypalOrder)->execute();
     }
 
-    public function addOrderTrackingInfo(\PaypalOrder $paypalOrder)
+    public function addOrderTrackingInfo(PaypalOrder $paypalOrder)
     {
         return $this->paypalApiManager->getAddTrackingInfoRequest($paypalOrder)->execute();
     }

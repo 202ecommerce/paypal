@@ -178,4 +178,13 @@ class PaypalOrder extends ObjectModel
 
         return $collection->getResults();
     }
+
+    public static function paymentExists($paymentId)
+    {
+        $row = Db::getInstance()->getRow(
+            (new DbQuery())->from('paypal_order')->where(sprintf('`id_payment` = \'%s\'', pSQL($paymentId)))
+        );
+
+        return false === empty($row);
+    }
 }
