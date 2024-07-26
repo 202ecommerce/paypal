@@ -130,6 +130,18 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const PS_CUSTOMER_DATE_FORMAT = 'Y-m-d';
 
+    const CAPTURE_STATUS_DECLINED = 'DECLINED';
+
+    const CAPTURE_STATUS_COMPLETED = 'COMPLETED';
+
+    const CAPTURE_STATUS_PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED';
+
+    const CAPTURE_STATUS_PENDING = 'PENDING';
+
+    const CAPTURE_STATUS_REFUNDED = 'REFUNDED';
+
+    const CAPTURE_STATUS_FAILED = 'FAILED';
+
     public static $dev = true;
     public $express_checkout;
     public $message;
