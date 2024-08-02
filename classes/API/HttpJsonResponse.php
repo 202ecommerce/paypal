@@ -45,7 +45,7 @@ class HttpJsonResponse extends HttpResponse
         return $this->response->getHeaders();
     }
 
-    public function setHeaders($headers)
+    public function setHeaders(array $headers)
     {
         return $this->response->setHeaders($headers);
     }

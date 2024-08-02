@@ -36,6 +36,7 @@ if (!defined('_PS_VERSION_')) {
  */
 function upgrade_module_6_4_3($module)
 {
+    $kit = new \PaypalAddons\services\Kit();
     $baseDir = _PS_ROOT_DIR_ . '/modules/paypal/';
     $dirs = [
         '_dev',
@@ -74,18 +75,10 @@ function upgrade_module_6_4_3($module)
     ];
 
     foreach ($dirs as $dir) {
-        if (file_exists($baseDir . $dir)) {
-            rmdir($baseDir . $dir);
-        }
+        $kit->rrmdir($baseDir . $dir);
     }
     foreach ($files as $file) {
-        if (file_exists($baseDir . $file)) {
-            try {
-                unlink($baseDir . $file);
-            } catch (Exception $e) {
-            } catch (Throwable $e) {
-            }
-        }
+        $kit->unlink($baseDir . $file);
     }
 
     return true;
