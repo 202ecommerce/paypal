@@ -29,56 +29,22 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+include _PS_MODULE_DIR_ . 'paypal/vendor/autoload.php';
+
 /**
  * @param $module PayPal
  *
  * @return bool
  */
-function upgrade_module_6_4_3($module)
+function upgrade_module_6_4_3(PayPal $module)
 {
-    $kit = new \PaypalAddons\services\Kit();
-    $baseDir = _PS_ROOT_DIR_ . '/modules/paypal/';
-    $dirs = [
-        '_dev',
-        'classes/APM',
-        'views/templates/apm',
-        'views/templates/admin/_partials/paypalBanner',
-        'views/templates/admin/_partials/form/fields',
-    ];
-    $files = [
-        'controllers/admin/AdminPayPalCustomizeCheckoutController.php',
-        'controllers/admin/AdminPayPalHelpController.php',
-        'controllers/admin/AdminPayPalInstallmentController.php',
-        'controllers/admin/AdminPayPalLogsController.php',
-        'controllers/admin/AdminPayPalPUIListenerController.php',
-        'controllers/admin/AdminPayPalSetupController.php',
-        'controllers/admin/AdminPaypalGetCredentialsController.php',
-        'views/templates/admin/customizeCheckout.tpl',
-        'views/templates/admin/help.tpl',
-        'views/templates/admin/installment.tpl',
-        'views/templates/admin/setup.tpl',
-        'views/templates/admin/_partials/accountSettingsBlock.tpl',
-        'views/templates/admin/_partials/blockPreviewButtonContext.tpl',
-        'views/templates/admin/_partials/block_info.tpl',
-        'views/templates/admin/_partials/carrierMap.tpl',
-        'views/templates/admin/_partials/ecCredentialFields.tpl',
-        'views/templates/admin/_partials/headerLogo.tpl',
-        'views/templates/admin/_partials/helperOptionInfo.tpl',
-        'views/templates/admin/_partials/mbCredentialsForm.tpl',
-        'views/templates/admin/_partials/pppCredentialsForm.tpl',
-        'views/templates/admin/_partials/roundingSettings.tpl',
-        'views/templates/admin/_partials/switchSandboxBlock.tpl',
-        'views/templates/admin/_partials/white-list.tpl',
-        'views/templates/admin/_partials/form/colorDescriptions.tpl',
-        'views/templates/admin/_partials/form/customizeStyleSection.tpl',
-        'views/templates/admin/_partials/form/sectionTitle.tpl',
-    ];
+    if (class_exists('\PaypalAddons\services\ToolKit')) {
+        $kit = new \PaypalAddons\services\ToolKit();
+        $baseDir = _PS_MODULE_DIR_ . 'paypal/';
 
-    foreach ($dirs as $dir) {
-        $kit->rrmdir($baseDir . $dir);
-    }
-    foreach ($files as $file) {
-        $kit->unlink($baseDir . $file);
+        foreach ($module->getRedundantFiles() as $file) {
+            $kit->unlink($baseDir . $file);
+        }
     }
 
     return true;

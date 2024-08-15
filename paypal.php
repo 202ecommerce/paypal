@@ -71,6 +71,7 @@ use PaypalAddons\services\StatusMapping;
 use PaypalAddons\services\WebhookService;
 use PaypalPPBTlib\Extensions\AbstractModuleExtension;
 use PaypalPPBTlib\Extensions\Diagnostic\DiagnosticExtension;
+use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\FileIntegrityStub;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PaypalPPBTlib\Install\ModuleInstaller;
@@ -3088,5 +3089,33 @@ class PayPal extends \PaymentModule implements WidgetInterface
     public function isConsiderGiftProductAsDiscount()
     {
         return version_compare(_PS_VERSION_, '1.7.4.4', '>=') && version_compare(_PS_VERSION_, '1.7.6', '<');
+    }
+
+    public function getDiagnosticSettings()
+    {
+        return include _PS_MODULE_DIR_ . 'paypal/diagnostic.php';
+    }
+
+    public function getRedundantFiles()
+    {
+        $diagnosticConf = $this->getDiagnosticSettings();
+
+        if (empty($diagnosticConf[0]['stubs'][FileIntegrityStub::class])) {
+            return [];
+        }
+
+        $stub = new FileIntegrityStub($diagnosticConf[0]['stubs'][FileIntegrityStub::class]);
+        $stub->setModule($this);
+        $response = $stub->getHandler()->handle();
+
+        if (empty($response['created'])) {
+            return [];
+        }
+
+        return array_filter(
+            $response['created'],
+            function ($file) {
+                return !preg_match('/^config_[a-z]+\.xml$/', $file);
+            });
     }
 }

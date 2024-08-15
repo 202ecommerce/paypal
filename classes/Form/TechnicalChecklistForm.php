@@ -71,6 +71,8 @@ class TechnicalChecklistForm implements FormInterface
             'accountConfigured' => $this->method == null ? false : $this->method->isConfigured(),
             'sslActivated' => $this->module->isSslActive(),
             'localizationUrl' => $this->context->link->getAdminLink('AdminLocalization', true),
+            'numberRedundantFiles' => count($this->module->getRedundantFiles()),
+            'diagnosticPage' => $this->context->link->getAdminLink('AdminPaypalDiagnostic', true),
         ];
 
         if ($this->webhookOption->isEligibleContext()) {
