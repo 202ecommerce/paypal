@@ -25,11 +25,11 @@
  *
  */
 
+use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\FileIntegrityStub;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-
-include _PS_MODULE_DIR_ . 'paypal/vendor/autoload.php';
 
 /**
  * @param $module PayPal
@@ -38,12 +38,32 @@ include _PS_MODULE_DIR_ . 'paypal/vendor/autoload.php';
  */
 function upgrade_module_6_4_3(PayPal $module)
 {
-    if (class_exists('\PaypalAddons\services\ToolKit')) {
-        $kit = new \PaypalAddons\services\ToolKit();
-        $baseDir = _PS_MODULE_DIR_ . 'paypal/';
+    $baseDir = _PS_MODULE_DIR_ . 'paypal/';
+    $diagnosticConf = include _PS_MODULE_DIR_ . 'paypal/diagnostic.php';
 
-        foreach ($module->getRedundantFiles() as $file) {
-            $kit->unlink($baseDir . $file);
+    if (empty($diagnosticConf[0]['stubs'][FileIntegrityStub::class])) {
+        return true;
+    }
+
+    $stub = new FileIntegrityStub($diagnosticConf[0]['stubs'][FileIntegrityStub::class]);
+    $stub->setModule($module);
+    $response = $stub->getHandler()->handle();
+
+    if (empty($response['created'])) {
+        return true;
+    }
+
+    $files = array_filter(
+        $response['created'],
+        function ($file) {
+            return !preg_match('/^config_[a-z]+\.xml$/', $file) && $file !== 'config.xml';
+        });
+
+    foreach ($files as $file) {
+        try {
+            unlink($baseDir . $file);
+        } catch (Exception $e) {
+        } catch (Throwable $e) {
         }
     }
 

@@ -3115,7 +3115,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return array_filter(
             $response['created'],
             function ($file) {
-                return !preg_match('/^config_[a-z]+\.xml$/', $file);
+                return !preg_match('/^config_[a-z]+\.xml$/', $file) && $file !== 'config.xml';
             });
     }
 }
