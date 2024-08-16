@@ -104,7 +104,7 @@
           file=$moduleFullDir|cat:"/views/templates/admin/_partials/icon-status.tpl"
           isSuccess=false
           }
-          <div>{{l s='You have files in your PayPal module that are not included in the official content. See more detail on [a @href1@]diagnostic page.[/a]' mod='paypal'}|paypalreplace:['@href1@' =>{$vars.diagnosticPage|default:'#'}, '@target@' => {'target="blank"'}]}</div>
+          <div>{{l s='You have files in your PayPal module that are not included in the official content. See more details on [a @href1@]diagnostic page.[/a]' mod='paypal'}|paypalreplace:['@href1@' =>{$vars.diagnosticPage|default:'#'}, '@target@' => {'target="blank"'}]}</div>
         </li>
       {/if}
     </ul>
