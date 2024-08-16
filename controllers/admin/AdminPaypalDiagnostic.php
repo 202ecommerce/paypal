@@ -42,6 +42,12 @@ class AdminPaypalDiagnosticController extends AdminDiagnosticController
         $this->context->smarty->clearAssign('help_link');
     }
 
+    public function initContent()
+    {
+        $this->context->smarty->assign('isRedundantFileExist', count($this->module->getRedundantFiles()) > 0);
+        parent::initContent();
+    }
+
     public function initProcess()
     {
         parent::initProcess();
