@@ -57,6 +57,8 @@ class PaypalConfigurations
 
     const SEPA_ENABLED = 'PAYPAL_SEPA_ENABLED';
 
+    const GIROPAY_ENABLED = 'GIROPAY_ENABLED';
+
     const SOFORT_ENABLED = 'PAYPAL_SOFORT_ENABLED';
 
     const VENMO_OPTION = 'PAYPAL_VENMO_ENABLED';
