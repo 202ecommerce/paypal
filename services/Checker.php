@@ -27,12 +27,14 @@
 
 namespace PaypalAddons\services;
 
+use Cart;
 use Context;
 use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\WebHookConf;
 use PaypalAddons\classes\Webhook\CreateWebhook;
 use PaypalAddons\classes\Webhook\WebhookAvailability;
+use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -123,5 +125,48 @@ class Checker
             ->execute();
 
         return $response->isSuccess();
+    }
+
+    public function isProductsAvailable(Cart $cart)
+    {
+        if (!$this->isAllProductsInStock($cart)) {
+            return false;
+        }
+        if (method_exists($cart, 'checkAllProductsAreStillAvailableInThisState') && !$cart->checkAllProductsAreStillAvailableInThisState()) {
+            return false;
+        }
+        if (method_exists($cart, 'checkAllProductsHaveMinimalQuantities') && !$cart->checkAllProductsHaveMinimalQuantities()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isAllProductsInStock(Cart $cart)
+    {
+        if (version_compare(_PS_VERSION_, '1.7.3.2', '>=')) {
+            return $cart->isAllProductsInStock(true);
+        }
+
+        foreach ($cart->getProducts(false, false, null, false) as $product) {
+            if ($product['is_virtual']) {
+                continue;
+            }
+            $idProductAttribute = empty($product['id_product_attribute']) ? null : $product['id_product_attribute'];
+            $availableOutOfStock = Product::isAvailableWhenOutOfStock($product['out_of_stock']);
+            $productQuantity = Product::getQuantity(
+                $product['id_product'],
+                $idProductAttribute,
+                null,
+                $cart,
+                $product['id_customization']
+            );
+
+            if (($productQuantity < 0 && !$availableOutOfStock)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
