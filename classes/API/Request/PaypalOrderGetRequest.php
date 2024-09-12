@@ -118,43 +118,32 @@ class PaypalOrderGetRequest extends RequestAbstract
 
     protected function getAddress1($exec)
     {
-        return $exec->result->purchase_units[0]->shipping->address->address_line_1;
+        return empty($exec->result->purchase_units[0]->shipping->address->address_line_1) ? '' : $exec->result->purchase_units[0]->shipping->address->address_line_1;
     }
 
     protected function getAddress2($exec)
     {
-        $address = $exec->result->purchase_units[0]->shipping->address;
-        if (isset($address->address_line_2)) {
-            return $address->address_line_2;
-        } else {
-            return '';
-        }
+        return empty($exec->result->purchase_units[0]->shipping->address->address_line_2) ? '' : $exec->result->purchase_units[0]->shipping->address->address_line_2;
     }
 
     protected function getCity($exec)
     {
-        return $exec->result->purchase_units[0]->shipping->address->admin_area_2;
+        return empty($exec->result->purchase_units[0]->shipping->address->admin_area_2) ? '' : $exec->result->purchase_units[0]->shipping->address->admin_area_2;
     }
 
     protected function getPostCode($exec)
     {
-        return $exec->result->purchase_units[0]->shipping->address->postal_code;
+        return empty($exec->result->purchase_units[0]->shipping->address->postal_code) ? '' : $exec->result->purchase_units[0]->shipping->address->postal_code;
     }
 
     protected function getCountryCode($exec)
     {
-        return $exec->result->purchase_units[0]->shipping->address->country_code;
+        return empty($exec->result->purchase_units[0]->shipping->address->country_code) ? '' : $exec->result->purchase_units[0]->shipping->address->country_code;
     }
 
     protected function getStateCode($exec)
     {
-        $address = $exec->result->purchase_units[0]->shipping->address;
-
-        if (isset($address->admin_area_1)) {
-            return $address->admin_area_1;
-        } else {
-            return '';
-        }
+        return empty($exec->result->purchase_units[0]->shipping->address->admin_area_1) ? '' : $exec->result->purchase_units[0]->shipping->address->admin_area_1;
     }
 
     protected function getPhone($exec)
@@ -168,7 +157,7 @@ class PaypalOrderGetRequest extends RequestAbstract
 
     protected function getFullName($exec)
     {
-        return $exec->result->purchase_units[0]->shipping->name->full_name;
+        return empty($exec->result->purchase_units[0]->shipping->name->full_name) ? '' : $exec->result->purchase_units[0]->shipping->name->full_name;
     }
 
     protected function getEmail($exec)
