@@ -32,7 +32,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Order;
-use PayPal;
 
 class RefundAmountCalculator
 {
