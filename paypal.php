@@ -122,8 +122,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const ACCESS_TOKEN = 'PAYPAL_ACCESS_TOKEN';
 
-    const USE_CARD_FIELDS = 'PAYPAL_USE_CARD_FIELDS';
-
     const SCA_WHEN_REQUIRED = 'SCA_WHEN_REQUIRED';
 
     const SCA_ALWAYS = 'SCA_ALWAYS';
@@ -416,7 +414,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
             PaypalConfigurations::PUI_ENABLED => 1,
             PaypalConfigurations::SEPA_ENABLED => 1,
             PaypalConfigurations::ACDC_OPTION => 1,
-            self::USE_CARD_FIELDS => 1,
         ];
 
         if (version_compare(_PS_VERSION_, '1.7.6', '<')) {

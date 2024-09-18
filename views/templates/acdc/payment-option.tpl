@@ -28,11 +28,8 @@
 
 {block name='style'}
   <style>
-    .pp-input {
-      border: solid;
-      border-width: thin;
-      height: 30px;
-      padding: 0 10px;
+    #cvv {
+      min-width: 120px;
     }
 
     .pp-flex {
@@ -136,7 +133,6 @@
         messages: messages,
         buttonForm: document.querySelector('[paypal-acdc-form-button]'),
         isMoveButtonAtEnd: PAYPAL_MOVE_BUTTON_AT_END,
-        isCardFields: isCardFields,
       });
       acdcObj.initFields();
       acdcObj.hideElementTillPaymentOptionChecked(
