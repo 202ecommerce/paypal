@@ -50,7 +50,7 @@ class RefundAmountCalculator
         }
 
         foreach ($params['productList'] as $product) {
-            $amount += \Tools::ps_round($product['amount'], PayPal::getPrecision());
+            $amount += (float) $product['amount'];
         }
 
         if (false == empty($params['partialRefundShippingCost'])) {

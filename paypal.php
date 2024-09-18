@@ -2325,12 +2325,21 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return $response;
     }
 
-    public static function getPrecision()
+    public static function getPrecision($currency = null)
     {
         if (version_compare(_PS_VERSION_, '1.7.7', '<')) {
             return _PS_PRICE_DISPLAY_PRECISION_;
         } else {
-            return Context::getContext()->getComputingPrecision();
+            if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
+                $context = Context::getContext()->cloneContext();
+                $context->currency = $currency;
+                $precision = $context->getComputingPrecision();
+                unset($context);
+
+                return $precision;
+            } else {
+                return Context::getContext()->getComputingPrecision();
+            }
         }
     }
 
@@ -2348,7 +2357,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
             $isoCurrency = $paypal->getPaymentCurrencyIso();
         }
 
-        $precision = self::getPrecision();
+        $precision = self::getPrecision(new Currency(Currency::getIdByIsoCode($isoCurrency)));
 
         if (in_array($isoCurrency, $currency_wt_decimal) || ($precision == 0)) {
             return (int) 0;
