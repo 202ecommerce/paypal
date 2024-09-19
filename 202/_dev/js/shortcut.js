@@ -124,8 +124,14 @@ const Shortcut = {
 
       style: Shortcut.getStyleSetting(),
 
-      createOrder: function(data, actions) {
-        return Shortcut.getIdOrder();
+      createOrder: async function(data, actions) {
+        let result = await Shortcut.checkCartStillOrderable();
+
+        if (!result) {
+          window.location.reload();
+        } else {
+          return Shortcut.getIdOrder();
+        }
       },
 
       onApprove: function(data, actions) {
@@ -275,6 +281,36 @@ const Shortcut = {
     if (mark.isEligible()) {
       mark.render(markContainer);
     }
+  },
+
+  checkCartStillOrderable() {
+    let data = new Object();
+    let url = new URL(this.controller);
+    url.searchParams.append('ajax', '1');
+    url.searchParams.append('action', 'CheckAvailability');
+    this.updateInfo();
+    data['page'] = this.page;
+    data['sc'] = true;
+
+    if (this.page == 'product') {
+      data['idProduct'] = this.idProduct;
+      data['quantity'] = this.productQuantity;
+      data['combination'] = this.combination.join('|');
+      data['sc'] = true;
+    }
+
+    return fetch(url.toString(),
+      {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(data),
+      }).then(function(res){
+        return res.json();
+    }).then(function (json) {
+      return json.success;
+    });
   }
 
 };
