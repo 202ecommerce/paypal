@@ -72,7 +72,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
         }
 
         if (false == ($this->module->getWebhookOption()->isEnable() && $this->module->getWebhookOption()->isAvailable())) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+            header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed', true, 405);
 
             return;
         }
@@ -102,7 +102,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                     null
                 );
                 ProcessLoggerHandler::closeLogger();
-                header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
             }
         } catch (\Exception $exception) {
         } catch (\Throwable $exception) {//for php version > 7
