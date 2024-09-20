@@ -127,11 +127,13 @@ const Shortcut = {
       createOrder: async function(data, actions) {
         let result = await Shortcut.checkCartStillOrderable();
 
-        if (!result) {
-          window.location.reload();
-        } else {
+        if (result) {
           return Shortcut.getIdOrder();
         }
+      },
+
+      onError(err) {
+        window.location.reload();
       },
 
       onApprove: function(data, actions) {
