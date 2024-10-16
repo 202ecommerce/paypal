@@ -42,7 +42,7 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
         $this->paypal = new PayPal();
         $this->context = Context::getContext();
         $this->id_module = (int) Tools::getValue('id_module');
-        $id_cart = Tools::getValue('id_cart');
+        $id_cart = (int) Tools::getValue('id_cart');
         if ($id_cart == false) {
             Tools::redirect($this->context->link->getPageLink('history'));
         }
