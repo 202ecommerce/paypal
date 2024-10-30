@@ -2701,6 +2701,9 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
             $hookName = empty($alias) ? $hookName : $alias;
 
+            if (in_array($hookName, $hooksUnregistered)) {
+                continue;
+            }
             if (Hook::isModuleRegisteredOnHook($this, $hookName, $this->context->shop->id)) {
                 continue;
             }
