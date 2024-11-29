@@ -137,7 +137,7 @@ class MethodEC extends AbstractMethodPaypal
     public function logOut($sandbox = null)
     {
         if ($sandbox == null) {
-            $mode = Configuration::get('PAYPAL_SANDBOX') ? 'SANDBOX' : 'LIVE';
+            $mode = $this->isSandbox() ? 'SANDBOX' : 'LIVE';
         } else {
             $mode = (int) $sandbox ? 'SANDBOX' : 'LIVE';
         }

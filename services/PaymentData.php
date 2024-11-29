@@ -34,40 +34,47 @@ if (!defined('_PS_VERSION_')) {
 class PaymentData
 {
     /** @var string */
-    protected $orderId;
+    protected $orderId = '';
 
     /** @var string */
-    protected $payerID;
+    protected $payerID = '';
 
     /** @var string */
-    protected $paymentID;
+    protected $paymentID = '';
 
     /** @var string */
-    protected $billingToken;
+    protected $billingToken = '';
 
     /** @var string */
-    protected $facilitatorAccessToken;
+    protected $facilitatorAccessToken = '';
+
+    /** @var string */
+    protected $rememberedCards = '';
 
     public function fromArray($data)
     {
-        if (false == empty($data['orderID'])) {
+        if (false === empty($data['orderID'])) {
             $this->setOrderId($data['orderID']);
         }
 
-        if (false == empty($data['payerID'])) {
+        if (false === empty($data['payerID'])) {
             $this->setPayerId($data['payerID']);
         }
 
-        if (false == empty($data['paymentID'])) {
+        if (false === empty($data['paymentID'])) {
             $this->setPaymentID($data['paymentID']);
         }
 
-        if (false == empty($data['billingToken'])) {
+        if (false === empty($data['billingToken'])) {
             $this->setBillingToken($data['billingToken']);
         }
 
-        if (false == empty($data['facilitatorAccessToken'])) {
+        if (false === empty($data['facilitatorAccessToken'])) {
             $this->setFacilitatorAccessToken($data['facilitatorAccessToken']);
+        }
+
+        if (false === empty($data['rememberedCards'])) {
+            $this->setRememberedCards($data['rememberedCards']);
         }
 
         return $this;
@@ -82,7 +89,7 @@ class PaymentData
         return $this;
     }
 
-    protected function setPayerId($payerID)
+    public function setPayerId($payerID)
     {
         if (is_string($payerID)) {
             $this->payerID = $payerID;
@@ -91,7 +98,7 @@ class PaymentData
         return $this;
     }
 
-    protected function setPaymentID($paymentID)
+    public function setPaymentID($paymentID)
     {
         if (is_string($paymentID)) {
             $this->paymentID = $paymentID;
@@ -100,7 +107,7 @@ class PaymentData
         return $this;
     }
 
-    protected function setBillingToken($billingToken)
+    public function setBillingToken($billingToken)
     {
         if (is_string($billingToken)) {
             $this->billingToken = $billingToken;
@@ -109,10 +116,19 @@ class PaymentData
         return $this;
     }
 
-    protected function setFacilitatorAccessToken($facilitatorAccessToken)
+    public function setFacilitatorAccessToken($facilitatorAccessToken)
     {
         if (is_string($facilitatorAccessToken)) {
             $this->facilitatorAccessToken = $facilitatorAccessToken;
+        }
+
+        return $this;
+    }
+
+    public function setRememberedCards($rememberedCards)
+    {
+        if (is_string($rememberedCards)) {
+            $this->rememberedCards = $rememberedCards;
         }
 
         return $this;
@@ -156,5 +172,10 @@ class PaymentData
     public function getFacilitatorAccessToken()
     {
         return $this->facilitatorAccessToken;
+    }
+
+    public function getRememberedCards()
+    {
+        return $this->rememberedCards;
     }
 }
