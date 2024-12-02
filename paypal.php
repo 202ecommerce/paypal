@@ -761,7 +761,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         if (Module::isEnabled('braintreeofficial') && (int) Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
             return [];
         }
-        if (!$this->context->customer->isLogged() && !$this->context->customer->is_guest) {
+        if (false === $this->context->customer->isLogged(true)) {
             return [];
         }
 
@@ -2701,6 +2701,9 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
             $hookName = empty($alias) ? $hookName : $alias;
 
+            if (in_array($hookName, $hooksUnregistered)) {
+                continue;
+            }
             if (Hook::isModuleRegisteredOnHook($this, $hookName, $this->context->shop->id)) {
                 continue;
             }

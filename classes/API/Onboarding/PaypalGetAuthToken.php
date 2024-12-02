@@ -28,8 +28,10 @@
 namespace PaypalAddons\classes\API\Onboarding;
 
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
+use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\classes\API\ExtensionSDK\AccessTokenRequest;
+use PaypalAddons\classes\API\HttpAdoptedResponse;
+use PaypalAddons\classes\API\PaypalClient;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseGetAuthToken;
 use Throwable;
@@ -40,8 +42,8 @@ if (!defined('_PS_VERSION_')) {
 
 class PaypalGetAuthToken
 {
-    /** @var */
-    protected $httpClient;
+    /** @var PaypalClient */
+    protected $client;
 
     /** @var string */
     protected $authCode;
@@ -54,11 +56,9 @@ class PaypalGetAuthToken
 
     public function __construct($authCode, $sharedId, $sellerNonce, $sandbox)
     {
-        // Depending on the guzzle version, Client take 'base_uri' or 'base_url' parameter
-        $this->httpClient = new Client([
-            'base_uri' => $sandbox ? 'https://api.sandbox.paypal.com' : 'https://api.paypal.com',
-            'base_url' => $sandbox ? 'https://api.sandbox.paypal.com' : 'https://api.paypal.com',
-        ]);
+        $method = AbstractMethodPaypal::load();
+        $method->setSandbox($sandbox);
+        $this->client = PaypalClient::get($method);
         $this->authCode = $authCode;
         $this->sharedId = $sharedId;
         $this->sellerNonce = $sellerNonce;
@@ -70,38 +70,36 @@ class PaypalGetAuthToken
     public function execute()
     {
         $returnResponse = new ResponseGetAuthToken();
-        $body = sprintf('grant_type=authorization_code&code=%s&code_verifier=%s', $this->authCode, $this->sellerNonce);
+        $request = new AccessTokenRequest();
+        $request->setBody(
+            sprintf('grant_type=authorization_code&code=%s&code_verifier=%s', $this->authCode, $this->sellerNonce)
+        );
+        $request->setHeaders([
+            'Content-Type' => 'text/plain',
+            'Authorization' => 'Basic ' . base64_encode($this->sharedId),
+        ]);
 
         try {
-            $response = $this->httpClient->post(
-                '/v1/oauth2/token',
-                [
-                    RequestOptions::BODY => $body,
-                    RequestOptions::HEADERS => [
-                        'Content-Type' => 'text/plain',
-                        'Authorization' => 'Basic ' . base64_encode($this->sharedId),
-                    ],
-                ]
-            );
-
-            $responseDecode = json_decode($response->getBody()->getContents());
+            /** @var HttpAdoptedResponse $response */
+            $response = $this->client->execute($request);
+            $responseDecode = $response->getAdoptedResponse();
             $returnResponse->setSuccess(true)
-                ->setData($returnResponse)
-                ->setAuthToken($responseDecode->access_token)
-                ->setRefreshToken($responseDecode->refresh_token)
-                ->setTokenType($responseDecode->token_type)
-                ->setNonce($responseDecode->nonce);
+                ->setData($response)
+                ->setAuthToken($responseDecode->result->access_token)
+                ->setRefreshToken($responseDecode->result->refresh_token)
+                ->setTokenType($responseDecode->result->token_type)
+                ->setNonce($responseDecode->result->nonce);
         } catch (Throwable $e) {
             $error = new Error();
             $error
                 ->setMessage($e->getMessage())
-                ->setErrorCode(empty($e->statusCode) ? $e->getCode() : $e->statusCode);
+                ->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);
         } catch (Exception $e) {
             $error = new Error();
             $error
                 ->setMessage($e->getMessage())
-                ->setErrorCode(empty($e->statusCode) ? $e->getCode() : $e->statusCode);
+                ->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);
         }
 

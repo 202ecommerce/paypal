@@ -394,6 +394,12 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
             exit;
         }
 
+        $confing = json_decode(Configuration::get(ConfigurationMap::MESSENGING_CONFIG), true);
+
+        if (!is_array($confing)) {
+            $confing = [];
+        }
+
         $messagingConfig = [
             'placements' => ['product', 'homepage', 'cart', 'checkout', 'category'],
             'merchantIdentifier' => $this->method->getClientId(),
@@ -401,10 +407,7 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
             'partnerName' => ($this->method->isSandbox() ? PayPal::PAYPAL_PARTNER_ID_SANDBOX : PayPal::PAYPAL_PARTNER_ID_LIVE),
             'bnCode' => $this->method->getPaypalPartnerId(),
             'locale' => str_replace('-', '_', Context::getContext()->language->locale),
-            'config' => json_decode(
-                Configuration::get(ConfigurationMap::MESSENGING_CONFIG, null, null, null, '{}'),
-                true
-            ),
+            'config' => $confing,
         ];
 
         $jsonResponse->setData(['success' => true, 'config' => $messagingConfig])->send();
