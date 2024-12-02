@@ -26,7 +26,7 @@
         "ajv": "^8.12.0",
         "autoprefixer": "^10.4.13",
         "babel-loader": "^9.1.2",
-        "bootstrap": "^4.6.0",
+        "bootstrap": "^5.0.0",
         "bootstrap-input-spinner": "git+https://github.com/202ecommerce/bootstrap-input-spinner.git#bugfix/lighthouse-passive-listeners",
         "bourbon": "^7.2.0",
         "browser-sync": "^2.27.11",
