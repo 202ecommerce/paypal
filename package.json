@@ -29,7 +29,7 @@
         "bootstrap": "^4.6.0",
         "bootstrap-input-spinner": "git+https://github.com/202ecommerce/bootstrap-input-spinner.git#bugfix/lighthouse-passive-listeners",
         "bourbon": "^7.2.0",
-        "browser-sync": "^2.27.11",
+        "browser-sync": "^3.0.3",
         "browser-sync-webpack-plugin": "^2.3.0",
         "bs-custom-file-input": "^1.3.4",
         "clean-webpack-plugin": "^4.0.0",
