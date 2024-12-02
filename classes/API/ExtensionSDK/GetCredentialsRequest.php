@@ -36,28 +36,20 @@ use PaypalAddons\classes\API\HttpResponse;
 use PaypalAddons\classes\API\Request\HttpRequestInterface;
 use PaypalAddons\classes\API\WrapperInterface;
 
-class AccessTokenRequest implements HttpRequestInterface, WrapperInterface
+class GetCredentialsRequest implements HttpRequestInterface, WrapperInterface
 {
     protected $headers = [];
-    /**
-     * @var string
-     */
-    protected $paypalCustomerId;
+    /** @var string */
+    protected $partnerId;
 
-    protected $body = null;
-
-    public function __construct($paypalCustomerId = null)
+    public function __construct($partnerId)
     {
-        $this->headers['Content-Type'] = 'application/x-www-form-urlencoded';
-
-        if (false === empty($paypalCustomerId)) {
-            $this->paypalCustomerId = (string) $paypalCustomerId;
-        }
+        $this->partnerId = (string) $partnerId;
     }
 
     public function getPath()
     {
-        return '/v1/oauth2/token';
+        return sprintf('/v1/customer/partners/%s/merchant-integrations/credentials', $this->partnerId);
     }
 
     /** @return array*/
@@ -80,34 +72,9 @@ class AccessTokenRequest implements HttpRequestInterface, WrapperInterface
         return $this;
     }
 
-    public function setBody($body)
-    {
-        $this->body = $body;
-
-        return $this;
-    }
-
-    public function getBody()
-    {
-        if (false === empty($this->body)) {
-            return $this->body;
-        }
-
-        $body = [
-            'grant_type' => 'client_credentials',
-        ];
-
-        if ($this->paypalCustomerId) {
-            $body['target_customer_id'] = $this->paypalCustomerId;
-            $body['response_type'] = 'id_token';
-        }
-
-        return http_build_query($body);
-    }
-
     public function getMethod()
     {
-        return 'POST';
+        return 'GET';
     }
 
     public function wrap($object)
@@ -117,5 +84,10 @@ class AccessTokenRequest implements HttpRequestInterface, WrapperInterface
         }
 
         return $object;
+    }
+
+    public function getBody()
+    {
+        return null;
     }
 }
