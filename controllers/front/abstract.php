@@ -37,6 +37,9 @@ if (!defined('_PS_VERSION_')) {
  */
 abstract class PaypalAbstarctModuleFrontController extends CommonAbstarctModuleFrontController
 {
+    /** @var Module|PayPal */
+    public $module;
+
     /**
      * @return PaymentData
      */
