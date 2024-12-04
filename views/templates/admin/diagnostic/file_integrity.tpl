@@ -87,6 +87,14 @@
                       {/foreach}
                   </div>
                 {/if}
+
+              {if isset($isRedundantFileExist) && $isRedundantFileExist}
+                <div class="d-flex justify-content-center m-3">
+                  <a href="{Context::getContext()->link->getAdminLink('AdminPaypalDiagnostic', true, [], ['remove_redundant_files' => 1])}" class="btn btn-primary">
+                    {l s='Remove redundant files' mod='paypal'}
+                  </a>
+                </div>
+              {/if}
             </div>
           </div>
         </div>

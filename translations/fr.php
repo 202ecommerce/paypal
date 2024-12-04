@@ -190,6 +190,7 @@ $_MODULE['<{paypal}prestashop>statusblock_fb11c619ba14750115c1bd0bddd199be'] = '
 $_MODULE['<{paypal}prestashop>statusblock_b0fb9d7e6d4ed47cb12f3092943fafc2'] = 'Le protocole SSL doit être activé sur votre site.';
 $_MODULE['<{paypal}prestashop>statusblock_ba54b8645ec3d87e95b4da1b5baad66f'] = 'L\'extension cURL PHP doit être activée sur votre serveur.';
 $_MODULE['<{paypal}prestashop>statusblock_5914be43ea057f2fd9fa49180f5db5bf'] = 'Vous devez vous connecter à votre compte PayPal.';
+$_MODULE['<{paypal}prestashop>statusblock_85e650a9b75ce606496731a086c28d0b'] = 'Vous avez des fichiers dans votre module PayPal qui ne sont pas présents dans le contenu officiel. Voir plus de détails sur [a @href1@]page de diagnostic.[/a]';
 $_MODULE['<{paypal}prestashop>helperoptioninfo_36c23650a89439d28101b389567fe2f5'] = 'Les logs avec ID de commande ne seront pas effacés.';
 $_MODULE['<{paypal}prestashop>headerlogo_536b624906878dc3954749a6cef3b0fa'] = 'Activation en 2 étapes simples';
 $_MODULE['<{paypal}prestashop>headerlogo_e269d95cbf9105896810d64a7307acdd'] = 'Activez le module PayPal pour commencer à vendre à plus de 300 millions de clients PayPal dans le monde entier';

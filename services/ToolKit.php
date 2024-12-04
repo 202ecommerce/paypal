@@ -30,7 +30,7 @@ namespace PaypalAddons\services;
 use Exception;
 use Throwable;
 
-class Kit
+class ToolKit
 {
     public function rrmdir($dir)
     {
