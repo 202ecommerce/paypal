@@ -2908,7 +2908,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return new WebhookOption();
     }
 
-    protected function getPaypalOrderService()
+    public function getPaypalOrderService()
     {
         return new ServicePaypalOrder();
     }
