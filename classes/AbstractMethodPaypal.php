@@ -77,6 +77,8 @@ if (!defined('_PS_VERSION_')) {
 
 abstract class AbstractMethodPaypal extends AbstractMethod
 {
+    const AUTHORIZE = 'AUTHORIZE';
+    const SALE = 'CAPTURE';
     /** @var bool */
     protected $isSandbox;
 

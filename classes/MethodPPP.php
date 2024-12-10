@@ -278,7 +278,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     public function getIntent()
     {
-        return 'CAPTURE';
+        return self::SALE;
     }
 
     public function getReturnUrl()

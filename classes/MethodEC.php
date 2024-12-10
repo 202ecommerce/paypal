@@ -42,10 +42,6 @@ if (!defined('_PS_VERSION_')) {
  */
 class MethodEC extends AbstractMethodPaypal
 {
-    const AUTHORIZE = 'AUTHORIZE';
-
-    const SALE = 'CAPTURE';
-
     /** @var bool pay with card without pp account */
     public $credit_card;
 
