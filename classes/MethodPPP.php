@@ -120,7 +120,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     public function logOut($sandbox = null)
     {
         if ($sandbox == null) {
-            $mode = Configuration::get('PAYPAL_SANDBOX') ? 'SANDBOX' : 'LIVE';
+            $mode = $this->isSandbox() ? 'SANDBOX' : 'LIVE';
         } else {
             $mode = (int) $sandbox ? 'SANDBOX' : 'LIVE';
         }
@@ -278,7 +278,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     public function getIntent()
     {
-        return 'CAPTURE';
+        return self::SALE;
     }
 
     public function getReturnUrl()

@@ -88,7 +88,7 @@ class PaypalEcInitModuleFrontController extends PaypalAbstarctModuleFrontControl
     protected function getMethodType($requestData)
     {
         if (empty($requestData['methodType'])) {
-            return 'EC';
+            return $this->module->paypal_method;
         } else {
             return $requestData['methodType'];
         }

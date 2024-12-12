@@ -30,7 +30,6 @@ namespace PaypalAddons\services;
 use Configuration;
 use MethodEC;
 use MethodMB;
-use MethodPPP;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\WebHookType;
@@ -182,15 +181,7 @@ class StatusMapping
             $method = AbstractMethodPaypal::load();
         }
 
-        if ($method instanceof MethodPPP) {
-            return true;
-        }
-
-        if ($method instanceof MethodMB) {
-            return true;
-        }
-
-        return Configuration::get('PAYPAL_API_INTENT') == 'sale';
+        return $method->getIntent() === AbstractMethodPaypal::SALE;
     }
 
     /**
