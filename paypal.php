@@ -2929,6 +2929,27 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return $result;
     }
 
+    public function registerHook($hook_name, $shop_list = null)
+    {
+        try {
+            return parent::registerHook($hook_name, $shop_list);
+        } catch (Throwable $e) {
+        } catch (Exception $e) {
+        }
+
+        ProcessLoggerHandler::openLogger();
+        ProcessLoggerHandler::logError(
+            sprintf(
+                'Error during registering the hook %s: %s',
+                $hook_name,
+                $e->getMessage()
+            )
+        );
+        ProcessLoggerHandler::closeLogger();
+
+        return false;
+    }
+
     /**
      * @param PaypalOrder $paypalOrder
      *
