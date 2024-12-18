@@ -211,9 +211,7 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
             $id_address = $orderAddress->id;
         }
 
-        $this->context->cart->id_address_delivery = $id_address;
-        $this->context->cart->id_address_invoice = $id_address;
-
+        $this->context->cart->updateAddressId($this->context->cart->id_address_delivery, $id_address);
         $invalidAddressIds = [];
 
         if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
@@ -230,16 +228,7 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
             $this->_errors[] = $this->l('Your address is incomplete, please update it.');
             $url = Context::getContext()->link->getPageLink('order', null, null, $vars);
             $this->redirectUrl = $url;
-
-            return;
         }
-
-        $products = $this->context->cart->getProducts();
-        foreach ($products as $key => $product) {
-            $this->context->cart->setProductAddressDelivery($product['id_product'], $product['id_product_attribute'], $product['id_address_delivery'], $id_address);
-        }
-
-        $this->context->cart->save();
     }
 
     public function setPaymentData($paymentData)
