@@ -80,17 +80,25 @@ class PaypalOrderAuthorizeRequest extends RequestAbstract
             } elseif ($exec->statusCode == 204) {
                 $response->setSuccess(true);
             } else {
-                $error = new Error();
-                $resultDecoded = json_decode($exec->message);
-                $error->setMessage($resultDecoded->message);
-                $response->setSuccess(false)->setError($error);
+                $response->setSuccess(false)->setData($exec);
             }
         } catch (PaypalException $e) {
             $error = new Error();
             $resultDecoded = json_decode($e->getMessage());
-            $error->setMessage($resultDecoded->details[0]->description)->setErrorCode($e->getCode());
-            $response->setSuccess(false)
-                ->setError($error);
+
+            if (!empty($resultDecoded->details[0]->description)) {
+                $error->setMessage($resultDecoded->details[0]->description);
+            }
+            if (!empty($resultDecoded->details[0]->issue)) {
+                if ($resultDecoded->details[0]->issue === \PayPal::PAYPAL_ISSUE_PAYER_ACTION_REQUIRED) {
+                    if (!empty($resultDecoded->links)) {
+                        $error->setErrorCode(PaypalException::PAYER_ACTION_REQUIRED);
+                        $response->setPayerAction($this->getLink('payer-action', $resultDecoded->links));
+                    }
+                }
+            }
+
+            $response->setSuccess(false)->setError($error);
         } catch (Throwable $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
@@ -164,5 +172,16 @@ class PaypalOrderAuthorizeRequest extends RequestAbstract
         }
 
         return $method;
+    }
+
+    protected function getLink($nameLink, $links)
+    {
+        foreach ($links as $link) {
+            if ($link->rel == $nameLink) {
+                return $link->href;
+            }
+        }
+
+        return '';
     }
 }

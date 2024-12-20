@@ -60,6 +60,10 @@ class PaypalPuiValidateModuleFrontController extends PaypalAbstarctModuleFrontCo
             $cart = Context::getContext()->cart;
             $customer = new Customer($cart->id_customer);
             $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $paypal->id . '&id_order=' . $paypal->currentOrder . '&key=' . $customer->secure_key;
+        } catch (PaypalAddons\classes\Exception\PayerActionRequired $e) {
+            $this->redirectUrl = $e->getPayerActionLink();
+
+            return;
         } catch (PaypalAddons\classes\PaypalException $e) {
             $this->_errors['error_code'] = $e->getCode();
             $this->_errors['error_msg'] = $e->getMessage();
