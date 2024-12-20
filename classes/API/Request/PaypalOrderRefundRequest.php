@@ -79,10 +79,7 @@ class PaypalOrderRefundRequest extends RequestAbstract
                     ->setAmount($exec->result->amount->value)
                     ->setDateTransaction($this->getDateTransaction($exec));
             } else {
-                $error = new Error();
-                $resultDecoded = json_decode($exec->message);
-                $error->setMessage($resultDecoded->message);
-                $response->setSuccess(false)->setError($error);
+                $response->setSuccess(false)->setData($exec);
             }
         } catch (PaypalException $e) {
             $error = new Error();

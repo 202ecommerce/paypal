@@ -71,6 +71,9 @@ class ResponseOrderCapture extends Response
     /** @var int */
     protected $scaState;
 
+    /** @var string */
+    protected $payerAction = '';
+
     /**
      * @return string
      */
@@ -274,6 +277,18 @@ class ResponseOrderCapture extends Response
     public function setScaState($scaState)
     {
         $this->scaState = (int) $scaState;
+
+        return $this;
+    }
+
+    public function getPayerAction()
+    {
+        return $this->payerAction;
+    }
+
+    public function setPayerAction($payerAction)
+    {
+        $this->payerAction = (string) $payerAction;
 
         return $this;
     }

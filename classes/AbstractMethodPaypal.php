@@ -52,6 +52,7 @@ use PaypalAddons\classes\API\Response\ResponseVaultPaymentToken;
 use PaypalAddons\classes\API\Response\ResponseWebhookEventDetail;
 use PaypalAddons\classes\API\Response\ResponseWebhookEventList;
 use PaypalAddons\classes\Constants\Vaulting;
+use PaypalAddons\classes\Exception\PayerActionRequired;
 use PaypalAddons\classes\PUI\SignupLink;
 use PaypalAddons\classes\Shortcut\ShortcutCart;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
@@ -257,6 +258,11 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $response = $this->completePayment();
 
         if ($response->isSuccess() === false) {
+            if ($response->getError()->getCode() === PaypalException::PAYER_ACTION_REQUIRED) {
+                if ($response->getPayerAction()) {
+                    throw new PayerActionRequired($response->getPayerAction(), 'Payer action required', PaypalException::PAYER_ACTION_REQUIRED);
+                }
+            }
             throw new Exception($response->getError()->getMessage(), $response->getError()->getCode());
         }
 

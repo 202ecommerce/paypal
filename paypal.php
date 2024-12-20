@@ -141,6 +141,8 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const CAPTURE_STATUS_FAILED = 'FAILED';
 
+    const PAYPAL_ISSUE_PAYER_ACTION_REQUIRED = 'PAYER_ACTION_REQUIRED';
+
     public static $dev = true;
     public $express_checkout;
     public $message;

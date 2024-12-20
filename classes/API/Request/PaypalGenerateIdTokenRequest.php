@@ -71,15 +71,7 @@ class PaypalGenerateIdTokenRequest extends RequestAbstract
                 $response->setSuccess(true);
                 $response->setIdToken($this->getIdToken($exec));
             } else {
-                $error = new Error();
-
-                if (false === empty($exec->message)) {
-                    $resultDecoded = json_decode($exec->message, true);
-                    $error->setMessage(empty($resultDecoded['message']) ? '' : $resultDecoded['message']);
-                }
-
-                $response->setSuccess(false)
-                    ->setError($error);
+                $response->setSuccess(false)->setData($exec);
             }
         } catch (PaypalException $e) {
             $error = new Error();
