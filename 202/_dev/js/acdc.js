@@ -38,8 +38,6 @@ const ACDC = function(conf) {
   this.isMoveButtonAtEnd = conf['isMoveButtonAtEnd'] === undefined ? null : conf['isMoveButtonAtEnd'];
 
   this.buttonForm = conf['buttonForm'] === undefined ? null : conf['buttonForm'];
-
-  this.isCardFields = conf['isCardFields'] === undefined ? false : conf['isCardFields'];
 };
 
 ACDC.prototype.initButton = function() {
@@ -71,7 +69,7 @@ ACDC.prototype.getIdOrder = function() {
     headers: {
       'content-type': 'application/json;charset=utf-8'
     },
-    body: JSON.stringify({page: 'cart', addAddress: 1, sca_verification: (this.isCardFields ? 'SCA_WHEN_REQUIRED' : '')}),
+    body: JSON.stringify({page: 'cart', addAddress: 1, sca_verification: 'SCA_WHEN_REQUIRED'}),
   }).then(function(res) {
     return res.json();
   }).then(function(data) {
@@ -111,11 +109,7 @@ ACDC.prototype.getPaypalButtonsContainer = function() {
 };
 
 ACDC.prototype.initFields = function() {
-  if (this.isCardFields) {
-    this.initCardFields();
-  } else {
-    this.initHostedFields();
-  }
+  this.initCardFields();
 };
 
 ACDC.prototype.initCardFields = function() {

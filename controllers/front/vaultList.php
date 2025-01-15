@@ -118,6 +118,13 @@ class PaypalVaultListModuleFrontController extends ModuleFrontController
             ])->send();
         }
 
+        if (!$paypalVaulting->id_customer || $paypalVaulting->id_customer != $this->context->customer->id) {
+            return $response->setData([
+                'success' => false,
+                'message' => 'PayPal vaulting is not found',
+            ])->send();
+        }
+
         if (false === $this->method->deleteVaultPaymentToken($paypalVaulting->vault_id)) {
             return $response->setData([
                 'success' => false,

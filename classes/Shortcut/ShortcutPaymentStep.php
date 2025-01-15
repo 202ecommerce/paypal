@@ -28,8 +28,6 @@
 namespace PaypalAddons\classes\Shortcut;
 
 use Configuration;
-use MethodMB;
-use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use Tools;
 
@@ -42,10 +40,6 @@ class ShortcutPaymentStep extends ShortcutAbstract
     public function __construct()
     {
         parent::__construct();
-
-        if ($this->method instanceof MethodMB) {
-            $this->method = AbstractMethodPaypal::load('EC');
-        }
     }
 
     public function getTemplatePath()

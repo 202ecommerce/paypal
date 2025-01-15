@@ -31,6 +31,7 @@ if (!defined('_PS_VERSION_')) {
 
 require_once _PS_MODULE_DIR_ . 'paypal/vendor/autoload.php';
 
+use PaypalAddons\services\ToolKit;
 use PaypalPPBTlib\Extensions\Diagnostic\Controllers\Admin\AdminDiagnosticController;
 
 class AdminPaypalDiagnosticController extends AdminDiagnosticController
@@ -39,5 +40,25 @@ class AdminPaypalDiagnosticController extends AdminDiagnosticController
     {
         parent::initPageHeaderToolbar();
         $this->context->smarty->clearAssign('help_link');
+    }
+
+    public function initContent()
+    {
+        $this->context->smarty->assign('isRedundantFileExist', count($this->module->getRedundantFiles()) > 0);
+        parent::initContent();
+    }
+
+    public function initProcess()
+    {
+        parent::initProcess();
+
+        if (Tools::isSubmit('remove_redundant_files')) {
+            $kit = new ToolKit();
+            $baseDir = _PS_MODULE_DIR_ . 'paypal/';
+
+            foreach ($this->module->getRedundantFiles() as $file) {
+                $kit->unlink($baseDir . $file);
+            }
+        }
     }
 }

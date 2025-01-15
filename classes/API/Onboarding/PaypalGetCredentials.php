@@ -28,8 +28,10 @@
 namespace PaypalAddons\classes\API\Onboarding;
 
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
+use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\classes\API\ExtensionSDK\GetCredentialsRequest;
+use PaypalAddons\classes\API\HttpAdoptedResponse;
+use PaypalAddons\classes\API\PaypalClient;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseGetCredentials;
 use Throwable;
@@ -40,8 +42,8 @@ if (!defined('_PS_VERSION_')) {
 
 class PaypalGetCredentials
 {
-    /** @var */
-    protected $httpClient;
+    /** @var PaypalClient */
+    protected $client;
 
     /** @var string */
     protected $authToken;
@@ -51,11 +53,9 @@ class PaypalGetCredentials
 
     public function __construct($authToken, $partnerId, $sandbox)
     {
-        // Depending on the guzzle version, Client take 'base_uri' or 'base_url' parameter
-        $this->httpClient = new Client([
-            'base_uri' => $sandbox ? 'https://api.sandbox.paypal.com' : 'https://api.paypal.com',
-            'base_url' => $sandbox ? 'https://api.sandbox.paypal.com' : 'https://api.paypal.com',
-        ]);
+        $method = AbstractMethodPaypal::load();
+        $method->setSandbox($sandbox);
+        $this->client = PaypalClient::get($method);
         $this->authToken = $authToken;
         $this->partnerId = $partnerId;
     }
@@ -63,35 +63,31 @@ class PaypalGetCredentials
     public function execute()
     {
         $returnResponse = new ResponseGetCredentials();
-        $uri = sprintf('/v1/customer/partners/%s/merchant-integrations/credentials', $this->partnerId);
+        $request = new GetCredentialsRequest($this->partnerId);
+        $request->setHeaders([
+            'Authorization' => 'Bearer ' . $this->authToken,
+        ]);
 
         try {
-            $response = $this->httpClient->get(
-                $uri,
-                [
-                    RequestOptions::HEADERS => [
-                        'Authorization' => 'Bearer ' . $this->authToken,
-                    ],
-                ]
-            );
-
-            $responseDecode = json_decode($response->getBody()->getContents());
+            /** @var HttpAdoptedResponse $response */
+            $response = $this->client->execute($request);
+            $responseDecode = $response->getAdoptedResponse();
             $returnResponse->setSuccess(true)
-                ->setClientId($responseDecode->client_id)
-                ->setSecret($responseDecode->client_secret)
-                ->setMerchantId($responseDecode->payer_id)
-                ->setData($returnResponse);
+                ->setClientId($responseDecode->result->client_id)
+                ->setSecret($responseDecode->result->client_secret)
+                ->setMerchantId($responseDecode->result->payer_id)
+                ->setData($response);
         } catch (Throwable $e) {
             $error = new Error();
             $error
                 ->setMessage($e->getMessage())
-                ->setErrorCode(empty($e->statusCode) ? $e->getCode() : $e->statusCode);
+                ->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);
         } catch (Exception $e) {
             $error = new Error();
             $error
                 ->setMessage($e->getMessage())
-                ->setErrorCode(empty($e->statusCode) ? $e->getCode() : $e->statusCode);
+                ->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);
         }
 

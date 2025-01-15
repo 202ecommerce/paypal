@@ -29,7 +29,6 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Model\WebhookEvent;
 use PaypalAddons\classes\Constants\WebhookHandler;
 use PaypalAddons\classes\Webhook\WebhookEventHandler;
-use PaypalAddons\services\ServicePaypalOrder;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 if (!defined('_PS_VERSION_')) {
@@ -41,9 +40,6 @@ if (!defined('_PS_VERSION_')) {
  */
 class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFrontController
 {
-    /** @var ServicePaypalOrder */
-    protected $servicePaypalOrder;
-
     /** @var array */
     protected $requestData;
 
@@ -72,7 +68,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
         }
 
         if (false == ($this->module->getWebhookOption()->isEnable() && $this->module->getWebhookOption()->isAvailable())) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+            header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed', true, 405);
 
             return;
         }
@@ -85,7 +81,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                 if ($this->webhookEventHandler->handle($webhookEvent)) {
                     header('HTTP/1.1 200 OK');
                 } else {
-                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 422 Unprocessable Content', true, 422);
                 }
             } else {
                 $paypalOrder = $this->initPaypalOrder($this->getRequest());
@@ -102,7 +98,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                     null
                 );
                 ProcessLoggerHandler::closeLogger();
-                header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
             }
         } catch (\Exception $exception) {
         } catch (\Throwable $exception) {//for php version > 7
@@ -193,7 +189,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
         if (false == empty($event->getResource()->supplementary_data->related_ids->order_id)) {
             $paymentId = $event->getResource()->supplementary_data->related_ids->order_id;
 
-            return $this->servicePaypalOrder->getPaypalOrderByPaymentId($paymentId);
+            return $this->module->getPaypalOrderService()->getPaypalOrderByPaymentId($paymentId);
         }
 
         return new PaypalOrder();

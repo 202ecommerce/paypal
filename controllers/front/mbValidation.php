@@ -26,6 +26,7 @@
  */
 
 use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\services\PaymentData;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -52,10 +53,10 @@ class PaypalMbValidationModuleFrontController extends PaypalAbstarctModuleFrontC
     public function postProcess()
     {
         $paypal = Module::getInstanceByName($this->name);
-        $payemtData = json_decode(Tools::getValue('paymentData'));
-        $this->method->setPaymentId($payemtData->paymentId);
-        $this->method->setPayerId($payemtData->result->payer->payer_info->payer_id);
-        $this->method->setRememberedCards($payemtData->result->rememberedCards);
+        $paymentData = $this->parsePaymentData(Tools::getAllValues());
+        $this->method->setPaymentId($paymentData->getPaymentID());
+        $this->method->setPayerId($paymentData->getPaymentID());
+        $this->method->setRememberedCards($paymentData->getRememberedCards());
 
         try {
             $this->method->validation();
@@ -82,5 +83,39 @@ class PaypalMbValidationModuleFrontController extends PaypalAbstarctModuleFrontC
             'paymentInfo' => $paymentInfo,
         ];
         $this->jsonValues = $responseContent;
+    }
+
+    protected function parsePaymentData($data)
+    {
+        $paymentDataObj = new PaymentData();
+
+        if (!empty($data['token'])) {
+            $paymentDataObj->setPaymentID($data['token']);
+        }
+        if (!empty($data['PayerID'])) {
+            $paymentDataObj->setPayerID($data['PayerID']);
+        }
+
+        if (!empty($data['paymentData'])) {
+            $paymentData = json_decode($data['paymentData'], true);
+
+            if (!empty($paymentData['paymentId'])) {
+                $paymentDataObj->setPaymentID($paymentData['paymentId']);
+            }
+            if (!empty($paymentData['paymentID'])) {
+                $paymentDataObj->setPaymentID($paymentData['paymentID']);
+            }
+            if (!empty($paymentData['result']['payer']['payer_info']['payer_id'])) {
+                $paymentDataObj->setPayerID($paymentData['result']['payer']['payer_info']['payer_id']);
+            }
+            if (!empty($paymentData['payerID'])) {
+                $paymentDataObj->setPayerID($paymentData['payerID']);
+            }
+            if (!empty($paymentData['result']['rememberedCards'])) {
+                $paymentDataObj->setRememberedCards($paymentData['result']['rememberedCards']);
+            }
+        }
+
+        return $paymentDataObj;
     }
 }

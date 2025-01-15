@@ -71,6 +71,7 @@ use PaypalAddons\services\StatusMapping;
 use PaypalAddons\services\WebhookService;
 use PaypalPPBTlib\Extensions\AbstractModuleExtension;
 use PaypalPPBTlib\Extensions\Diagnostic\DiagnosticExtension;
+use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\FileIntegrityStub;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PaypalPPBTlib\Install\ModuleInstaller;
@@ -121,8 +122,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
     const SCA_STATE_NOT_PASSED = 4;
 
     const ACCESS_TOKEN = 'PAYPAL_ACCESS_TOKEN';
-
-    const USE_CARD_FIELDS = 'PAYPAL_USE_CARD_FIELDS';
 
     const SCA_WHEN_REQUIRED = 'SCA_WHEN_REQUIRED';
 
@@ -416,7 +415,6 @@ class PayPal extends \PaymentModule implements WidgetInterface
             PaypalConfigurations::PUI_ENABLED => 1,
             PaypalConfigurations::SEPA_ENABLED => 1,
             PaypalConfigurations::ACDC_OPTION => 1,
-            self::USE_CARD_FIELDS => 1,
         ];
 
         if (version_compare(_PS_VERSION_, '1.7.6', '<')) {
@@ -764,7 +762,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         if (Module::isEnabled('braintreeofficial') && (int) Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
             return [];
         }
-        if (!$this->context->customer->isLogged() && !$this->context->customer->is_guest) {
+        if (false === $this->context->customer->isLogged(true)) {
             return [];
         }
 
@@ -2325,12 +2323,21 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return $response;
     }
 
-    public static function getPrecision()
+    public static function getPrecision($currency = null)
     {
         if (version_compare(_PS_VERSION_, '1.7.7', '<')) {
             return _PS_PRICE_DISPLAY_PRECISION_;
         } else {
-            return Context::getContext()->getComputingPrecision();
+            if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
+                $context = Context::getContext()->cloneContext();
+                $context->currency = $currency;
+                $precision = $context->getComputingPrecision();
+                unset($context);
+
+                return $precision;
+            } else {
+                return Context::getContext()->getComputingPrecision();
+            }
         }
     }
 
@@ -2348,7 +2355,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
             $isoCurrency = $paypal->getPaymentCurrencyIso();
         }
 
-        $precision = self::getPrecision();
+        $precision = self::getPrecision(new Currency(Currency::getIdByIsoCode($isoCurrency)));
 
         if (in_array($isoCurrency, $currency_wt_decimal) || ($precision == 0)) {
             return (int) 0;
@@ -2695,6 +2702,9 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
             $hookName = empty($alias) ? $hookName : $alias;
 
+            if (in_array($hookName, $hooksUnregistered)) {
+                continue;
+            }
             if (Hook::isModuleRegisteredOnHook($this, $hookName, $this->context->shop->id)) {
                 continue;
             }
@@ -2898,7 +2908,7 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return new WebhookOption();
     }
 
-    protected function getPaypalOrderService()
+    public function getPaypalOrderService()
     {
         return new ServicePaypalOrder();
     }
@@ -2917,6 +2927,27 @@ class PayPal extends \PaymentModule implements WidgetInterface
         }
 
         return $result;
+    }
+
+    public function registerHook($hook_name, $shop_list = null)
+    {
+        try {
+            return parent::registerHook($hook_name, $shop_list);
+        } catch (Throwable $e) {
+        } catch (Exception $e) {
+        }
+
+        ProcessLoggerHandler::openLogger();
+        ProcessLoggerHandler::logError(
+            sprintf(
+                'Error during registering the hook %s: %s',
+                $hook_name,
+                $e->getMessage()
+            )
+        );
+        ProcessLoggerHandler::closeLogger();
+
+        return false;
     }
 
     /**
@@ -3088,5 +3119,33 @@ class PayPal extends \PaymentModule implements WidgetInterface
     public function isConsiderGiftProductAsDiscount()
     {
         return version_compare(_PS_VERSION_, '1.7.4.4', '>=') && version_compare(_PS_VERSION_, '1.7.6', '<');
+    }
+
+    public function getDiagnosticSettings()
+    {
+        return include _PS_MODULE_DIR_ . 'paypal/diagnostic.php';
+    }
+
+    public function getRedundantFiles()
+    {
+        $diagnosticConf = $this->getDiagnosticSettings();
+
+        if (empty($diagnosticConf[0]['stubs'][FileIntegrityStub::class])) {
+            return [];
+        }
+
+        $stub = new FileIntegrityStub($diagnosticConf[0]['stubs'][FileIntegrityStub::class]);
+        $stub->setModule($this);
+        $response = $stub->getHandler()->handle();
+
+        if (empty($response['created'])) {
+            return [];
+        }
+
+        return array_filter(
+            $response['created'],
+            function ($file) {
+                return !preg_match('/^config_[a-z]+\.xml$/', $file) && $file !== 'config.xml';
+            });
     }
 }

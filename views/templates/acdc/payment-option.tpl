@@ -28,11 +28,12 @@
 
 {block name='style'}
   <style>
-    .pp-input {
-      border: solid;
-      border-width: thin;
-      height: 30px;
-      padding: 0 10px;
+    #cvv {
+      min-width: 120px;
+    }
+
+    #card-number {
+      width: 300px;
     }
 
     .pp-flex {
@@ -47,12 +48,7 @@
       justify-content: center;
     }
 
-    .pp-field-wrapper {
-      padding: 10px;
-    }
-
     .pp-field-wrapper label {
-      padding: 0 0 10px 0;
       font-weight: bold;
     }
 
@@ -65,8 +61,17 @@
     }
 
     .pp-padding-1 {
-      padding: 10px
+      padding: 0.375rem;
     }
+
+    [paypal-acdc-card-wrapper] [paypal-acdc-form-button] {
+      width: 100%;
+    }
+
+    [paypal-acdc-form-button] {
+      min-width: 200px;
+    }
+
   </style>
 {/block}
 
@@ -86,24 +91,24 @@
       <form id="card-form" class="pp-flex pp-flex-direction-column">
 
         <div class="pp-field-wrapper">
-          <label for="card-number">{l s='Card Number' mod='paypal'}</label>
+          <div class="pp-padding-1"><label for="card-number">{l s='Card Number' mod='paypal'}</label></div>
           <div id="card-number" class="pp-input"></div>
         </div>
 
         <div class="pp-flex pp-space-between">
           <div class="pp-field-wrapper">
-            <label for="expiration-date">{l s='Expiration Date' mod='paypal'}</label>
+            <div class="pp-padding-1"><label for="expiration-date">{l s='Expiration Date' mod='paypal'}</label></div>
             <div id="expiration-date" class="pp-input"></div>
           </div>
 
           <div class="pp-field-wrapper">
-            <label for="cvv">{l s='CVV' mod='paypal'}</label>
+            <div class="pp-padding-1"><label for="cvv">{l s='CVV' mod='paypal'}</label></div>
             <div id="cvv" class="pp-input"></div>
           </div>
         </div>
 
         <div class="pp-padding-1">
-          <button paypal-acdc-form-button class="btn btn-primary" style="width: 300px">{l s='Pay' mod='paypal'}</button>
+          <button paypal-acdc-form-button class="btn btn-primary">{l s='Pay' mod='paypal'}</button>
         </div>
 
         <div paypal-acdc-card-error>
@@ -136,7 +141,6 @@
         messages: messages,
         buttonForm: document.querySelector('[paypal-acdc-form-button]'),
         isMoveButtonAtEnd: PAYPAL_MOVE_BUTTON_AT_END,
-        isCardFields: isCardFields,
       });
       acdcObj.initFields();
       acdcObj.hideElementTillPaymentOptionChecked(

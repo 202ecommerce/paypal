@@ -42,10 +42,6 @@ if (!defined('_PS_VERSION_')) {
  */
 class MethodEC extends AbstractMethodPaypal
 {
-    const AUTHORIZE = 'AUTHORIZE';
-
-    const SALE = 'CAPTURE';
-
     /** @var bool pay with card without pp account */
     public $credit_card;
 
@@ -137,7 +133,7 @@ class MethodEC extends AbstractMethodPaypal
     public function logOut($sandbox = null)
     {
         if ($sandbox == null) {
-            $mode = Configuration::get('PAYPAL_SANDBOX') ? 'SANDBOX' : 'LIVE';
+            $mode = $this->isSandbox() ? 'SANDBOX' : 'LIVE';
         } else {
             $mode = (int) $sandbox ? 'SANDBOX' : 'LIVE';
         }

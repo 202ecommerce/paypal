@@ -25,54 +25,47 @@
  *
  */
 
-namespace PaypalAddons\classes\API;
+use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\FileIntegrityStub;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class HttpJsonResponse extends HttpResponse
+/**
+ * @param $module PayPal
+ *
+ * @return bool
+ */
+function upgrade_module_6_4_3(PayPal $module)
 {
-    protected $response;
+    $baseDir = _PS_MODULE_DIR_ . 'paypal/';
+    $diagnosticConf = include _PS_MODULE_DIR_ . 'paypal/diagnostic.php';
 
-    public function __construct(HttpResponse $response)
-    {
-        $this->response = $response;
+    if (empty($diagnosticConf[0]['stubs'][FileIntegrityStub::class])) {
+        return true;
     }
 
-    public function getHeaders()
-    {
-        return $this->response->getHeaders();
+    $stub = new FileIntegrityStub($diagnosticConf[0]['stubs'][FileIntegrityStub::class]);
+    $stub->setModule($module);
+    $response = $stub->getHandler()->handle();
+
+    if (empty($response['created'])) {
+        return true;
     }
 
-    public function setHeaders(array $headers)
-    {
-        return $this->response->setHeaders($headers);
-    }
+    $files = array_filter(
+        $response['created'],
+        function ($file) {
+            return !preg_match('/^config_[a-z]+\.xml$/', $file) && $file !== 'config.xml';
+        });
 
-    public function getCode()
-    {
-        return $this->response->getCode();
-    }
-
-    public function setCode($code)
-    {
-        return $this->response->setCode($code);
-    }
-
-    public function getContent()
-    {
-        return $this->response->getContent();
-    }
-
-    public function toArray()
-    {
-        $result = json_decode($this->getContent(), true);
-
-        if (is_array($result)) {
-            return $result;
+    foreach ($files as $file) {
+        try {
+            unlink($baseDir . $file);
+        } catch (Exception $e) {
+        } catch (Throwable $e) {
         }
-
-        return [];
     }
+
+    return true;
 }

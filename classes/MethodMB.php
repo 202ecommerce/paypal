@@ -107,7 +107,7 @@ class MethodMB extends AbstractMethodPaypal
     public function logOut($sandbox = null)
     {
         if ($sandbox == null) {
-            $mode = Configuration::get('PAYPAL_SANDBOX') ? 'SANDBOX' : 'LIVE';
+            $mode = $this->isSandbox() ? 'SANDBOX' : 'LIVE';
         } else {
             $mode = (int) $sandbox ? 'SANDBOX' : 'LIVE';
         }
@@ -164,6 +164,7 @@ class MethodMB extends AbstractMethodPaypal
      */
     public function confirmCapture($orderPayPal)
     {
+        return $this->paypalApiManager->getCaptureAuthorizeRequest($orderPayPal)->execute();
     }
 
     /**
@@ -171,6 +172,7 @@ class MethodMB extends AbstractMethodPaypal
      */
     public function void($orderPayPal)
     {
+        return $this->paypalApiManager->getAuthorizationVoidRequest($orderPayPal)->execute();
     }
 
     /**
@@ -454,7 +456,7 @@ class MethodMB extends AbstractMethodPaypal
 
     public function getIntent()
     {
-        return Configuration::get('PAYPAL_API_INTENT') == 'sale' ? 'CAPTURE' : 'AUTHORIZE';
+        return Configuration::get('PAYPAL_API_INTENT') == 'sale' ? self::SALE : self::AUTHORIZE;
     }
 
     public function getMerchantId()

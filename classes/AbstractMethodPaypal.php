@@ -59,6 +59,7 @@ use PaypalAddons\classes\Shortcut\ShortcutProduct;
 use PaypalAddons\classes\Shortcut\ShortcutSignup;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
 use PaypalAddons\classes\Webhook\WebhookOption;
+use PaypalAddons\services\Checker;
 use PaypalAddons\services\Order\RefundAmountCalculator;
 use PaypalAddons\services\PaypalContext;
 use PaypalAddons\services\ServicePaypalVaulting;
@@ -76,6 +77,8 @@ if (!defined('_PS_VERSION_')) {
 
 abstract class AbstractMethodPaypal extends AbstractMethod
 {
+    const AUTHORIZE = 'AUTHORIZE';
+    const SALE = 'CAPTURE';
     /** @var bool */
     protected $isSandbox;
 
@@ -247,10 +250,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             throw new PaypalException(PaypalException::PAYMENT_EXISTS, 'Payment exists.');
         }
 
-        if ($cart->isAllProductsInStock() !== true ||
-            (method_exists($cart, 'checkAllProductsAreStillAvailableInThisState') && $cart->checkAllProductsAreStillAvailableInThisState() !== true) ||
-            (method_exists($cart, 'checkAllProductsHaveMinimalQuantities') && $cart->checkAllProductsHaveMinimalQuantities() !== true)
-        ) {
+        if (false === $this->initChecker()->isProductsAvailable($cart)) {
             throw new PaypalException(PaypalException::PRODUCT_UNAVAILABLE, sprintf('Cart with id %d contains products unavailable. Cannot capture the order.', (int) $cart->id));
         }
 
@@ -947,6 +947,11 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         }
 
         return (new Response())->setSuccess(false);
+    }
+
+    protected function initChecker()
+    {
+        return new Checker();
     }
 
     /** @return  string*/
