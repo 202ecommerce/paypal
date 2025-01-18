@@ -70,7 +70,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                presta-versions: ['1.7.4.0', '8.0.4']
+                presta-versions: ['1.7.4.0', '8.0.4', '8'] # These are prestashop/prestashop Docker tag versions
         steps:
             - name: Checkout
               uses: actions/checkout@v2.0.0
