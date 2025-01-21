@@ -135,6 +135,8 @@ $color-swatch-height: $color-swatch-width !default;
 
 // Modals
 $modal-lg: 1125px !default;
+$zindex-modal-backdrop:             1090 !default;
+$zindex-modal:                      1091 !default;
 
 // Badges
 $badge-font-size: 13px !default;
