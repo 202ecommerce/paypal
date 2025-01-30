@@ -61,6 +61,11 @@ class PaypalEcInitModuleFrontController extends PaypalAbstarctModuleFrontControl
                 $this->redirectUrl = $this->method->init()->getApproveLink();
             } else {
                 $this->redirectUrl = $this->method->initApm($this->values['apmMethod'])->getPayerActionLink();
+
+                if (empty($this->redirectUrl)) {
+                    $this->_errors['error_code'] = PaypalAddons\classes\PaypalException::APPROVAL_LINK_INVALID;
+                    $this->_errors['error_msg'] = $this->module->l('Failure of redirecting to the confirmation page');
+                }
             }
         } catch (PaypalAddons\classes\PaypalException $e) {
             $this->_errors['error_code'] = $e->getCode();

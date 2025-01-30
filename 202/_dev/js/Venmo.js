@@ -101,7 +101,7 @@ class Venmo {
       return;
     }
 
-    totVenmoPaypalSdkButtons.Buttons({
+    const paypalButton = totVenmoPaypalSdkButtons.Buttons({
       fundingSource: totVenmoPaypalSdkButtons.FUNDING.VENMO,
 
       createOrder: function(data, actions) {
@@ -112,7 +112,23 @@ class Venmo {
         this.sendData(data);
       }.bind(this),
 
-    }).render(this.container);
+    });
+
+    if (!paypalButton.isEligible()) {
+      const paymentOption = document.querySelector('[data-module-name="paypal_venmo"]');
+
+      if (paymentOption) {
+        const paymentOptionRow = paymentOption.closest('.payment-option');
+
+        if (paymentOptionRow) {
+          paymentOptionRow.style.display = 'none';
+        }
+      }
+
+      return;
+    }
+
+    paypalButton.render(this.container);
 
     Tools.disableTillConsenting(
       document.querySelector(this.container),
