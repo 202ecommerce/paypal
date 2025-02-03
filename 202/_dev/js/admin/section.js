@@ -79,7 +79,7 @@ class Section {
         break;
 
       case 'configuration':
-        formSelector = '#pp_checkout_form, #pp_installment_form, #pp_installment_messenging_form, #pp_shortcut_configuration_form, #pp_order_status_form, #pp_white_list_form';
+        formSelector = '#pp_checkout_form, #pp_installment_form, #pp_installment_messenging_form, #pp_shortcut_configuration_form, #pp_order_status_form, #pp_white_list_form, #pp_cloudsync_form';
         break;
 
       case 'account':
