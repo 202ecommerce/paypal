@@ -1,5 +1,5 @@
-{*
- * 2007-2024 PayPal
+{**
+ * Since 2007 PayPal
  *
  * NOTICE OF LICENSE
  *
@@ -23,10 +23,23 @@
  *  @copyright PayPal
  *
  *}
-{extends file="./form.tpl"}
+{include file="{$module_dir}/views/templates/_partials/javascript.tpl"}
 
-{block name='form_content' append}
-  {if !empty($form.fields.cloudSyncSection.set.html)}
-    {$form.fields.cloudSyncSection.set.html nofilter} {*html content*}
-  {/if}
-{/block}
+<div id="prestashop-cloudsync"></div>
+
+<script src="{$urlAccountsCdn|escape:'htmlall':'UTF-8'}"></script>
+<script src="{$urlCloudsync|escape:'htmlall':'UTF-8'}"></script>
+
+<script>
+  window?.psaccountsVue?.init();
+  // CloudSync
+  const cdc = window.cloudSyncSharingConsent;
+
+  cdc.init('#prestashop-cloudsync');
+  cdc.on('OnboardingCompleted', (isCompleted) => {
+    console.log('OnboardingCompleted', isCompleted);
+  });
+  cdc.isOnboardingCompleted((isCompleted) => {
+    console.log('Onboarding is already Completed', isCompleted);
+  });
+</script>
