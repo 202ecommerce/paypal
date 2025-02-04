@@ -25,3 +25,8 @@
  *}
 {extends file="./form.tpl"}
 
+{block name='form_content' append}
+  {if !empty($form.fields.cloudSyncSection.set.html)}
+    {$form.fields.cloudSyncSection.set.html nofilter} {*html content*}
+  {/if}
+{/block}

@@ -28,10 +28,15 @@
 namespace PaypalAddons\classes\Form;
 
 use Context;
+use Matrix\Exception;
 use Module;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
+use PaypalAddons\classes\PrestaShopCloudSync\CloudSyncView;
+use PaypalAddons\classes\PrestaShopCloudSync\CloudSyncWrapper;
+use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
+use Throwable;
 use Tools;
 
 if (!defined('_PS_VERSION_')) {
@@ -84,6 +89,13 @@ class PrestaShopCloudSyncForm implements FormInterface
                     ],
                     'value' => (int) $this->configuration->get(PaypalConfigurations::CLOUDSYNC_ENABLED),
                 ],
+                'cloudSyncSection' => [
+                    'name' => 'cloudSyncSection',
+                    'type' => 'variable-set',
+                    'set' => [
+                        'html' => $this->initCloudSync()
+                    ],
+                ]
             ],
             'submit' => [
                 'title' => $this->module->l('Save', $this->className),
@@ -107,10 +119,12 @@ class PrestaShopCloudSyncForm implements FormInterface
             return false;
         }
 
-        $this->configuration->set(
-            PaypalConfigurations::CLOUDSYNC_ENABLED,
-            isset($data[PaypalConfigurations::CLOUDSYNC_ENABLED]) ? (int) $data[PaypalConfigurations::CLOUDSYNC_ENABLED] : 0
-        );
+        if (empty($data[PaypalConfigurations::CLOUDSYNC_ENABLED]) || !$data[PaypalConfigurations::CLOUDSYNC_ENABLED]) {
+            $this->configuration->set(PaypalConfigurations::CLOUDSYNC_ENABLED, 0);
+        } else {
+            $this->configuration->set(PaypalConfigurations::CLOUDSYNC_ENABLED, 1);
+            (new CloudSyncWrapper())->installModules();
+        }
 
         return true;
     }
@@ -118,5 +132,30 @@ class PrestaShopCloudSyncForm implements FormInterface
     protected function getHelpInfo()
     {
         return Context::getContext()->smarty->fetch('module:paypal/views/templates/admin/_partials/messages/form-help-info/cloud-sync.tpl');
+    }
+
+    protected function initCloudSync()
+    {
+        $output = '';
+
+        if (!$this->configuration->get(PaypalConfigurations::CLOUDSYNC_ENABLED)) {
+            return $output;
+        }
+
+        try {
+            $output .= (new CloudSyncView())->render();
+        } catch (Throwable $e) {
+        } catch (Exception $e) {
+        } finally {
+            if (isset($e)) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    '[PrestaShopCloudSyncForm] ' . $e->getMessage(),
+                );
+                ProcessLoggerHandler::closeLogger();
+            }
+        }
+
+        return $output;
     }
 }

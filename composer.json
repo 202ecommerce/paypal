@@ -19,7 +19,8 @@
     "autoload": {
         "psr-4": {
             "PaypalPPBTlib\\": "vendor/ppbtlib/src/",
-            "PaypalAddons\\": "."
+            "PaypalAddons\\": ".",
+            "PaypalAddons\\PrestaShop\\PsAccountsInstaller\\": "vendor/prefixed/prestashop/prestashop-accounts-installer/src"
         },
         "classmap": [
             "classes/",
