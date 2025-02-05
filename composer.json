@@ -20,7 +20,15 @@
         "psr-4": {
             "PaypalPPBTlib\\": "vendor/ppbtlib/src/",
             "PaypalAddons\\": ".",
-            "PaypalAddons\\PrestaShop\\PsAccountsInstaller\\": "vendor/prefixed/prestashop/prestashop-accounts-installer/src"
+            "PaypalAddons\\PrestaShop\\PsAccountsInstaller\\": "vendor/prefixed/prestashop/prestashop-accounts-installer/src",
+            "PaypalAddons\\Prestashop\\ModuleLibGuzzleAdapter\\": "vendor/prefixed/prestashop/module-lib-guzzle-adapter/src",
+            "PaypalAddons\\Prestashop\\ModuleLibMboInstaller\\": "vendor/prefixed/prestashop/module-lib-mbo-installer/src",
+            "PaypalAddons\\Clue\\StreamFilter\\": "vendor/prefixed/clue/stream-filter/src",
+            "PaypalAddons\\GuzzleHttp\\Psr7\\": "vendor/prefixed/guzzlehttp/psr7/src",
+            "PaypalAddons\\Http\\Client\\": "vendor/prefixed/php-http/httplug/src",
+            "PaypalAddons\\Http\\Message\\": "vendor/prefixed/php-http/message/src",
+            "PaypalAddons\\Http\\Promise\\": "vendor/prefixed/php-http/promise/src",
+            "PaypalAddons\\Psr\\Http\\Message\\": "vendor/prefixed/psr/http-message/src"
         },
         "classmap": [
             "classes/",

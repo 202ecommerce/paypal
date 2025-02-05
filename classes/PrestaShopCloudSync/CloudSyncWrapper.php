@@ -5,6 +5,7 @@ namespace PaypalAddons\classes\PrestaShopCloudSync;
 use Module;
 use PaypalAddons\PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PaypalAddons\PrestaShop\PsAccountsInstaller\Installer\Installer;
+use Prestashop\ModuleLibMboInstaller\DependencyBuilder;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 use PrestaShop\PrestaShop\Core\Module\ModuleManager;
 
@@ -14,11 +15,14 @@ class CloudSyncWrapper
     protected $moduleManager;
     /** @var Installer */
     protected $accountInstaller;
+    /** @var DependencyBuilder */
+    protected $mboInstaller;
 
     public function __construct()
     {
         $this->moduleManager = ModuleManagerBuilder::getInstance()->build();
         $this->accountInstaller = new Installer('5.0');
+        $this->mboInstaller = new DependencyBuilder(Module::getInstanceByName('paypal'));
     }
     public function installModules()
     {
@@ -52,5 +56,15 @@ class CloudSyncWrapper
         $eventbusModule = Module::getInstanceByName('ps_eventbus');
 
         return $eventbusModule->getService('PrestaShop\Module\PsEventbus\Service\PresenterService');
+    }
+
+    public function areDependenciesMet()
+    {
+        return $this->mboInstaller->areDependenciesMet();
+    }
+
+    public function getDependencies()
+    {
+        return $this->mboInstaller->handleDependencies();
     }
 }

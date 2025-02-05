@@ -123,7 +123,6 @@ class PrestaShopCloudSyncForm implements FormInterface
             $this->configuration->set(PaypalConfigurations::CLOUDSYNC_ENABLED, 0);
         } else {
             $this->configuration->set(PaypalConfigurations::CLOUDSYNC_ENABLED, 1);
-            (new CloudSyncWrapper())->installModules();
         }
 
         return true;
