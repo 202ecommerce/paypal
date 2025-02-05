@@ -24,10 +24,11 @@ class CloudSyncWrapper
         $this->accountInstaller = new Installer('5.0');
         $this->mboInstaller = new DependencyBuilder(Module::getInstanceByName('paypal'));
     }
+
     public function installModules()
     {
-        $this->moduleManager->install("ps_eventbus");
-        $this->moduleManager->enable("ps_eventbus");
+        $this->moduleManager->install('ps_eventbus');
+        $this->moduleManager->enable('ps_eventbus');
         $this->accountInstaller->install();
     }
 

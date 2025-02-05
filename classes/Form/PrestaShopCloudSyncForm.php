@@ -32,7 +32,6 @@ use Matrix\Exception;
 use Module;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\PrestaShopCloudSync\CloudSyncView;
-use PaypalAddons\classes\PrestaShopCloudSync\CloudSyncWrapper;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
@@ -93,9 +92,9 @@ class PrestaShopCloudSyncForm implements FormInterface
                     'name' => 'cloudSyncSection',
                     'type' => 'variable-set',
                     'set' => [
-                        'html' => $this->initCloudSync()
+                        'html' => $this->initCloudSync(),
                     ],
-                ]
+                ],
             ],
             'submit' => [
                 'title' => $this->module->l('Save', $this->className),

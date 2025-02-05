@@ -5,8 +5,6 @@ namespace PaypalAddons\classes\PrestaShopCloudSync;
 use Context;
 use Module;
 use PayPal;
-use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use PrestaShop\PrestaShop\Core\Module\ModuleManager;
 
 class CloudSyncView
 {
@@ -37,7 +35,7 @@ class CloudSyncView
         $tpl = $this->context->smarty->createTemplate(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/cloud-sync.tpl');
         $tpl->assign('module_dir', _PS_MODULE_DIR_ . $this->module->name);
         $tpl->assign('urlAccountsCdn', $this->cloudSyncWrapper->getPsAccountsService()->getAccountsCdn());
-        $tpl->assign('urlCloudsync', "https://assets.prestashop3.com/ext/cloudsync-merchant-sync-consent/latest/cloudsync-cdc.js");
+        $tpl->assign('urlCloudsync', 'https://assets.prestashop3.com/ext/cloudsync-merchant-sync-consent/latest/cloudsync-cdc.js');
         $tpl->assign(
             'JSvars',
             [
