@@ -937,8 +937,24 @@ class PayPal extends \PaymentModule implements WidgetInterface
             )
         );
         $paymentOption->setModuleName('paypal_venmo');
-        $paymentOption->setAdditionalInformation($this->initVenmoButton()->render());
         $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
+
+        if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
+            $paymentOption->setAdditionalInformation($this->initVenmoButton()->render());
+        } else {
+            $paymentOption->setAction(
+                $this->context->link->getModuleLink(
+                    $this->name,
+                    'ecInit',
+                    [
+                        'credit_card' => '0',
+                        'methodType' => 'EC',
+                        'apmMethod' => 'venmo',
+                    ],
+                    true
+                )
+            );
+        }
 
         return $paymentOption;
     }
