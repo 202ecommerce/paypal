@@ -61,6 +61,8 @@ $paragraph-margin-bottom: .5rem;
 
 // Links
 $link-color: $info !default;
+$link-decoration: underline !default;
+$link-hover-color: darken($link-color, 15%) !default;
 
 // Icons
 $material-icons-font-path: '~material-icons/iconfont/' !default;
