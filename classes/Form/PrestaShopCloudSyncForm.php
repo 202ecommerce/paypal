@@ -28,7 +28,7 @@
 namespace PaypalAddons\classes\Form;
 
 use Context;
-use Matrix\Exception;
+use Exception;
 use Module;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\PrestaShopCloudSync\CloudSyncView;
