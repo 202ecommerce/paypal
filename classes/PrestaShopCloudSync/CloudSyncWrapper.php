@@ -5,7 +5,7 @@ namespace PaypalAddons\classes\PrestaShopCloudSync;
 use Module;
 use PaypalAddons\PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PaypalAddons\PrestaShop\PsAccountsInstaller\Installer\Installer;
-use Prestashop\ModuleLibMboInstaller\DependencyBuilder;
+use PaypalAddons\Prestashop\ModuleLibMboInstaller\DependencyBuilder;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 use PrestaShop\PrestaShop\Core\Module\ModuleManager;
 
