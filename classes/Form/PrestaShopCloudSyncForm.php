@@ -148,7 +148,7 @@ class PrestaShopCloudSyncForm implements FormInterface
             if (isset($e)) {
                 ProcessLoggerHandler::openLogger();
                 ProcessLoggerHandler::logError(
-                    '[PrestaShopCloudSyncForm] ' . $e->getMessage(),
+                    '[PrestaShopCloudSyncForm] ' . $e->getMessage()
                 );
                 ProcessLoggerHandler::closeLogger();
             }
