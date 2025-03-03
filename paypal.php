@@ -749,6 +749,17 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return false;
     }
 
+    public function isBraintreeEnabled()
+    {
+        $braintree = Module::getInstanceByName('braintreeofficial');
+
+        if (false === Validate::isLoadedObject($braintree)) {
+            return false;
+        }
+
+        return $braintree->isEnabledForShopContext();
+    }
+
     /**
      * @param $params
      *
@@ -813,18 +824,28 @@ class PayPal extends \PaymentModule implements WidgetInterface
                         $payments_options = array_merge($payments_options, $paymentOptionsEc);
                     }
 
-                    if ($method->isConfigured() && (int) Configuration::get('PAYPAL_API_CARD') && (in_array($isoCountryDefault, $this->countriesApiCartUnavailable) == false)) {
-                        $payment_option = new PaymentOption();
-                        $action_text = $this->l('Pay with credit or debit card');
-                        $payment_option->setCallToActionText($action_text);
-                        $payment_option->setModuleName('paypal_plus_mb');
-                        try {
-                            $this->context->smarty->assign('path', $this->_path);
-                            $payment_option->setAdditionalInformation($this->context->smarty->fetch('module:paypal/views/templates/front/payment_mb.tpl'));
-                        } catch (Exception $e) {
-                            return;
+                    if ($method->isConfigured()) {
+                        if ((int) Configuration::get('PAYPAL_API_CARD')) {
+                            if (false === in_array($isoCountryDefault, $this->countriesApiCartUnavailable)) {
+                                if (false === $this->isBraintreeEnabled()) {
+                                    $payment_option = new PaymentOption();
+                                    $action_text = $this->l('Pay with credit or debit card');
+                                    $payment_option->setCallToActionText($action_text);
+                                    $payment_option->setModuleName('paypal_plus_mb');
+                                    try {
+                                        $this->context->smarty->assign('path', $this->_path);
+                                        $payment_option->setAdditionalInformation(
+                                            $this->context->smarty->fetch(
+                                                'module:paypal/views/templates/front/payment_mb.tpl'
+                                            )
+                                        );
+                                    } catch (Exception $e) {
+                                        return;
+                                    }
+                                    $payments_options[] = $payment_option;
+                                }
+                            }
                         }
-                        $payments_options[] = $payment_option;
                     }
                 }
 
@@ -843,7 +864,9 @@ class PayPal extends \PaymentModule implements WidgetInterface
             }
 
             if ($this->initAcdcFunctionality()->isAvailable() && $this->initAcdcFunctionality()->isEnabled()) {
-                $payments_options[] = $this->buildAcdcPaymentOption($params);
+                if (false === $this->isBraintreeEnabled()) {
+                    $payments_options[] = $this->buildAcdcPaymentOption($params);
+                }
             }
 
             if ($this->paypal_method == 'PPP') {
@@ -914,8 +937,24 @@ class PayPal extends \PaymentModule implements WidgetInterface
             )
         );
         $paymentOption->setModuleName('paypal_venmo');
-        $paymentOption->setAdditionalInformation($this->initVenmoButton()->render());
         $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
+
+        if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
+            $paymentOption->setAdditionalInformation($this->initVenmoButton()->render());
+        } else {
+            $paymentOption->setAction(
+                $this->context->link->getModuleLink(
+                    $this->name,
+                    'ecInit',
+                    [
+                        'credit_card' => '0',
+                        'methodType' => 'EC',
+                        'apmMethod' => 'venmo',
+                    ],
+                    true
+                )
+            );
+        }
 
         return $paymentOption;
     }
