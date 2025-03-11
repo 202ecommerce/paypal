@@ -20,14 +20,14 @@ jobs:
 
             # Add vendor folder in cache to make next builds faster
             - name: Cache vendor folder
-              uses: actions/cache@v1
+              uses: actions/cache@v3
               with:
                   path: vendor
                   key: php-${{ hashFiles('composer.lock') }}
 
             # Add composer local folder in cache to make next builds faster
             - name: Cache composer folder
-              uses: actions/cache@v1
+              uses: actions/cache@v3
               with:
                   path: ~/.composer/cache
                   key: php-composer-cache

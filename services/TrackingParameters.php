@@ -62,6 +62,11 @@ class TrackingParameters
 
     public function getPaypalCarriersByCountry($isoCountry = null)
     {
+        if (!$isoCountry) {
+            $isoCountry = (new Country(Configuration::get('PS_COUNTRY_DEFAULT')))->iso_code;
+        }
+
+        $isoCountry = strtoupper($isoCountry);
         $carriers = [
             [
                 'key' => Map::CARRIER_OTHER,
