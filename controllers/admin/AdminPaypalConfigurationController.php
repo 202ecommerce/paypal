@@ -40,6 +40,7 @@ use PaypalAddons\classes\Form\FeatureChecklistForm;
 use PaypalAddons\classes\Form\FormInstallment;
 use PaypalAddons\classes\Form\FormInstallmentMessaging;
 use PaypalAddons\classes\Form\OrderStatusForm;
+use PaypalAddons\classes\Form\PrestaShopCloudSyncForm;
 use PaypalAddons\classes\Form\ShortcutConfigurationForm;
 use PaypalAddons\classes\Form\TechnicalChecklistForm;
 use PaypalAddons\classes\Form\TrackingParametersForm;
@@ -94,6 +95,7 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
         $this->forms['shortcutConfigurationForm'] = new ShortcutConfigurationForm();
         $this->forms['technicalChecklistForm'] = new TechnicalChecklistForm();
         $this->forms['featureChecklistForm'] = new FeatureChecklistForm();
+        $this->forms['cloudSyncForm'] = new PrestaShopCloudSyncForm();
     }
 
     public function setMedia($isNewTheme = false)
