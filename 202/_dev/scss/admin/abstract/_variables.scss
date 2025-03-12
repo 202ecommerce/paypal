@@ -61,6 +61,8 @@ $paragraph-margin-bottom: .5rem;
 
 // Links
 $link-color: $info !default;
+$link-decoration: underline !default;
+$link-hover-color: darken($link-color, 15%) !default;
 
 // Icons
 $material-icons-font-path: '~material-icons/iconfont/' !default;
@@ -135,6 +137,8 @@ $color-swatch-height: $color-swatch-width !default;
 
 // Modals
 $modal-lg: 1125px !default;
+$zindex-modal-backdrop:             1090 !default;
+$zindex-modal:                      1091 !default;
 
 // Badges
 $badge-font-size: 13px !default;

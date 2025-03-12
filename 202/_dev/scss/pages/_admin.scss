@@ -27,3 +27,23 @@
 #messaging-configurator div  {
   box-sizing: initial;
 }
+
+body:not(.ps-bo-rebrand) {
+  background: $body-bg !important;
+
+  #main {
+    background: transparent;
+
+    &:not(.loaded) {
+      &::before {
+        content: '';
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        z-index: 1;
+        background: $body-bg;
+      }
+    }
+  }
+}

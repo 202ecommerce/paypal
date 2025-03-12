@@ -42,6 +42,10 @@
 </p>
 
 <p>
+  {{l s='[b]PayPal Redirect:[/b] This mode will only be applied to eligible payments; other payment methods offered by the PayPal module will be displayed in context.' mod='paypal'}|paypalreplace:[]}
+</p>
+
+<p>
     {{l s='[b]PayPal Express Checkout shortcuts[/b] allow a faster checkout for your buyers. PayPal automatically provides you with the client\'s shipping and billing information.' mod='paypal'}|paypalreplace:[]}
 </p>
 
