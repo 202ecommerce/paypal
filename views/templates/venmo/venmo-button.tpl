@@ -40,12 +40,20 @@
 
         var venmoButton = new Venmo({
             container: '[paypal-venmo-button-container]',
-            controller: '{/literal}{Context::getContext()->link->getModuleLink('paypal', 'ScInit')|addslashes}{literal}',
-            validationController: '{/literal}{Context::getContext()->link->getModuleLink('paypal', 'ecValidation')|addslashes}{literal}'
+            controller: '{/literal}{Context::getContext()->link->getModuleLink('paypal', 'ScInit') nofilter}{literal}',
+            validationController: '{/literal}{Context::getContext()->link->getModuleLink('paypal', 'ecValidation') nofilter}{literal}'
         });
         window.venmoObj = venmoButton;
 
         venmoButton.initButton();
+        venmoButton.hideElementTillPaymentOptionChecked(
+          '[data-module-name="paypal_venmo"]',
+          '#payment-confirmation'
+        );
+        venmoButton.showElementIfPaymentOptionChecked(
+          '[data-module-name="paypal_venmo"]',
+          '[paypal-venmo-button-container]'
+        );
     }
 
     waitPaypalVenmoSDKIsLoaded();
