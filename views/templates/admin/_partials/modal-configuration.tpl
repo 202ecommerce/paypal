@@ -98,6 +98,15 @@
                 }
             </div>
           {/if}
+        {if isset($cloudSyncForm)}
+          <div class="d-none" data-step-content>
+            {include
+            file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
+            form=$cloudSyncForm
+            isModal=true
+            }
+          </div>
+        {/if}
       </div>
      </div>
    </div>

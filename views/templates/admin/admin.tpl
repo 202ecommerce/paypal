@@ -105,5 +105,13 @@
       }
   {/if}
 
+  {* PrestaShop CloudSync section *}
+  {if isset($cloudSyncForm)}
+    {include
+    file=$moduleFullDir|cat:"/views/templates/admin/_partials/section.tpl"
+    form=$cloudSyncForm
+    }
+  {/if}
+
 
 {/if}
