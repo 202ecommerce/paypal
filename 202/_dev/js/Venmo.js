@@ -136,6 +136,13 @@ class Venmo {
     );
   }
 
+  hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector) {
+    Tools.hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector);
+  }
+
+  showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector) {
+    Tools.showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector);
+  }
 
 }
 
