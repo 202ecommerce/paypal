@@ -178,6 +178,9 @@ export const Tools = {
   },
 
   showElementsIfChecked() {
+    if (window.paypalToolsShowElemenList === undefined) {
+      return;
+    }
     Object.keys(window.paypalToolsShowElemenList).forEach(function(showElementSelector) {
       let isShow = false;
       window.paypalToolsShowElemenList[showElementSelector].forEach(function(elem) {
@@ -196,6 +199,9 @@ export const Tools = {
   },
 
   hideElementTillChecked() {
+    if (window.paypalToolsHiddenElemenList === undefined) {
+      return;
+    }
     Object.keys(window.paypalToolsHiddenElemenList).forEach(function(hideElementSelector) {
       let isHide = false;
       const hideElement = document.querySelector(hideElementSelector);
