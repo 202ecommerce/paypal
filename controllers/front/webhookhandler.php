@@ -74,6 +74,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
         }
 
         try {
+            $this->setShopContext();
             if ($this->requestIsValid()) {
                 $webhookEvent = new WebhookEvent();
                 $webhookEvent->fromArray($this->getRequestData());
@@ -193,5 +194,20 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
         }
 
         return new PaypalOrder();
+    }
+
+    protected function setShopContext()
+    {
+        $event = new WebhookEvent();
+        $event->fromArray($this->getRequestData());
+        $cart = new Cart($event->getCartId());
+
+        if (false === Validate::isLoadedObject($cart)) {
+            return;
+        }
+
+        $shop = new Shop($cart->id_shop);
+        $this->context->shop = $shop;
+        Shop::setContext(Shop::CONTEXT_SHOP, $shop->id);
     }
 }
