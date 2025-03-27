@@ -310,6 +310,15 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
             return $response;
         }
+        if ($getOrderResponse->getStatus() === PayPal::PAYPAL_ISSUE_PAYER_ACTION_REQUIRED) {
+            $response->setPayerAction($getOrderResponse->getLink('payer-action'));
+            $response->setError(
+                (new Error())->setErrorCode(PaypalException::PAYER_ACTION_REQUIRED)
+            );
+            $response->setSuccess(false);
+
+            return $response;
+        }
         // Make sure that the order is eligible for capture when the buyer was passed by security customer authentication
         if (!empty($getOrderResponse->getData()->result->payment_source->card->authentication_result)) {
             $authResult = $getOrderResponse->getData()->result->payment_source->card->authentication_result;
@@ -373,6 +382,9 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 ->setPaymentTool($getOrderResponse->getPaymentTool())
                 ->setMethod($getOrderResponse->getMethod())
                 ->setDateTransaction($getOrderResponse->getDateTransaction());
+        }
+        if ($response->isSuccess() === false) {
+            return $response;
         }
 
         $response->setScaState($scaState);
