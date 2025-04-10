@@ -826,28 +826,22 @@ class PayPal extends \PaymentModule implements WidgetInterface
                         $payments_options = array_merge($payments_options, $paymentOptionsEc);
                     }
 
-                    if ($method->isConfigured()) {
-                        if ((int) Configuration::get('PAYPAL_API_CARD')) {
-                            if (false === in_array($isoCountryDefault, $this->countriesApiCartUnavailable)) {
-                                if (false === $this->isBraintreeEnabled()) {
-                                    $payment_option = new PaymentOption();
-                                    $action_text = $this->l('Pay with credit or debit card');
-                                    $payment_option->setCallToActionText($action_text);
-                                    $payment_option->setModuleName('paypal_plus_mb');
-                                    try {
-                                        $this->context->smarty->assign('path', $this->_path);
-                                        $payment_option->setAdditionalInformation(
-                                            $this->context->smarty->fetch(
-                                                'module:paypal/views/templates/front/payment_mb.tpl'
-                                            )
-                                        );
-                                    } catch (Exception $e) {
-                                        return;
-                                    }
-                                    $payments_options[] = $payment_option;
-                                }
-                            }
+                    if ($method->isConfigured() && (int) Configuration::get('PAYPAL_API_CARD') && false === in_array($isoCountryDefault, $this->countriesApiCartUnavailable) && false === $this->isBraintreeEnabled()) {
+                        $payment_option = new PaymentOption();
+                        $action_text = $this->l('Pay with credit or debit card');
+                        $payment_option->setCallToActionText($action_text);
+                        $payment_option->setModuleName('paypal_plus_mb');
+                        try {
+                            $this->context->smarty->assign('path', $this->_path);
+                            $payment_option->setAdditionalInformation(
+                                $this->context->smarty->fetch(
+                                    'module:paypal/views/templates/front/payment_mb.tpl'
+                                )
+                            );
+                        } catch (Exception $e) {
+                            return;
                         }
+                        $payments_options[] = $payment_option;
                     }
                 }
 
@@ -855,20 +849,16 @@ class PayPal extends \PaymentModule implements WidgetInterface
         }
 
         if ($method->isConfigured()) {
-            if ($bnplOption->isEnable() && $bnplOption->displayOnPaymentStep()) {
-                if ($bnplAvailabilityManager->isEligibleCountryConfiguration() && $bnplAvailabilityManager->isEligibleContext()) {
-                    $payments_options[] = $this->buildBnplPaymentOption($params);
-                }
+            if ($bnplOption->isEnable() && $bnplOption->displayOnPaymentStep() && $bnplAvailabilityManager->isEligibleCountryConfiguration() && $bnplAvailabilityManager->isEligibleContext()) {
+                $payments_options[] = $this->buildBnplPaymentOption($params);
             }
 
             if ($venmoFunctionality->isAvailable() && $venmoFunctionality->isEnabled() && $venmoFunctionality->isEligibleContext($this->context)) {
                 $payments_options[] = $this->buildVenmoPaymentOption($params);
             }
 
-            if ($this->initAcdcFunctionality()->isAvailable() && $this->initAcdcFunctionality()->isEnabled()) {
-                if (false === $this->isBraintreeEnabled()) {
-                    $payments_options[] = $this->buildAcdcPaymentOption($params);
-                }
+            if ($this->initAcdcFunctionality()->isAvailable() && $this->initAcdcFunctionality()->isEnabled() && false === $this->isBraintreeEnabled()) {
+                $payments_options[] = $this->buildAcdcPaymentOption($params);
             }
 
             if ($this->paypal_method == 'PPP') {
