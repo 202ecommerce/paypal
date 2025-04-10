@@ -59,6 +59,8 @@ class PaypalException extends Exception
 
     const APPROVAL_LINK_INVALID = 1010;
 
+    const PAYER_ACTION_REQUIRED = 1011;
+
     /** @var string Long detailed error message */
     private $message_long;
 

@@ -200,4 +200,17 @@ class WebhookEvent extends \PaypalAddons\classes\API\Model\PayPalModel
     {
         return $this->resource;
     }
+
+    public function getCartId()
+    {
+        $parts = explode('_', $this->getResource()->__get('custom_id'));
+
+        foreach ($parts as $part) {
+            if (strpos($part, 'Cart') === 0) {
+                return (int) trim(explode(':', $part)[1]);
+            }
+        }
+
+        return null;
+    }
 }

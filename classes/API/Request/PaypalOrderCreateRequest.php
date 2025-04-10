@@ -69,11 +69,7 @@ class PaypalOrderCreateRequest extends RequestAbstract
             } elseif ($exec->statusCode == 204) {
                 $response->setSuccess(true);
             } else {
-                $error = new Error();
-                $resultDecoded = json_decode($exec->message);
-                $error->setMessage($resultDecoded->message);
-                $response->setSuccess(false)
-                    ->setError($error);
+                $response->setSuccess(false)->setData($exec);
             }
         } catch (PaypalException $e) {
             $error = new Error();

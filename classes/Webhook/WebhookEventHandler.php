@@ -107,14 +107,6 @@ class WebhookEventHandler
         PaypalContext::getContext()->set('skipHandleHookActionOrderStatusUpdate', true);
 
         foreach ($orders as $order) {
-            //If there are several shops, then PayPal sends webhook event to each shop. The module should
-            //handle the event once.
-            if ($this->isMultishop()) {
-                if ($order->id_shop != $this->context->shop->id) {
-                    return false;
-                }
-            }
-
             ProcessLoggerHandler::logInfo(
                 $msg,
                 empty($event->getResource()->id) ? '' : $event->getResource()->id,
