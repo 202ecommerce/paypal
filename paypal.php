@@ -141,6 +141,8 @@ class PayPal extends \PaymentModule implements WidgetInterface
 
     const CAPTURE_STATUS_FAILED = 'FAILED';
 
+    const PAYPAL_ISSUE_PAYER_ACTION_REQUIRED = 'PAYER_ACTION_REQUIRED';
+
     public static $dev = true;
     public $express_checkout;
     public $message;
@@ -749,6 +751,17 @@ class PayPal extends \PaymentModule implements WidgetInterface
         return false;
     }
 
+    public function isBraintreeEnabled()
+    {
+        $braintree = Module::getInstanceByName('braintreeofficial');
+
+        if (false === Validate::isLoadedObject($braintree)) {
+            return false;
+        }
+
+        return $braintree->isEnabledForShopContext();
+    }
+
     /**
      * @param $params
      *
@@ -813,14 +826,18 @@ class PayPal extends \PaymentModule implements WidgetInterface
                         $payments_options = array_merge($payments_options, $paymentOptionsEc);
                     }
 
-                    if ($method->isConfigured() && (int) Configuration::get('PAYPAL_API_CARD') && (in_array($isoCountryDefault, $this->countriesApiCartUnavailable) == false)) {
+                    if ($method->isConfigured() && (int) Configuration::get('PAYPAL_API_CARD') && false === in_array($isoCountryDefault, $this->countriesApiCartUnavailable) && false === $this->isBraintreeEnabled()) {
                         $payment_option = new PaymentOption();
                         $action_text = $this->l('Pay with credit or debit card');
                         $payment_option->setCallToActionText($action_text);
                         $payment_option->setModuleName('paypal_plus_mb');
                         try {
                             $this->context->smarty->assign('path', $this->_path);
-                            $payment_option->setAdditionalInformation($this->context->smarty->fetch('module:paypal/views/templates/front/payment_mb.tpl'));
+                            $payment_option->setAdditionalInformation(
+                                $this->context->smarty->fetch(
+                                    'module:paypal/views/templates/front/payment_mb.tpl'
+                                )
+                            );
                         } catch (Exception $e) {
                             return;
                         }
@@ -832,17 +849,15 @@ class PayPal extends \PaymentModule implements WidgetInterface
         }
 
         if ($method->isConfigured()) {
-            if ($bnplOption->isEnable() && $bnplOption->displayOnPaymentStep()) {
-                if ($bnplAvailabilityManager->isEligibleCountryConfiguration() && $bnplAvailabilityManager->isEligibleContext()) {
-                    $payments_options[] = $this->buildBnplPaymentOption($params);
-                }
+            if ($bnplOption->isEnable() && $bnplOption->displayOnPaymentStep() && $bnplAvailabilityManager->isEligibleCountryConfiguration() && $bnplAvailabilityManager->isEligibleContext()) {
+                $payments_options[] = $this->buildBnplPaymentOption($params);
             }
 
             if ($venmoFunctionality->isAvailable() && $venmoFunctionality->isEnabled() && $venmoFunctionality->isEligibleContext($this->context)) {
                 $payments_options[] = $this->buildVenmoPaymentOption($params);
             }
 
-            if ($this->initAcdcFunctionality()->isAvailable() && $this->initAcdcFunctionality()->isEnabled()) {
+            if ($this->initAcdcFunctionality()->isAvailable() && $this->initAcdcFunctionality()->isEnabled() && false === $this->isBraintreeEnabled()) {
                 $payments_options[] = $this->buildAcdcPaymentOption($params);
             }
 

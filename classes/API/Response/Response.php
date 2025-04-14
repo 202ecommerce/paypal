@@ -83,4 +83,18 @@ class Response
 
         return $this;
     }
+
+    public function getLink($type)
+    {
+        if (empty($this->data->result->links)) {
+            return null;
+        }
+        foreach ($this->data->result->links as $link) {
+            if ($link->rel === $type) {
+                return $link->href;
+            }
+        }
+
+        return null;
+    }
 }

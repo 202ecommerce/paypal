@@ -28,6 +28,7 @@
 ]|classnames}" data-form-configuration {block name='form_attributes'}{/block}>
   {block name='form_content'}
     {foreach from=$form.fields item=field}
+      {if $field.type|default:'' === 'variable-set'}{continue}{/if}
       {if $field.name|default:false}
         {block name='form_field'}
           {include file="../form-fields.tpl" field=$field}

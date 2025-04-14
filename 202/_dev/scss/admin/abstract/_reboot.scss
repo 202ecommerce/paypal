@@ -84,8 +84,14 @@
     padding: unset;
   }
 
-  a {
-    color: $link-color;
+  @at-root body & {
+    a {
+      color: $link-color;
+
+      &:hover {
+        color: $link-hover-color;
+      }
+    }
   }
 }
 

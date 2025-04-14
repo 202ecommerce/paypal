@@ -52,6 +52,7 @@ use PaypalAddons\classes\API\Response\ResponseVaultPaymentToken;
 use PaypalAddons\classes\API\Response\ResponseWebhookEventDetail;
 use PaypalAddons\classes\API\Response\ResponseWebhookEventList;
 use PaypalAddons\classes\Constants\Vaulting;
+use PaypalAddons\classes\Exception\PayerActionRequired;
 use PaypalAddons\classes\PUI\SignupLink;
 use PaypalAddons\classes\Shortcut\ShortcutCart;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
@@ -257,6 +258,11 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $response = $this->completePayment();
 
         if ($response->isSuccess() === false) {
+            if ($response->getError()->getCode() === PaypalException::PAYER_ACTION_REQUIRED) {
+                if ($response->getPayerAction()) {
+                    throw new PayerActionRequired($response->getPayerAction(), 'Payer action required', PaypalException::PAYER_ACTION_REQUIRED);
+                }
+            }
             throw new Exception($response->getError()->getMessage(), $response->getError()->getCode());
         }
 
@@ -301,6 +307,15 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 ->setMessage('Payment ID is invalid');
             $response->setError($error)->setSuccess(false);
             $response->setScaState(PayPal::SCA_STATE_FAILED);
+
+            return $response;
+        }
+        if ($getOrderResponse->getStatus() === PayPal::PAYPAL_ISSUE_PAYER_ACTION_REQUIRED) {
+            $response->setPayerAction($getOrderResponse->getLink('payer-action'));
+            $response->setError(
+                (new Error())->setErrorCode(PaypalException::PAYER_ACTION_REQUIRED)
+            );
+            $response->setSuccess(false);
 
             return $response;
         }
@@ -367,6 +382,9 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 ->setPaymentTool($getOrderResponse->getPaymentTool())
                 ->setMethod($getOrderResponse->getMethod())
                 ->setDateTransaction($getOrderResponse->getDateTransaction());
+        }
+        if ($response->isSuccess() === false) {
+            return $response;
         }
 
         $response->setScaState($scaState);

@@ -57,4 +57,10 @@ window.addEventListener('load', () => {
       ))
     );
   }
+
+  document.getElementById('main').classList.add('loaded');
+});
+
+$(() => {
+  document.body.classList.add("no-smb-reskin");
 });

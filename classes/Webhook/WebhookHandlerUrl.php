@@ -43,7 +43,8 @@ class WebhookHandlerUrl
             'webhookhandler',
             [],
             null,
-            (int) Configuration::get('PS_LANG_DEFAULT')
+            (int) Configuration::get('PS_LANG_DEFAULT'),
+            (int) Configuration::get('PS_SHOP_DEFAULT')
         );
         $url = str_replace('http://', 'https://', $url);
 
@@ -57,7 +58,10 @@ class WebhookHandlerUrl
             'webhookhandler',
             [
                 'checkAvailability' => 1,
-            ]
+            ],
+            null,
+            (int) Configuration::get('PS_LANG_DEFAULT'),
+            (int) Configuration::get('PS_SHOP_DEFAULT')
         );
         $url = str_replace('http://', 'https://', $url);
 
