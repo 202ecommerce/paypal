@@ -48,12 +48,10 @@ class FileIntegrityStubHandler extends AbstractStubHandler
         ];
         $respositoryInfo = $this->getRepositoryInfo();
         foreach ($respositoryInfo as $repository) {
-            if (isset($repository['tag_name'])) {
-                if ($repository['tag_name'] == $this->getStub()->getParameters()->getModuleVersion()) {
-                    $differences = $this->getDifferences($repository);
-                    if(!empty($differences)) {
-                        return array_merge($differences, $response);
-                    }
+            if (isset($repository['tag_name']) && $repository['tag_name'] == $this->getStub()->getParameters()->getModuleVersion()) {
+                $differences = $this->getDifferences($repository);
+                if(!empty($differences)) {
+                    return array_merge($differences, $response);
                 }
             }
         }

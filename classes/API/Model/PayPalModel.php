@@ -167,7 +167,7 @@ class PayPalModel
      */
     public function fromArray($arr)
     {
-        if (!empty($arr)) {
+        if (!empty($arr) || !is_array($arr)) {
             // Iterate over each element in array
             foreach ($arr as $k => $v) {
                 // If the value is an array, it means, it is an object after conversion
