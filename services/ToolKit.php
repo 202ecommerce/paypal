@@ -30,6 +30,10 @@ namespace PaypalAddons\services;
 use Exception;
 use Throwable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ToolKit
 {
     public function rrmdir($dir)
