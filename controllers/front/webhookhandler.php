@@ -85,7 +85,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                     header($_SERVER['SERVER_PROTOCOL'] . ' 422 Unprocessable Content', true, 422);
                 }
             } else {
-                $paypalOrder = $this->initPaypalOrder($this->getRequest());
+                $paypalOrder = $this->initPaypalOrder($this->getRequestData());
 
                 ProcessLoggerHandler::openLogger();
                 ProcessLoggerHandler::logError(
