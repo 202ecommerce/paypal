@@ -971,3 +971,4 @@ $_MODULE['<{paypal}prestashop>cloud-sync_745b3c9d7d8efb34b1a3e21edc3a9a63'] = 'i
 $_MODULE['<{paypal}prestashop>cloud-sync_e2ca13e6261a701aac6125c620ff8867'] = 'modules : la liste des modules installés sur votre boutique PrestaShop';
 $_MODULE['<{paypal}prestashop>cloud-sync_61ee3ec593d6c22fe48c0e2adcc07f4d'] = 'thèmes : le thème installé sur votre boutique PrestaShop';
 $_MODULE['<{paypal}prestashop>cloud-sync_a2186209d5a24827c4779bf9527ef351'] = 'devises : les devises installées sur votre boutique PrestaShop';
+$_MODULE['<{paypal}prestashop>onboarding-complete-message_4ddaccf882fd06ba99db78c109886dd3'] = 'L\'intégration est terminée';

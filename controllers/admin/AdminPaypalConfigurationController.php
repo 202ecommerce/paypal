@@ -118,7 +118,19 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
 
     public function initContent()
     {
+        if (Tools::getValue('action') === 'onboarding-completed') {
+            return $this->showOnboardingCompletedMessage();
+        }
+
         $this->content .= $this->renderConfiguration();
+        parent::initContent();
+    }
+
+    protected function showOnboardingCompletedMessage()
+    {
+        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'onboarding-complete-message.tpl');
+        $this->display_footer = false;
+        $this->display_header = false;
         parent::initContent();
     }
 
