@@ -64,12 +64,15 @@ class Banner
 
     /** @var string */
     protected $pageTypeAttribute;
+    /** @var BuyerCountry */
+    protected $buyerCountry;
 
     public function __construct()
     {
         $this->module = Module::getInstanceByName('paypal');
         $this->setTemplate('module:paypal/views/templates/installmentBanner/banner.tpl');
         $this->method = AbstractMethodPaypal::load();
+        $this->buyerCountry = new BuyerCountry();
     }
 
     public function render()
@@ -122,6 +125,7 @@ class Banner
         $configReturn = $config[$placement];
         $configReturn['amount'] = $this->amount;
         $configReturn['locale'] = str_replace('-', '_', \Context::getContext()->language->locale);
+        $configReturn['buyercountry'] = strtoupper($this->buyerCountry->get());
 
         return $configReturn;
     }
