@@ -41,6 +41,7 @@
     data-pp-style-ratio="{$paypalmessenging.ratio|escape:'htmlall':'UTF-8'}"
  {/if}
  data-pp-amount="{$paypalmessenging.amount|escape:'htmlall':'UTF-8'}"
+ data-pp-buyercountry="{$paypalmessenging.buyercountry|escape:'htmlall':'UTF-8'}"
  {if ($paypalmessenging.placement) == 'home'}
    data-pp-placement="homepage"
  {else}
