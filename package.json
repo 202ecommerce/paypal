@@ -56,7 +56,7 @@
         "vanilla-lazyload": "^15.2.0",
         "webpack": "^5.96.1",
         "webpack-cli": "^5.0.1",
-        "webpack-dev-server": "^4.11.1",
+        "webpack-dev-server": "^5.2.1",
         "webpack-remove-empty-scripts": "^1.0.4"
     },
     "dependencies": {
