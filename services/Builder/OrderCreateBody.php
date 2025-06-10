@@ -35,6 +35,7 @@ use Address;
 use Configuration;
 use Context;
 use Customer;
+use Hook;
 use Module;
 use Paypal;
 use PaypalAddons\classes\AbstractMethodPaypal;
@@ -378,6 +379,14 @@ class OrderCreateBody implements BuilderInterface
         if (false == empty($name)) {
             $shippingInfo['name'] = $name;
         }
+
+        Hook::exec(
+            'actionPaypalShippingInfo',
+            [
+                'shippingInfo' => &$shippingInfo,
+                'cart' => $this->context->cart,
+            ]
+        );
 
         return $shippingInfo;
     }
