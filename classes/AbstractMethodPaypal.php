@@ -585,6 +585,14 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             'displayMode' => 'minibrowser',
             'sellerNonce' => $this->getSellerNonce($sandbox),
         ];
+        $params['returnToPartnerUrl'] = Context::getContext()->link->getAdminLink(
+            'AdminPaypalConfiguration',
+            true,
+            [],
+            [
+                'action' => 'onboarding-completed',
+            ]
+        );
 
         if ($vaultingFunctionality->isAvailable()) {
             $params['features'] = 'PAYMENT,REFUND,VAULT,BILLING_AGREEMENT';

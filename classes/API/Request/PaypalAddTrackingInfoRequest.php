@@ -30,12 +30,12 @@ namespace PaypalAddons\classes\API\Request;
 use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Client\HttpClient;
-use PaypalAddons\classes\API\ExtensionSDK\AddTrackingInfo;
+use PaypalAddons\classes\API\ExtensionSDK\Order\OrdersAddTrackingInfoRequest;
 use PaypalAddons\classes\API\HttpAdoptedResponse;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\PaypalException;
-use PaypalAddons\services\Builder\AddTrackingInfoRequestBuilder;
+use PaypalAddons\services\Builder\OrderAddTrackingInfoBuilder;
 use Throwable;
 
 if (!defined('_PS_VERSION_')) {
@@ -58,7 +58,7 @@ class PaypalAddTrackingInfoRequest extends RequestAbstract
         $response = $this->initResponse();
 
         try {
-            $sendTrackingInfoRequest = new AddTrackingInfo($this->initBuilder());
+            $sendTrackingInfoRequest = new OrdersAddTrackingInfoRequest($this->paypalOrder, $this->initBuilder());
             $exec = $this->client->execute($sendTrackingInfoRequest);
 
             if ($exec instanceof HttpAdoptedResponse) {
@@ -108,6 +108,6 @@ class PaypalAddTrackingInfoRequest extends RequestAbstract
 
     protected function initBuilder()
     {
-        return new AddTrackingInfoRequestBuilder($this->paypalOrder);
+        return new OrderAddTrackingInfoBuilder($this->paypalOrder);
     }
 }

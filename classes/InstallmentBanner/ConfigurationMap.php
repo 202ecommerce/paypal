@@ -54,6 +54,8 @@ class ConfigurationMap
 
     const MESSENGING_CONFIG = 'PAYPAL_INSTALLMENT_MESSAGING_CONFIG';
 
+    const MESSAGING_BUYER_COUNTRY = 'PAYPAL_INSTALLMENT_MESSAGING_BUYER_COUNTRY';
+
     const COLOR_BLUE = 'blue';
 
     const COLOR_GRAY = 'gray';
