@@ -531,6 +531,7 @@ $_MODULE['<{paypal}prestashop>forminstallment_1ffd9e753c8054cc61456ac7fac1ac89']
 $_MODULE['<{paypal}prestashop>forminstallment_d508fe45cecaf653904a0e774084bb5c'] = 'blanc';
 $_MODULE['<{paypal}prestashop>forminstallment_4e680f2c69e04d0cb666ae4a1a69d078'] = 'monochrome';
 $_MODULE['<{paypal}prestashop>forminstallment_276be00a5232f6cd17555f7d2af1418d'] = 'échelle de gris';
+$_MODULE['<{paypal}prestashop>forminstallmentmessaging_56bd7b4a119c2f5a13e60742af161bf8'] = 'Pays de l\'acheteur';
 $_MODULE['<{paypal}prestashop>installmentdisclaimer_e2f76b189f6997a121158a522c8f7f99'] = 'Afficher le paiement en 4X PayPal sur votre site';
 $_MODULE['<{paypal}prestashop>installmentdisclaimer_4345eb9cc04bd88722f32189e111111e'] = 'Le paiement en 4X PayPal permet aux consommateurs français de payer en 4 versements égaux. Vous pouvez promouvoir le paiement en 4X PayPal uniquement si vous êtes un marchand basé en France, avec un site Web français et une intégration PayPal standard.';
 $_MODULE['<{paypal}prestashop>installmentdisclaimer_790768678d15ea5e6b855639ec2e1def'] = 'Les marchands disposant de l\'outil Vaulting (coffre-fort numérique) ou de l\'intégration des paiements récurrents / abonnements, ainsi que ceux ayant certaines activités (vente de biens numériques / biens non physiques) ne sont pas éligibles pour promouvoir 4X PayPal Payment . Nous publierons des messages sur votre site pour promouvoir 4X PayPal Payment. Vous ne pouvez pas promouvoir 4X PayPal Payment avec tout autre contenu.';
