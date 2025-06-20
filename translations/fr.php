@@ -973,3 +973,4 @@ $_MODULE['<{paypal}prestashop>cloud-sync_e2ca13e6261a701aac6125c620ff8867'] = 'm
 $_MODULE['<{paypal}prestashop>cloud-sync_61ee3ec593d6c22fe48c0e2adcc07f4d'] = 'thèmes : le thème installé sur votre boutique PrestaShop';
 $_MODULE['<{paypal}prestashop>cloud-sync_a2186209d5a24827c4779bf9527ef351'] = 'devises : les devises installées sur votre boutique PrestaShop';
 $_MODULE['<{paypal}prestashop>onboarding-complete-message_4ddaccf882fd06ba99db78c109886dd3'] = 'L\'intégration est terminée';
+$_MODULE['<{paypal}prestashop>vaultingfunctionality_f6c325ace102342a535857ec43b13dcf'] = 'Enregistrement de compte PayPal ou de moyen de paiement désactivé : veuillez contacter PayPal pour activer cette fonctionnalité';
