@@ -118,6 +118,10 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
 
     public function initContent()
     {
+        if (Tools::getValue('action') === 'onboarding-completed') {
+            $this->method->setSandbox((int) Tools::getValue('sandbox'));
+            $this->completeOnboarding();
+        }
         $this->content .= $this->renderConfiguration();
         parent::initContent();
     }
@@ -420,5 +424,21 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
     {
         parent::initPageHeaderToolbar();
         $this->context->smarty->clearAssign('help_link');
+    }
+
+    protected function completeOnboarding()
+    {
+        $start = time();
+        $waitForCredentials = true;
+
+        while ($waitForCredentials && (time() - $start < 10)) {
+            if ($this->method->isCredentialsSetted()) {
+                $waitForCredentials = false;
+                Configuration::loadConfiguration();
+            }
+        }
+
+        $this->method->checkCredentials();
+        Tools::redirectAdmin($this->context->link->getAdminLink('AdminPaypalConfiguration'));
     }
 }
