@@ -64,15 +64,12 @@ class Banner
 
     /** @var string */
     protected $pageTypeAttribute;
-    /** @var BuyerCountry */
-    protected $buyerCountry;
 
     public function __construct()
     {
         $this->module = Module::getInstanceByName('paypal');
         $this->setTemplate('module:paypal/views/templates/installmentBanner/banner.tpl');
         $this->method = AbstractMethodPaypal::load();
-        $this->buyerCountry = new BuyerCountry();
     }
 
     public function render()
@@ -125,7 +122,7 @@ class Banner
         $configReturn = $config[$placement];
         $configReturn['amount'] = $this->amount;
         $configReturn['locale'] = str_replace('-', '_', \Context::getContext()->language->locale);
-        $configReturn['buyercountry'] = strtoupper($this->buyerCountry->get());
+        $configReturn['buyercountry'] = $this->getBuyerCountry();
 
         return $configReturn;
     }
@@ -308,5 +305,35 @@ class Banner
     public function getPartnerId()
     {
         return 'PRESTASHOP_Cart_SPB';
+    }
+
+    protected function getBuyerCountry()
+    {
+        $isoLang = \Tools::strtoupper(Context::getContext()->language->iso_code);
+        $isoCurrency = \Tools::strtoupper(Context::getContext()->currency->iso_code);
+
+        if ($isoLang === 'FR') {
+            return 'FR';
+        }
+        if ($isoLang === 'IT') {
+            return 'IT';
+        }
+        if ($isoLang === 'ES') {
+            return 'ES';
+        }
+        if ($isoLang === 'DE') {
+            return 'DE';
+        }
+        if ($isoCurrency === 'AUD') {
+            return 'AU';
+        }
+        if ($isoCurrency === 'GBP') {
+            return 'UK';
+        }
+        if ($isoCurrency === 'USD') {
+            return 'US';
+        }
+
+        return '';
     }
 }
