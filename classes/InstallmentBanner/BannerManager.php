@@ -56,10 +56,10 @@ class BannerManager
      */
     public function isEligibleContext()
     {
-        $isoLang = \Tools::strtolower($this->context->language->iso_code);
+        $isoLang = substr(\Tools::strtolower($this->context->language->language_code), -2, 2);
         $isoCurrency = \Tools::strtolower($this->context->currency->iso_code);
 
-        foreach (ConfigurationMap::getLanguageCurrencyMap() as $langCurrency) {
+        foreach (ConfigurationMap::getBnplLanguageCurrencyMap() as $langCurrency) {
             if (isset($langCurrency[$isoLang]) && $langCurrency[$isoLang] == $isoCurrency) {
                 return true;
             }

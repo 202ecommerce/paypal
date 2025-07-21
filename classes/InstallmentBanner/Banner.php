@@ -328,7 +328,7 @@ class Banner
             return 'AU';
         }
         if ($isoCurrency === 'GBP') {
-            return 'UK';
+            return 'GB';
         }
         if ($isoCurrency === 'USD') {
             return 'US';
