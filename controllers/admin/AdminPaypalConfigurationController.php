@@ -429,7 +429,6 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
         }
         $locale .= '_' . strtoupper($country);
 
-
         $messagingConfig = [
             'placements' => ['product', 'homepage', 'cart', 'checkout', 'category'],
             'merchantIdentifier' => $this->method->getClientId(),
