@@ -55,7 +55,7 @@ class BnplAvailabilityManager
      */
     public function isEligibleContext()
     {
-        $isoLang = \Tools::strtolower($this->context->language->iso_code);
+        $isoLang = substr(\Tools::strtolower($this->context->language->language_code), -2, 2);
         $isoCurrency = \Tools::strtolower($this->context->currency->iso_code);
 
         foreach (ConfigurationMap::getBnplLanguageCurrencyMap() as $langCurrency) {
