@@ -591,6 +591,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             [],
             [
                 'action' => 'onboarding-completed',
+                'sandbox' => $sandbox ? 1 : 0,
             ]
         );
 
