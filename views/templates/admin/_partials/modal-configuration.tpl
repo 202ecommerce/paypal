@@ -23,7 +23,7 @@
  *  @copyright PayPal
  *
  *}
-<div class="modal fade" id="modal-configuration" tabindex="-1" aria-hidden="true">
+<div class="modal" id="modal-configuration" tabindex="-1" aria-hidden="true">
  <div class="modal-dialog modal-lg modal-dialog-centered" data-modal-dialog-configuration>
    <div class="modal-content">
 
