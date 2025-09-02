@@ -26,6 +26,7 @@
 
 <form id="{$form.id_form|escape:'htmlall':'UTF-8'}" class="mt-4" data-form-configuration {block name='form_attributes'}{/block}
 onsubmit="function (e) { e.preventDefault(); e.stopPropagation();}">
+  {include file="../form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_MESSAGING_BUYER_COUNTRY}
   {include file="../form-fields.tpl" field=$form.fields.PAYPAL_INSTALLMENT_MESSAGING_CONFIG}
 </form>
 

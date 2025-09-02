@@ -32,7 +32,10 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration;
+use Context;
+use Country;
 use Module;
+use PaypalAddons\classes\InstallmentBanner\BuyerCountry;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use Tools;
 
@@ -42,11 +45,28 @@ class FormInstallmentMessaging implements FormInterface
     protected $module;
 
     protected $className;
+    /** @var BuyerCountry */
+    protected $buyerCountry;
 
     public function __construct()
     {
         $this->module = Module::getInstanceByName('paypal');
         $this->className = 'FormInstallmentMessaging';
+        $this->buyerCountry = new BuyerCountry();
+    }
+
+    protected function getBuyerCountryOptions()
+    {
+        $options = [];
+
+        foreach (ConfigurationMap::getAllowedCountries() as $iso) {
+            $options[] = [
+                'value' => strtolower($iso),
+                'title' => Country::getNameById(Context::getContext()->language->id, Country::getByIso($iso)),
+            ];
+        }
+
+        return $options;
     }
 
     /**
@@ -61,6 +81,14 @@ class FormInstallmentMessaging implements FormInterface
             'label' => '',
             'value' => Configuration::get(ConfigurationMap::MESSENGING_CONFIG),
             'name' => ConfigurationMap::MESSENGING_CONFIG,
+        ];
+        $fields[ConfigurationMap::MESSAGING_BUYER_COUNTRY] = [
+            'type' => 'select',
+            'label' => $this->module->l('Buyer country', $this->className),
+            'value' => $this->buyerCountry->get(),
+            'name' => ConfigurationMap::MESSAGING_BUYER_COUNTRY,
+            'variant' => 'primary',
+            'options' => $this->getBuyerCountryOptions(),
         ];
 
         $description = [
@@ -98,6 +126,10 @@ class FormInstallmentMessaging implements FormInterface
         $return &= $this->saveDecodedConf($config);
 
         $return &= Configuration::updateValue(ConfigurationMap::MESSENGING_CONFIG, $config);
+
+        if (isset($data[ConfigurationMap::MESSAGING_BUYER_COUNTRY])) {
+            $this->buyerCountry->set($data[ConfigurationMap::MESSAGING_BUYER_COUNTRY]);
+        }
 
         return $return;
     }

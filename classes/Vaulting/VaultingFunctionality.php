@@ -121,40 +121,36 @@ class VaultingFunctionality
 
     public function getStatusMessage()
     {
+        if ($this->isEnabled() === false) {
+            return $this->module->l('PayPal account vaulting/ save payments disabled', 'VaultingFunctionality');
+        }
+
         if (empty($this->_cache['sellerStatus'])) {
             $this->_cache['sellerStatus'] = $this->method->getSellerStatus();
         }
         /** @var ResponseGetSellerStatus $sellerStatus */
         $sellerStatus = $this->_cache['sellerStatus'];
-        $defaultMessage = $this->module->l('PayPal account vaulting/ save payments disabled');
+        $defaultMessage = $this->module->l('PayPal account vaulting/save payments disabled : Please contact PayPal to activate this feature', 'VaultingFunctionality');
 
         if ($sellerStatus->isSuccess() == false) {
             return $defaultMessage;
         }
 
-        foreach ($sellerStatus->getProductsFull() as $product) {
-            if (empty($product['capabilities']) || empty($product['name'])) {
+        foreach ($sellerStatus->getCapabilitiesFull() as $capability) {
+            if ($capability['name'] !== Vaulting::CAPABILITY) {
                 continue;
             }
 
-            if ($product['name'] === Vaulting::PRODUCT || in_array(Vaulting::CAPABILITY, $product['capabilities'])) {
-                if (isset($product['vetting_status'])) {
-                    $status = Tools::strtoupper($product['vetting_status']);
-                } elseif (isset($product['status'])) {
-                    $status = Tools::strtoupper($product['status']);
-                } else {
-                    $status = '';
-                }
+            $status = Tools::strtoupper($capability['status']);
 
-                if (in_array($status, [Vaulting::PRODUCT_STATUS_ACTIVE, Vaulting::PRODUCT_STATUS_APPROVED, Vaulting::PRODUCT_STATUS_SUBSCRIBED])) {
-                    return $this->module->l('PayPal account vaulting/save payments enabled');
-                }
-                if (in_array($status, [Vaulting::PRODUCT_STATUS_NEED_MORE_DATA, Vaulting::PRODUCT_STATUS_PENDING, Vaulting::PRODUCT_STATUS_IN_REVIEW])) {
-                    return $this->module->l('PayPal account vaulting/ save payments capability is pending PayPal approval, click [b]here[/b] to update status. PayPal may contact you by email if more information is needed.');
-                }
-                if (in_array($status, [Vaulting::PRODUCT_STATUS_DECLINED, Vaulting::PRODUCT_STATUS_DENIED, Vaulting::PRODUCT_STATUS_REFUSED])) {
-                    return $this->module->l('PayPal account vaulting/ save payments capability has been refused by PayPal, you could re-apply within 90 days by disconnect-reconnect your PayPal account');
-                }
+            if (in_array($status, [Vaulting::PRODUCT_STATUS_ACTIVE, Vaulting::PRODUCT_STATUS_APPROVED, Vaulting::PRODUCT_STATUS_SUBSCRIBED])) {
+                return $this->module->l('PayPal account vaulting/save payments enabled', 'VaultingFunctionality');
+            }
+            if (in_array($status, [Vaulting::PRODUCT_STATUS_NEED_MORE_DATA, Vaulting::PRODUCT_STATUS_NEED_DATA, Vaulting::PRODUCT_STATUS_PENDING, Vaulting::PRODUCT_STATUS_IN_REVIEW])) {
+                return $this->module->l('PayPal account vaulting/ save payments capability is pending PayPal approval, click [b]here[/b] to update status. PayPal may contact you by email if more information is needed.', 'VaultingFunctionality');
+            }
+            if (in_array($status, [Vaulting::PRODUCT_STATUS_DECLINED, Vaulting::PRODUCT_STATUS_DENIED, Vaulting::PRODUCT_STATUS_REFUSED])) {
+                return $this->module->l('PayPal account vaulting/ save payments capability has been refused by PayPal, you could re-apply within 90 days by disconnect-reconnect your PayPal account', 'VaultingFunctionality');
             }
         }
 

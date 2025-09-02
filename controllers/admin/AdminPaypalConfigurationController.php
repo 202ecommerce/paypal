@@ -118,6 +118,10 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
 
     public function initContent()
     {
+        if (Tools::getValue('action') === 'onboarding-completed') {
+            $this->method->setSandbox((int) Tools::getValue('sandbox'));
+            $this->completeOnboarding();
+        }
         $this->content .= $this->renderConfiguration();
         parent::initContent();
     }
@@ -402,13 +406,28 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
             $confing = [];
         }
 
+        $country = Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY, 'fr');
+        $locale = $country;
+        switch ($country) {
+            case 'au':
+            case 'gb':
+            case 'us':
+                $locale = 'en';
+                break;
+            case '':
+                $locale = 'fr';
+                $country = 'fr';
+                break;
+        }
+        $locale .= '_' . strtoupper($country);
+
         $messagingConfig = [
             'placements' => ['product', 'homepage', 'cart', 'checkout', 'category'],
             'merchantIdentifier' => $this->method->getClientId(),
             'partnerClientId' => ($this->method->isSandbox() ? PayPal::PAYPAL_PARTNER_CLIENT_ID_SANDBOX : PayPal::PAYPAL_PARTNER_CLIENT_ID_LIVE),
             'partnerName' => ($this->method->isSandbox() ? PayPal::PAYPAL_PARTNER_ID_SANDBOX : PayPal::PAYPAL_PARTNER_ID_LIVE),
             'bnCode' => $this->method->getPaypalPartnerId(),
-            'locale' => str_replace('-', '_', Context::getContext()->language->locale),
+            'locale' => $locale,
             'config' => $confing,
         ];
 
@@ -420,5 +439,21 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
     {
         parent::initPageHeaderToolbar();
         $this->context->smarty->clearAssign('help_link');
+    }
+
+    protected function completeOnboarding()
+    {
+        $start = time();
+        $waitForCredentials = true;
+
+        while ($waitForCredentials && (time() - $start < 10)) {
+            if ($this->method->isCredentialsSetted()) {
+                $waitForCredentials = false;
+                Configuration::loadConfiguration();
+            }
+        }
+
+        $this->method->checkCredentials();
+        Tools::redirectAdmin($this->context->link->getAdminLink('AdminPaypalConfiguration'));
     }
 }

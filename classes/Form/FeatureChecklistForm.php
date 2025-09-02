@@ -87,8 +87,8 @@ class FeatureChecklistForm implements FormInterface
             $vars['isCreditCardEnabled'] = $this->isCreditCardEnabled();
         }
 
-        if ($this->vaultingFunctionality->isAvailable() && $this->vaultingFunctionality->isEnabled()) {
-            $vars['isVaultingCapabilityAvailable'] = $this->vaultingFunctionality->isCapabilityAvailable();
+        if ($this->vaultingFunctionality->isAvailable()) {
+            $vars['isVaultingCapabilityAvailable'] = $this->vaultingFunctionality->isEnabled() && $this->vaultingFunctionality->isCapabilityAvailable();
             $vars['vaultingStatusMessage'] = $this->vaultingFunctionality->getStatusMessage();
         }
 
