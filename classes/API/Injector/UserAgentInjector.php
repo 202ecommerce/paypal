@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\API\Injector;
 
-use Module;
 use PaypalAddons\classes\API\InjectorInterface;
 use PaypalAddons\classes\API\Request\HttpRequestInterface;
 
@@ -38,13 +38,13 @@ if (!defined('_PS_VERSION_')) {
 class UserAgentInjector implements InjectorInterface
 {
     /**
-     * @var Module
+     * @var \Module
      */
     protected $module;
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
     }
 
     public function inject(&$object)

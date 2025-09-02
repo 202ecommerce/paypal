@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\PUI;
 
-use Context;
 use PaypalAddons\classes\PuiMethodInterface;
 
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,7 @@ class SignUpLinkButton
 
     public function __construct(PuiMethodInterface $method)
     {
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
         $this->method = $method;
     }
 

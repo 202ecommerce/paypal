@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,8 +28,6 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Context;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalAddons\services\Checker;
@@ -51,11 +50,11 @@ class TechnicalChecklistForm implements FormInterface
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load();
         $this->webhookOption = new WebhookOption();
         $this->checker = new Checker();
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     /**

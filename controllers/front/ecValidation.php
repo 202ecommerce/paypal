@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -64,7 +65,7 @@ class PaypalEcValidationModuleFrontController extends PaypalAbstarctModuleFrontC
             $method_ec->setParameters($this->values);
 
             if ($method_ec->getShortCut()) {
-                /** @var $resultPath \PaypalAddons\classes\API\Response\Response */
+                /** @var PaypalAddons\classes\API\Response\Response $resultPath */
                 $resultPath = $method_ec->doOrderPatch();
 
                 if ($resultPath->isSuccess() == false) {
@@ -91,7 +92,7 @@ class PaypalEcValidationModuleFrontController extends PaypalAbstarctModuleFrontC
             $this->transaction_detail = $method_ec->getDetailsTransaction();
         }
 
-        //unset cookie of payment init
+        // unset cookie of payment init
         Context::getContext()->cookie->__unset('paypal_ecs');
         Context::getContext()->cookie->__unset('paypal_ecs_email');
 

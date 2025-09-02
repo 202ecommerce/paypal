@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -182,7 +183,7 @@ class PayPalModel
                                 continue;
                             }
                             $o = new $clazz();
-                            //$arr = array();
+                            // $arr = array();
                             $this->assignValue($k, $o);
                         } elseif ($this->isAssocArray($v)) {
                             /** @var self $o */
@@ -286,7 +287,7 @@ class PayPalModel
                 return true;
             }
             if (!$silent) {
-                //Throw an Exception for string or array
+                // Throw an Exception for string or array
                 throw new \InvalidArgumentException('Invalid JSON String');
             }
 

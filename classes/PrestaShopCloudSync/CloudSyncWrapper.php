@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\PrestaShopCloudSync;
 
-use Module;
 use PaypalAddons\Prestashop\ModuleLibMboInstaller\DependencyBuilder;
 use PaypalAddons\PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PaypalAddons\PrestaShop\PsAccountsInstaller\Installer\Installer;
@@ -51,7 +51,7 @@ class CloudSyncWrapper
     {
         $this->moduleManager = ModuleManagerBuilder::getInstance()->build();
         $this->accountInstaller = new Installer('5.0');
-        $this->mboInstaller = new DependencyBuilder(Module::getInstanceByName('paypal'));
+        $this->mboInstaller = new DependencyBuilder(\Module::getInstanceByName('paypal'));
     }
 
     public function installModules()
@@ -83,7 +83,7 @@ class CloudSyncWrapper
 
     public function getEventbusPresenterService()
     {
-        $eventbusModule = Module::getInstanceByName('ps_eventbus');
+        $eventbusModule = \Module::getInstanceByName('ps_eventbus');
 
         return $eventbusModule->getService('PrestaShop\Module\PsEventbus\Service\PresenterService');
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\API;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Client\HttpClient;
 use PaypalAddons\classes\API\Environment\PaypalEnvironment;
@@ -70,10 +70,10 @@ class PaypalClient extends HttpClient
             $this->logRequest($httpRequest);
             $response = parent::execute($httpRequest);
             $this->logResponse($response);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $this->logException($e);
             throw $e;
-        } catch (Exception $e) { // Throwable is available since php7
+        } catch (\Exception $e) { // Throwable is available since php7
             $this->logException($e);
             throw $e;
         }
@@ -124,7 +124,7 @@ class PaypalClient extends HttpClient
     }
 
     /**
-     * @param Throwable $exception
+     * @param \Throwable $exception
      */
     protected function logException($exception)
     {

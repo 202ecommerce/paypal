@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,16 +28,11 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Context;
-use Exception;
-use Module;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\PrestaShopCloudSync\CloudSyncView;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
-use Throwable;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -54,9 +50,9 @@ class PrestaShopCloudSyncForm implements FormInterface
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->className = 'PrestaShopCloudSyncForm';
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
         $this->configuration = new Configuration();
     }
 
@@ -111,7 +107,7 @@ class PrestaShopCloudSyncForm implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         if (empty($data['cloudSyncForm'])) {
@@ -129,7 +125,7 @@ class PrestaShopCloudSyncForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty->fetch('module:paypal/views/templates/admin/_partials/messages/form-help-info/cloud-sync.tpl');
+        return \Context::getContext()->smarty->fetch('module:paypal/views/templates/admin/_partials/messages/form-help-info/cloud-sync.tpl');
     }
 
     protected function initCloudSync()
@@ -142,8 +138,8 @@ class PrestaShopCloudSyncForm implements FormInterface
 
         try {
             $output .= (new CloudSyncView())->render();
-        } catch (Throwable $e) {
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
         } finally {
             if (isset($e)) {
                 ProcessLoggerHandler::openLogger();

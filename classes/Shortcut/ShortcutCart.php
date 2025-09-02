@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,9 +28,6 @@
 
 namespace PaypalAddons\classes\Shortcut;
 
-use Configuration;
-use Tools;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -50,8 +48,8 @@ class ShortcutCart extends ShortcutAbstract
             'shop_url' => $shop_url,
             'PayPal_payment_type' => $this->getMethodType(),
             'action_url' => $this->context->link->getModuleLink($this->module->name, 'ScInit', [], true),
-            'ec_sc_in_context' => Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT'),
-            'merchant_id' => Configuration::get('PAYPAL_MERCHANT_ID_' . Tools::strtoupper($environment)),
+            'ec_sc_in_context' => \Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT'),
+            'merchant_id' => \Configuration::get('PAYPAL_MERCHANT_ID_' . \Tools::strtoupper($environment)),
             'environment' => $environment,
         ];
 
@@ -60,13 +58,13 @@ class ShortcutCart extends ShortcutAbstract
 
     protected function getStyleSetting()
     {
-        if (Configuration::get(ShortcutConfiguration::CUSTOMIZE_STYLE)) {
+        if (\Configuration::get(ShortcutConfiguration::CUSTOMIZE_STYLE)) {
             $styleSetting = [
-                'label' => Configuration::get(ShortcutConfiguration::STYLE_LABEL_CART, null, null, null, ShortcutConfiguration::STYLE_LABEL_CHECKOUT),
-                'color' => Configuration::get(ShortcutConfiguration::STYLE_COLOR_CART, null, null, null, ShortcutConfiguration::STYLE_COLOR_GOLD),
-                'shape' => Configuration::get(ShortcutConfiguration::STYLE_SHAPE_CART, null, null, null, ShortcutConfiguration::STYLE_SHAPE_RECT),
-                'height' => (int) Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART, null, null, null, 35),
-                'width' => (int) Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART, null, null, null, 200),
+                'label' => \Configuration::get(ShortcutConfiguration::STYLE_LABEL_CART, null, null, null, ShortcutConfiguration::STYLE_LABEL_CHECKOUT),
+                'color' => \Configuration::get(ShortcutConfiguration::STYLE_COLOR_CART, null, null, null, ShortcutConfiguration::STYLE_COLOR_GOLD),
+                'shape' => \Configuration::get(ShortcutConfiguration::STYLE_SHAPE_CART, null, null, null, ShortcutConfiguration::STYLE_SHAPE_RECT),
+                'height' => (int) \Configuration::get(ShortcutConfiguration::STYLE_HEIGHT_CART, null, null, null, 35),
+                'width' => (int) \Configuration::get(ShortcutConfiguration::STYLE_WIDTH_CART, null, null, null, 200),
             ];
         } else {
             $styleSetting = [

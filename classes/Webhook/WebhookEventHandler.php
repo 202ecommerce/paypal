@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,6 @@
 
 namespace PaypalAddons\classes\Webhook;
 
-use Configuration;
-use Context;
-use Db;
-use DbQuery;
-use Employee;
-use Exception;
 use PaypalAddons\classes\API\Model\WebhookEvent;
 use PaypalAddons\classes\Constants\WebHookType;
 use PaypalAddons\services\ActualizeTotalPaid;
@@ -41,14 +36,7 @@ use PaypalAddons\services\PaypalContext;
 use PaypalAddons\services\ServicePaypalOrder;
 use PaypalAddons\services\StatusMapping;
 use PaypalAddons\services\WebhookService;
-use PaypalCapture;
-use PaypalOrder;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
-use PaypalWebhook;
-use Shop;
-use Throwable;
-use Tools;
-use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -63,7 +51,7 @@ class WebhookEventHandler
     public function __construct()
     {
         $this->servicePaypalOrder = new ServicePaypalOrder();
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     public function handle(WebhookEvent $event)
@@ -75,11 +63,11 @@ class WebhookEventHandler
         $this->init();
         ProcessLoggerHandler::openLogger();
         $msg = 'Webhook event : ' . $this->jsonEncode([
-                'event_type' => $event->getEventType(),
-                'webhook_id' => $event->getId(),
-                'data' => $event->toArray(),
-            ]);
-        $msg = Tools::substr($msg, 0, 999);
+            'event_type' => $event->getEventType(),
+            'webhook_id' => $event->getId(),
+            'data' => $event->toArray(),
+        ]);
+        $msg = \Tools::substr($msg, 0, 999);
 
         if ($event->getResource()->status != 'COMPLETED') {
             ProcessLoggerHandler::logInfo(
@@ -89,7 +77,7 @@ class WebhookEventHandler
                 null,
                 null,
                 'PayPal',
-                (int) Configuration::get('PAYPAL_SANDBOX')
+                (int) \Configuration::get('PAYPAL_SANDBOX')
             );
             ProcessLoggerHandler::closeLogger();
 
@@ -98,7 +86,7 @@ class WebhookEventHandler
 
         $paypalOrder = $this->initPaypalOrder($event);
 
-        if (Validate::isLoadedObject($paypalOrder) == false) {
+        if (\Validate::isLoadedObject($paypalOrder) == false) {
             return false;
         }
 
@@ -114,7 +102,7 @@ class WebhookEventHandler
                 $order->id_cart,
                 $order->id_shop,
                 'PayPal',
-                (int) Configuration::get('PAYPAL_SANDBOX')
+                (int) \Configuration::get('PAYPAL_SANDBOX')
             );
 
             if ($psOrderStatus == 0) {
@@ -141,9 +129,9 @@ class WebhookEventHandler
         ProcessLoggerHandler::closeLogger();
 
         if ($this->isCaptureAuthorization($event)) {
-            $capture = PaypalCapture::loadByOrderPayPalId($paypalOrder->id);
+            $capture = \PaypalCapture::loadByOrderPayPalId($paypalOrder->id);
 
-            if (Validate::isLoadedObject($capture)) {
+            if (\Validate::isLoadedObject($capture)) {
                 $capture->id_capture = empty($event->getResource()->id) ? '' : $event->getResource()->id;
                 $capture->result = empty($event->getResource()->status) ? '' : $event->getResource()->status;
                 $capture->capture_amount = $this->getAmount($event);
@@ -161,14 +149,14 @@ class WebhookEventHandler
         $paypalWebhook->id_webhook = $event->getId();
         $paypalWebhook->event_type = $event->getEventType();
         $paypalWebhook->data = $event->toJSON();
-        $paypalWebhook->date_completed = date(PaypalWebhook::DATE_FORMAT);
+        $paypalWebhook->date_completed = date(\PaypalWebhook::DATE_FORMAT);
         // Trying to save a webhook event without field 'data' if there is an error
         try {
             $paypalWebhook->save();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $paypalWebhook->data = '';
             $paypalWebhook->save();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $paypalWebhook->data = '';
             $paypalWebhook->save();
         }
@@ -182,16 +170,16 @@ class WebhookEventHandler
 
     protected function alreadyHandled(WebhookEvent $event)
     {
-        $query = (new DbQuery())
-            ->from(PaypalWebhook::$definition['table'])
+        $query = (new \DbQuery())
+            ->from(\PaypalWebhook::$definition['table'])
             ->where('id_webhook = \'' . pSQL($event->getId()) . '\'')
-            ->select(PaypalWebhook::$definition['primary']);
+            ->select(\PaypalWebhook::$definition['primary']);
 
         try {
-            return (bool) Db::getInstance()->getValue($query);
-        } catch (Throwable $e) {
+            return (bool) \Db::getInstance()->getValue($query);
+        } catch (\Throwable $e) {
             return false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -210,7 +198,7 @@ class WebhookEventHandler
             return $this->servicePaypalOrder->getPaypalOrderByTransaction($transaction);
         }
 
-        return new PaypalOrder();
+        return new \PaypalOrder();
     }
 
     protected function getTransactionRef(WebhookEvent $event)
@@ -249,9 +237,9 @@ class WebhookEventHandler
     {
         try {
             return $event->getResource()->supplementary_data->related_ids->authorization_id;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return '';
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return '';
         }
     }
@@ -265,9 +253,9 @@ class WebhookEventHandler
     {
         try {
             return (float) $event->getResource()->amount->value;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return 0;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return 0;
         }
     }
@@ -286,7 +274,7 @@ class WebhookEventHandler
     {
     }
 
-    protected function actualizeOrder(PaypalOrder $paypalOrder, WebhookEvent $webhookEvent)
+    protected function actualizeOrder(\PaypalOrder $paypalOrder, WebhookEvent $webhookEvent)
     {
         $orders = $this->servicePaypalOrder->getPsOrders($paypalOrder);
 
@@ -312,7 +300,7 @@ class WebhookEventHandler
         return new ActualizeTotalPaid();
     }
 
-    protected function removeEventInWaiting(PaypalOrder $paypalOrder)
+    protected function removeEventInWaiting(\PaypalOrder $paypalOrder)
     {
         $webhookEvents = $this->getWebhookService()->getPendingWebhooks($paypalOrder);
 
@@ -396,7 +384,7 @@ class WebhookEventHandler
 
     protected function isMultishop()
     {
-        return Shop::isFeatureActive();
+        return \Shop::isFeatureActive();
     }
 
     protected function init()
@@ -408,10 +396,10 @@ class WebhookEventHandler
 
     protected function setEmployeeInContext()
     {
-        $employees = Employee::getEmployeesByProfile(1);
+        $employees = \Employee::getEmployeesByProfile(1);
 
         if (false === empty($employees)) {
-            $employee = new Employee((int) $employees[0]);
+            $employee = new \Employee((int) $employees[0]);
             $this->context->employee = $employee;
         }
     }

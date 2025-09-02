@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,9 +28,6 @@
 
 namespace PaypalAddons\classes\InstallmentBanner;
 
-use Configuration;
-use Context;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
 if (!defined('_PS_VERSION_')) {
@@ -67,7 +65,7 @@ class Banner
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->setTemplate('module:paypal/views/templates/installmentBanner/banner.tpl');
         $this->method = AbstractMethodPaypal::load();
     }
@@ -78,7 +76,7 @@ class Banner
             return '';
         }
 
-        $render = Context::getContext()->smarty
+        $render = \Context::getContext()->smarty
             ->assign('paypalmessenging', $this->getConfig())
             ->assign($this->getTplVars())
             ->assign('JSscripts', $this->getJS())
@@ -89,7 +87,7 @@ class Banner
 
     public function getConfig()
     {
-        $config = json_decode(str_replace('-', '_', Configuration::get(ConfigurationMap::MESSENGING_CONFIG)), true);
+        $config = json_decode(str_replace('-', '_', \Configuration::get(ConfigurationMap::MESSENGING_CONFIG)), true);
         $placement = $this->getPlacement();
         if (isset($config['homepage'])) {
             $config['home'] = $config['homepage'];
@@ -309,8 +307,8 @@ class Banner
 
     protected function getBuyerCountry()
     {
-        $isoLang = \Tools::strtoupper(Context::getContext()->language->iso_code);
-        $isoCurrency = \Tools::strtoupper(Context::getContext()->currency->iso_code);
+        $isoLang = \Tools::strtoupper(\Context::getContext()->language->iso_code);
+        $isoCurrency = \Tools::strtoupper(\Context::getContext()->currency->iso_code);
 
         if ($isoLang === 'FR') {
             return 'FR';

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,8 +32,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Exception;
-
 class ReflectionUtil
 {
     /**
@@ -59,7 +58,7 @@ class ReflectionUtil
      *
      * @return string|null
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getPropertyClass($class, $propertyName)
     {
@@ -82,7 +81,7 @@ class ReflectionUtil
 
             return $anno[0];
         } else {
-            throw new Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
+            throw new \Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
         }
     }
 
@@ -94,7 +93,7 @@ class ReflectionUtil
      *
      * @return bool|null
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function isPropertyClassArray($class, $propertyName)
     {
@@ -110,7 +109,7 @@ class ReflectionUtil
         if (isset($param)) {
             return substr($param, -strlen('[]')) === '[]';
         } else {
-            throw new Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
+            throw new \Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
         }
     }
 
@@ -120,9 +119,9 @@ class ReflectionUtil
      * @param $class
      * @param $propertyName
      *
-     * @throws \RuntimeException
-     *
      * @return mixed
+     *
+     * @throws \RuntimeException
      */
     public static function propertyAnnotations($class, $propertyName)
     {

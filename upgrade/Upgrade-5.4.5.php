@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -38,14 +39,14 @@ function upgrade_module_5_4_5($module)
     if (Shop::isFeatureActive()) {
         foreach (Shop::getShops() as $shop) {
             Configuration::updateValue(
-                \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::ENABLE_BNPL,
+                PaypalAddons\classes\InstallmentBanner\ConfigurationMap::ENABLE_BNPL,
                 1,
                 false,
                 null,
                 (int) $shop['id_shop']
             );
             Configuration::updateValue(
-                \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CART_PAGE,
+                PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CART_PAGE,
                 1,
                 false,
                 null,
@@ -53,8 +54,8 @@ function upgrade_module_5_4_5($module)
             );
         }
     } else {
-        Configuration::updateValue(\PaypalAddons\classes\InstallmentBanner\ConfigurationMap::ENABLE_BNPL, 1);
-        Configuration::updateValue(\PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CART_PAGE, 1);
+        Configuration::updateValue(PaypalAddons\classes\InstallmentBanner\ConfigurationMap::ENABLE_BNPL, 1);
+        Configuration::updateValue(PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_CART_PAGE, 1);
     }
 
     return true;

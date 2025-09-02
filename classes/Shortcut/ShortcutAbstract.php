@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,8 @@
 
 namespace PaypalAddons\classes\Shortcut;
 
-use Context;
-use Exception;
-use Hook;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\services\PaypalMedia;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,10 +37,10 @@ if (!defined('_PS_VERSION_')) {
 
 abstract class ShortcutAbstract
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
-    /** @var Module */
+    /** @var \Module */
     protected $module;
 
     /** @var AbstractMethodPaypal */
@@ -55,8 +51,8 @@ abstract class ShortcutAbstract
 
     public function __construct()
     {
-        $this->context = Context::getContext();
-        $this->module = Module::getInstanceByName('paypal');
+        $this->context = \Context::getContext();
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->setId(uniqid());
     }
@@ -178,9 +174,9 @@ abstract class ShortcutAbstract
         $isAddJquery = version_compare(_PS_VERSION_, '1.7.7', '<');
 
         try {
-            Hook::exec('actionPaypalShortcutIsAddJquery', ['isAddJquery' => &$isAddJquery]);
-        } catch (Throwable $e) {
-        } catch (Exception $e) {
+            \Hook::exec('actionPaypalShortcutIsAddJquery', ['isAddJquery' => &$isAddJquery]);
+        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
         }
 
         return $isAddJquery;

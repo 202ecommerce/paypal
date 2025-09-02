@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,16 +28,7 @@
 
 namespace PaypalAddons\classes;
 
-use Cart;
-use Configuration;
-use Context;
-use Country;
-use Currency;
 use Customer;
-use Exception;
-use MethodMB;
-use Module;
-use PayPal;
 use PaypalAddons\classes\API\Model\VaultInfo;
 use PaypalAddons\classes\API\Model\WebhookPatch;
 use PaypalAddons\classes\API\PaypalApiManagerInterface;
@@ -65,12 +57,7 @@ use PaypalAddons\services\Order\RefundAmountCalculator;
 use PaypalAddons\services\PaypalContext;
 use PaypalAddons\services\ServicePaypalVaulting;
 use PaypalAddons\services\StatusMapping;
-use PaypalOrder;
 use PaypalPPBTlib\AbstractMethod;
-use PrestaShopLogger;
-use Throwable;
-use Tools;
-use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -144,17 +131,17 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @return \PaypalAddons\classes\API\Response\ResponseOrderCreate
+     * @return API\Response\ResponseOrderCreate
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function init()
     {
         if ($this->isConfigured() == false) {
-            throw new Exception('Module is not configured');
+            throw new \Exception('Module is not configured');
         }
 
-        /** @var $response \PaypalAddons\classes\API\Response\ResponseOrderCreate */
+        /** @var API\Response\ResponseOrderCreate $response */
         $response = $this->paypalApiManager->getOrderRequest()->execute();
 
         if ($response->isSuccess() == false) {
@@ -162,15 +149,15 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         }
 
         $this->setPaymentId($response->getPaymentId());
-        $this->updateCartTrace(Context::getContext()->cart, $response->getPaymentId());
+        $this->updateCartTrace(\Context::getContext()->cart, $response->getPaymentId());
 
         return $response;
     }
 
     /**
-     * @return \PaypalAddons\classes\API\Response\ResponseConfirmationPaymentSource
+     * @return API\Response\ResponseConfirmationPaymentSource
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function initApm($method)
     {
@@ -229,16 +216,16 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @see AbstractMethodPaypal::validation()
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function validation()
     {
-        $context = Context::getContext();
+        $context = \Context::getContext();
         $cart = $context->cart;
-        $customer = new Customer($cart->id_customer);
+        $customer = new \Customer($cart->id_customer);
         $vaultingFunctionality = $this->initVaultingFunctionality();
 
-        if (!Validate::isLoadedObject($customer)) {
+        if (!\Validate::isLoadedObject($customer)) {
             throw new PaypalException(PaypalException::INVALID_CUSTOMER, 'Customer is not loaded object');
         }
         if (empty($this->getPaymentId())) {
@@ -247,7 +234,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         if (false === $this->isCorrectCart($cart, $this->getPaymentId())) {
             throw new PaypalException(PaypalException::CART_CHANGED, 'The elements in the shopping cart were changed. Please try to pay again.');
         }
-        if (PaypalOrder::paymentExists($this->getPaymentId())) {
+        if (\PaypalOrder::paymentExists($this->getPaymentId())) {
             throw new PaypalException(PaypalException::PAYMENT_EXISTS, 'Payment exists.');
         }
 
@@ -263,7 +250,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                     throw new PayerActionRequired($response->getPayerAction(), 'Payer action required', PaypalException::PAYER_ACTION_REQUIRED);
                 }
             }
-            throw new Exception($response->getError()->getMessage(), $response->getError()->getCode());
+            throw new \Exception($response->getError()->getMessage(), $response->getError()->getCode());
         }
 
         if ($vaultingFunctionality->isAvailable() && $vaultingFunctionality->isEnabled()) {
@@ -275,7 +262,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $this->setDetailsTransaction($response);
         $currency = $context->currency;
         $total = $response->getTotalPaid();
-        $paypal = Module::getInstanceByName($this->name);
+        $paypal = \Module::getInstanceByName($this->name);
         $order_state = $this->getOrderStatus($response->getStatus());
         $paypal->validateOrder(
             $cart->id,
@@ -306,11 +293,11 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 ->setErrorCode(PaypalException::PAYMENT_ID_INVALID)
                 ->setMessage('Payment ID is invalid');
             $response->setError($error)->setSuccess(false);
-            $response->setScaState(PayPal::SCA_STATE_FAILED);
+            $response->setScaState(\PayPal::SCA_STATE_FAILED);
 
             return $response;
         }
-        if ($getOrderResponse->getStatus() === PayPal::PAYPAL_ISSUE_PAYER_ACTION_REQUIRED) {
+        if ($getOrderResponse->getStatus() === \PayPal::PAYPAL_ISSUE_PAYER_ACTION_REQUIRED) {
             $response->setPayerAction($getOrderResponse->getLink('payer-action'));
             $response->setError(
                 (new Error())->setErrorCode(PaypalException::PAYER_ACTION_REQUIRED)
@@ -325,25 +312,25 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             $isSuccessSCA = false;
 
             if (!empty($authResult->liability_shift)) {
-                if ($authResult->liability_shift === PayPal::SCA_LIABILITY_SHIFT_POSSIBLE) {
+                if ($authResult->liability_shift === \PayPal::SCA_LIABILITY_SHIFT_POSSIBLE) {
                     $isSuccessSCA = true;
-                    $scaState = PayPal::SCA_STATE_SUCCESS;
-                    $response->setScaState(PayPal::SCA_STATE_SUCCESS);
+                    $scaState = \PayPal::SCA_STATE_SUCCESS;
+                    $response->setScaState(\PayPal::SCA_STATE_SUCCESS);
                 }
-                if ($authResult->liability_shift === PayPal::SCA_LIABILITY_SHIFT_NO) {
+                if ($authResult->liability_shift === \PayPal::SCA_LIABILITY_SHIFT_NO) {
                     if (!empty($authResult->three_d_secure->enrollment_status)) {
                         $isSuccessSCA = in_array(
                             $authResult->three_d_secure->enrollment_status,
                             [
-                                PayPal::SCA_BANK_NOT_READY,
-                                PayPal::SCA_UNAVAILABLE,
-                                PayPal::SCA_BYPASSED,
+                                \PayPal::SCA_BANK_NOT_READY,
+                                \PayPal::SCA_UNAVAILABLE,
+                                \PayPal::SCA_BYPASSED,
                             ]
                         );
 
                         if ($isSuccessSCA) {
-                            $scaState = PayPal::SCA_STATE_NOT_PASSED;
-                            $response->setScaState(PayPal::SCA_STATE_NOT_PASSED);
+                            $scaState = \PayPal::SCA_STATE_NOT_PASSED;
+                            $response->setScaState(\PayPal::SCA_STATE_NOT_PASSED);
                         }
                     }
                 }
@@ -355,15 +342,15 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                     ->setErrorCode(PaypalException::SCA_FAIL)
                     ->setMessage('3DS verification is failed');
                 $response->setError($error)->setSuccess(false);
-                $response->setScaState(PayPal::SCA_STATE_FAILED);
+                $response->setScaState(\PayPal::SCA_STATE_FAILED);
 
                 return $response;
             }
         } else {
-            $scaState = PayPal::SCA_STATE_UNKNOWN;
+            $scaState = \PayPal::SCA_STATE_UNKNOWN;
         }
 
-        if ($this instanceof MethodMB || $getOrderResponse->getStatus() !== 'COMPLETED') {
+        if ($this instanceof \MethodMB || $getOrderResponse->getStatus() !== 'COMPLETED') {
             if ($this->getIntent() == 'CAPTURE') {
                 $response = $this->paypalApiManager->getOrderCaptureRequest($this->getPaymentId())->execute();
             } else {
@@ -401,7 +388,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             }
 
             foreach ($response->getData()->result->purchase_units[0]->payments->captures as $capture) {
-                if (false === in_array($capture->status, [PayPal::CAPTURE_STATUS_COMPLETED, PayPal::CAPTURE_STATUS_PENDING])) {
+                if (false === in_array($capture->status, [\PayPal::CAPTURE_STATUS_COMPLETED, \PayPal::CAPTURE_STATUS_PENDING])) {
                     $error = new Error();
                     $error
                         ->setErrorCode(PaypalException::CAPTURE_FAIL)
@@ -410,8 +397,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
                     return $response;
                 }
-                if ($capture->status === PayPal::CAPTURE_STATUS_PENDING) {
-                    $response->setStatus(PayPal::CAPTURE_STATUS_PENDING);
+                if ($capture->status === \PayPal::CAPTURE_STATUS_PENDING) {
+                    $response->setStatus(\PayPal::CAPTURE_STATUS_PENDING);
                 }
             }
         }
@@ -420,7 +407,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @param \PaypalAddons\classes\API\Response\ResponseOrderCapture $data
+     * @param ResponseOrderCapture $data
      *
      * @return void
      */
@@ -450,7 +437,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      */
     public function refund($paypalOrder)
     {
-        /** @var $response ResponseOrderRefund */
+        /** @var ResponseOrderRefund $response */
         $response = $this->paypalApiManager->getOrderRefundRequest($paypalOrder)->execute();
 
         return $response;
@@ -483,7 +470,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             return false;
         }
 
-        $this->updateCartTrace(Context::getContext()->cart, $this->getPaymentId());
+        $this->updateCartTrace(\Context::getContext()->cart, $this->getPaymentId());
 
         return $this->paypalApiManager->getOrderPatchRequest($this->getPaymentId())->execute();
     }
@@ -511,16 +498,16 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      */
     public function formatPrice($price, $isoCurrency = null, $convert = true)
     {
-        $context = Context::getContext();
+        $context = \Context::getContext();
         $context_currency = $context->currency;
-        $paypal = Module::getInstanceByName($this->name);
+        $paypal = \Module::getInstanceByName($this->name);
 
         if ($convert && $id_currency_to = $paypal->needConvert()) {
-            $currency_to_convert = new Currency($id_currency_to);
-            $price = Tools::convertPriceFull($price, $context_currency, $currency_to_convert);
+            $currency_to_convert = new \Currency($id_currency_to);
+            $price = \Tools::convertPriceFull($price, $context_currency, $currency_to_convert);
         }
 
-        return number_format($price, Paypal::getDecimal($isoCurrency), '.', '');
+        return number_format($price, \PayPal::getDecimal($isoCurrency), '.', '');
     }
 
     /**
@@ -544,11 +531,11 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      *
      * @return string additional payment information
      */
-    public function getCustomFieldInformation(Cart $cart)
+    public function getCustomFieldInformation(\Cart $cart)
     {
         $module = \Module::getInstanceByName($this->name);
         $return = (string) _PS_VERSION_ . '_' . (string) $module->version . '_' . \phpversion() . '_';
-        if (Tools::getValue('sc') !== false) {
+        if (\Tools::getValue('sc') !== false) {
             $return .= 'ESC_';
         }
         $return .= $module->l('Cart ID: ', get_class($this)) . $cart->id . '_';
@@ -585,7 +572,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             'displayMode' => 'minibrowser',
             'sellerNonce' => $this->getSellerNonce($sandbox),
         ];
-        $params['returnToPartnerUrl'] = Context::getContext()->link->getAdminLink(
+        $params['returnToPartnerUrl'] = \Context::getContext()->link->getAdminLink(
             'AdminPaypalConfiguration',
             true,
             [],
@@ -662,8 +649,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     {
         if ($sourcePage === ShortcutConfiguration::SOURCE_PAGE_PRODUCT) {
             $Shortcut = new ShortcutProduct(
-                (int) Tools::getValue('id_product'),
-                (int) Tools::getValue('id_product_attribute')
+                (int) \Tools::getValue('id_product'),
+                (int) \Tools::getValue('id_product_attribute')
             );
         } elseif ($sourcePage === ShortcutConfiguration::SOURCE_PAGE_CART) {
             $Shortcut = new ShortcutCart();
@@ -691,7 +678,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      *
      * @return string
      */
-    public function buildCartTrace(Cart $cart, $paymentId)
+    public function buildCartTrace(\Cart $cart, $paymentId)
     {
         $key = [];
         $products = $cart->getProducts();
@@ -716,11 +703,11 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $key[] = $cart->id;
 
         try {
-            $key[] = $cart->getOrderTotal(true, Cart::BOTH);
-        } catch (Throwable $e) {
-            PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
-        } catch (Exception $e) {
-            PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
+            $key[] = $cart->getOrderTotal(true, \Cart::BOTH);
+        } catch (\Throwable $e) {
+            \PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            \PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
         }
 
         return md5(implode('_', $key));
@@ -747,7 +734,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             return $this->cartTrace;
         }
 
-        return isset(Context::getContext()->cookie->paypal_cart_trace) ? Context::getContext()->cookie->paypal_cart_trace : '';
+        return isset(\Context::getContext()->cookie->paypal_cart_trace) ? \Context::getContext()->cookie->paypal_cart_trace : '';
     }
 
     /**
@@ -756,12 +743,12 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      *
      * @return void
      */
-    public function updateCartTrace(Cart $cart, $paymentId)
+    public function updateCartTrace(\Cart $cart, $paymentId)
     {
         $cartTrace = $this->buildCartTrace($cart, $paymentId);
         $this->setCartTrace($cartTrace);
-        Context::getContext()->cookie->paypal_cart_trace = $cartTrace;
-        Context::getContext()->cookie->write();
+        \Context::getContext()->cookie->paypal_cart_trace = $cartTrace;
+        \Context::getContext()->cookie->write();
     }
 
     /**
@@ -770,7 +757,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      *
      * @return bool
      */
-    public function isCorrectCart(Cart $cart, $paymentId)
+    public function isCorrectCart(\Cart $cart, $paymentId)
     {
         return $this->getCartTrace() == $this->buildCartTrace($cart, $paymentId);
     }
@@ -778,7 +765,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @return int id of the order status
      **/
-    public function getOrderStatus($captureState = PayPal::CAPTURE_STATUS_COMPLETED)
+    public function getOrderStatus($captureState = \PayPal::CAPTURE_STATUS_COMPLETED)
     {
         if ($this->getWebhookOption()->isEnable() && $this->getWebhookOption()->isAvailable()) {
             return $this->getStatusMapping()->getWaitValidationStatus();
@@ -788,19 +775,19 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             return $this->getStatusMapping()->getWaitValidationStatus();
         }
 
-        if ($captureState === PayPal::CAPTURE_STATUS_COMPLETED) {
+        if ($captureState === \PayPal::CAPTURE_STATUS_COMPLETED) {
             return $this->getStatusMapping()->getAcceptedStatus();
         }
 
         return $this->getStatusMapping()->getWaitValidationStatus();
     }
 
-    public function updateOrderTrackingInfo(PaypalOrder $paypalOrder)
+    public function updateOrderTrackingInfo(\PaypalOrder $paypalOrder)
     {
         return $this->paypalApiManager->getUpdateTrackingInfoRequest($paypalOrder)->execute();
     }
 
-    public function addOrderTrackingInfo(PaypalOrder $paypalOrder)
+    public function addOrderTrackingInfo(\PaypalOrder $paypalOrder)
     {
         return $this->paypalApiManager->getAddTrackingInfoRequest($paypalOrder)->execute();
     }
@@ -818,12 +805,12 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     public function getVarsForAccountForm()
     {
         $tplVars = [];
-        $countryDefault = new Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
+        $countryDefault = new \Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), \Context::getContext()->language->id);
         $actualSandboxMode = $this->isSandbox();
 
         $tplVars['mode'] = $actualSandboxMode ? 'SANDBOX' : 'LIVE';
         $tplVars['country_iso'] = strtoupper($countryDefault->iso_code);
-        //Assign values for sandbox mode
+        // Assign values for sandbox mode
         $this->setSandbox(true);
         $tplVars['paypal_clientid_sandbox'] = $this->getClientId();
         $tplVars['paypal_secret_sandbox'] = $this->getSecret();
@@ -835,7 +822,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         } else {
             $tplVars['urlOnboarding_sandbox'] = $this->getUrlOnboarding();
         }
-        //Assign values for live
+        // Assign values for live
         $this->setSandbox(false);
         $tplVars['paypal_clientid_live'] = $this->getClientId();
         $tplVars['paypal_secret_live'] = $this->getSecret();
@@ -847,7 +834,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         } else {
             $tplVars['urlOnboarding_live'] = $this->getUrlOnboarding();
         }
-        //Return actual mode
+        // Return actual mode
         $this->setSandbox($actualSandboxMode);
 
         return $tplVars;
@@ -861,7 +848,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     public function saveAccountForm($data = null)
     {
         if (isset($data['mode'])) {
-            Configuration::updateValue('PAYPAL_SANDBOX', $data['mode'] == 'SANDBOX');
+            \Configuration::updateValue('PAYPAL_SANDBOX', $data['mode'] == 'SANDBOX');
         }
 
         if (isset($data['paypal_clientid_live']) && isset($data['paypal_secret_live'])) {

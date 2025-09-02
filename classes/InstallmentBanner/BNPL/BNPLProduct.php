@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -26,9 +27,6 @@
  */
 
 namespace PaypalAddons\classes\InstallmentBanner\BNPL;
-
-use Configuration;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -60,8 +58,8 @@ class BNPLProduct extends BNPLAbstract
             'shop_url' => $shop_url,
             'PayPal_payment_type' => $this->getMethodType(),
             'action_url' => $this->context->link->getModuleLink($this->module->name, 'ScInit', [], true),
-            'ec_sc_in_context' => Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT'),
-            'merchant_id' => Configuration::get('PAYPAL_MERCHANT_ID_' . Tools::strtoupper($environment)),
+            'ec_sc_in_context' => \Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT'),
+            'merchant_id' => \Configuration::get('PAYPAL_MERCHANT_ID_' . \Tools::strtoupper($environment)),
             'environment' => $environment,
             'paypalIdProduct' => $this->idProduct,
         ];

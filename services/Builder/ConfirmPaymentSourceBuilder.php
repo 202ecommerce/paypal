@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,13 +32,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Address;
-use Context;
-use Country;
-use Customer;
-use Tools;
-use Validate;
-
 class ConfirmPaymentSourceBuilder implements BuilderInterface
 {
     protected $apmMethod;
@@ -48,10 +42,10 @@ class ConfirmPaymentSourceBuilder implements BuilderInterface
     {
         $this->apmMethod = $apmMethod;
 
-        if ($context instanceof Context) {
+        if ($context instanceof \Context) {
             $this->context = $context;
         } else {
-            $this->context = Context::getContext();
+            $this->context = \Context::getContext();
         }
     }
 
@@ -75,9 +69,9 @@ class ConfirmPaymentSourceBuilder implements BuilderInterface
             return '';
         }
 
-        $customer = new Customer($this->context->cart->id_customer);
+        $customer = new \Customer($this->context->cart->id_customer);
 
-        if (false == Validate::isLoadedObject($customer)) {
+        if (false == \Validate::isLoadedObject($customer)) {
             return '';
         }
 
@@ -90,8 +84,8 @@ class ConfirmPaymentSourceBuilder implements BuilderInterface
             return '';
         }
 
-        $address = new Address($this->context->cart->id_address_delivery);
+        $address = new \Address($this->context->cart->id_address_delivery);
 
-        return Tools::strtoupper(Country::getIsoById($address->id_country));
+        return \Tools::strtoupper(\Country::getIsoById($address->id_country));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -37,7 +38,7 @@ if (!defined('_PS_VERSION_')) {
  */
 class PaypalScInitModuleFrontController extends PaypalAbstarctModuleFrontController
 {
-    /* @var $method AbstractMethodPaypal*/
+    /* @var $method AbstractMethodPaypal */
     protected $method;
 
     public function init()

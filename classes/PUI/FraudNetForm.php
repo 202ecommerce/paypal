@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,7 @@
 
 namespace PaypalAddons\classes\PUI;
 
-use Address;
-use Context;
-use Customer;
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -46,7 +42,7 @@ class FraudNetForm
 
     public function __construct()
     {
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
         $this->method = AbstractMethodPaypal::load('PPP');
     }
 
@@ -63,10 +59,10 @@ class FraudNetForm
         $this->context->smarty->assign('psPaypalDir', _PS_MODULE_DIR_ . 'paypal');
 
         try {
-            return Context::getContext()->smarty->fetch('module:paypal/views/templates/pui/fraudNetForm.tpl');
-        } catch (Throwable $e) {
+            return \Context::getContext()->smarty->fetch('module:paypal/views/templates/pui/fraudNetForm.tpl');
+        } catch (\Throwable $e) {
             return '';
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return '';
         }
     }
@@ -83,8 +79,8 @@ class FraudNetForm
 
     protected function getUserData()
     {
-        $billingAddress = new Address($this->context->cart->id_address_invoice);
-        $customer = new Customer($billingAddress->id_customer);
+        $billingAddress = new \Address($this->context->cart->id_address_invoice);
+        $customer = new \Customer($billingAddress->id_customer);
         $userData = new DataUserForm();
 
         $userData->setFirstName($this->context->customer->firstname);

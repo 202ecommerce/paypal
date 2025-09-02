@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -63,7 +64,7 @@ class PaypalPppValidationModuleFrontController extends PaypalAbstarctModuleFront
             $method_ppp->setParameters($this->values);
 
             if ($method_ppp->getShortCut()) {
-                /** @var $resultPath \PaypalAddons\classes\API\Response\Response */
+                /** @var PaypalAddons\classes\API\Response\Response $resultPath */
                 $resultPath = $method_ppp->doOrderPatch();
 
                 if ($resultPath->isSuccess() == false) {

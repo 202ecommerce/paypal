@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -64,6 +65,7 @@ function upgrade_module_5_3_0($module)
         Configuration::updateValue(ShortcutConfiguration::PRODUCT_PAGE_HOOK, ShortcutConfiguration::HOOK_REASSURANCE);
         Configuration::updateValue(ShortcutConfiguration::CART_PAGE_HOOK, ShortcutConfiguration::HOOK_SHOPPING_CART_FOOTER);
     }
+
     // Registre the new hooks
     return $installer->registerHooks();
 }

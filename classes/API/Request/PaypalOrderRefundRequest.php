@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Client\HttpClient;
 use PaypalAddons\classes\API\ExtensionSDK\Order\CapturesRefundRequest;
@@ -39,8 +39,6 @@ use PaypalAddons\classes\Exception\RefundCalculationException;
 use PaypalAddons\classes\PaypalException;
 use PaypalAddons\services\PaymentTotalAmount;
 use PaypalAddons\services\ServicePaypalOrder;
-use Throwable;
-use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -94,11 +92,11 @@ class PaypalOrderRefundRequest extends RequestAbstract
             }
         } catch (OrderFullyRefundedException $e) {
             $response->setSuccess(false)->setAlreadyRefunded(true);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);
@@ -165,7 +163,7 @@ class PaypalOrderRefundRequest extends RequestAbstract
         $paypalOrderService = new ServicePaypalOrder();
         $capture = $paypalOrderService->getCapture($this->paypalOrder);
 
-        if (Validate::isLoadedObject($capture)) {
+        if (\Validate::isLoadedObject($capture)) {
             $idResource = $capture->id_capture;
         } else {
             $idResource = $this->paypalOrder->id_transaction;

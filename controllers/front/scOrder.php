@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -151,8 +152,8 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
                 $id_address = $address['id_address'];
                 break;
             } else {
-                if ((strrpos($address['alias'], 'Paypal_Address')) !== false) {
-                    $count = (int) (Tools::substr($address['alias'], -1)) + 1;
+                if (strrpos($address['alias'], 'Paypal_Address') !== false) {
+                    $count = (int) Tools::substr($address['alias'], -1) + 1;
                 }
             }
         }
@@ -177,7 +178,7 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
             $orderAddress->phone = $info->getAddress()->getPhone();
 
             $orderAddress->id_customer = $customer->id;
-            $orderAddress->alias = 'Paypal_Address ' . ($count);
+            $orderAddress->alias = 'Paypal_Address ' . $count;
             $validationMessage = $orderAddress->validateFields(false, true);
             if (Country::containsStates($orderAddress->id_country) && $orderAddress->id_state == false) {
                 $validationMessage = $module->l('State is required in order to process payment. Please fill in state field.', $this->fileName);

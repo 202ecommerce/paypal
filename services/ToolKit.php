@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -26,9 +27,6 @@
  */
 
 namespace PaypalAddons\services;
-
-use Exception;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -67,8 +65,8 @@ class ToolKit
 
         try {
             return unlink($file);
-        } catch (Exception $e) {
-        } catch (Throwable $e) {
+        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         }
 
         return false;
@@ -82,8 +80,8 @@ class ToolKit
 
         try {
             return rmdir($dir);
-        } catch (Exception $e) {
-        } catch (Throwable $e) {
+        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         }
 
         return false;

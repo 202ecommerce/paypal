@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,18 +28,12 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Configuration;
-use Country;
-use MethodMB;
-use MethodPPP;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\InstallmentBanner\BNPL\BNPLOption;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -58,7 +53,7 @@ class FeatureChecklistForm implements FormInterface
     {
         $this->bnplOption = new BNPLOption();
         $this->method = AbstractMethodPaypal::load();
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->vaultingFunctionality = new VaultingFunctionality();
     }
 
@@ -67,23 +62,23 @@ class FeatureChecklistForm implements FormInterface
      */
     public function getDescription()
     {
-        $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
         $vars = [];
 
         if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
             $vars['isBnplEnabled'] = $this->bnplOption->isEnable();
         }
 
-        $vars['isShortcutCustomized'] = (int) Configuration::get(ShortcutConfiguration::CUSTOMIZE_STYLE);
+        $vars['isShortcutCustomized'] = (int) \Configuration::get(ShortcutConfiguration::CUSTOMIZE_STYLE);
 
-        if ($this->method instanceof MethodPPP) {
-            $vars['isPuiEnabled'] = (int) Configuration::get(PaypalConfigurations::PUI_ENABLED);
+        if ($this->method instanceof \MethodPPP) {
+            $vars['isPuiEnabled'] = (int) \Configuration::get(PaypalConfigurations::PUI_ENABLED);
         }
 
-        $vars['isOrderStatusCustomized'] = (int) Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS);
-        $vars['isShowPaypalBenefits'] = (int) Configuration::get(PaypalConfigurations::API_ADVANTAGES);
+        $vars['isOrderStatusCustomized'] = (int) \Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS);
+        $vars['isShowPaypalBenefits'] = (int) \Configuration::get(PaypalConfigurations::API_ADVANTAGES);
 
-        if (false === in_array(Tools::strtoupper($isoCountryDefault), $this->module->countriesApiCartUnavailable)) {
+        if (false === in_array(\Tools::strtoupper($isoCountryDefault), $this->module->countriesApiCartUnavailable)) {
             $vars['isCreditCardEnabled'] = $this->isCreditCardEnabled();
         }
 
@@ -92,8 +87,8 @@ class FeatureChecklistForm implements FormInterface
             $vars['vaultingStatusMessage'] = $this->vaultingFunctionality->getStatusMessage();
         }
 
-        if ($this->method instanceof MethodMB) {
-            if (Configuration::get(PaypalConfigurations::MERCHANT_INSTALLMENT)) {
+        if ($this->method instanceof \MethodMB) {
+            if (\Configuration::get(PaypalConfigurations::MERCHANT_INSTALLMENT)) {
                 $vars['isInstallmentMbEnabled'] = true;
             } else {
                 $vars['isInstallmentMbEnabled'] = false;
@@ -127,12 +122,12 @@ class FeatureChecklistForm implements FormInterface
 
     protected function isCreditCardEnabled()
     {
-        $isoCountryDefault = Tools::strtoupper(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtoupper(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
 
-        if ($this->method instanceof MethodPPP) {
-            return (int) Configuration::get(PaypalConfigurations::ACDC_OPTION);
+        if ($this->method instanceof \MethodPPP) {
+            return (int) \Configuration::get(PaypalConfigurations::ACDC_OPTION);
         } elseif (false === in_array($isoCountryDefault, $this->module->countriesApiCartUnavailable)) {
-            return (int) Configuration::get(PaypalConfigurations::API_CARD);
+            return (int) \Configuration::get(PaypalConfigurations::API_CARD);
         }
 
         return false;

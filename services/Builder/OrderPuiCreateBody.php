@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,12 +32,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Address;
-use Configuration;
-use Country;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\PUI\DataUserForm;
-use Product;
 
 class OrderPuiCreateBody extends OrderCreateBody
 {
@@ -44,8 +41,8 @@ class OrderPuiCreateBody extends OrderCreateBody
     {
         $body = parent::build();
         $dataUser = $this->getDataUser();
-        $billingAddress = new Address($this->context->cart->id_address_invoice);
-        $country = new Country($billingAddress->id_country);
+        $billingAddress = new \Address($this->context->cart->id_address_invoice);
+        $country = new \Country($billingAddress->id_country);
 
         $body['payment_source'] = [
             'pay_upon_invoice' => [
@@ -75,7 +72,7 @@ class OrderPuiCreateBody extends OrderCreateBody
 
     protected function getCustomerServiceInstructions()
     {
-        $instructions = Configuration::get(PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS);
+        $instructions = \Configuration::get(PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS);
 
         if (false == $instructions) {
             $instructions = 'Instructions are not found';
@@ -124,7 +121,7 @@ class OrderPuiCreateBody extends OrderCreateBody
                 $body['purchase_units'][0]['items'][$index]['category'] = 'PHYSICAL_GOODS';
             }
 
-            $product = new Product((int) $item['sku']);
+            $product = new \Product((int) $item['sku']);
 
             if ($product->is_virtual) {
                 $body['purchase_units'][0]['items'][$index]['category'] = 'DIGITAL_GOODS';

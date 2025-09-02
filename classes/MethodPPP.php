@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -55,7 +56,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     /** payment Object IDl*/
     public $paymentId;
 
-    /** @var \PaypalAddons\classes\PUI\DataUserForm */
+    /** @var DataUserForm */
     protected $puiDataUser;
 
     /**
@@ -319,17 +320,17 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             throw new Exception('Module is not configured');
         }
 
-        /** @var $response \PaypalAddons\classes\API\Response\ResponseOrderCreate */
+        /** @var PaypalAddons\classes\API\Response\ResponseOrderCreate $response */
         $response = $this->paypalApiManager->getOrderPuiRequest()->execute();
 
         if ($response->isSuccess() == false) {
-            throw new \Exception($response->getError()->getMessage());
+            throw new Exception($response->getError()->getMessage());
         }
 
         $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($response->getPaymentId())->execute();
 
         if ($getOrderResponse->isSuccess() == false) {
-            throw new \Exception($getOrderResponse->getError()->getMessage());
+            throw new Exception($getOrderResponse->getError()->getMessage());
         }
 
         $transactionDetails = [

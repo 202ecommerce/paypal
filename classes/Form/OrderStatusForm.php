@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,18 +28,11 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Configuration;
-use Context;
-use MethodEC;
-use MethodMB;
-use Module;
-use OrderState;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\WebHookConf;
 use PaypalAddons\classes\Webhook\CreateWebhook;
 use PaypalAddons\classes\Webhook\WebhookOption;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -55,7 +49,7 @@ class OrderStatusForm implements FormInterface
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load();
         $this->webhookOption = new WebhookOption();
     }
@@ -82,7 +76,7 @@ class OrderStatusForm implements FormInterface
                     'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                 ],
             ],
-            'value' => (int) Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS),
+            'value' => (int) \Configuration::get(PaypalConfigurations::CUSTOMIZE_ORDER_STATUS),
         ];
         $fields[PaypalConfigurations::OS_REFUNDED] = [
             'type' => 'select',
@@ -91,7 +85,7 @@ class OrderStatusForm implements FormInterface
             'hint' => $this->module->l('You can refund the orders paid via PayPal directly via your PrestaShop BackOffice. Here you can choose the order status that triggers the refund on PayPal. Choose the option "no actions" if you would like to change the order status without triggering the automatic refund on PayPal.', 'AdminPayPalCustomizeCheckoutController'),
             'desc' => $this->module->l('Default status : Refunded', 'AdminPayPalCustomizeCheckoutController'),
             'options' => $orderStatuses,
-            'value' => (int) Configuration::get(PaypalConfigurations::OS_REFUNDED),
+            'value' => (int) \Configuration::get(PaypalConfigurations::OS_REFUNDED),
         ];
 
         if ($this->method->getIntent() == 'CAPTURE') {
@@ -102,11 +96,11 @@ class OrderStatusForm implements FormInterface
                 'hint' => $this->module->l('You can cancel orders paid via PayPal directly via your PrestaShop BackOffice. Here you can choose the order status that triggers the PayPal voiding of an authorized transaction on PayPal. Choose the option "no actions" if you would like to change the order status without triggering the automatic cancellation on PayPal.', 'AdminPayPalCustomizeCheckoutController'),
                 'desc' => $this->module->l(' Default status : Canceled', 'AdminPayPalCustomizeCheckoutController'),
                 'options' => $orderStatuses,
-                'value' => (int) Configuration::get(PaypalConfigurations::OS_CANCELED),
+                'value' => (int) \Configuration::get(PaypalConfigurations::OS_CANCELED),
             ];
         }
 
-        if ($this->method instanceof MethodEC) {
+        if ($this->method instanceof \MethodEC) {
             if ($this->method->getIntent() == 'AUTHORIZE') {
                 $fields[PaypalConfigurations::OS_WAITING_VALIDATION] = [
                     'type' => 'select',
@@ -114,7 +108,7 @@ class OrderStatusForm implements FormInterface
                     'name' => PaypalConfigurations::OS_WAITING_VALIDATION,
                     'desc' => $this->module->l('Default status : Waiting for PayPal payment', 'AdminPayPalCustomizeCheckoutController'),
                     'options' => $orderStatuses,
-                    'value' => (int) Configuration::get(PaypalConfigurations::OS_WAITING_VALIDATION),
+                    'value' => (int) \Configuration::get(PaypalConfigurations::OS_WAITING_VALIDATION),
                 ];
                 $fields[PaypalConfigurations::OS_ACCEPTED] = [
                     'type' => 'select',
@@ -123,7 +117,7 @@ class OrderStatusForm implements FormInterface
                     'hint' => $this->module->l('You are currently using the Authorize mode. It means that you separate the payment authorization from the capture of the authorized payment. For capturing the authorized payement you have to change the order status to "payment accepted" (or to a custom status with the same meaning). Here you can choose a custom order status for accepting the order and validating transaction in Authorize mode.', 'AdminPayPalCustomizeCheckoutController'),
                     'desc' => $this->module->l('Default status : Payment accepted', 'AdminPayPalCustomizeCheckoutController'),
                     'options' => $orderStatuses,
-                    'value' => (int) Configuration::get(PaypalConfigurations::OS_ACCEPTED),
+                    'value' => (int) \Configuration::get(PaypalConfigurations::OS_ACCEPTED),
                 ];
                 $fields[PaypalConfigurations::OS_CAPTURE_CANCELED] = [
                     'type' => 'select',
@@ -132,7 +126,7 @@ class OrderStatusForm implements FormInterface
                     'hint' => $this->module->l('You are currently using the Authorize mode. It means that you separate the payment authorization from the capture of the authorized payment. For canceling the authorized payment you have to change the order status to "canceled" (or to a custom status with the same meaning). Here you can choose an order status for canceling the order and voiding the transaction in Authorize mode.', 'AdminPayPalCustomizeCheckoutController'),
                     'desc' => $this->module->l('Default status : Canceled', 'AdminPayPalCustomizeCheckoutController'),
                     'options' => $orderStatuses,
-                    'value' => (int) Configuration::get(PaypalConfigurations::OS_CAPTURE_CANCELED),
+                    'value' => (int) \Configuration::get(PaypalConfigurations::OS_CAPTURE_CANCELED),
                 ];
             } else {
                 $fields[PaypalConfigurations::OS_ACCEPTED_TWO] = [
@@ -142,7 +136,7 @@ class OrderStatusForm implements FormInterface
                     'hint' => $this->module->l('You are currently using the Sale mode (the authorization and capture occur at the same time as the sale). So the payement is accepted instantly and the new order is created in the "Payment accepted" status. You can customize the status for orders with completed transactions. Ex : you can create an additional status "Payment accepted via PayPal" and set it as the default status.', 'MethodPPP'),
                     'desc' => $this->module->l('Default status : Payment accepted', 'MethodPPP'),
                     'options' => $orderStatuses,
-                    'value' => (int) Configuration::get(PaypalConfigurations::OS_ACCEPTED_TWO),
+                    'value' => (int) \Configuration::get(PaypalConfigurations::OS_ACCEPTED_TWO),
                 ];
             }
         } else {
@@ -153,11 +147,11 @@ class OrderStatusForm implements FormInterface
                 'hint' => $this->module->l('You are currently using the Sale mode (the authorization and capture occur at the same time as the sale). So the payement is accepted instantly and the new order is created in the "Payment accepted" status. You can customize the status for orders with completed transactions. Ex : you can create an additional status "Payment accepted via PayPal" and set it as the default status.', 'MethodPPP'),
                 'desc' => $this->module->l('Default status : Payment accepted', 'MethodPPP'),
                 'options' => $orderStatuses,
-                'value' => (int) Configuration::get(PaypalConfigurations::OS_ACCEPTED_TWO),
+                'value' => (int) \Configuration::get(PaypalConfigurations::OS_ACCEPTED_TWO),
             ];
         }
 
-        if ($this->method instanceof MethodMB && $this->method->getIntent() == 'AUTHORIZE') {
+        if ($this->method instanceof \MethodMB && $this->method->getIntent() == 'AUTHORIZE') {
             $fields[PaypalConfigurations::OS_WAITING_VALIDATION] = [
                 'type' => 'select',
                 'label' => $this->module->l('Payment authorized, waiting for validation by admin (paid via PayPal express checkout)', 'MethodMB'),
@@ -165,7 +159,7 @@ class OrderStatusForm implements FormInterface
                 'hint' => $this->module->l('You are currently using the Authorize mode. It means that you separate the payment authorization from the capture of the authorized payment. By default the orders will be created in the "Waiting for PayPal payment" but you can customize it if needed.', 'MethodMB'),
                 'desc' => $this->module->l('Default status : Waiting for PayPal payment', 'MethodMB'),
                 'options' => $orderStatuses,
-                'value' => (int) Configuration::get(PaypalConfigurations::OS_WAITING_VALIDATION),
+                'value' => (int) \Configuration::get(PaypalConfigurations::OS_WAITING_VALIDATION),
             ];
         }
 
@@ -177,7 +171,7 @@ class OrderStatusForm implements FormInterface
                     'name' => PaypalConfigurations::OS_WAITING_VALIDATION,
                     'desc' => $this->module->l('Default status : Waiting for PayPal payment', 'AdminPayPalCustomizeCheckoutController'),
                     'options' => $orderStatuses,
-                    'value' => (int) Configuration::get(PaypalConfigurations::OS_WAITING_VALIDATION),
+                    'value' => (int) \Configuration::get(PaypalConfigurations::OS_WAITING_VALIDATION),
                 ];
             }
         }
@@ -222,49 +216,49 @@ class OrderStatusForm implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         if (empty($data['orderStatusForm'])) {
             return false;
         }
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::CUSTOMIZE_ORDER_STATUS,
             isset($data[PaypalConfigurations::CUSTOMIZE_ORDER_STATUS]) ? 1 : 0
         );
         if (isset($data[PaypalConfigurations::OS_REFUNDED])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::OS_REFUNDED,
                 (int) $data[PaypalConfigurations::OS_REFUNDED]
             );
         }
         if (isset($data[PaypalConfigurations::OS_CANCELED])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::OS_CANCELED,
                 (int) $data[PaypalConfigurations::OS_CANCELED]
             );
         }
         if (isset($data[PaypalConfigurations::OS_ACCEPTED])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::OS_ACCEPTED,
                 (int) $data[PaypalConfigurations::OS_ACCEPTED]
             );
         }
         if (isset($data[PaypalConfigurations::OS_ACCEPTED_TWO])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::OS_ACCEPTED_TWO,
                 (int) $data[PaypalConfigurations::OS_ACCEPTED_TWO]
             );
         }
         if (isset($data[PaypalConfigurations::OS_WAITING_VALIDATION])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::OS_WAITING_VALIDATION,
                 (int) $data[PaypalConfigurations::OS_WAITING_VALIDATION]
             );
         }
         if (isset($data[PaypalConfigurations::OS_CAPTURE_CANCELED])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::OS_CAPTURE_CANCELED,
                 (int) $data[PaypalConfigurations::OS_CAPTURE_CANCELED]
             );
@@ -272,10 +266,10 @@ class OrderStatusForm implements FormInterface
 
         if (isset($data[WebHookConf::ENABLE])) {
             $response = (new CreateWebhook())->setUpdate(false)->execute();
-            Configuration::updateValue(WebHookConf::ENABLE, (int) $response->isSuccess());
+            \Configuration::updateValue(WebHookConf::ENABLE, (int) $response->isSuccess());
         // ToDo: Need show warning if creation of the webhook is failed
         } else {
-            Configuration::updateValue(WebHookConf::ENABLE, 0);
+            \Configuration::updateValue(WebHookConf::ENABLE, 0);
         }
 
         return true;
@@ -289,7 +283,7 @@ class OrderStatusForm implements FormInterface
                 'title' => $this->module->l('No action'),
             ],
         ];
-        $prestashopOrderStatuses = OrderState::getOrderStates(Context::getContext()->language->id);
+        $prestashopOrderStatuses = \OrderState::getOrderStates(\Context::getContext()->language->id);
 
         foreach ($prestashopOrderStatuses as $prestashopOrderStatus) {
             $orderStatuses[] = [
@@ -303,6 +297,6 @@ class OrderStatusForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/order-status.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/order-status.tpl');
     }
 }

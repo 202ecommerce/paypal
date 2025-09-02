@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -38,7 +39,7 @@ if (!defined('_PS_VERSION_')) {
  */
 class PaypalPuiValidateModuleFrontController extends PaypalAbstarctModuleFrontController
 {
-    /* @var $method MethodPPP*/
+    /* @var $method MethodPPP */
     protected $method;
 
     public function init()

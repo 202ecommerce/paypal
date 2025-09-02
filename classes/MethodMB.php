@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -42,10 +43,10 @@ if (!defined('_PS_VERSION_')) {
  */
 class MethodMB extends AbstractMethodPaypal
 {
-    /* @var string type of the payer tax*/
+    /* @var string type of the payer tax */
     const BR_CPF = 'BR_CPF';
 
-    /* @var string type of the payer tax*/
+    /* @var string type of the payer tax */
     const BR_CNPJ = 'BR_CNPJ';
 
     protected $payment_method = 'PayPal';

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -40,7 +41,7 @@ function upgrade_module_5_4_6($module)
     if (Shop::isFeatureActive()) {
         foreach (Shop::getShops() as $shop) {
             Configuration::updateValue(
-                \PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE,
+                PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE,
                 1,
                 false,
                 null,
@@ -48,7 +49,7 @@ function upgrade_module_5_4_6($module)
             );
         }
     } else {
-        Configuration::updateValue(\PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE, 1);
+        Configuration::updateValue(PaypalAddons\classes\InstallmentBanner\ConfigurationMap::BNPL_PAYMENT_STEP_PAGE, 1);
     }
 
     $installer = new ModuleInstaller($module);

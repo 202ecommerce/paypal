@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,14 +28,12 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
 use PaypalAddons\classes\API\ExtensionSDK\Order\OrdersCreateRequest;
 use PaypalAddons\classes\API\HttpAdoptedResponse;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseOrderCreate;
 use PaypalAddons\classes\PaypalException;
 use PaypalAddons\services\Builder\OrderCreateBody;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -83,13 +82,13 @@ class PaypalOrderCreateRequest extends RequestAbstract
 
             $error->setErrorCode($e->getCode());
             $response->setSuccess(false)->setError($error);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

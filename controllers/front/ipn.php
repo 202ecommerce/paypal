@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -58,19 +59,19 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
                     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = 'Error code: ' . $e->getCode() . '.';
             $message .= 'Short message: ' . $e->getMessage() . '.';
 
             ProcessLoggerHandler::openLogger();
             ProcessLoggerHandler::logError(
                 $message,
-                \Tools::getValue('txn_id') ? \Tools::getValue('txn_id') : null,
+                Tools::getValue('txn_id') ? Tools::getValue('txn_id') : null,
                 null,
                 null,
                 null,
                 null,
-                (int) \Configuration::get('PAYPAL_SANDBOX'),
+                (int) Configuration::get('PAYPAL_SANDBOX'),
                 null
             );
             ProcessLoggerHandler::closeLogger();
@@ -209,7 +210,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
      */
     protected function setOrderStatus($orders, $idState)
     {
-        /** @var $order \Order */
+        /** @var Order $order */
         foreach ($orders as $order) {
             $order->setCurrentState((int) $idState);
         }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\Venmo;
 
-use Context;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,7 @@ class VenmoButton
 
     public function __construct()
     {
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
         $this->method = AbstractMethodPaypal::load();
     }
 

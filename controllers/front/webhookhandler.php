@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -101,8 +102,8 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                 ProcessLoggerHandler::closeLogger();
                 header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
             }
-        } catch (\Exception $exception) {
-        } catch (\Throwable $exception) {//for php version > 7
+        } catch (Exception $exception) {
+        } catch (Throwable $exception) {// for php version > 7
         }
 
         if (isset($exception)) {

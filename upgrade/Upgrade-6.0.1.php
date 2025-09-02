@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -36,7 +37,7 @@ if (!defined('_PS_VERSION_')) {
  */
 function upgrade_module_6_0_1($module)
 {
-    $installer = new \PaypalPPBTlib\Install\ModuleInstaller($module);
+    $installer = new PaypalPPBTlib\Install\ModuleInstaller($module);
     $installer->installObjectModels();
     $module->resetHooks();
 

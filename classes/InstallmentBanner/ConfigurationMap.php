@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -28,7 +29,6 @@
 namespace PaypalAddons\classes\InstallmentBanner;
 
 use Configuration;
-use Country;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -96,7 +96,7 @@ class ConfigurationMap
             self::COLOR_GRAYSCALE => '#ffffff',
             self::COLOR_GRAY => '#ebecee',
         ];
-        $isoCountryDefault = \Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
 
         if ($isoCountryDefault === 'de') {
             $gradientMap[self::COLOR_BLACK] = '#2c2e2f';
@@ -164,7 +164,7 @@ class ConfigurationMap
 
     public static function getPageConfMap()
     {
-        //todo: should add possibility modify the list by hook?
+        // todo: should add possibility modify the list by hook?
         return [
             'OrderController' => self::CHECKOUT_PAGE,
             'CartController' => self::CART_PAGE,
@@ -191,7 +191,7 @@ class ConfigurationMap
 
     public static function getBnplColorMapping()
     {
-        //todo: validate mapping
+        // todo: validate mapping
         return [
             'gray' => 'white',
             'monochrome' => 'white',

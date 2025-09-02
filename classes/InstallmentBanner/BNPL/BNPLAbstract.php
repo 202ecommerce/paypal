@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,8 @@
 
 namespace PaypalAddons\classes\InstallmentBanner\BNPL;
 
-use Configuration;
-use Context;
-use Country;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,10 +37,10 @@ if (!defined('_PS_VERSION_')) {
 
 abstract class BNPLAbstract
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
-    /** @var Module */
+    /** @var \Module */
     protected $module;
 
     /** @var AbstractMethodPaypal */
@@ -55,8 +51,8 @@ abstract class BNPLAbstract
 
     public function __construct()
     {
-        $this->context = Context::getContext();
-        $this->module = Module::getInstanceByName('paypal');
+        $this->context = \Context::getContext();
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->setId(uniqid());
     }
@@ -173,8 +169,8 @@ abstract class BNPLAbstract
     /** @return string*/
     public function getColor()
     {
-        if ((int) Configuration::get(ConfigurationMap::ADVANCED_OPTIONS_INSTALLMENT)) {
-            $bannerColor = Configuration::get(ConfigurationMap::COLOR);
+        if ((int) \Configuration::get(ConfigurationMap::ADVANCED_OPTIONS_INSTALLMENT)) {
+            $bannerColor = \Configuration::get(ConfigurationMap::COLOR);
         } else {
             $bannerColor = ConfigurationMap::COLOR_GRAY;
         }
@@ -184,7 +180,7 @@ abstract class BNPLAbstract
 
     public function getBuyerCountry()
     {
-        $buyerCountry = Tools::strtoupper(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $buyerCountry = \Tools::strtoupper(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
         // https://developer.paypal.com/docs/regional/th/checkout/reference/customize-sdk/
         // According a documentation the available countries are following 'US', 'CA', 'GB', 'DE', 'FR', 'IT', 'ES'
         // But an error was occurring using 'US', 'CA', 'GB' during the test

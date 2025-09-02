@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,8 +28,6 @@
 
 namespace PaypalAddons\classes\ACDC;
 
-use Configuration;
-use Context;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 
@@ -41,7 +40,7 @@ class AcdcPaymentMethod
     /** @var AbstractMethodPaypal */
     protected $method;
 
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
     public function __construct($method = null)
@@ -52,7 +51,7 @@ class AcdcPaymentMethod
             $this->method = AbstractMethodPaypal::load();
         }
 
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     public function render()
@@ -73,7 +72,7 @@ class AcdcPaymentMethod
         $vars = [
             'psPaypalDir' => _PS_MODULE_DIR_ . 'paypal',
             'JSvars' => [
-                PaypalConfigurations::MOVE_BUTTON_AT_END => (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+                PaypalConfigurations::MOVE_BUTTON_AT_END => (int) \Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
             ],
             'JSscripts' => $this->getScripts(),
         ];
