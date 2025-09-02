@@ -30,6 +30,10 @@ namespace PaypalAddons\classes\InstallmentBanner;
 use Configuration;
 use Country;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class BuyerCountry
 {
     public function set($isoCountry)
