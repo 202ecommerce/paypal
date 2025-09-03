@@ -34,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
 
 class CloudSyncView
 {
-    /** @var \Module|\PayPal */
+    /** @var \PayPal */
     protected $module;
     /** @var \Context */
     protected $context;
@@ -43,7 +43,7 @@ class CloudSyncView
 
     public function __construct()
     {
-        $this->module = \Module::getInstanceByName('paypal');
+        $this->module = call_user_func([\Module::class, 'getInstanceByName'], 'paypal');
         $this->context = \Context::getContext();
         $this->cloudSyncWrapper = new CloudSyncWrapper();
     }

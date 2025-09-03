@@ -40,16 +40,16 @@ class SepaButton
     /** @var \Context */
     protected $context;
 
-    /** @var \Module */
+    /** @var \PayPal */
     protected $module;
 
-    /** @var AbstractMethodPaypal */
+    /** @var \MethodEC|\MethodPPP|\MethodMB */
     protected $method;
 
     public function __construct()
     {
         $this->context = \Context::getContext();
-        $this->module = \Module::getInstanceByName('paypal');
+        $this->module = call_user_func([\Module::class, 'getInstanceByName'], 'paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
     }
 
@@ -66,7 +66,7 @@ class SepaButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJSvars()
     {
@@ -76,7 +76,7 @@ class SepaButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJS()
     {
@@ -129,7 +129,7 @@ class SepaButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getTplVars()
     {

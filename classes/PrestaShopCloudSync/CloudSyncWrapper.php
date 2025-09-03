@@ -85,7 +85,7 @@ class CloudSyncWrapper
     {
         $eventbusModule = \Module::getInstanceByName('ps_eventbus');
 
-        return $eventbusModule->getService('PrestaShop\Module\PsEventbus\Service\PresenterService');
+        return call_user_func([$eventbusModule, 'getService'], 'PrestaShop\Module\PsEventbus\Service\PresenterService');
     }
 
     public function areDependenciesMet()

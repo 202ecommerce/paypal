@@ -66,7 +66,7 @@ class ShortcutPreview extends ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getTplVars()
     {

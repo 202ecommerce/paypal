@@ -27,6 +27,7 @@
  */
 
 use PaypalAddons\classes\AbstractMethodPaypal;
+use PaypalAddons\services\ToolKit;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,6 +44,8 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
     protected $method;
 
     protected $fileName;
+    /** @var ToolKit */
+    protected $toolKit;
 
     public function init()
     {
@@ -50,6 +53,7 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
         $this->fileName = pathinfo(__FILE__)['filename'];
         $this->setPaymentData(json_decode(Tools::getValue('paymentData')));
         $this->method = AbstractMethodPaypal::load();
+        $this->toolKit = new ToolKit();
     }
 
     /**
@@ -57,8 +61,6 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
      */
     public function postProcess()
     {
-        $paypal = Module::getInstanceByName($this->name);
-
         try {
             $this->redirectUrl = $this->context->link->getPageLink('order', null, null, ['step' => 2]);
             $this->method->setPaymentId($this->paymentData->orderID);
@@ -87,12 +89,10 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
      */
     public function prepareOrder($info)
     {
-        $module = Module::getInstanceByName($this->name);
-
         if (false === $this->method->isCorrectCart($this->context->cart, $this->paymentData->orderID)) {
             $this->redirectUrl = Context::getContext()->link->getPageLink('order');
-            $this->_errors[] = $module->l('The elements in the shopping cart were changed. Please try to pay again.', $this->fileName);
-            $module->resetCookiePaymentInfo();
+            $this->_errors[] = $this->module->l('The elements in the shopping cart were changed. Please try to pay again.', $this->fileName);
+            $this->module->resetCookiePaymentInfo();
 
             return;
         }
@@ -106,7 +106,7 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
             $customer->email = $info->getClient()->getEmail();
             $customer->firstname = $info->getClient()->getFirstName();
             $customer->lastname = $info->getClient()->getLastName();
-            $customer->passwd = Tools::encrypt(Tools::passwdGen());
+            $customer->passwd = $this->toolKit->hash(Tools::passwdGen());
 
             $customer->add();
         }
@@ -181,11 +181,11 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
             $orderAddress->alias = 'Paypal_Address ' . $count;
             $validationMessage = $orderAddress->validateFields(false, true);
             if (Country::containsStates($orderAddress->id_country) && $orderAddress->id_state == false) {
-                $validationMessage = $module->l('State is required in order to process payment. Please fill in state field.', $this->fileName);
+                $validationMessage = $this->module->l('State is required in order to process payment. Please fill in state field.', $this->fileName);
             }
             $country = new Country($orderAddress->id_country);
             if ($country->active == false) {
-                $validationMessage = $module->l('Country is not active', $this->fileName);
+                $validationMessage = $this->module->l('Country is not active', $this->fileName);
             }
 
             if (is_string($validationMessage)) {

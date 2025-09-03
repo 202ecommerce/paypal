@@ -75,5 +75,5 @@ function upgrade_module_5_1_0($module)
         }
     }
 
-    return $return;
+    return (bool) $return;
 }

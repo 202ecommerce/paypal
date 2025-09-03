@@ -34,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
 
 abstract class AbstractWidget
 {
-    /** @var \Module */
+    /** @var \PayPal */
     protected $module;
 
     /** @var array */
@@ -44,12 +44,12 @@ abstract class AbstractWidget
     protected $context;
 
     /**
-     * @param \Module $module
+     * @param \PayPal $module
      * @param array $configuratons
      *
      * @return void
      */
-    public function __construct(\Module $module, $configuratons = [])
+    public function __construct($module, $configuratons = [])
     {
         $this->module = $module;
         $this->configuratons = $configuratons;

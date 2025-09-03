@@ -49,6 +49,8 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
     protected $webhookEventHandler;
 
     protected $method;
+    /** @var PayPal */
+    public $module;
 
     public function __construct()
     {

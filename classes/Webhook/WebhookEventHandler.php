@@ -69,7 +69,7 @@ class WebhookEventHandler
         ]);
         $msg = \Tools::substr($msg, 0, 999);
 
-        if ($event->getResource()->status != 'COMPLETED') {
+        if ($event->getResource()->__get('status') != 'COMPLETED') {
             ProcessLoggerHandler::logInfo(
                 $msg,
                 empty($event->getResource()->id) ? '' : $event->getResource()->id,
@@ -77,7 +77,7 @@ class WebhookEventHandler
                 null,
                 null,
                 'PayPal',
-                (int) \Configuration::get('PAYPAL_SANDBOX')
+                (bool) \Configuration::get('PAYPAL_SANDBOX')
             );
             ProcessLoggerHandler::closeLogger();
 
@@ -102,7 +102,7 @@ class WebhookEventHandler
                 $order->id_cart,
                 $order->id_shop,
                 'PayPal',
-                (int) \Configuration::get('PAYPAL_SANDBOX')
+                (bool) \Configuration::get('PAYPAL_SANDBOX')
             );
 
             if ($psOrderStatus == 0) {
@@ -156,13 +156,10 @@ class WebhookEventHandler
         } catch (\Throwable $e) {
             $paypalWebhook->data = '';
             $paypalWebhook->save();
-        } catch (\Exception $e) {
-            $paypalWebhook->data = '';
-            $paypalWebhook->save();
         }
 
         if ($psOrderStatus == $this->getStatusMapping()->getAcceptedStatus()) {
-            $this->servicePaypalOrder->setTransactionId($paypalOrder, $event->getResource()->id);
+            $this->servicePaypalOrder->setTransactionId($paypalOrder, $event->getResource()->__get('id'));
         }
 
         return true;
@@ -178,8 +175,6 @@ class WebhookEventHandler
         try {
             return (bool) \Db::getInstance()->getValue($query);
         } catch (\Throwable $e) {
-            return false;
-        } catch (\Exception $e) {
             return false;
         }
     }
@@ -208,7 +203,7 @@ class WebhookEventHandler
         }
 
         if ($event->getEventType() == WebHookType::CAPTURE_REFUNDED) {
-            foreach ($event->getResource()->links as $link) {
+            foreach ($event->getResource()->__get('links') as $link) {
                 if ($link->rel == 'up') {
                     return $this->getTransactionFromHref($link->href);
                 }
@@ -219,7 +214,7 @@ class WebhookEventHandler
     }
 
     /**
-     * @param mixed $data
+     * @param WebhookEvent $event
      *
      * @return bool
      */
@@ -229,23 +224,22 @@ class WebhookEventHandler
     }
 
     /**
-     * @param mixed $data
+     * @param WebhookEvent $event
      *
      * @return string
      */
     protected function getAuthorizationId(WebhookEvent $event)
     {
         try {
+            /* @phpstan-ignore-next-line */
             return $event->getResource()->supplementary_data->related_ids->authorization_id;
         } catch (\Throwable $e) {
-            return '';
-        } catch (\Exception $e) {
             return '';
         }
     }
 
     /**
-     * @param mixed $data
+     * @param WebhookEvent $event
      *
      * @return float
      */
@@ -254,8 +248,6 @@ class WebhookEventHandler
         try {
             return (float) $event->getResource()->amount->value;
         } catch (\Throwable $e) {
-            return 0;
-        } catch (\Exception $e) {
             return 0;
         }
     }

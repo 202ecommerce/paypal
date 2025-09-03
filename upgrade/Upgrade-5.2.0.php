@@ -53,5 +53,5 @@ function upgrade_module_5_2_0($module)
         Configuration::updateValue('PAYPAL_API_INTENT', 'authorize');
     }
 
-    return $return;
+    return (bool) $return;
 }

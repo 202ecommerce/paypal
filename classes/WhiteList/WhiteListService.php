@@ -61,8 +61,6 @@ class WhiteListService
             $list = json_decode($list, true);
         } catch (\Throwable $e) {
             return [];
-        } catch (\Exception $e) {
-            return [];
         }
 
         return array_filter($list, function ($ip) { return false === empty($ip); });

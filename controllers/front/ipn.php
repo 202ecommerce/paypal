@@ -71,7 +71,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
                 null,
                 null,
                 null,
-                (int) Configuration::get('PAYPAL_SANDBOX'),
+                (bool) Configuration::get('PAYPAL_SANDBOX'),
                 null
             );
             ProcessLoggerHandler::closeLogger();
@@ -119,7 +119,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
                 $order->id_cart,
                 null,
                 'PayPal',
-                (int) Configuration::get('PAYPAL_SANDBOX')
+                (bool) Configuration::get('PAYPAL_SANDBOX')
             );
         }
         ProcessLoggerHandler::closeLogger();

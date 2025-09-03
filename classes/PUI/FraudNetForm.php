@@ -62,8 +62,6 @@ class FraudNetForm
             return \Context::getContext()->smarty->fetch('module:paypal/views/templates/pui/fraudNetForm.tpl');
         } catch (\Throwable $e) {
             return '';
-        } catch (\Exception $e) {
-            return '';
         }
     }
 

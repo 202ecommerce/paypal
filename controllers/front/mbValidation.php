@@ -53,7 +53,6 @@ class PaypalMbValidationModuleFrontController extends PaypalAbstarctModuleFrontC
      */
     public function postProcess()
     {
-        $paypal = Module::getInstanceByName($this->name);
         $paymentData = $this->parsePaymentData(Tools::getAllValues());
         $this->method->setPaymentId($paymentData->getPaymentID());
         $this->method->setPayerId($paymentData->getPaymentID());
@@ -63,7 +62,7 @@ class PaypalMbValidationModuleFrontController extends PaypalAbstarctModuleFrontC
             $this->method->validation();
             $cart = Context::getContext()->cart;
             $customer = new Customer($cart->id_customer);
-            $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $paypal->id . '&id_order=' . $paypal->currentOrder . '&key=' . $customer->secure_key;
+            $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $this->module->currentOrder . '&key=' . $customer->secure_key;
         } catch (PaypalAddons\classes\Exception\PayerActionRequired $e) {
             $this->redirectUrl = $e->getPayerActionLink();
 

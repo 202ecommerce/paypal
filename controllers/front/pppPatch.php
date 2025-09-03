@@ -40,7 +40,7 @@ class PaypalPppPatchModuleFrontController extends PaypalAbstarctModuleFrontContr
     public function postProcess()
     {
         $method_ppp = AbstractMethodPaypal::load('PPP');
-        $idPayment = Tools::getValue('idPayment') ? Tools::getValue('idPayment') : Context::getContext()->cookie->paypal_plus_payment;
+        $idPayment = Tools::getValue('idPayment') ? Tools::getValue('idPayment') : Context::getContext()->cookie->__get('paypal_plus_payment');
         $method_ppp->setPaymentId($idPayment);
 
         if ($idPayment) {

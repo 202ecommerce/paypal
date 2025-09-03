@@ -162,7 +162,7 @@ class PaypalOrder extends ObjectModel
         $sql->where('id_order = ' . (int) $id_order);
         $id_paypal_order = Db::getInstance()->getValue($sql);
 
-        return new self($id_paypal_order);
+        return new self((int) $id_paypal_order);
     }
 
     /**

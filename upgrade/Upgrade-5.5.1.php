@@ -60,7 +60,7 @@ function upgrade_module_5_5_1($module)
             null,
             null,
             null,
-            (int) $method->isSandbox()
+            $method->isSandbox()
         );
         ProcessLoggerHandler::closeLogger();
     }

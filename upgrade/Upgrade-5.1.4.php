@@ -43,5 +43,5 @@ function upgrade_module_5_1_4($module)
     $return &= $module->registerHook('displayAdminOrderTabLink');
     $return &= $module->registerHook('displayAdminOrderTabContent');
 
-    return $return;
+    return (bool) $return;
 }

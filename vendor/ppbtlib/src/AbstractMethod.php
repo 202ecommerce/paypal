@@ -27,6 +27,9 @@
 
 namespace PaypalPPBTlib;
 
+use Exception;
+use PaypalOrder;
+
 abstract class AbstractMethod
 {
     /** @var string module name */
@@ -65,7 +68,7 @@ abstract class AbstractMethod
     /**
      * Capture authorized transaction
      * @param $orderPayPal PaypalOrder object
-     * @return array|Exception
+     * @return mixed
      */
     abstract public function confirmCapture($orderPayPal);
 
@@ -85,10 +88,10 @@ abstract class AbstractMethod
 
     /**
      * Generate getContent
-     * @param Paypal $module
+     * @param \PayPal $module
      * @return mixed
      */
-    abstract public function getConfig(\Paypal $module);
+    abstract public function getConfig(\PayPal $module);
 
     /**
      * Void authorized transaction (cancel payment)

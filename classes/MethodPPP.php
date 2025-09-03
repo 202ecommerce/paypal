@@ -153,7 +153,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         }
     }
 
-    public function getConfig(Paypal $paypal)
+    public function getConfig(PayPal $module)
     {
     }
 
@@ -162,6 +162,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
      */
     public function confirmCapture($orderPayPal)
     {
+        return null;
     }
 
     /**
@@ -205,8 +206,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             $approval_url = $this->init()->getApproveLink();
             $context->cookie->__set('paypal_plus_payment', $this->paymentId);
         } catch (Throwable $e) {
-            return false;
-        } catch (Exception $e) {
             return false;
         }
 
@@ -344,6 +343,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             'intent' => $this->getIntent(),
             'capture' => false,
         ];
+        /** @var PayPal $paypal */
         $paypal = Module::getInstanceByName($this->name);
         $paypal->validateOrder(
             Context::getContext()->cart->id,

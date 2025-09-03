@@ -38,7 +38,7 @@ if (!defined('_PS_VERSION_')) {
  */
 abstract class PaypalAbstarctModuleFrontController extends CommonAbstarctModuleFrontController
 {
-    /** @var Module|PayPal */
+    /** @var PayPal */
     public $module;
 
     /**
@@ -47,12 +47,7 @@ abstract class PaypalAbstarctModuleFrontController extends CommonAbstarctModuleF
     protected function parsePaymentData($data)
     {
         $paymentDataObj = new PaymentData();
-
-        try {
-            $paymentData = json_decode($data, true);
-        } catch (Exception $e) {
-            $paymentData = [];
-        }
+        $paymentData = json_decode($data, true);
 
         if (false == is_array($paymentData)) {
             return $paymentDataObj;

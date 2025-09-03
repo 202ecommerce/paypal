@@ -70,7 +70,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /** @var bool */
     protected $isSandbox;
 
-    /** @var PaypalApiManagerInterface */
+    /** @var PaypalApiManagerInterface|PaypalVaultApiManagerInterface|PaypalWebhookApiManagerInterface */
     protected $paypalApiManager;
 
     /** @var string */
@@ -79,7 +79,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @param string $method
      *
-     * @return AbstractMethodPaypal
+     * @return \MethodEC|\MethodPPP|\MethodMB
      */
     public static function load($method = null)
     {

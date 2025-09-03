@@ -74,6 +74,7 @@ class PaypalScInitModuleFrontController extends PaypalAbstarctModuleFrontControl
                 $group = $this->parseCombination($request->combination);
 
                 if (false == empty($group)) {
+                    /* @phpstan-ignore-next-line */
                     $product->id_product_attribute = $this->module->getIdProductAttributeByIdAttributes($request->idProduct, $group);
                 }
 
@@ -115,7 +116,7 @@ class PaypalScInitModuleFrontController extends PaypalAbstarctModuleFrontControl
     {
         if (empty($this->context->cart->id)) {
             $this->context->cart->add();
-            $this->context->cookie->id_cart = $this->context->cart->id;
+            $this->context->cookie->__set('id_cart', $this->context->cart->id);
             $this->context->cookie->write();
         } else {
             // delete all product in cart

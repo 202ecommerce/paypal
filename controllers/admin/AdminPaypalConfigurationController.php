@@ -78,7 +78,7 @@ class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPa
 
     protected function initForms()
     {
-        $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = Tools::strtolower(Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT')));
         $this->forms['checkoutForm'] = new CheckoutForm((int) Tools::getValue('with_factory'));
         $this->forms['trackingForm'] = new TrackingParametersForm();
 
@@ -177,8 +177,6 @@ class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPa
 
             $data['success'] = true;
         } catch (Throwable $e) {
-            $data['success'] = false;
-        } catch (Exception $e) {
             $data['success'] = false;
         }
 
@@ -407,7 +405,7 @@ class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPa
             $confing = [];
         }
 
-        $country = Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY, 'fr');
+        $country = Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY, Language::getIdByIso('fr'));
         $locale = $country;
         switch ($country) {
             case 'au':

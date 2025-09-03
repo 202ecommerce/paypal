@@ -40,10 +40,10 @@ class VaultedPaymentButton
     /** @var \Context */
     protected $context;
 
-    /** @var \Module */
+    /** @var \PayPal */
     protected $module;
 
-    /** @var AbstractMethodPaypal */
+    /** @var \MethodEC|\MethodPPP|\MethodMB */
     protected $method;
 
     /** @var string */
@@ -55,7 +55,7 @@ class VaultedPaymentButton
     public function __construct($userIdToken)
     {
         $this->context = \Context::getContext();
-        $this->module = \Module::getInstanceByName('paypal');
+        $this->module = call_user_func([\Module::class, 'getInstanceByName'], 'paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->userIdToken = (string) $userIdToken;
     }
@@ -74,7 +74,7 @@ class VaultedPaymentButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJSvars()
     {
@@ -82,7 +82,7 @@ class VaultedPaymentButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJS()
     {
@@ -135,7 +135,7 @@ class VaultedPaymentButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getTplVars()
     {
@@ -147,7 +147,7 @@ class VaultedPaymentButton
 
     protected function getBuyerCountry()
     {
-        $buyerCountry = \Tools::strtoupper(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
+        $buyerCountry = \Tools::strtoupper(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
         // https://developer.paypal.com/docs/regional/th/checkout/reference/customize-sdk/
         // According a documentation the available countries are following 'US', 'CA', 'GB', 'DE', 'FR'
         // But an error was occurring using 'US', 'CA', 'GB' during the test

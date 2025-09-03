@@ -40,10 +40,10 @@ abstract class ShortcutAbstract
     /** @var \Context */
     protected $context;
 
-    /** @var \Module */
+    /** @var \PayPal */
     protected $module;
 
-    /** @var AbstractMethodPaypal */
+    /** @var \MethodEC|\MethodPPP|\MethodMB */
     protected $method;
 
     /** @var string */
@@ -52,7 +52,7 @@ abstract class ShortcutAbstract
     public function __construct()
     {
         $this->context = \Context::getContext();
-        $this->module = \Module::getInstanceByName('paypal');
+        $this->module = call_user_func([\Module::class, 'getInstanceByName'], 'paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->setId(uniqid());
     }
@@ -71,7 +71,7 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJSvars()
     {
@@ -84,7 +84,7 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJS()
     {
@@ -124,7 +124,7 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     abstract protected function getTplVars();
 
@@ -138,7 +138,7 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId()
     {
@@ -157,7 +157,7 @@ abstract class ShortcutAbstract
         return $this;
     }
 
-    /** @return []*/
+    /** @return array */
     public function getJqueryPath()
     {
         return $this->getPaypalMedia()->getJqueryPath();
@@ -176,7 +176,6 @@ abstract class ShortcutAbstract
         try {
             \Hook::exec('actionPaypalShortcutIsAddJquery', ['isAddJquery' => &$isAddJquery]);
         } catch (\Throwable $e) {
-        } catch (\Exception $e) {
         }
 
         return $isAddJquery;
