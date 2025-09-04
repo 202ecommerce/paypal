@@ -209,7 +209,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @see AbstractMethod::validation()
      * @return void
      * @throws \Exception
      */
@@ -217,6 +216,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     {
         $context = \Context::getContext();
         $cart = $context->cart;
+        /* @phpstan-ignore-next-line */
         $customer = new \Customer($cart->id_customer);
         $vaultingFunctionality = $this->initVaultingFunctionality();
 
@@ -406,7 +406,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @param ResponseOrderCapture $data
      *
-     * @return array
+     * @return void
      */
     public function setDetailsTransaction($data)
     {
@@ -425,8 +425,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         ];
 
         $this->transaction_detail = $transaction_detail;
-
-        return $transaction_detail;
     }
 
     /**
@@ -503,6 +501,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $paypal = \Module::getInstanceByName($this->name);
 
         if ($convert && $id_currency_to = $paypal->needConvert()) {
+            /* @phpstan-ignore-next-line */
             $currency_to_convert = new \Currency($id_currency_to);
             $price = \Tools::convertPriceFull($price, $context_currency, $currency_to_convert);
         }

@@ -405,7 +405,7 @@ class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPa
             $confing = [];
         }
 
-        $country = Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY, Language::getIdByIso('fr'));
+        $country = Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY, (int) Language::getIdByIso('fr'));
         $locale = $country;
         switch ($country) {
             case 'au':

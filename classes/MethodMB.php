@@ -151,6 +151,7 @@ class MethodMB extends AbstractMethodPaypal
     {
         $context = Context::getContext();
         $cart = $context->cart;
+        /* @phpstan-ignore-next-line */
         $customer = new Customer($cart->id_customer);
 
         if (Validate::isLoadedObject($customer) && $this->getRememberedCards()) {
@@ -226,6 +227,7 @@ class MethodMB extends AbstractMethodPaypal
         $context = Context::getContext();
         $module = Module::getInstanceByName($this->name);
         Media::addJsDef([
+            /* @phpstan-ignore-next-line */
             'ajaxPatch' => $context->link->getModuleLink('paypal', 'mbValidation', [], true),
             'EMPTY_TAX_ID' => $module->l('For processing you payment via PayPal it is required to add a VAT number to your address. Please fill it and complete your payment.', get_class($this)),
             'INVALID_PAYER_TAX_ID' => $module->l('For processing you payment via PayPal it is required to add a valid Tax ID to your address. Please verify if your Tax ID is correct, change it if needed and complete your payment.', get_class($this)),
@@ -415,6 +417,7 @@ class MethodMB extends AbstractMethodPaypal
      */
     public function getReturnUrl()
     {
+        /* @phpstan-ignore-next-line */
         return (string) Context::getContext()->link->getModuleLink($this->name, 'mbValidation', [], true);
     }
 

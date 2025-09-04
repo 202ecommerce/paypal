@@ -97,9 +97,10 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
             return;
         }
 
-        if ($this->context->cookie->logged) {
+        if ($this->context->cookie->__get('logged')) {
             $customer = $this->context->customer;
         } elseif ($id_customer = Customer::customerExists($info->getClient()->getEmail(), true)) {
+            /* @phpstan-ignore-next-line */
             $customer = new Customer($id_customer);
         } else {
             $customer = new Customer();

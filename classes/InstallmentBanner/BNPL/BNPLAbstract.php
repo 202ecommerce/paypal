@@ -77,7 +77,9 @@ abstract class BNPLAbstract
     protected function getJSvars()
     {
         $JSvars = [];
+        /* @phpstan-ignore-next-line */
         $JSvars['sc_init_url'] = $this->context->link->getModuleLink($this->module->name, 'ScInit', [], true);
+        /* @phpstan-ignore-next-line */
         $JSvars['scOrderUrl'] = $this->context->link->getModuleLink($this->module->name, 'scOrder', [], true);
         $JSvars['bnplColor'] = $this->getColor();
 

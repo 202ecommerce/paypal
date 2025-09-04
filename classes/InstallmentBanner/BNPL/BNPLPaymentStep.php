@@ -49,6 +49,7 @@ class BNPLPaymentStep extends BNPLAbstract
         $return = [
             'shop_url' => $shop_url,
             'PayPal_payment_type' => $this->getMethodType(),
+            /* @phpstan-ignore-next-line */
             'action_url' => $this->context->link->getModuleLink($this->module->name, 'ScInit', [], true),
             'ec_sc_in_context' => \Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT'),
             'merchant_id' => \Configuration::get('PAYPAL_MERCHANT_ID_' . \Tools::strtoupper($environment)),

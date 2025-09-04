@@ -527,6 +527,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         if (!Configuration::get('PAYPAL_OS_WAITING')
             || !Validate::isLoadedObject(new OrderState((int) Configuration::get('PAYPAL_OS_WAITING')))) {
             $order_state = new OrderState();
+            /* @phpstan-ignore-next-line */
             $order_state->name = [];
             foreach (Language::getLanguages() as $language) {
                 if (Tools::strtolower($language['iso_code']) == 'fr') {
@@ -804,6 +805,7 @@ class PayPal extends PaymentModule implements WidgetInterface
                         $payment_option->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/logo_card.png'));
                         $payment_option->setCallToActionText($action_text);
                         $payment_option->setModuleName('paypal_cb');
+                        /* @phpstan-ignore-next-line */
                         $payment_option->setAction($this->context->link->getModuleLink($this->name, 'ecInit', ['credit_card' => '1'], true));
                         $payment_option->setAdditionalInformation($this->context->smarty->fetch('module:paypal/views/templates/front/payment_infos_card.tpl'));
                         $payments_options[] = $payment_option;
@@ -817,6 +819,7 @@ class PayPal extends PaymentModule implements WidgetInterface
                         $action_text = $this->l('Pay with paypal plus shortcut');
                         $payment_option->setCallToActionText($action_text);
                         $payment_option->setModuleName('paypal_plus_schortcut');
+                        /* @phpstan-ignore-next-line */
                         $payment_option->setAction($this->context->link->getModuleLink($this->name, 'pppValidation', ['short_cut' => '1', 'token' => $this->context->cookie->paypal_pSc], true));
                         $payments_options[] = $payment_option;
                     }
@@ -1039,17 +1042,8 @@ class PayPal extends PaymentModule implements WidgetInterface
         if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT')) {
             $additionalInformation .= $this->getShortcutPaymentStep()->render();
         } else {
-            $paymentOption->setAction(
-                $this->context->link->getModuleLink(
-                    $this->name,
-                    'ecInit',
-                    [
-                        'credit_card' => '0',
-                        'methodType' => 'PPP',
-                    ],
-                    true
-                )
-            );
+            /* @phpstan-ignore-next-line */
+            $paymentOption->setAction($this->context->link->getModuleLink($this->name, 'ecInit', ['credit_card' => '0', 'methodType' => 'PPP'], true));
         }
 
         if (!$is_virtual && Configuration::get('PAYPAL_API_ADVANTAGES')) {
@@ -1096,6 +1090,7 @@ class PayPal extends PaymentModule implements WidgetInterface
             $additionalInformation .= $this->getShortcutPaymentStep()->render();
         } else {
             $paymentOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_ . $this->name . '/views/img/paypal_logo.png'));
+            /* @phpstan-ignore-next-line */
             $paymentOption->setAction($this->context->link->getModuleLink($this->name, 'ecInit', ['credit_card' => '0'], true));
         }
         if (!$is_virtual && Configuration::get('PAYPAL_API_ADVANTAGES')) {
@@ -1127,6 +1122,7 @@ class PayPal extends PaymentModule implements WidgetInterface
             $action_text = $this->l('Pay with paypal express checkout');
             $paymentOption->setCallToActionText($action_text);
             $paymentOption->setModuleName('express_checkout_schortcut');
+            /* @phpstan-ignore-next-line */
             $paymentOption->setAction($this->context->link->getModuleLink($this->name, 'ecValidation', ['short_cut' => '1', 'token' => $this->context->cookie->paypal_ecs], true));
             $paymentOptions[] = $paymentOption;
         }
@@ -1538,11 +1534,13 @@ class PayPal extends PaymentModule implements WidgetInterface
     public function getPaymentCurrencyIso()
     {
         if ($id_currency = $this->needConvert()) {
+            /* @phpstan-ignore-next-line */
             $currency = new Currency((int) $id_currency);
         } else {
             if (Validate::isLoadedObject(Context::getContext()->currency)) {
                 $currency = Context::getContext()->currency;
             } else {
+                /* @phpstan-ignore-next-line */
                 $currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
             }
         }
@@ -1622,8 +1620,8 @@ class PayPal extends PaymentModule implements WidgetInterface
 
         $adminEmployee = new Employee(_PS_ADMIN_PROFILE_);
         $order = new Order($this->currentOrder);
-        $adminLang = new Language($adminEmployee->id_lang);
-        $orderState = new OrderState($order->current_state, $adminEmployee->id_lang);
+        $adminLang = new Language((int) $adminEmployee->id_lang);
+        $orderState = new OrderState($order->current_state, (int) $adminEmployee->id_lang);
 
         if (is_string($orderState->name)) {
             $message = $orderState->name;
@@ -2356,12 +2354,12 @@ class PayPal extends PaymentModule implements WidgetInterface
             if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
                 $context = Context::getContext()->cloneContext();
                 $context->currency = $currency;
-                $precision = $context->getComputingPrecision();
+                $precision = call_user_func([$context, 'getComputingPrecision']);
                 unset($context);
 
                 return $precision;
             } else {
-                return Context::getContext()->getComputingPrecision();
+                return call_user_func([Context::getContext(), 'getComputingPrecision']);
             }
         }
     }
@@ -2380,7 +2378,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         if ($isoCurrency === null || Currency::exists($isoCurrency) === false) {
             $isoCurrency = $paypal->getPaymentCurrencyIso();
         }
-
+        /* @phpstan-ignore-next-line */
         $precision = self::getPrecision(new Currency(Currency::getIdByIsoCode($isoCurrency)));
 
         if (in_array($isoCurrency, $currency_wt_decimal) || ($precision == 0)) {
@@ -2584,6 +2582,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         foreach ($this->extensions as $extension) {
             /** @var AbstractModuleExtension $extension */
             $extension = new $extension();
+            /* @phpstan-ignore-next-line */
             $extension->setModule($this);
             if (is_callable([$extension, $hookName])) {
                 $hookResult = $extension->{$hookName}($params);
@@ -2628,6 +2627,7 @@ class PayPal extends PaymentModule implements WidgetInterface
             if ($extensionClass != $action) {
                 continue;
             }
+            /* @phpstan-ignore-next-line */
             $extension->setModule($this);
             if (is_callable([$extension, $method])) {
                 return $extension->{$method}($hookName, $configuration);
@@ -2649,7 +2649,7 @@ class PayPal extends PaymentModule implements WidgetInterface
     public function reset()
     {
         $installer = new ModuleInstaller($this);
-
+        /* @phpstan-ignore-next-line */
         return $installer->reset($this);
     }
 
@@ -2861,6 +2861,7 @@ class PayPal extends PaymentModule implements WidgetInterface
      */
     public function isShowShortcut()
     {
+        /* @phpstan-ignore-next-line */
         if (is_null($this->context->controller)) {
             return false;
         }

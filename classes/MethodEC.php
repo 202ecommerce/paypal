@@ -285,6 +285,7 @@ class MethodEC extends AbstractMethodPaypal
 
     public function getReturnUrl()
     {
+        /* @phpstan-ignore-next-line */
         return Context::getContext()->link->getModuleLink($this->name, 'ecValidation', [], true);
     }
 

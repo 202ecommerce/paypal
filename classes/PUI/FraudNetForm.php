@@ -78,6 +78,7 @@ class FraudNetForm
     protected function getUserData()
     {
         $billingAddress = new \Address($this->context->cart->id_address_invoice);
+        /* @phpstan-ignore-next-line */
         $customer = new \Customer($billingAddress->id_customer);
         $userData = new DataUserForm();
 

@@ -75,6 +75,7 @@ class PaypalEcValidationModuleFrontController extends PaypalAbstarctModuleFrontC
 
             $method_ec->validation();
             $cart = Context::getContext()->cart;
+            /* @phpstan-ignore-next-line */
             $customer = new Customer($cart->id_customer);
             $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $this->module->currentOrder . '&key=' . $customer->secure_key;
         } catch (PaypalAddons\classes\Exception\PayerActionRequired $e) {

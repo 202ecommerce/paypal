@@ -55,58 +55,20 @@ abstract class AbstractMethod
 
     abstract public function init();
 
-    /**
-     * Validate payment
-     * @return void
-     * @throw Exception
-     */
     abstract public function validation();
 
-    /**
-     * Capture authorized transaction
-     * @param $orderPayPal PaypalOrder object
-     * @return mixed
-     */
     abstract public function confirmCapture($orderPayPal);
 
-    /**
-     * Refund settled transaction
-     * @param $orderPaypal PaypalOrder object
-     * @return mixed
-     */
     abstract public function refund($orderPaypal);
 
-    /**
-     * Update configuration (postProcess)
-     * @param $params array
-     * @return mixed
-     */
     abstract public function setConfig($params);
 
-    /**
-     * Generate getContent
-     * @param \PayPal $module
-     * @return mixed
-     */
     abstract public function getConfig(\PayPal $module);
 
-    /**
-     * Void authorized transaction (cancel payment)
-     * @param $orderPaypal PaypalOrder object
-     * @return mixed
-     */
     abstract public function void($orderPaypal);
 
-    /**
-     * @param $params array hookActionOrderSlipAdd parameters
-     * @return mixed
-     */
     abstract public function partialRefund($params);
 
-    /**
-     * @param string $method method alias like BT, EC, PPP
-     * @return stdClass Method class
-     */
     public static function load($method)
     {
         if (preg_match('/^[a-zA-Z0-9_-]+$/', $method) && file_exists(_PS_MODULE_DIR_.'paypal/classes/Method'.$method.'.php')) {
@@ -125,17 +87,7 @@ abstract class AbstractMethod
         return $this->transaction_detail;
     }
 
-    /**
-     * Get Transaction details for order
-     * @param object $transaction
-     * @return array
-     */
     abstract function setDetailsTransaction($transaction);
 
-    /**
-     * Get link to transaction
-     * @param \PaypalLog $log
-     * @return string
-     */
     abstract public function getLinkToTransaction($log);
 }

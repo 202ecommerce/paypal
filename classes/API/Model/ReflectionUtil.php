@@ -168,6 +168,6 @@ class ReflectionUtil
     {
         return method_exists($class, 'get' . ucfirst($propertyName)) ?
             'get' . ucfirst($propertyName) :
-            'get' . preg_replace_callback("/([_\-\s]?([a-z0-9]+))/", fn ($match) => ucwords($match[2]), $propertyName);
+            'get' . preg_replace_callback("/([_\-\s]?([a-z0-9]+))/", function($match) {return ucwords($match[2]);}, $propertyName);
     }
 }
