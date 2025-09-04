@@ -40,22 +40,22 @@ class Banner
     protected $module;
 
     /** @var string */
-    protected $placement;
+    protected $placement = '';
 
     /** @var string */
-    protected $layout;
+    protected $layout = '';
 
     /** @var float */
-    protected $amount;
+    protected $amount = 0;
 
     /** @var string */
-    protected $template;
+    protected $template = '';
 
     /** @var array */
-    protected $jsVars;
+    protected $jsVars = [];
 
     /** @var array */
-    protected $tplVars;
+    protected $tplVars = [];
 
     /** @var AbstractMethodPaypal */
     protected $method;
@@ -65,6 +65,7 @@ class Banner
 
     public function __construct()
     {
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
         $this->setTemplate('module:paypal/views/templates/installmentBanner/banner.tpl');
         $this->method = AbstractMethodPaypal::load();
@@ -76,13 +77,12 @@ class Banner
             return '';
         }
 
-        $render = \Context::getContext()->smarty
-            ->assign('paypalmessenging', $this->getConfig())
+        $tpl = \Context::getContext()->smarty->createTemplate($this->getTemplate());
+        $tpl->assign('paypalmessenging', $this->getConfig())
             ->assign($this->getTplVars())
-            ->assign('JSscripts', $this->getJS())
-            ->fetch($this->getTemplate());
+            ->assign('JSscripts', $this->getJS());
 
-        return $render;
+        return $tpl->fetch();
     }
 
     public function getConfig()
@@ -229,10 +229,6 @@ class Banner
      */
     public function addJsVar($name, $value)
     {
-        if (is_array($this->jsVars) === false) {
-            $this->jsVars = [];
-        }
-
         $this->jsVars[$name] = $value;
 
         return $this;
@@ -243,11 +239,7 @@ class Banner
      */
     protected function getTplVars()
     {
-        if (is_array($this->tplVars)) {
-            return $this->tplVars;
-        }
-
-        return [];
+        return $this->tplVars;
     }
 
     /**
@@ -258,10 +250,6 @@ class Banner
      */
     public function addTplVar($name, $value)
     {
-        if (is_array($this->tplVars) === false) {
-            $this->tplVars = [];
-        }
-
         $this->tplVars[$name] = $value;
 
         return $this;

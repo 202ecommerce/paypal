@@ -53,15 +53,12 @@ abstract class AbstractMethod
         }
     }
 
-    /**
-     * Init payment method
-     * @return string|array
-     */
     abstract public function init();
 
     /**
      * Validate payment
-     * @return Exception
+     * @return void
+     * @throw Exception
      */
     abstract public function validation();
 

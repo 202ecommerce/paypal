@@ -36,18 +36,16 @@ if (!defined('_PS_VERSION_')) {
 
 class FormInstallment implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $className;
 
-    private $is_shown_modal;
-
-    public function __construct($is_shown_modal = false)
+    public function __construct()
     {
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
         $this->className = 'FormInstallment';
-        $this->is_shown_modal = $is_shown_modal;
     }
 
     /**
@@ -55,7 +53,7 @@ class FormInstallment implements FormInterface
      */
     public function getDescription()
     {
-        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
         $fields = [];
 
         if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
@@ -164,7 +162,7 @@ class FormInstallment implements FormInterface
             isset($data[ConfigurationMap::BNPL_PAYMENT_STEP_PAGE]) ? (int) $data[ConfigurationMap::BNPL_PAYMENT_STEP_PAGE] : 0
         );
 
-        return $return;
+        return (bool) $return;
     }
 
     protected function getHelpInfo()

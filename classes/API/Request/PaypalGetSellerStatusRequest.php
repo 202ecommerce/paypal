@@ -55,12 +55,6 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
                 ->setErrorCode($e->getCode());
 
             return $response->setSuccess(false)->setError($error);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-
-            return $response->setSuccess(false)->setError($error);
         }
 
         $response->setSuccess(true);
@@ -145,13 +139,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
             return [];
         }
 
-        try {
-            $products = json_decode(json_encode($data->result->products), true);
-        } catch (\Throwable $e) {
-            return [];
-        } catch (\Exception $e) {
-            return [];
-        }
+        $products = json_decode(json_encode($data->result->products), true);
 
         if (empty($products)) {
             return [];
@@ -166,13 +154,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
             return [];
         }
 
-        try {
-            $capabilities = json_decode(json_encode($data->result->capabilities), true);
-        } catch (\Throwable $e) {
-            return [];
-        } catch (\Exception $e) {
-            return [];
-        }
+        $capabilities = json_decode(json_encode($data->result->capabilities), true);
 
         if (empty($capabilities)) {
             return [];

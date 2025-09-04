@@ -43,7 +43,8 @@ class CloudSyncView
 
     public function __construct()
     {
-        $this->module = call_user_func([\Module::class, 'getInstanceByName'], 'paypal');
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->context = \Context::getContext();
         $this->cloudSyncWrapper = new CloudSyncWrapper();
     }

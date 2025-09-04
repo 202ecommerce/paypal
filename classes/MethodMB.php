@@ -94,7 +94,7 @@ class MethodMB extends AbstractMethodPaypal
     }
 
     /**
-     * @param $values array replace for tools::getValues()
+     * @param array $values replace for tools::getValues()
      */
     public function setParameters($values)
     {
@@ -140,7 +140,7 @@ class MethodMB extends AbstractMethodPaypal
         }
     }
 
-    public function getConfig(Paypal $paypal)
+    public function getConfig(PayPal $module)
     {
     }
 
@@ -219,7 +219,7 @@ class MethodMB extends AbstractMethodPaypal
     /**
      * Assign form data for Paypal Plus payment option
      *
-     * @return bool
+     * @return void
      */
     public function assignJSvarsPaypalMB()
     {
@@ -292,8 +292,6 @@ class MethodMB extends AbstractMethodPaypal
             $context->cookie->__set('paypal_plus_mb_payment', $this->paymentId);
         } catch (Throwable $e) {
             return false;
-        } catch (Exception $e) {
-            return false;
         }
 
         $addressCustomer = new Address(Context::getContext()->cart->id_address_delivery);
@@ -357,7 +355,7 @@ class MethodMB extends AbstractMethodPaypal
     }
 
     /**
-     * @param $vatNumber string
+     * @param string $vatNumber
      *
      * @return string
      */
@@ -446,7 +444,7 @@ class MethodMB extends AbstractMethodPaypal
 
     public function getPaypalPartnerId()
     {
-        if (Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'MX') {
+        if (Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT')) == 'MX') {
             $bnCodeSuffix = 'Mexico';
         } else {
             $bnCodeSuffix = 'Brazil';

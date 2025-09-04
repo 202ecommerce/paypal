@@ -37,8 +37,8 @@ class Response
     /** @var bool */
     protected $success;
 
-    /** @var Error */
-    protected $error;
+    /** @var Error|null */
+    protected $error = null;
 
     protected $data;
 

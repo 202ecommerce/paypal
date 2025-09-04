@@ -87,7 +87,7 @@ class MethodEC extends AbstractMethodPaypal
     }
 
     /**
-     * @param $values array replace for tools::getValues()
+     * @param array $values replace for tools::getValues()
      */
     public function setParameters($values)
     {

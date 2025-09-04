@@ -33,7 +33,7 @@ use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalPPBTlib\Install\ModuleInstaller;
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */

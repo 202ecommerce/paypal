@@ -94,12 +94,6 @@ class PaypalGetAuthToken
                 ->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());
             $returnResponse->setError($error)->setSuccess(false);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error
-                ->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-            $returnResponse->setError($error)->setSuccess(false);
         }
 
         return $returnResponse;

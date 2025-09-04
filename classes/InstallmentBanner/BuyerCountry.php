@@ -48,7 +48,7 @@ class BuyerCountry
 
     public function get()
     {
-        $defaultValue = strtolower(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
+        $defaultValue = strtolower(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
 
         if (false === in_array($defaultValue, ConfigurationMap::getAllowedCountries())) {
             $defaultValue = current(ConfigurationMap::getAllowedCountries());

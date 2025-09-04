@@ -31,7 +31,7 @@ if (!defined('_PS_VERSION_')) {
 use PaypalPPBTlib\Install\ModuleInstaller;
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */

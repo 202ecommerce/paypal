@@ -39,7 +39,7 @@ if (!defined('_PS_VERSION_')) {
 
 class AccountForm implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $puiFunctionality;
@@ -48,6 +48,7 @@ class AccountForm implements FormInterface
 
     public function __construct()
     {
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
         $this->puiFunctionality = new PuiFunctionality();
         $this->method = AbstractMethodPaypal::load();
@@ -88,10 +89,12 @@ class AccountForm implements FormInterface
         }
 
         if (empty($data['accountForm'])) {
-            return;
+            return true;
         }
 
-        return $this->method->saveAccountForm($data);
+        $this->method->saveAccountForm($data);
+
+        return true;
     }
 
     protected function getHelpInfo()

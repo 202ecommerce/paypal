@@ -44,7 +44,7 @@ class ReflectionUtil
     /**
      * Properties Type
      *
-     * @var string[]
+     * @var array
      */
     private static $propertiesType = [];
 
@@ -53,8 +53,8 @@ class ReflectionUtil
      * If the class is null, it returns null.
      * If the property is not found, it returns null.
      *
-     * @param $class
-     * @param $propertyName
+     * @param string $class
+     * @param string $propertyName
      *
      * @return string|null
      *
@@ -88,8 +88,8 @@ class ReflectionUtil
     /**
      * Checks if the Property is of type array or an object
      *
-     * @param $class
-     * @param $propertyName
+     * @param string $class
+     * @param string $propertyName
      *
      * @return bool|null
      *
@@ -116,8 +116,8 @@ class ReflectionUtil
     /**
      * Retrieves Annotations of each property
      *
-     * @param $class
-     * @param $propertyName
+     * @param string $class
+     * @param string $propertyName
      *
      * @return mixed
      *
@@ -156,18 +156,6 @@ class ReflectionUtil
     }
 
     /**
-     * preg_replace_callback callback function
-     *
-     * @param $match
-     *
-     * @return string
-     */
-    private static function replace_callback($match)
-    {
-        return ucwords($match[2]);
-    }
-
-    /**
      * Returns the properly formatted getter function name based on class name and property
      * Formats the property name to a standard getter function
      *
@@ -180,6 +168,6 @@ class ReflectionUtil
     {
         return method_exists($class, 'get' . ucfirst($propertyName)) ?
             'get' . ucfirst($propertyName) :
-            'get' . preg_replace_callback("/([_\-\s]?([a-z0-9]+))/", 'self::replace_callback', $propertyName);
+            'get' . preg_replace_callback("/([_\-\s]?([a-z0-9]+))/", fn ($match) => ucwords($match[2]), $propertyName);
     }
 }

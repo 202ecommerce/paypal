@@ -769,7 +769,7 @@ class PayPal extends PaymentModule implements WidgetInterface
     }
 
     /**
-     * @param $params
+     * @param mixed $params
      *
      * @return array
      *
@@ -1063,7 +1063,7 @@ class PayPal extends PaymentModule implements WidgetInterface
     }
 
     /**
-     * @param $params
+     * @param mixed $params
      *
      * @return array of the PaymentOption objects
      *
@@ -2393,8 +2393,8 @@ class PayPal extends PaymentModule implements WidgetInterface
     /**
      * Get State ID
      *
-     * @param $ship_addr_state string state code from PayPal
-     * @param $ship_addr_country string delivery country iso code from PayPal
+     * @param string $ship_addr_state state code from PayPal
+     * @param string $ship_addr_country delivery country iso code from PayPal
      *
      * @return int id state
      */
@@ -2423,7 +2423,7 @@ class PayPal extends PaymentModule implements WidgetInterface
     /**
      * Get delivery state code in paypal format
      *
-     * @param $address Address object
+     * @param Address $address
      *
      * @return string state code
      */
@@ -2603,10 +2603,10 @@ class PayPal extends PaymentModule implements WidgetInterface
     /**
      * Handle module widget call
      *
-     * @param $action
-     * @param $method
-     * @param $hookName
-     * @param $configuration
+     * @param string $action
+     * @param string $method
+     * @param string $hookName
+     * @param array $configuration
      *
      * @return bool
      *

@@ -81,7 +81,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
     }
 
     /**
-     * @param $data array Ipn message data
+     * @param array $data  Ipn message data
      *
      * @return bool
      */
@@ -203,8 +203,8 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
     }
 
     /**
-     * @param $orders array
-     * @param $idState int
+     * @param array $orders
+     * @param int $idState
      *
      * @return bool
      */
@@ -219,7 +219,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
     }
 
     /**
-     * @param $value mixed
+     * @param mixed $value
      *
      * @return string
      */

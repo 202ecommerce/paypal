@@ -96,10 +96,6 @@ class PaypalOrderRefundRequest extends RequestAbstract
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
-            $response->setError($error)->setSuccess(false);
         }
 
         return $response;

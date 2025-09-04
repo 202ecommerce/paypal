@@ -55,7 +55,8 @@ class VaultedPaymentButton
     public function __construct($userIdToken)
     {
         $this->context = \Context::getContext();
-        $this->module = call_user_func([\Module::class, 'getInstanceByName'], 'paypal');
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->userIdToken = (string) $userIdToken;
     }

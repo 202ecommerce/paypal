@@ -31,6 +31,7 @@ namespace PaypalAddons\classes;
 use Customer;
 use PaypalAddons\classes\API\Model\VaultInfo;
 use PaypalAddons\classes\API\Model\WebhookPatch;
+use PaypalAddons\classes\API\PaypalApiManager;
 use PaypalAddons\classes\API\PaypalApiManagerInterface;
 use PaypalAddons\classes\API\PaypalVaultApiManagerInterface;
 use PaypalAddons\classes\API\PaypalWebhookApiManagerInterface;
@@ -70,7 +71,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /** @var bool */
     protected $isSandbox;
 
-    /** @var PaypalApiManagerInterface|PaypalVaultApiManagerInterface|PaypalWebhookApiManagerInterface */
+    /** @var PaypalApiManager */
     protected $paypalApiManager;
 
     /** @var string */
@@ -80,6 +81,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      * @param string $method
      *
      * @return \MethodEC|\MethodPPP|\MethodMB
+     * @throws \Exception
      */
     public static function load($method = null)
     {
@@ -107,6 +109,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
             return new $method_class();
         }
+
+        throw new \Exception('Invalid method: ' . $method);
     }
 
     /**
@@ -125,7 +129,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     public function setSandbox($isSandbox)
     {
-        $this->isSandbox = (int) $isSandbox;
+        $this->isSandbox = (bool) $isSandbox;
 
         return $this;
     }
@@ -174,9 +178,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     public function getVaultPaymentToken($vaultId)
     {
-        if (false === $this->paypalApiManager instanceof PaypalVaultApiManagerInterface) {
-            return null;
-        }
         /** @var ResponseVaultPaymentToken $response */
         $response = $this->paypalApiManager->getVaultPaymentTokenRequest($vaultId)->execute();
 
@@ -189,9 +190,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     public function deleteVaultPaymentToken($vaultId)
     {
-        if (false === $this->paypalApiManager instanceof PaypalVaultApiManagerInterface) {
-            return false;
-        }
         /** @var Response $response */
         $response = $this->paypalApiManager->getDeleteVaultPaymentTokenRequest($vaultId)->execute();
 
@@ -200,9 +198,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     public function generateVaultUserIdToken($paypalCustomerId)
     {
-        if (false === $this->paypalApiManager instanceof PaypalVaultApiManagerInterface) {
-            return null;
-        }
         /** @var ResponseGenerateIdToken $response */
         $response = $this->paypalApiManager->getGenerateIdTokenRequest($paypalCustomerId)->execute();
 
@@ -214,8 +209,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @see AbstractMethodPaypal::validation()
-     *
+     * @see AbstractMethod::validation()
+     * @return void
      * @throws \Exception
      */
     public function validation()
@@ -262,6 +257,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         $this->setDetailsTransaction($response);
         $currency = $context->currency;
         $total = $response->getTotalPaid();
+        /** @var \PayPal $paypal */
         $paypal = \Module::getInstanceByName($this->name);
         $order_state = $this->getOrderStatus($response->getStatus());
         $paypal->validateOrder(
@@ -318,6 +314,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                     $response->setScaState(\PayPal::SCA_STATE_SUCCESS);
                 }
                 if ($authResult->liability_shift === \PayPal::SCA_LIABILITY_SHIFT_NO) {
+                    /* @phpstan-ignore-next-line */
                     if (!empty($authResult->three_d_secure->enrollment_status)) {
                         $isSuccessSCA = in_array(
                             $authResult->three_d_secure->enrollment_status,
@@ -409,7 +406,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @param ResponseOrderCapture $data
      *
-     * @return void
+     * @return array
      */
     public function setDetailsTransaction($data)
     {
@@ -428,23 +425,25 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         ];
 
         $this->transaction_detail = $transaction_detail;
+
+        return $transaction_detail;
     }
 
     /**
-     * @param $paypalOrder \PaypalOrder
+     * @param \PaypalOrder $orderPaypal
      *
      * @return ResponseOrderRefund
      */
-    public function refund($paypalOrder)
+    public function refund($orderPaypal)
     {
         /** @var ResponseOrderRefund $response */
-        $response = $this->paypalApiManager->getOrderRefundRequest($paypalOrder)->execute();
+        $response = $this->paypalApiManager->getOrderRefundRequest($orderPaypal)->execute();
 
         return $response;
     }
 
     /**
-     * @param $params mixed
+     * @param mixed $params
      *
      * @return ResponseOrderRefund
      */
@@ -462,7 +461,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @return Response
+     * @return Response|bool
      */
     public function doOrderPatch()
     {
@@ -492,7 +491,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * Convert and format price
      *
-     * @param $price
+     * @param float $price
      *
      * @return float|int|string
      */
@@ -500,6 +499,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     {
         $context = \Context::getContext();
         $context_currency = $context->currency;
+        /** @var \PayPal $paypal */
         $paypal = \Module::getInstanceByName($this->name);
 
         if ($convert && $id_currency_to = $paypal->needConvert()) {
@@ -511,7 +511,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @param \PaypalLog
+     * @param \PaypalLog $log
      *
      * @return string
      */
@@ -527,7 +527,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     }
 
     /**
-     * @param $cart \Cart
+     * @param \Cart $cart
      *
      * @return string additional payment information
      */
@@ -617,6 +617,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      */
     public function getUrlJsSdkLib($parameters = null)
     {
+        /** @var \PayPal $paypal */
         $paypal = \Module::getInstanceByName($this->name);
 
         $params = [
@@ -706,8 +707,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             $key[] = $cart->getOrderTotal(true, \Cart::BOTH);
         } catch (\Throwable $e) {
             \PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
-        } catch (\Exception $e) {
-            \PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
         }
 
         return md5(implode('_', $key));
@@ -747,7 +746,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     {
         $cartTrace = $this->buildCartTrace($cart, $paymentId);
         $this->setCartTrace($cartTrace);
-        \Context::getContext()->cookie->paypal_cart_trace = $cartTrace;
+        \Context::getContext()->cookie->__set('paypal_cart_trace', $cartTrace);
         \Context::getContext()->cookie->write();
     }
 
@@ -911,56 +910,32 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     public function getWebhookEventList($params = [])
     {
-        if ($this->paypalApiManager instanceof PaypalWebhookApiManagerInterface) {
-            return $this->paypalApiManager->getWebhookEventList($params)->execute();
-        }
-
-        return (new ResponseWebhookEventList())->setSuccess(false);
+        return $this->paypalApiManager->getWebhookEventList($params)->execute();
     }
 
     public function getWebhookEventDetail($id)
     {
-        if ($this->paypalApiManager instanceof PaypalWebhookApiManagerInterface) {
-            return $this->paypalApiManager->getWebhookEventDetail($id)->execute();
-        }
-
-        return (new ResponseWebhookEventDetail())->setSuccess(false);
+        return $this->paypalApiManager->getWebhookEventDetail($id)->execute();
     }
 
     public function getWebhookList()
     {
-        if ($this->paypalApiManager instanceof PaypalWebhookApiManagerInterface) {
-            return $this->paypalApiManager->getWebhookList()->execute();
-        }
-
-        return (new Response())->setSuccess(false);
+        return $this->paypalApiManager->getWebhookList()->execute();
     }
 
     public function createWebhook($webhook = null)
     {
-        if ($this->paypalApiManager instanceof PaypalWebhookApiManagerInterface) {
-            return $this->paypalApiManager->createWebhook($webhook)->execute();
-        }
-
-        return (new Response())->setSuccess(false);
+        return $this->paypalApiManager->createWebhook($webhook)->execute();
     }
 
     public function patchWebhook(WebhookPatch $patch)
     {
-        if ($this->paypalApiManager instanceof PaypalWebhookApiManagerInterface) {
-            return $this->paypalApiManager->patchWebhook($patch)->execute();
-        }
-
-        return (new Response())->setSuccess(false);
+        return $this->paypalApiManager->patchWebhook($patch)->execute();
     }
 
     public function deleteWebhook($id)
     {
-        if ($this->paypalApiManager instanceof PaypalWebhookApiManagerInterface) {
-            return $this->paypalApiManager->deleteWebhook($id)->execute();
-        }
-
-        return (new Response())->setSuccess(false);
+        return $this->paypalApiManager->deleteWebhook($id)->execute();
     }
 
     protected function initChecker()

@@ -41,7 +41,7 @@ if (!defined('_PS_VERSION_')) {
 
 class CheckoutForm implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $method;
@@ -57,8 +57,9 @@ class CheckoutForm implements FormInterface
 
     public function __construct($advancedMode = false)
     {
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
-        $countryDefault = new \Country(\Configuration::get('PS_COUNTRY_DEFAULT'), \Context::getContext()->language->id);
+        $countryDefault = new \Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), \Context::getContext()->language->id);
         $this->acdcFunctionality = new AcdcFunctionality();
         $this->vaultingFunctionality = new VaultingFunctionality();
         $this->venmoFunctionality = new VenmoFunctionality();
@@ -81,7 +82,7 @@ class CheckoutForm implements FormInterface
 
     public function getDescription()
     {
-        $countryDefault = new \Country(\Configuration::get('PS_COUNTRY_DEFAULT'), \Context::getContext()->language->id);
+        $countryDefault = new \Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), \Context::getContext()->language->id);
         $fields = [];
 
         if ($this->method == 'MB') {
@@ -536,9 +537,10 @@ class CheckoutForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return \Context::getContext()->smarty
-            ->assign('isShowCustomerInstruction', $this->method == 'PPP')
-            ->assign('isShowVaultingFunctionality', $this->vaultingFunctionality->isAvailable())
-            ->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/checkout.tpl');
+        $tpl = \Context::getContext()->smarty->createTemplate(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/checkout.tpl');
+        $tpl->assign('isShowCustomerInstruction', $this->method == 'PPP')
+            ->assign('isShowVaultingFunctionality', $this->vaultingFunctionality->isAvailable());
+
+        return $tpl->fetch();
     }
 }

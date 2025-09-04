@@ -62,7 +62,7 @@ class FeatureChecklistForm implements FormInterface
      */
     public function getDescription()
     {
-        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
         $vars = [];
 
         if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
@@ -118,11 +118,12 @@ class FeatureChecklistForm implements FormInterface
      */
     public function save($data = null)
     {
+        return true;
     }
 
     protected function isCreditCardEnabled()
     {
-        $isoCountryDefault = \Tools::strtoupper(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtoupper(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
 
         if ($this->method instanceof \MethodPPP) {
             return (int) \Configuration::get(PaypalConfigurations::ACDC_OPTION);

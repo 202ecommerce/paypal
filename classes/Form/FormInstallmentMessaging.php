@@ -38,7 +38,7 @@ use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 
 class FormInstallmentMessaging implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $className;
@@ -47,6 +47,7 @@ class FormInstallmentMessaging implements FormInterface
 
     public function __construct()
     {
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
         $this->className = 'FormInstallmentMessaging';
         $this->buyerCountry = new BuyerCountry();
@@ -128,7 +129,7 @@ class FormInstallmentMessaging implements FormInterface
             $this->buyerCountry->set($data[ConfigurationMap::MESSAGING_BUYER_COUNTRY]);
         }
 
-        return $return;
+        return (bool) $return;
     }
 
     /**
@@ -137,7 +138,7 @@ class FormInstallmentMessaging implements FormInterface
      *
      * @param string $config JSON string returned by configurator
      *
-     * @return string same string if not an error on decoding part
+     * @return bool
      */
     private function saveDecodedConf($config)
     {
@@ -153,6 +154,6 @@ class FormInstallmentMessaging implements FormInterface
             }
         }
 
-        return $return;
+        return (bool) $return;
     }
 }

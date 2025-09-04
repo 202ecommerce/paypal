@@ -114,7 +114,7 @@ class PrestaShopCloudSyncForm implements FormInterface
             return false;
         }
 
-        if (empty($data[PaypalConfigurations::CLOUDSYNC_ENABLED]) || !$data[PaypalConfigurations::CLOUDSYNC_ENABLED]) {
+        if (empty($data[PaypalConfigurations::CLOUDSYNC_ENABLED])) {
             $this->configuration->set(PaypalConfigurations::CLOUDSYNC_ENABLED, 0);
         } else {
             $this->configuration->set(PaypalConfigurations::CLOUDSYNC_ENABLED, 1);
@@ -139,15 +139,11 @@ class PrestaShopCloudSyncForm implements FormInterface
         try {
             $output .= (new CloudSyncView())->render();
         } catch (\Throwable $e) {
-        } catch (\Exception $e) {
-        } finally {
-            if (isset($e)) {
-                ProcessLoggerHandler::openLogger();
-                ProcessLoggerHandler::logError(
-                    '[PrestaShopCloudSyncForm] ' . $e->getMessage()
-                );
-                ProcessLoggerHandler::closeLogger();
-            }
+            ProcessLoggerHandler::openLogger();
+            ProcessLoggerHandler::logError(
+                '[PrestaShopCloudSyncForm] ' . $e->getMessage()
+            );
+            ProcessLoggerHandler::closeLogger();
         }
 
         return $output;

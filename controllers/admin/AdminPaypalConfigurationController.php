@@ -83,7 +83,7 @@ class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPa
         $this->forms['trackingForm'] = new TrackingParametersForm();
 
         if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
-            $this->forms['formInstallment'] = new FormInstallment((bool) $this->is_shown_modal);
+            $this->forms['formInstallment'] = new FormInstallment();
 
             if ((bool) $this->is_shown_modal === false) {
                 $this->forms['formInstallmentMessaging'] = new FormInstallmentMessaging();

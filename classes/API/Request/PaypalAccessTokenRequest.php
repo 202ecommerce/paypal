@@ -80,12 +80,6 @@ class PaypalAccessTokenRequest extends RequestAbstract
                 ->setMessage($e->getMessage());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setErrorCode($e->getCode())
-                ->setMessage($e->getMessage());
-            $response->setSuccess(false)
-                ->setError($error);
         }
 
         return $response;

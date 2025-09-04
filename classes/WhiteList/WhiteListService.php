@@ -57,9 +57,9 @@ class WhiteListService
             return [];
         }
 
-        try {
-            $list = json_decode($list, true);
-        } catch (\Throwable $e) {
+        $list = json_decode($list, true);
+
+        if (empty($list)) {
             return [];
         }
 

@@ -83,12 +83,6 @@ class PaypalPatchWebhookRequest extends RequestAbstract
                 ->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-            $response->setSuccess(false)
-                ->setError($error);
         }
 
         return $response;

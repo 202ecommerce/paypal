@@ -189,7 +189,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
     {
         $event = new WebhookEvent();
         $event->fromArray($requestData);
-
+        /* @phpstan-ignore-next-line */
         if (false == empty($event->getResource()->supplementary_data->related_ids->order_id)) {
             $paymentId = $event->getResource()->supplementary_data->related_ids->order_id;
 

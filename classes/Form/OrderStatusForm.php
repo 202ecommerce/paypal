@@ -40,7 +40,7 @@ if (!defined('_PS_VERSION_')) {
 
 class OrderStatusForm implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $method;
@@ -49,6 +49,7 @@ class OrderStatusForm implements FormInterface
 
     public function __construct()
     {
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load();
         $this->webhookOption = new WebhookOption();

@@ -35,7 +35,7 @@ use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */

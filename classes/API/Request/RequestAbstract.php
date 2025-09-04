@@ -62,6 +62,7 @@ abstract class RequestAbstract implements RequestInteface
         $this->client = $client;
         $this->method = $method;
         $this->context = \Context::getContext();
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName($method->name);
         $this->formatter = new FormatterPaypal();
         $this->paypalContext = PaypalContext::getContext();

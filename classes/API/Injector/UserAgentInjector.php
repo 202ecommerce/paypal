@@ -38,12 +38,13 @@ if (!defined('_PS_VERSION_')) {
 class UserAgentInjector implements InjectorInterface
 {
     /**
-     * @var \Module
+     * @var \PayPal
      */
     protected $module;
 
     public function __construct()
     {
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
     }
 

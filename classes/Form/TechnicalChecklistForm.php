@@ -110,5 +110,6 @@ class TechnicalChecklistForm implements FormInterface
      */
     public function save($data = null)
     {
+        return true;
     }
 }

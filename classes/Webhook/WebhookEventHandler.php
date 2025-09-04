@@ -181,6 +181,7 @@ class WebhookEventHandler
 
     protected function initPaypalOrder(WebhookEvent $event)
     {
+        /* @phpstan-ignore-next-line */
         if (false == empty($event->getResource()->supplementary_data->related_ids->order_id)) {
             $paymentId = $event->getResource()->supplementary_data->related_ids->order_id;
 
@@ -246,6 +247,7 @@ class WebhookEventHandler
     protected function getAmount(WebhookEvent $event)
     {
         try {
+            /* @phpstan-ignore-next-line */
             return (float) $event->getResource()->amount->value;
         } catch (\Throwable $e) {
             return 0;
@@ -276,7 +278,7 @@ class WebhookEventHandler
         }
 
         $order = array_shift($orders);
-
+        /* @phpstan-ignore-next-line */
         if (empty($webhookEvent->resource->amount->value)) {
             return;
         }

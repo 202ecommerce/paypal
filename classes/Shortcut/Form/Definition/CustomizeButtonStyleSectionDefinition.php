@@ -65,7 +65,7 @@ class CustomizeButtonStyleSectionDefinition
     protected $typeHeight;
 
     /** @var array */
-    protected $errors;
+    protected $errors = [];
 
     /**
      * @return string
@@ -272,10 +272,6 @@ class CustomizeButtonStyleSectionDefinition
      */
     public function getErrors()
     {
-        if (false === is_array($this->errors)) {
-            return [];
-        }
-
         return $this->errors;
     }
 

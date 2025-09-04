@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */

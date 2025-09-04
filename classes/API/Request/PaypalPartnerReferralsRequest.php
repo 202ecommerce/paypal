@@ -79,12 +79,6 @@ class PaypalPartnerReferralsRequest extends RequestAbstract
                 ->setErrorCode($e->getCode());
 
             return $response->setSuccess(false)->setError($error);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-
-            return $response->setSuccess(false)->setError($error);
         }
 
         $response->setSuccess(true);

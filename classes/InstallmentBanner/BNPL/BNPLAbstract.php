@@ -40,7 +40,7 @@ abstract class BNPLAbstract
     /** @var \Context */
     protected $context;
 
-    /** @var \Module */
+    /** @var \PayPal */
     protected $module;
 
     /** @var AbstractMethodPaypal */
@@ -52,6 +52,7 @@ abstract class BNPLAbstract
     public function __construct()
     {
         $this->context = \Context::getContext();
+        /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->setId(uniqid());
@@ -71,7 +72,7 @@ abstract class BNPLAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJSvars()
     {
@@ -84,7 +85,7 @@ abstract class BNPLAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJS()
     {
@@ -133,7 +134,7 @@ abstract class BNPLAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     abstract protected function getTplVars();
 
@@ -147,7 +148,7 @@ abstract class BNPLAbstract
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId()
     {
@@ -180,7 +181,7 @@ abstract class BNPLAbstract
 
     public function getBuyerCountry()
     {
-        $buyerCountry = \Tools::strtoupper(\Country::getIsoById(\Configuration::get('PS_COUNTRY_DEFAULT')));
+        $buyerCountry = \Tools::strtoupper(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
         // https://developer.paypal.com/docs/regional/th/checkout/reference/customize-sdk/
         // According a documentation the available countries are following 'US', 'CA', 'GB', 'DE', 'FR', 'IT', 'ES'
         // But an error was occurring using 'US', 'CA', 'GB' during the test

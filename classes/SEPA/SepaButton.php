@@ -49,7 +49,8 @@ class SepaButton
     public function __construct()
     {
         $this->context = \Context::getContext();
-        $this->module = call_user_func([\Module::class, 'getInstanceByName'], 'paypal');
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
     }
 

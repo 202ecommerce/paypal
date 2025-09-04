@@ -37,7 +37,7 @@ if (!defined('_PS_VERSION_')) {
 
 class AcdcPaymentMethod
 {
-    /** @var AbstractMethodPaypal */
+    /** @var \MethodEC|\MethodPPP|\MethodMB */
     protected $method;
 
     /** @var \Context */
@@ -46,6 +46,7 @@ class AcdcPaymentMethod
     public function __construct($method = null)
     {
         if ($method instanceof AbstractMethodPaypal) {
+            /* @phpstan-ignore-next-line */
             $this->method = $method;
         } else {
             $this->method = AbstractMethodPaypal::load();

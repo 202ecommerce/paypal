@@ -73,9 +73,6 @@ class PaypalClient extends HttpClient
         } catch (\Throwable $e) {
             $this->logException($e);
             throw $e;
-        } catch (\Exception $e) { // Throwable is available since php7
-            $this->logException($e);
-            throw $e;
         }
 
         return $response;
@@ -118,7 +115,7 @@ class PaypalClient extends HttpClient
             empty(\Context::getContext()->cart->id) ? null : \Context::getContext()->cart->id,
             \Context::getContext()->shop->id,
             null,
-            (int) \Configuration::get('PAYPAL_SANDBOX')
+            (bool) \Configuration::get('PAYPAL_SANDBOX')
         );
         ProcessLoggerHandler::closeLogger();
     }
@@ -139,7 +136,7 @@ class PaypalClient extends HttpClient
             empty(\Context::getContext()->cart->id) ? null : \Context::getContext()->cart->id,
             \Context::getContext()->shop->id,
             null,
-            (int) \Configuration::get('PAYPAL_SANDBOX')
+            (bool) \Configuration::get('PAYPAL_SANDBOX')
         );
         ProcessLoggerHandler::closeLogger();
     }
@@ -157,7 +154,7 @@ class PaypalClient extends HttpClient
             empty(\Context::getContext()->cart->id) ? null : \Context::getContext()->cart->id,
             \Context::getContext()->shop->id,
             null,
-            (int) \Configuration::get('PAYPAL_SANDBOX')
+            (bool) \Configuration::get('PAYPAL_SANDBOX')
         );
         ProcessLoggerHandler::closeLogger();
     }

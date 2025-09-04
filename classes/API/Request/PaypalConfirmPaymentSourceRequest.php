@@ -97,12 +97,6 @@ class PaypalConfirmPaymentSourceRequest extends RequestAbstract
                 ->setMessage($e->getMessage());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (\Exception $e) {
-            $error = new Error();
-            $error->setErrorCode($e->getCode())
-                ->setMessage($e->getMessage());
-            $response->setSuccess(false)
-                ->setError($error);
         }
 
         return $response;
@@ -119,8 +113,8 @@ class PaypalConfirmPaymentSourceRequest extends RequestAbstract
     }
 
     /**
-     * @param $nameLink string
-     * @param $links array
+     * @param string $nameLink
+     * @param array $links
      *
      * @return string
      */
