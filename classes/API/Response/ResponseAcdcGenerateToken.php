@@ -47,6 +47,7 @@ class ResponseAcdcGenerateToken extends Response
 
     /**
      * @param string $token
+     *
      * @return self
      */
     public function setToken($token)

@@ -38,7 +38,6 @@ use PaypalAddons\classes\API\Injector\BnCodeInjector;
 use PaypalAddons\classes\API\Injector\UserAgentInjector;
 use PaypalAddons\classes\API\Request\HttpRequestInterface;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;

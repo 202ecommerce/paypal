@@ -81,7 +81,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
     }
 
     /**
-     * @param array $data  Ipn message data
+     * @param array $data Ipn message data
      *
      * @return bool
      */

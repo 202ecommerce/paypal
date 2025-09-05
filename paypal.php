@@ -2649,6 +2649,7 @@ class PayPal extends PaymentModule implements WidgetInterface
     public function reset()
     {
         $installer = new ModuleInstaller($this);
+
         /* @phpstan-ignore-next-line */
         return $installer->reset($this);
     }

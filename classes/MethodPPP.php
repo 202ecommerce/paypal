@@ -159,6 +159,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     /**
      * @param PaypalOrder $orderPayPal
+     *
      * @return mixed
      */
     public function confirmCapture($orderPayPal)

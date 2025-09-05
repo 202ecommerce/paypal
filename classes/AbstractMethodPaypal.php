@@ -32,9 +32,7 @@ use Customer;
 use PaypalAddons\classes\API\Model\VaultInfo;
 use PaypalAddons\classes\API\Model\WebhookPatch;
 use PaypalAddons\classes\API\PaypalApiManager;
-use PaypalAddons\classes\API\PaypalApiManagerInterface;
 use PaypalAddons\classes\API\PaypalVaultApiManagerInterface;
-use PaypalAddons\classes\API\PaypalWebhookApiManagerInterface;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\API\Response\ResponseGenerateIdToken;
@@ -42,8 +40,6 @@ use PaypalAddons\classes\API\Response\ResponseOrderCapture;
 use PaypalAddons\classes\API\Response\ResponseOrderGet;
 use PaypalAddons\classes\API\Response\ResponseOrderRefund;
 use PaypalAddons\classes\API\Response\ResponseVaultPaymentToken;
-use PaypalAddons\classes\API\Response\ResponseWebhookEventDetail;
-use PaypalAddons\classes\API\Response\ResponseWebhookEventList;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\Exception\PayerActionRequired;
 use PaypalAddons\classes\PUI\SignupLink;
@@ -81,6 +77,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
      * @param string $method
      *
      * @return \MethodEC|\MethodPPP|\MethodMB
+     *
      * @throws \Exception
      */
     public static function load($method = null)
@@ -210,6 +207,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     /**
      * @return void
+     *
      * @throws \Exception
      */
     public function validation()

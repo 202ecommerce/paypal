@@ -85,7 +85,7 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
     }
 
     /**
-     * @param \PaypalAddons\classes\API\Response\ResponseOrderGet $info
+     * @param PaypalAddons\classes\API\Response\ResponseOrderGet $info
      */
     public function prepareOrder($info)
     {
