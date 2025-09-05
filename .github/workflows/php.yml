@@ -75,18 +75,6 @@ jobs:
             php-version: '7.4'
             coverage: none
 
-        - name: Cache vendor folder
-          uses: actions/cache@v4
-          with:
-            path: vendor
-            key: php-${{ hashFiles('composer.lock') }}
-
-        - name: Cache composer folder
-          uses: actions/cache@v4
-          with:
-            path: ~/.composer/cache
-            key: php-composer-cache
-
         - run: composer update
 
         # Run PrestaShop container (detached) with a named volume
