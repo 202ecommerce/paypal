@@ -1622,11 +1622,13 @@ class PayPal extends PaymentModule implements WidgetInterface
         $order = new Order($this->currentOrder);
         $adminLang = new Language((int) $adminEmployee->id_lang);
         $orderState = new OrderState($order->current_state, (int) $adminEmployee->id_lang);
+        /** @var mixed $orderStateName */
+        $orderStateName = $orderState->name;
 
-        if (is_string($orderState->name)) {
-            $message = $orderState->name;
-        } elseif (is_array($orderState->name)) {
-            $message = (isset($orderState->name[$order->id_lang]) ? $orderState->name[$order->id_lang] : current($orderState->name));
+        if (is_string($orderStateName)) {
+            $message = $orderStateName;
+        } elseif (is_array($orderStateName)) {
+            $message = (isset($orderStateName[$order->id_lang]) ? $orderStateName[$order->id_lang] : current($orderStateName));
         } else {
             $message = $this->l('Order creation is successful');
         }
@@ -2826,30 +2828,21 @@ class PayPal extends PaymentModule implements WidgetInterface
     public function showPsCheckoutMessage()
     {
         $countryDefault = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
-        $notShowDetails = Configuration::get('PAYPAL_NOT_SHOW_PS_CHECKOUT');
+        $notShowDetails = (string) Configuration::get('PAYPAL_NOT_SHOW_PS_CHECKOUT');
 
-        if (is_string($notShowDetails)) {
-            $notShowDetailsArray = json_decode($notShowDetails, true);
-            $notShowPsCheckout = isset($notShowDetailsArray[$this->version]) ? (bool) $notShowDetailsArray[$this->version] : false;
-        } else {
-            $notShowPsCheckout = false;
-        }
+        $notShowDetailsArray = json_decode($notShowDetails, true);
+        $notShowPsCheckout = empty($notShowDetailsArray[$this->version]) ? false : (bool) $notShowDetailsArray[$this->version];
 
         return in_array($countryDefault->iso_code, $this->countriesApiCartUnavailable) && ($notShowPsCheckout == false);
     }
 
     public function setPsCheckoutMessageValue($value)
     {
-        $notShowDetails = Configuration::get('PAYPAL_NOT_SHOW_PS_CHECKOUT');
+        $notShowDetails = (string) Configuration::get('PAYPAL_NOT_SHOW_PS_CHECKOUT');
+        $notShowDetailsArray = json_decode($notShowDetails, true);
 
-        if (is_string($notShowDetails)) {
-            $notShowDetailsArray = json_decode($notShowDetails, true);
-
-            if (is_array($notShowDetailsArray)) {
-                $notShowDetailsArray[$this->version] = $value;
-            } else {
-                $notShowDetailsArray = [$this->version => $value];
-            }
+        if (is_array($notShowDetailsArray)) {
+            $notShowDetailsArray[$this->version] = $value;
         } else {
             $notShowDetailsArray = [$this->version => $value];
         }
