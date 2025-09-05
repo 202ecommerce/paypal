@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,7 +32,7 @@ if (!defined('_PS_VERSION_')) {
 use PaypalPPBTlib\Install\ModuleInstaller;
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */
@@ -52,5 +53,5 @@ function upgrade_module_5_2_0($module)
         Configuration::updateValue('PAYPAL_API_INTENT', 'authorize');
     }
 
-    return $return;
+    return (bool) $return;
 }

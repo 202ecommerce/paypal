@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\InstallmentBanner\BNPL;
 
-use Configuration;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 
 if (!defined('_PS_VERSION_')) {
@@ -38,26 +38,26 @@ class BNPLOption
 {
     public function isEnable()
     {
-        return (bool) Configuration::get(ConfigurationMap::ENABLE_BNPL);
+        return (bool) \Configuration::get(ConfigurationMap::ENABLE_BNPL);
     }
 
     public function displayOnCart()
     {
-        return (bool) Configuration::get(ConfigurationMap::BNPL_CART_PAGE);
+        return (bool) \Configuration::get(ConfigurationMap::BNPL_CART_PAGE);
     }
 
     public function displayOnProduct()
     {
-        return (bool) Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE);
+        return (bool) \Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE);
     }
 
     public function displayOnSignup()
     {
-        return (bool) Configuration::get(ConfigurationMap::BNPL_CHECKOUT_PAGE);
+        return (bool) \Configuration::get(ConfigurationMap::BNPL_CHECKOUT_PAGE);
     }
 
     public function displayOnPaymentStep()
     {
-        return (bool) Configuration::get(ConfigurationMap::BNPL_PAYMENT_STEP_PAGE);
+        return (bool) \Configuration::get(ConfigurationMap::BNPL_PAYMENT_STEP_PAGE);
     }
 }

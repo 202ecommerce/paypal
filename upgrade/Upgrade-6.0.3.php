@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -30,13 +31,13 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */
 function upgrade_module_6_0_3($module)
 {
-    $installer = new \PaypalPPBTlib\Install\ModuleInstaller($module);
+    $installer = new PaypalPPBTlib\Install\ModuleInstaller($module);
     $installer->installObjectModels();
     Db::getInstance()->delete(PaypalWebhook::$definition['table'], 'id_webhook IS NULL OR id_webhook =""');
 

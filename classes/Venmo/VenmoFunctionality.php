@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,11 +28,7 @@
 
 namespace PaypalAddons\classes\Venmo;
 
-use Configuration;
-use Context;
-use Country;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,22 +38,22 @@ class VenmoFunctionality
 {
     public function isAvailable()
     {
-        $iso = Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT'));
+        $iso = \Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT'));
 
-        return Tools::strtolower($iso) == 'us';
+        return \Tools::strtolower($iso) == 'us';
     }
 
     public function isEnabled()
     {
-        return (int) Configuration::get(PaypalConfigurations::VENMO_OPTION);
+        return (int) \Configuration::get(PaypalConfigurations::VENMO_OPTION);
     }
 
-    public function isEligibleContext(Context $context)
+    public function isEligibleContext(\Context $context)
     {
         if (empty($context->currency->iso_code)) {
             return false;
         }
 
-        return Tools::strtolower($context->currency->iso_code) == 'usd';
+        return \Tools::strtolower($context->currency->iso_code) == 'usd';
     }
 }

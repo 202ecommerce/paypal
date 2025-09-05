@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,14 +28,12 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
 use PaypalAddons\classes\API\ExtensionSDK\Webhook\ListWebhook;
 use PaypalAddons\classes\API\HttpAdoptedResponse;
 use PaypalAddons\classes\API\Model\Webhook;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\Response;
 use PaypalAddons\classes\PaypalException;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -73,13 +72,7 @@ class PaypalGetWebhookListRequest extends RequestAbstract
 
             $error->setErrorCode($e->getCode());
             $response->setSuccess(false)->setError($error);
-        } catch (Throwable $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-            $response->setSuccess(false)
-                ->setError($error);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -39,10 +40,10 @@ class PaypalOrderHistory extends ObjectModel
     /** @var bool */
     public $completed;
 
-    /* @var string creation date*/
+    /* @var string creation date */
     public $date_add;
 
-    /* @var string creation date*/
+    /* @var string creation date */
     public $date_upd;
 
     /**

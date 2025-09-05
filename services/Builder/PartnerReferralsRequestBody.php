@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,14 +32,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Context;
-use Country;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\PUI\PsMerchantId;
-use State;
-use Store;
-use Tools;
-use Validate;
 
 class PartnerReferralsRequestBody implements BuilderInterface
 {
@@ -50,7 +45,7 @@ class PartnerReferralsRequestBody implements BuilderInterface
     public function __construct(AbstractMethodPaypal $method)
     {
         $this->method = $method;
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     public function build()
@@ -113,27 +108,27 @@ class PartnerReferralsRequestBody implements BuilderInterface
     protected function getBusinessAddresses()
     {
         $addresses = [];
-        $stores = Store::getStores($this->context->language->id);
+        $stores = \Store::getStores($this->context->language->id);
 
         if (empty($stores)) {
             return $addresses;
         }
 
         foreach ($stores as $store) {
-            $country = new Country($store['id_country']);
+            $country = new \Country($store['id_country']);
             $address = [
                 'address_line_1' => $store['address1'],
                 'admin_area_2' => $store['city'],
                 'postal_code' => $store['postcode'],
-                'country_code' => Tools::strtoupper($country->iso_code),
+                'country_code' => \Tools::strtoupper($country->iso_code),
                 'type' => 'WORK',
             ];
 
             if ($country->contains_states) {
-                $state = new State($store['id_state']);
+                $state = new \State($store['id_state']);
 
-                if (Validate::isLoadedObject($state)) {
-                    $address['admin_area_1'] = Tools::strtoupper($state->iso_code);
+                if (\Validate::isLoadedObject($state)) {
+                    $address['admin_area_1'] = \Tools::strtoupper($state->iso_code);
                 }
             }
 

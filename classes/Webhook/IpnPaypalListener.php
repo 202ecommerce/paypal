@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,8 +28,6 @@
 
 namespace PaypalAddons\classes\Webhook;
 
-use Configuration;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -43,7 +42,7 @@ class IpnPaypalListener
     public function get($sandbox = null)
     {
         if ($sandbox === null) {
-            $sandbox = (int) Configuration::get('PAYPAL_SANDBOX');
+            $sandbox = (int) \Configuration::get('PAYPAL_SANDBOX');
         }
 
         if ((int) $sandbox) {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,9 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Context;
-use Module;
 use PaypalAddons\classes\Constants\WhiteList;
 use PaypalAddons\classes\WhiteList\WhiteListService;
 use Symfony\Component\HttpFoundation\Request;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -46,7 +44,7 @@ class WhiteListForm implements FormInterface
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->className = 'WhiteListForm';
     }
 
@@ -69,7 +67,7 @@ class WhiteListForm implements FormInterface
                     'value' => implode(';', $this->initWhiteListService()->getListIP()),
                     'hint' => $request->getClientIp(),
                     'variant' => 'primary',
-                    'placeholder' => Tools::getRemoteAddr(),
+                    'placeholder' => \Tools::getRemoteAddr(),
                 ],
             ],
             'submit' => [
@@ -87,17 +85,17 @@ class WhiteListForm implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         $service = $this->initWhiteListService();
         $service->setEnabled(
-            (isset($data[WhiteList::ENABLED]) ? (int) $data[WhiteList::ENABLED] : 0)
+            isset($data[WhiteList::ENABLED]) ? (int) $data[WhiteList::ENABLED] : 0
         );
         $service->setListIP(
             explode(
                 ';',
-                (isset($data[WhiteList::LIST_IP]) ? $data[WhiteList::LIST_IP] : '')
+                isset($data[WhiteList::LIST_IP]) ? $data[WhiteList::LIST_IP] : ''
             )
         );
 
@@ -111,6 +109,6 @@ class WhiteListForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/white-list-ip.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/white-list-ip.tpl');
     }
 }

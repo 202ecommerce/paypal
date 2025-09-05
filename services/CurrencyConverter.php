@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,10 +28,6 @@
 
 namespace PaypalAddons\services;
 
-use Exception;
-use Throwable;
-use Tools;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -45,10 +42,10 @@ class CurrencyConverter
     public function convert($amount, $currency = null, $to = false)
     {
         try {
-            return Tools::convertPrice($amount, $currency, $to);
-        } catch (Throwable $e) {
+            return \Tools::convertPrice($amount, $currency, $to);
+        } catch (\Throwable $e) {
             return 0;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return 0;
         }
     }

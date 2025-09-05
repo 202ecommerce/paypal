@@ -26,6 +26,7 @@
  */
 namespace PaypalPPBTlib\Extensions;
 
+
 abstract class AbstractModuleExtension
 {
     //region Fields
@@ -52,7 +53,7 @@ abstract class AbstractModuleExtension
     }
 
     /**
-     * @param Module $module
+     * @param \Module $module
      */
     public function setModule($module)
     {

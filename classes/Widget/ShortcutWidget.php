@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,11 +28,7 @@
 
 namespace PaypalAddons\classes\Widget;
 
-use CartController;
-use Configuration;
-use OrderController;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
-use ProductController;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -46,11 +43,11 @@ class ShortcutWidget extends AbstractWidget
     {
         $sourcePage = null;
 
-        if ($this->context->controller instanceof ProductController && (int) Configuration::get(ShortcutConfiguration::DISPLAY_MODE_PRODUCT) === ShortcutConfiguration::DISPLAY_MODE_TYPE_WIDGET) {
+        if ($this->context->controller instanceof \ProductController && (int) \Configuration::get(ShortcutConfiguration::DISPLAY_MODE_PRODUCT) === ShortcutConfiguration::DISPLAY_MODE_TYPE_WIDGET) {
             $sourcePage = ShortcutConfiguration::SOURCE_PAGE_PRODUCT;
-        } elseif ($this->context->controller instanceof CartController && (int) Configuration::get(ShortcutConfiguration::DISPLAY_MODE_CART) === ShortcutConfiguration::DISPLAY_MODE_TYPE_WIDGET) {
+        } elseif ($this->context->controller instanceof \CartController && (int) \Configuration::get(ShortcutConfiguration::DISPLAY_MODE_CART) === ShortcutConfiguration::DISPLAY_MODE_TYPE_WIDGET) {
             $sourcePage = ShortcutConfiguration::SOURCE_PAGE_CART;
-        } elseif ($this->context->controller instanceof OrderController && (int) Configuration::get(ShortcutConfiguration::DISPLAY_MODE_SIGNUP) === ShortcutConfiguration::DISPLAY_MODE_TYPE_WIDGET) {
+        } elseif ($this->context->controller instanceof \OrderController && (int) \Configuration::get(ShortcutConfiguration::DISPLAY_MODE_SIGNUP) === ShortcutConfiguration::DISPLAY_MODE_TYPE_WIDGET) {
             $sourcePage = ShortcutConfiguration::SOURCE_PAGE_SIGNUP;
         }
 

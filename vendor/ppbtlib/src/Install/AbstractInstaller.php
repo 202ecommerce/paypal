@@ -127,7 +127,7 @@ abstract class AbstractInstaller
     /**
      * Used only if merchant choose to keep data on modal in Prestashop 1.6
      *
-     * @param Paypal $module
+     * @param \PayPal $module
      * @return bool
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -36,7 +37,7 @@ class Response
     /** @var bool */
     protected $success;
 
-    /** @var Error */
+    /** @var Error|null */
     protected $error;
 
     protected $data;

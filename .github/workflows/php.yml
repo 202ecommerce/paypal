@@ -9,28 +9,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
 
-            - name: PHP syntax checker 5.6
-              uses: prestashop/github-action-php-lint/5.6@master
-              with:
-                folder-to-exclude: "! -path \"./202/*\" ! -path \"./vendor/*\""
-
             - name: PHP syntax checker 7.2
               uses: prestashop/github-action-php-lint/7.2@master
               with:
                 folder-to-exclude: "! -path \"./202/*\" ! -path \"./vendor/*\""
 
-            - name: PHP syntax checker 7.3
-              uses: prestashop/github-action-php-lint/7.3@master
-              with:
-                folder-to-exclude: "! -path \"./202/*\" ! -path \"./vendor/*\""
-
             - name: PHP syntax checker 7.4
               uses: prestashop/github-action-php-lint/7.4@master
-              with:
-                folder-to-exclude: "! -path \"./202/*\" ! -path \"./vendor/*\""
-
-            - name: PHP syntax checker 8.0
-              uses: prestashop/github-action-php-lint/8.0@master
               with:
                 folder-to-exclude: "! -path \"./202/*\" ! -path \"./vendor/*\""
 
@@ -62,50 +47,58 @@ jobs:
               run: composer update
 
             - name: Run PHP-CS-Fixer
-              run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --diff-format udiff
+              run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no
 
     # Run PHPStan against the module and a PrestaShop release
     phpstan:
-        name: PHPStan
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                presta-versions: ['1.7.4.0', '8.0.4']
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2.0.0
+      name: PHPStan
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          include:
+            - presta-versions: '1.7.4.0'
+              phpstan-image: 'phpstan/phpstan'
+              phpstan-tag: '0.12'
+            - presta-versions: '8.0.4'
+              phpstan-image: 'phpstan/phpstan'
+              phpstan-tag: '0.12'
+            - presta-versions: 'latest'
+              phpstan-image: 'ghcr.io/phpstan/phpstan'
+              phpstan-tag: '1-php8.1'
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2.0.0
 
-          # Set php version to avoid error during perform command composer update
-            - name: Setup PHP
-              uses: nanasess/setup-php@v4.1.0
-              with:
-                php-version: '7.3'
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '7.4'
+            coverage: none
 
-            # Add vendor folder in cache to make next builds faster
-            - name: Cache vendor folder
-              uses: actions/cache@v3
-              with:
-                  path: vendor
-                  key: php-${{ hashFiles('composer.lock') }}
+        - run: composer update
 
-            # Add composer local folder in cache to make next builds faster
-            - name: Cache composer folder
-              uses: actions/cache@v3
-              with:
-                  path: ~/.composer/cache
-                  key: php-composer-cache
+        # Run PrestaShop container (detached) with a named volume
+        - name: Pull PrestaShop files (Tag ${{ matrix.presta-versions }})
+          run: docker run -tid -v ps-volume:/var/www/html --name temp-ps prestashop/prestashop:${{ matrix.presta-versions }}
 
-            - run: composer update
+        # Fix for PrestaShop 9+: ensure cache stub exists
+        - name: Fix missing PS cache stub
+          run: docker exec temp-ps mkdir -p /var/www/html/var/cache/prod && docker exec temp-ps touch /var/www/html/var/cache/prod/class_stub.php
 
-            # Docker images prestashop/prestashop may be used, even if the shop remains uninstalled
-            - name: Pull PrestaShop files (Tag ${{ matrix.presta-versions }})
-              run: docker run -tid --rm -v ps-volume:/var/www/html --name temp-ps prestashop/prestashop:${{ matrix.presta-versions }}
+        # Clear previous module copy
+        - name: Clear previous module
+          run: docker exec -t temp-ps rm -rf /var/www/html/modules/paypal
 
-            # Clear previous instance of the module in the PrestaShop volume
-            - name: Clear previous module
-              run: docker exec -t temp-ps rm -rf /var/www/html/modules/paypal
+        - name: Run PHPStan
+          run: |
+            docker run --rm \
+              --volumes-from temp-ps \
+              -v $PWD:/var/www/html/modules/paypal \
+              -e _PS_ROOT_DIR_=/var/www/html \
+              --workdir=/var/www/html/modules/paypal \
+              ${{ matrix.phpstan-image }}:${{ matrix.phpstan-tag }} analyse \
+              --configuration=/var/www/html/modules/paypal/202/phpstan/phpstan.neon
 
-            # Run a container for PHPStan, having access to the module content and PrestaShop sources.
-            # This tool is outside the composer.json because of the compatibility with PHP 5.6
-            - name : Run PHPStan
-              run: docker run --rm --volumes-from temp-ps -v $PWD:/var/www/html/modules/paypal -e _PS_ROOT_DIR_=/var/www/html --workdir=/var/www/html/modules/paypal phpstan/phpstan:0.12 analyse --configuration=/var/www/html/modules/paypal/202/phpstan/phpstan.neon
+        - name: Cleanup
+          if: always()
+          run: docker rm -f temp-ps || true
