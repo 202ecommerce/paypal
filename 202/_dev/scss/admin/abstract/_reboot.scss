@@ -102,3 +102,13 @@
 .page-sidebar-closed:not(.mobile) #content.nobootstrap {
   padding-left: 50px;
 }
+
+.bootstrap {
+  a {
+    color: $link-color !important;
+
+    &:hover {
+      color: $link-hover-color !important;
+    }
+  }
+}
