@@ -25,7 +25,7 @@
  *}
 <div class="row" data-dashboard>
     {include file=$moduleFullDir|cat:"/views/templates/admin/_partials/welcome-board.tpl"}
-  <div class="col col-md-6 mt-4">
+  <div class="col col-md-6 mt-4 pp__px-4">
     <div class="card h-100">
       <div class="card-header">
         {l s='Technical checklist' mod='paypal'}
@@ -38,7 +38,7 @@
       </div>
     </div>
   </div>
-  <div class="col col-md-6 mt-4">
+  <div class="col col-md-6 mt-4 pp__px-4">
     <div class="card h-100">
       <div class="card-header">
         {l s='Feature checklist' mod='paypal'}
