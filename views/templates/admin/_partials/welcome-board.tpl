@@ -23,7 +23,7 @@
  *  @copyright PayPal
  *
  *}
-<div welcome-board class="col col-12">
+<div welcome-board class="col col-12 pp__px-4">
   <div class="card shadow">
     <div class="card-body">
       <div class="row">
