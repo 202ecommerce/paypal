@@ -30,6 +30,8 @@
 
   &-secondary {
     color: $primary !important;
+    background-color: $secondary !important;
+    border-color: $secondary !important;
   }
 
   @at-root .form-group & {
