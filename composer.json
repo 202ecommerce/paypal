@@ -51,8 +51,9 @@
     },
     "require-dev": {
       "php": "^7.3",
-      "prestashop/php-dev-tools": "^3.4",
-      "phpunit/phpunit": "^9.0"
+      "prestashop/php-dev-tools": "^5.0",
+      "phpunit/phpunit": "^9.0",
+      "friendsofphp/php-cs-fixer": "^3.68"
     },
     "type": "prestashop-module",
     "author": "PrestaShop"

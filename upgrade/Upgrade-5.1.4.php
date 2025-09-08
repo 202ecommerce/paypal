@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -29,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */
@@ -42,5 +43,5 @@ function upgrade_module_5_1_4($module)
     $return &= $module->registerHook('displayAdminOrderTabLink');
     $return &= $module->registerHook('displayAdminOrderTabContent');
 
-    return $return;
+    return (bool) $return;
 }

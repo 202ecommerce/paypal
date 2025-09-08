@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\Webhook;
 
-use Configuration;
 use PaypalAddons\classes\Constants\WebHookConf;
 
 if (!defined('_PS_VERSION_')) {
@@ -41,7 +41,7 @@ class WebhookOption
      */
     public function isEnable()
     {
-        return (bool) Configuration::get(WebHookConf::ENABLE);
+        return (bool) \Configuration::get(WebHookConf::ENABLE);
     }
 
     /**
@@ -49,7 +49,7 @@ class WebhookOption
      */
     public function enable()
     {
-        Configuration::updateValue(WebHookConf::ENABLE, 1);
+        \Configuration::updateValue(WebHookConf::ENABLE, 1);
 
         return $this;
     }
@@ -59,7 +59,7 @@ class WebhookOption
      */
     public function disable()
     {
-        Configuration::updateValue(WebHookConf::ENABLE, 0);
+        \Configuration::updateValue(WebHookConf::ENABLE, 0);
 
         return $this;
     }
@@ -69,7 +69,7 @@ class WebhookOption
      */
     public function isAvailable()
     {
-        return (bool) Configuration::get(WebHookConf::AVAILABLE) && $this->isEligibleContext();
+        return (bool) \Configuration::get(WebHookConf::AVAILABLE) && $this->isEligibleContext();
     }
 
     public function isEligibleContext()

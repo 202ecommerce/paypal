@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -36,9 +37,9 @@ if (!defined('_PS_VERSION_')) {
 class HttpAdoptedResponse extends HttpJsonResponse
 {
     /**
-     * @throws PaypalException
-     *
      * @return \stdClass
+     *
+     * @throws PaypalException
      */
     public function getAdoptedResponse()
     {

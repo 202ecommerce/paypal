@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -55,7 +56,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     /** payment Object IDl*/
     public $paymentId;
 
-    /** @var \PaypalAddons\classes\PUI\DataUserForm */
+    /** @var DataUserForm */
     protected $puiDataUser;
 
     /**
@@ -106,7 +107,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     }
 
     /**
-     * @param $values array replace for tools::getValues()
+     * @param array $values replace for tools::getValues()
      */
     public function setParameters($values)
     {
@@ -152,20 +153,20 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         }
     }
 
-    public function getConfig(Paypal $paypal)
+    public function getConfig(PayPal $module)
     {
     }
 
     /**
-     * @see AbstractMethodPaypal::confirmCapture()
+     * @param PaypalOrder $orderPayPal
+     *
+     * @return mixed
      */
     public function confirmCapture($orderPayPal)
     {
+        return null;
     }
 
-    /**
-     * @see AbstractMethodPaypal::void()
-     */
     public function void($orderPayPal)
     {
     }
@@ -205,8 +206,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             $context->cookie->__set('paypal_plus_payment', $this->paymentId);
         } catch (Throwable $e) {
             return false;
-        } catch (Exception $e) {
-            return false;
         }
 
         $paypal = Module::getInstanceByName('paypal');
@@ -219,6 +218,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             'modePPP' => Configuration::get('PAYPAL_SANDBOX') ? 'sandbox' : 'live',
             'languageIsoCodePPP' => $context->language->iso_code,
             'countryIsoCodePPP' => $country_invoice->iso_code,
+            /* @phpstan-ignore-next-line */
             'ajaxPatchUrl' => $context->link->getModuleLink('paypal', 'pppPatch', [], true),
         ]);
         Media::addJsDefL('waitingRedirectionMsg', $paypal->l('In few seconds, you will be redirected to PayPal. Please wait.', get_class($this)));
@@ -283,6 +283,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     public function getReturnUrl()
     {
+        /* @phpstan-ignore-next-line */
         return Context::getContext()->link->getModuleLink($this->name, 'pppValidation', [], true);
     }
 
@@ -319,17 +320,17 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             throw new Exception('Module is not configured');
         }
 
-        /** @var $response \PaypalAddons\classes\API\Response\ResponseOrderCreate */
+        /** @var PaypalAddons\classes\API\Response\ResponseOrderCreate $response */
         $response = $this->paypalApiManager->getOrderPuiRequest()->execute();
 
         if ($response->isSuccess() == false) {
-            throw new \Exception($response->getError()->getMessage());
+            throw new Exception($response->getError()->getMessage());
         }
 
         $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($response->getPaymentId())->execute();
 
         if ($getOrderResponse->isSuccess() == false) {
-            throw new \Exception($getOrderResponse->getError()->getMessage());
+            throw new Exception($getOrderResponse->getError()->getMessage());
         }
 
         $transactionDetails = [
@@ -343,6 +344,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             'intent' => $this->getIntent(),
             'capture' => false,
         ];
+        /** @var PayPal $paypal */
         $paypal = Module::getInstanceByName($this->name);
         $paypal->validateOrder(
             Context::getContext()->cart->id,

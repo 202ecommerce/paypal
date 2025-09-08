@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\API;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Client\HttpClient;
 use PaypalAddons\classes\API\Environment\PaypalEnvironment;
@@ -38,7 +38,6 @@ use PaypalAddons\classes\API\Injector\BnCodeInjector;
 use PaypalAddons\classes\API\Injector\UserAgentInjector;
 use PaypalAddons\classes\API\Request\HttpRequestInterface;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -70,10 +69,7 @@ class PaypalClient extends HttpClient
             $this->logRequest($httpRequest);
             $response = parent::execute($httpRequest);
             $this->logResponse($response);
-        } catch (Throwable $e) {
-            $this->logException($e);
-            throw $e;
-        } catch (Exception $e) { // Throwable is available since php7
+        } catch (\Throwable $e) {
             $this->logException($e);
             throw $e;
         }
@@ -118,13 +114,13 @@ class PaypalClient extends HttpClient
             empty(\Context::getContext()->cart->id) ? null : \Context::getContext()->cart->id,
             \Context::getContext()->shop->id,
             null,
-            (int) \Configuration::get('PAYPAL_SANDBOX')
+            (bool) \Configuration::get('PAYPAL_SANDBOX')
         );
         ProcessLoggerHandler::closeLogger();
     }
 
     /**
-     * @param Throwable $exception
+     * @param \Throwable $exception
      */
     protected function logException($exception)
     {
@@ -139,7 +135,7 @@ class PaypalClient extends HttpClient
             empty(\Context::getContext()->cart->id) ? null : \Context::getContext()->cart->id,
             \Context::getContext()->shop->id,
             null,
-            (int) \Configuration::get('PAYPAL_SANDBOX')
+            (bool) \Configuration::get('PAYPAL_SANDBOX')
         );
         ProcessLoggerHandler::closeLogger();
     }
@@ -157,7 +153,7 @@ class PaypalClient extends HttpClient
             empty(\Context::getContext()->cart->id) ? null : \Context::getContext()->cart->id,
             \Context::getContext()->shop->id,
             null,
-            (int) \Configuration::get('PAYPAL_SANDBOX')
+            (bool) \Configuration::get('PAYPAL_SANDBOX')
         );
         ProcessLoggerHandler::closeLogger();
     }

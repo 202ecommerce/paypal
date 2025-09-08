@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,7 @@
 
 namespace PaypalAddons\classes\Widget;
 
-use CartController;
-use CategoryController;
-use IndexController;
-use OrderController;
 use PaypalAddons\classes\InstallmentBanner\BannerManager;
-use ProductController;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -51,23 +47,23 @@ class InstallmentWidget extends AbstractWidget
             return '';
         }
 
-        if ($this->context->controller instanceof IndexController) {
+        if ($this->context->controller instanceof \IndexController) {
             return $bannerMaganager->renderForHomePage();
         }
 
-        if ($this->context->controller instanceof CategoryController) {
+        if ($this->context->controller instanceof \CategoryController) {
             return $bannerMaganager->renderBanner('category');
         }
 
-        if ($this->context->controller instanceof CartController) {
+        if ($this->context->controller instanceof \CartController) {
             return $bannerMaganager->renderForCartPage();
         }
 
-        if ($this->context->controller instanceof OrderController) {
+        if ($this->context->controller instanceof \OrderController) {
             return $bannerMaganager->renderForCheckoutPage();
         }
 
-        if ($this->context->controller instanceof ProductController) {
+        if ($this->context->controller instanceof \ProductController) {
             return $bannerMaganager->renderForProductPage();
         }
 

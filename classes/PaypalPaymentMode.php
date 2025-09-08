@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes;
 
-use Configuration;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 
 if (!defined('_PS_VERSION_')) {
@@ -41,7 +41,7 @@ class PaypalPaymentMode
      */
     public static function isSale()
     {
-        return Configuration::get(PaypalConfigurations::INTENT) == 'sale';
+        return \Configuration::get(PaypalConfigurations::INTENT) == 'sale';
     }
 
     /**
@@ -49,6 +49,6 @@ class PaypalPaymentMode
      */
     public static function isAuthorize()
     {
-        return Configuration::get(PaypalConfigurations::INTENT) == 'authorize';
+        return \Configuration::get(PaypalConfigurations::INTENT) == 'authorize';
     }
 }

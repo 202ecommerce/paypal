@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -32,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */

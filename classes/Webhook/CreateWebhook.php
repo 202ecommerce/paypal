@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -40,7 +41,7 @@ if (!defined('_PS_VERSION_')) {
 
 class CreateWebhook
 {
-    /** @var AbstractMethodPaypal */
+    /** @var AbstractMethodPaypal|null */
     protected $method;
 
     /** @var bool if webhook exists it will be updated ou not */

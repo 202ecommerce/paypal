@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -84,7 +85,7 @@ class PaypalCapture extends ObjectModel
         $sql->where('id_paypal_order = ' . (int) $orderPayPalId);
         $id_paypal_capture = Db::getInstance()->getValue($sql);
 
-        return new self($id_paypal_capture);
+        return new self((int) $id_paypal_capture);
     }
 
     /**

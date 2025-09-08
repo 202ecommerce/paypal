@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,15 +28,10 @@
 
 namespace PaypalAddons\services;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Model\WebhookEvent;
 use PaypalAddons\classes\Constants\WebHookType;
 use PaypalAddons\classes\Exception\RefundCalculationException;
-use PaypalOrder;
-use PaypalWebhook;
-use PrestaShopCollection;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -44,11 +40,11 @@ if (!defined('_PS_VERSION_')) {
 class PaymentRefundAmount
 {
     /**
-     * @param PaypalOrder $paypalOrder
+     * @param \PaypalOrder $paypalOrder
      *
      * @return float
      */
-    public function calculateTotalRefunded(PaypalOrder $paypalOrder)
+    public function calculateTotalRefunded(\PaypalOrder $paypalOrder)
     {
         $method = AbstractMethodPaypal::load($paypalOrder->method);
         $totalRefund = 0;
@@ -62,9 +58,9 @@ class PaymentRefundAmount
                     $totalRefund += $refund->amount->value;
                 }
             }
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new RefundCalculationException($e->getMessage());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new RefundCalculationException($e->getMessage());
         }
 
@@ -72,11 +68,11 @@ class PaymentRefundAmount
     }
 
     /**
-     * @param PaypalOrder $paypalOrder
+     * @param \PaypalOrder $paypalOrder
      *
      * @return float
      */
-    public function calculateReceivedWebhookEvent(PaypalOrder $paypalOrder)
+    public function calculateReceivedWebhookEvent(\PaypalOrder $paypalOrder)
     {
         $webhookEvents = $this->getWebhookEvents($paypalOrder);
         $totalRefunded = 0;
@@ -90,8 +86,8 @@ class PaymentRefundAmount
 
             try {
                 $totalRefunded += $webhookEvent->resource->amount->value;
-            } catch (Throwable $e) {
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
+            } catch (\Exception $e) {
             }
         }
 
@@ -99,20 +95,20 @@ class PaymentRefundAmount
     }
 
     /**
-     * @param PaypalOrder $paypalOrder
+     * @param \PaypalOrder $paypalOrder
      *
-     * @return PaypalWebhook[]
+     * @return \PaypalWebhook[]
      */
-    protected function getWebhookEvents(PaypalOrder $paypalOrder)
+    protected function getWebhookEvents(\PaypalOrder $paypalOrder)
     {
         try {
-            $collection = (new PrestaShopCollection(PaypalWebhook::class))
+            $collection = (new \PrestaShopCollection(\PaypalWebhook::class))
                 ->where('id_paypal_order', '=', (int) $paypalOrder->id);
 
             return $collection->getResults();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return [];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return [];
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -48,6 +49,8 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
     protected $webhookEventHandler;
 
     protected $method;
+    /** @var PayPal */
+    public $module;
 
     public function __construct()
     {
@@ -101,8 +104,8 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                 ProcessLoggerHandler::closeLogger();
                 header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
             }
-        } catch (\Exception $exception) {
-        } catch (\Throwable $exception) {//for php version > 7
+        } catch (Exception $exception) {
+        } catch (Throwable $exception) {// for php version > 7
         }
 
         if (isset($exception)) {
@@ -186,7 +189,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
     {
         $event = new WebhookEvent();
         $event->fromArray($requestData);
-
+        /* @phpstan-ignore-next-line */
         if (false == empty($event->getResource()->supplementary_data->related_ids->order_id)) {
             $paymentId = $event->getResource()->supplementary_data->related_ids->order_id;
 

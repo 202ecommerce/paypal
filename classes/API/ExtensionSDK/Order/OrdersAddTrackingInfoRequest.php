@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -32,7 +33,6 @@ use PaypalAddons\classes\API\HttpResponse;
 use PaypalAddons\classes\API\Request\HttpRequestInterface;
 use PaypalAddons\classes\API\WrapperInterface;
 use PaypalAddons\services\Builder\BuilderInterface;
-use PaypalOrder;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,10 +43,10 @@ class OrdersAddTrackingInfoRequest implements HttpRequestInterface, WrapperInter
     protected $headers = [];
     /** @var BuilderInterface */
     protected $bodyBuilder;
-    /** @var PaypalOrder */
+    /** @var \PaypalOrder */
     protected $paypalOrder;
 
-    public function __construct(PaypalOrder $paypalOrder, BuilderInterface $bodyBuilder)
+    public function __construct(\PaypalOrder $paypalOrder, BuilderInterface $bodyBuilder)
     {
         $this->headers['Content-Type'] = 'application/json';
         $this->bodyBuilder = $bodyBuilder;

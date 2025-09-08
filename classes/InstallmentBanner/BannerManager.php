@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,11 +28,7 @@
 
 namespace PaypalAddons\classes\InstallmentBanner;
 
-use Configuration;
-use Context;
-use Country;
 use PaypalAddons\services\CurrencyConverter;
-use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -42,13 +39,13 @@ class BannerManager
     /** @var Banner */
     protected $banner;
 
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
     public function __construct()
     {
         $this->banner = new Banner();
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     /**
@@ -74,7 +71,7 @@ class BannerManager
     public function isEligiblePage()
     {
         foreach (ConfigurationMap::getPageConfMap() as $page => $conf) {
-            if (is_a($this->context->controller, $page) && (bool) Configuration::get($conf)) {
+            if (is_a($this->context->controller, $page) && (bool) \Configuration::get($conf)) {
                 return true;
             }
         }
@@ -96,8 +93,8 @@ class BannerManager
 
     public function isEligibleCountry()
     {
-        $isoCountryDefault = Country::getIsoById(
-            (int) Configuration::get(
+        $isoCountryDefault = \Country::getIsoById(
+            (int) \Configuration::get(
                 'PS_COUNTRY_DEFAULT',
                 null,
                 null,
@@ -144,7 +141,7 @@ class BannerManager
             ->setTemplate('module:paypal/views/templates/installmentBanner/banner.tpl');
 
         if ($this->context->controller instanceof \ProductController && $placement == 'product') {
-            if (Validate::isLoadedObject($this->context->controller->getProduct())) {
+            if (\Validate::isLoadedObject($this->context->controller->getProduct())) {
                 /** @var \Product $product */
                 $product = $this->context->controller->getProduct();
                 $banner->setAmount($product->getPrice());

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -49,7 +50,7 @@ class ServicePaypalLog
             return '';
         }
 
-        /** @var $paypalOrder \PaypalOrder object */
+        /** @var \PaypalOrder $paypalOrder object */
         $paypalOrder = $this->getPaypalOrderByLog($log);
 
         if (\Validate::isLoadedObject($paypalOrder) == false || $paypalOrder->method == 'BT') {

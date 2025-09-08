@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,8 @@
 
 namespace PaypalAddons\classes\Vaulting;
 
-use Configuration;
-use Context;
-use Country;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,13 +37,13 @@ if (!defined('_PS_VERSION_')) {
 
 class VaultedPaymentButton
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
-    /** @var Module */
+    /** @var \PayPal */
     protected $module;
 
-    /** @var AbstractMethodPaypal */
+    /** @var \MethodEC|\MethodPPP|\MethodMB */
     protected $method;
 
     /** @var string */
@@ -58,8 +54,9 @@ class VaultedPaymentButton
 
     public function __construct($userIdToken)
     {
-        $this->context = Context::getContext();
-        $this->module = Module::getInstanceByName('paypal');
+        $this->context = \Context::getContext();
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->userIdToken = (string) $userIdToken;
     }
@@ -78,7 +75,7 @@ class VaultedPaymentButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJSvars()
     {
@@ -86,7 +83,7 @@ class VaultedPaymentButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJS()
     {
@@ -139,19 +136,19 @@ class VaultedPaymentButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getTplVars()
     {
         return [
             'sdkNameSpace' => $this->getIdentifier(),
-            'isMoveButtonAtEnd' => Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+            'isMoveButtonAtEnd' => \Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
         ];
     }
 
     protected function getBuyerCountry()
     {
-        $buyerCountry = Tools::strtoupper(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $buyerCountry = \Tools::strtoupper(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
         // https://developer.paypal.com/docs/regional/th/checkout/reference/customize-sdk/
         // According a documentation the available countries are following 'US', 'CA', 'GB', 'DE', 'FR'
         // But an error was occurring using 'US', 'CA', 'GB' during the test

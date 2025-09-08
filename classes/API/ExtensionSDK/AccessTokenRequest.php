@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -44,7 +45,7 @@ class AccessTokenRequest implements HttpRequestInterface, WrapperInterface
      */
     protected $paypalCustomerId;
 
-    protected $body = null;
+    protected $body;
 
     public function __construct($paypalCustomerId = null)
     {

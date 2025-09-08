@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,8 +28,6 @@
 
 namespace PaypalAddons\services;
 
-use Db;
-use DbQuery;
 use Order;
 
 require_once dirname(__FILE__) . '/../classes/PaypalOrder.php';
@@ -54,7 +53,7 @@ class ServicePaypalOrder
             return false;
         }
 
-        /* @var $psOrder \Order*/
+        /* @var $psOrder \Order */
         foreach ($psOrders as $psOrder) {
             if ($checkHistory) {
                 if (empty($psOrder->getHistory(\Context::getContext()->language->id, $idStatus)) == false) {
@@ -81,7 +80,7 @@ class ServicePaypalOrder
     {
         $paypalOrder->id_transaction = $transactionId;
         $paypalOrder->save();
-        $order = new Order($paypalOrder->id_order);
+        $order = new \Order($paypalOrder->id_order);
 
         $data = [
             'transaction_id' => $transactionId,
@@ -90,7 +89,7 @@ class ServicePaypalOrder
             'order_reference = \'%s\' AND (transaction_id IS NULL OR transaction_id = \'\')',
             $order->reference
         );
-        Db::getInstance()->update('order_payment', $data, $where);
+        \Db::getInstance()->update('order_payment', $data, $where);
     }
 
     /**
@@ -113,15 +112,15 @@ class ServicePaypalOrder
      */
     public function getPaypalOrderByTransaction($transactionId)
     {
-        $query = (new DbQuery())
+        $query = (new \DbQuery())
             ->select('po.id_paypal_order')
             ->from('paypal_order', 'po')
             ->leftJoin('paypal_capture', 'pc', 'po.id_paypal_order = pc.id_paypal_order')
             ->where(implode(' OR ', [
-                    'po.id_transaction = "' . pSQL($transactionId) . '"',
-                    'pc.id_capture = "' . pSQL($transactionId) . '"',
-                ]));
-        $idPaypalOrder = (int) Db::getInstance()->getValue($query);
+                'po.id_transaction = "' . pSQL($transactionId) . '"',
+                'pc.id_capture = "' . pSQL($transactionId) . '"',
+            ]));
+        $idPaypalOrder = (int) \Db::getInstance()->getValue($query);
 
         if ($idPaypalOrder) {
             return new \PaypalOrder($idPaypalOrder);
@@ -132,11 +131,11 @@ class ServicePaypalOrder
 
     public function getPaypalOrderByPaymentId($paymentId)
     {
-        $query = (new DbQuery())
+        $query = (new \DbQuery())
             ->select('id_paypal_order')
             ->from('paypal_order', 'po')
             ->where('id_payment = \'' . pSQL($paymentId) . '\'');
-        $id = (int) Db::getInstance()->getValue($query);
+        $id = (int) \Db::getInstance()->getValue($query);
 
         if ($id) {
             return new \PaypalOrder($id);

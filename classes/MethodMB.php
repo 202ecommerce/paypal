@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -42,10 +43,10 @@ if (!defined('_PS_VERSION_')) {
  */
 class MethodMB extends AbstractMethodPaypal
 {
-    /* @var string type of the payer tax*/
+    /* @var string type of the payer tax */
     const BR_CPF = 'BR_CPF';
 
-    /* @var string type of the payer tax*/
+    /* @var string type of the payer tax */
     const BR_CNPJ = 'BR_CNPJ';
 
     protected $payment_method = 'PayPal';
@@ -93,7 +94,7 @@ class MethodMB extends AbstractMethodPaypal
     }
 
     /**
-     * @param $values array replace for tools::getValues()
+     * @param array $values replace for tools::getValues()
      */
     public function setParameters($values)
     {
@@ -139,7 +140,7 @@ class MethodMB extends AbstractMethodPaypal
         }
     }
 
-    public function getConfig(Paypal $paypal)
+    public function getConfig(PayPal $module)
     {
     }
 
@@ -150,6 +151,7 @@ class MethodMB extends AbstractMethodPaypal
     {
         $context = Context::getContext();
         $cart = $context->cart;
+        /* @phpstan-ignore-next-line */
         $customer = new Customer($cart->id_customer);
 
         if (Validate::isLoadedObject($customer) && $this->getRememberedCards()) {
@@ -218,13 +220,14 @@ class MethodMB extends AbstractMethodPaypal
     /**
      * Assign form data for Paypal Plus payment option
      *
-     * @return bool
+     * @return void
      */
     public function assignJSvarsPaypalMB()
     {
         $context = Context::getContext();
         $module = Module::getInstanceByName($this->name);
         Media::addJsDef([
+            /* @phpstan-ignore-next-line */
             'ajaxPatch' => $context->link->getModuleLink('paypal', 'mbValidation', [], true),
             'EMPTY_TAX_ID' => $module->l('For processing you payment via PayPal it is required to add a VAT number to your address. Please fill it and complete your payment.', get_class($this)),
             'INVALID_PAYER_TAX_ID' => $module->l('For processing you payment via PayPal it is required to add a valid Tax ID to your address. Please verify if your Tax ID is correct, change it if needed and complete your payment.', get_class($this)),
@@ -291,8 +294,6 @@ class MethodMB extends AbstractMethodPaypal
             $context->cookie->__set('paypal_plus_mb_payment', $this->paymentId);
         } catch (Throwable $e) {
             return false;
-        } catch (Exception $e) {
-            return false;
         }
 
         $addressCustomer = new Address(Context::getContext()->cart->id_address_delivery);
@@ -356,7 +357,7 @@ class MethodMB extends AbstractMethodPaypal
     }
 
     /**
-     * @param $vatNumber string
+     * @param string $vatNumber
      *
      * @return string
      */
@@ -416,6 +417,7 @@ class MethodMB extends AbstractMethodPaypal
      */
     public function getReturnUrl()
     {
+        /* @phpstan-ignore-next-line */
         return (string) Context::getContext()->link->getModuleLink($this->name, 'mbValidation', [], true);
     }
 
@@ -445,7 +447,7 @@ class MethodMB extends AbstractMethodPaypal
 
     public function getPaypalPartnerId()
     {
-        if (Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'MX') {
+        if (Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT')) == 'MX') {
             $bnCodeSuffix = 'Mexico';
         } else {
             $bnCodeSuffix = 'Brazil';

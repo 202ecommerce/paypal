@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,17 +28,12 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Configuration;
-use Context;
-use Country;
-use Module;
 use PaypalAddons\classes\ACDC\AcdcFunctionality;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\Shortcut\ShortcutConfiguration;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
 use PaypalAddons\classes\Venmo\VenmoFunctionality;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -45,7 +41,7 @@ if (!defined('_PS_VERSION_')) {
 
 class CheckoutForm implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $method;
@@ -61,8 +57,9 @@ class CheckoutForm implements FormInterface
 
     public function __construct($advancedMode = false)
     {
-        $this->module = Module::getInstanceByName('paypal');
-        $countryDefault = new Country(Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
+        $countryDefault = new \Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), \Context::getContext()->language->id);
         $this->acdcFunctionality = new AcdcFunctionality();
         $this->vaultingFunctionality = new VaultingFunctionality();
         $this->venmoFunctionality = new VenmoFunctionality();
@@ -85,7 +82,7 @@ class CheckoutForm implements FormInterface
 
     public function getDescription()
     {
-        $countryDefault = new Country(Configuration::get('PS_COUNTRY_DEFAULT'), Context::getContext()->language->id);
+        $countryDefault = new \Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), \Context::getContext()->language->id);
         $fields = [];
 
         if ($this->method == 'MB') {
@@ -105,7 +102,7 @@ class CheckoutForm implements FormInterface
                         'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                     ],
                 ],
-                'value' => (int) Configuration::get(PaypalConfigurations::MB_EC_ENABLED),
+                'value' => (int) \Configuration::get(PaypalConfigurations::MB_EC_ENABLED),
             ];
         }
 
@@ -124,7 +121,7 @@ class CheckoutForm implements FormInterface
                         'title' => $this->module->l('Authorize', 'AdminPayPalSetupController'),
                     ],
                 ],
-                'value' => Configuration::get(PaypalConfigurations::INTENT),
+                'value' => \Configuration::get(PaypalConfigurations::INTENT),
                 'variant' => 'primary',
             ];
 
@@ -148,14 +145,14 @@ class CheckoutForm implements FormInterface
                     'title' => $this->module->l('REDIRECT', 'AdminPayPalCustomizeCheckoutController'),
                 ],
             ],
-            'value' => Configuration::get(PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT),
+            'value' => \Configuration::get(PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT),
             'variant' => 'primary',
         ];
         $fields[PaypalConfigurations::BRAND_NAME] = [
             'type' => 'text',
             'label' => $this->module->l('Brand name', 'CheckoutForm'),
             'name' => PaypalConfigurations::BRAND_NAME,
-            'value' => Configuration::get(PaypalConfigurations::BRAND_NAME),
+            'value' => \Configuration::get(PaypalConfigurations::BRAND_NAME),
             'placeholder' => $this->module->l('Leave it empty to use your shop name', 'AdminPayPalCustomizeCheckoutController'),
             'hint' => $this->module->l('A label that overrides the business name in the PayPal account on the PayPal pages. If logo is set, then brand name won\'t be shown.', 'AdminPayPalCustomizeCheckoutController'),
         ];
@@ -168,7 +165,7 @@ class CheckoutForm implements FormInterface
                 'placeholder' => $this->module->l('Example: Customer service phone is +49 6912345678', 'AdminPayPalCustomizeCheckoutController'),
                 'required' => true,
                 'hint' => $this->module->l('Required message for using Pay upon invoice payment method', 'AdminPayPalCustomizeCheckoutController'),
-                'value' => Configuration::get(PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS),
+                'value' => \Configuration::get(PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS),
             ];
         }
 
@@ -189,7 +186,7 @@ class CheckoutForm implements FormInterface
                     'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                 ],
             ],
-            'value' => (int) Configuration::get(PaypalConfigurations::API_ADVANTAGES),
+            'value' => (int) \Configuration::get(PaypalConfigurations::API_ADVANTAGES),
             'variant' => 'secondary',
         ];
         $fields[ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE] = [
@@ -197,7 +194,7 @@ class CheckoutForm implements FormInterface
             'name' => ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE,
             'label' => $this->module->l('Product Page', 'blockpreviewbuttoncontext'),
             'value' => 1,
-            'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
+            'checked' => (bool) \Configuration::get(ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE),
             'image' => _MODULE_DIR_ . $this->module->name . '/views/img/product_page_button.png',
         ];
         $fields[ShortcutConfiguration::SHOW_ON_CART_PAGE] = [
@@ -205,7 +202,7 @@ class CheckoutForm implements FormInterface
             'name' => ShortcutConfiguration::SHOW_ON_CART_PAGE,
             'label' => $this->module->l('Cart Page', 'blockpreviewbuttoncontext'),
             'value' => 1,
-            'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE),
+            'checked' => (bool) \Configuration::get(ShortcutConfiguration::SHOW_ON_CART_PAGE),
             'image' => _MODULE_DIR_ . $this->module->name . '/views/img/cart_page_button.png',
         ];
         $fields[ShortcutConfiguration::SHOW_ON_SIGNUP_STEP] = [
@@ -213,7 +210,7 @@ class CheckoutForm implements FormInterface
             'name' => ShortcutConfiguration::SHOW_ON_SIGNUP_STEP,
             'label' => $this->module->l('Sign up step in checkout', 'blockpreviewbuttoncontext'),
             'value' => 1,
-            'checked' => (bool) Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP),
+            'checked' => (bool) \Configuration::get(ShortcutConfiguration::SHOW_ON_SIGNUP_STEP),
             'image' => _MODULE_DIR_ . $this->module->name . '/views/img/signin-checkout-button.png',
         ];
 
@@ -222,7 +219,7 @@ class CheckoutForm implements FormInterface
             'label' => $this->module->l('Put the PayPal button at the end of the order page', 'CheckoutForm'),
             'desc' => $this->module->l('Put the PayPal button at the end of the order page', 'AdminPayPalCustomizeCheckoutController'),
             'name' => PaypalConfigurations::MOVE_BUTTON_AT_END,
-            'value' => (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+            'value' => (int) \Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
             'values' => [
                 [
                     'id' => PaypalConfigurations::MOVE_BUTTON_AT_END . '_on',
@@ -254,8 +251,8 @@ class CheckoutForm implements FormInterface
                         'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                     ],
                 ],
-                'value' => (int) Configuration::get(PaypalConfigurations::ACDC_OPTION),
-                'disabled' => (int) Configuration::get(PaypalConfigurations::ACDC_OPTION) && !$this->advancedMode,
+                'value' => (int) \Configuration::get(PaypalConfigurations::ACDC_OPTION),
+                'disabled' => (int) \Configuration::get(PaypalConfigurations::ACDC_OPTION) && !$this->advancedMode,
             ];
         }
 
@@ -277,7 +274,7 @@ class CheckoutForm implements FormInterface
                         'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                     ],
                 ],
-                'value' => (int) Configuration::get(PaypalConfigurations::VENMO_OPTION),
+                'value' => (int) \Configuration::get(PaypalConfigurations::VENMO_OPTION),
             ];
         }
 
@@ -299,7 +296,7 @@ class CheckoutForm implements FormInterface
                             'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                         ],
                     ],
-                    'value' => (int) Configuration::get(PaypalConfigurations::API_CARD),
+                    'value' => (int) \Configuration::get(PaypalConfigurations::API_CARD),
                 ];
             }
         }
@@ -322,7 +319,7 @@ class CheckoutForm implements FormInterface
                         'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                     ],
                 ],
-                'value' => (int) Configuration::get(PaypalConfigurations::VAULTING),
+                'value' => (int) \Configuration::get(PaypalConfigurations::VAULTING),
             ];
 
             $fields[PaypalConfigurations::MERCHANT_INSTALLMENT] = [
@@ -342,7 +339,7 @@ class CheckoutForm implements FormInterface
                         'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                     ],
                 ],
-                'value' => (int) Configuration::get(PaypalConfigurations::MERCHANT_INSTALLMENT),
+                'value' => (int) \Configuration::get(PaypalConfigurations::MERCHANT_INSTALLMENT),
             ];
         }
 
@@ -363,7 +360,7 @@ class CheckoutForm implements FormInterface
                         'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                     ],
                 ],
-                'value' => (int) Configuration::get(PaypalConfigurations::PUI_ENABLED),
+                'value' => (int) \Configuration::get(PaypalConfigurations::PUI_ENABLED),
             ];
             $fields[PaypalConfigurations::SEPA_ENABLED] = [
                 'type' => 'switch',
@@ -381,10 +378,10 @@ class CheckoutForm implements FormInterface
                         'label' => $this->module->l('Disabled', 'AdminPayPalCustomizeCheckoutController'),
                     ],
                 ],
-                'value' => (int) Configuration::get(PaypalConfigurations::SEPA_ENABLED),
+                'value' => (int) \Configuration::get(PaypalConfigurations::SEPA_ENABLED),
             ];
 
-            if ((int) Configuration::get(PaypalConfigurations::SOFORT_ENABLED)) {
+            if ((int) \Configuration::get(PaypalConfigurations::SOFORT_ENABLED)) {
                 $fields[PaypalConfigurations::SOFORT_ENABLED] = [
                     'name' => PaypalConfigurations::SOFORT_ENABLED,
                     'type' => 'variable-set',
@@ -433,7 +430,7 @@ class CheckoutForm implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         if (empty($data['checkoutForm'])) {
@@ -441,94 +438,94 @@ class CheckoutForm implements FormInterface
         }
 
         if (isset($data[PaypalConfigurations::INTENT])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::INTENT,
                 pSQL($data[PaypalConfigurations::INTENT])
             );
         }
 
         if (isset($data[PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT,
                 (int) $data[PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT]
             );
         }
 
         if (isset($data[PaypalConfigurations::BRAND_NAME])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::BRAND_NAME,
                 pSQL($data[PaypalConfigurations::BRAND_NAME])
             );
         }
 
         if (isset($data[PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS])) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS,
                 pSQL($data[PaypalConfigurations::PUI_CUSTOMER_SERVICE_INSTRUCTIONS])
             );
         }
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::MB_EC_ENABLED,
             isset($data[PaypalConfigurations::MB_EC_ENABLED]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::API_ADVANTAGES,
             isset($data[PaypalConfigurations::API_ADVANTAGES]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE,
             isset($data[ShortcutConfiguration::SHOW_ON_PRODUCT_PAGE]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             ShortcutConfiguration::SHOW_ON_CART_PAGE,
             isset($data[ShortcutConfiguration::SHOW_ON_CART_PAGE]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             ShortcutConfiguration::SHOW_ON_SIGNUP_STEP,
             isset($data[ShortcutConfiguration::SHOW_ON_SIGNUP_STEP]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::ACDC_OPTION,
             isset($data[PaypalConfigurations::ACDC_OPTION]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::VENMO_OPTION,
             isset($data[PaypalConfigurations::VENMO_OPTION]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::PUI_ENABLED,
             isset($data[PaypalConfigurations::PUI_ENABLED]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::SEPA_ENABLED,
             isset($data[PaypalConfigurations::SEPA_ENABLED]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::MOVE_BUTTON_AT_END,
             isset($data[PaypalConfigurations::MOVE_BUTTON_AT_END]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::API_CARD,
             isset($data[PaypalConfigurations::API_CARD]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::VAULTING,
             isset($data[PaypalConfigurations::VAULTING]) ? 1 : 0
         );
 
-        Configuration::updateValue(
+        \Configuration::updateValue(
             PaypalConfigurations::MERCHANT_INSTALLMENT,
             isset($data[PaypalConfigurations::MERCHANT_INSTALLMENT]) ? 1 : 0
         );
@@ -540,9 +537,10 @@ class CheckoutForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty
-            ->assign('isShowCustomerInstruction', $this->method == 'PPP')
-            ->assign('isShowVaultingFunctionality', $this->vaultingFunctionality->isAvailable())
-            ->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/checkout.tpl');
+        $tpl = \Context::getContext()->smarty->createTemplate(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/checkout.tpl');
+        $tpl->assign('isShowCustomerInstruction', $this->method == 'PPP')
+            ->assign('isShowVaultingFunctionality', $this->vaultingFunctionality->isAvailable());
+
+        return $tpl->fetch();
     }
 }
