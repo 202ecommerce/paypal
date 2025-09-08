@@ -36,9 +36,10 @@
 
   &-control-label {
     font-weight: $font-weight-base !important;
-    font-size: $custom-control-label-font-size;
+    font-size: $custom-control-label-font-size !important;
     color: $custom-control-label-color !important;
     padding-left: $grid-gutter-width / 2 !important;
+    padding-right: 0;
     @extend .m-0;
 
     &:not(.form-control-label-check) {
@@ -55,6 +56,7 @@
 
   &-control {
     max-width: 411px;
+    border: 1px solid $blue !important;
 
     &-primary {
       background: $primary !important;
