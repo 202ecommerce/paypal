@@ -111,4 +111,8 @@
       color: $link-hover-color !important;
     }
   }
+
+  .table thead>tr>th {
+    font-weight: $font-weight-semibold !important;
+  }
 }
