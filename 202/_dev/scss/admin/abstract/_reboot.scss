@@ -115,4 +115,8 @@
   .table thead>tr>th {
     font-weight: $font-weight-semibold !important;
   }
+
+  .custom-select {
+    @extend .custom-select
+  }
 }
