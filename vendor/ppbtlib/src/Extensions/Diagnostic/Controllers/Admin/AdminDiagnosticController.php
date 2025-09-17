@@ -50,6 +50,8 @@ class AdminDiagnosticController extends \ModuleAdminController
     public $bootstrap = false;
 
     public $override_folder;
+    /** @var Module */
+    public $module;
 
     /**
      * @var int
@@ -165,7 +167,7 @@ class AdminDiagnosticController extends \ModuleAdminController
     public function initPageHeaderToolbar()
     {
         parent::initPageHeaderToolbar();
-        $this->page_header_toolbar_title = sprintf($this->l('Diagnostic %s'), Configuration::get(DiagnosticExtension::MODULE_NAME));
+        $this->page_header_toolbar_title = sprintf($this->module->l('Diagnostic %s'), Configuration::get(DiagnosticExtension::MODULE_NAME));
     }
 
     protected function getStubModule()
