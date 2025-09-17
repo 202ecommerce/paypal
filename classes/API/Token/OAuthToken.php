@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,8 +32,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Configuration;
-use PayPal;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\TokenInterface;
 
@@ -45,7 +44,7 @@ class OAuthToken implements TokenInterface
 
     public function __construct(AbstractMethodPaypal $method)
     {
-        $token = json_decode((string) Configuration::get(PayPal::ACCESS_TOKEN), true);
+        $token = json_decode((string) \Configuration::get(\PayPal::ACCESS_TOKEN), true);
         $this->method = $method;
 
         if (!empty($token['client-id']) && $token['client-id'] === $method->getClientId()) {
@@ -102,6 +101,6 @@ class OAuthToken implements TokenInterface
         $data['client-id'] = $this->method->getClientId();
         $this->token = $data;
 
-        return Configuration::updateValue(PayPal::ACCESS_TOKEN, json_encode($data));
+        return \Configuration::updateValue(\PayPal::ACCESS_TOKEN, json_encode($data));
     }
 }

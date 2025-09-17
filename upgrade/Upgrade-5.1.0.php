@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -33,7 +34,7 @@ require_once _PS_MODULE_DIR_ . 'paypal/classes/AbstractMethodPaypal.php';
 use PaypalPPBTlib\Install\ModuleInstaller;
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */
@@ -74,5 +75,5 @@ function upgrade_module_5_1_0($module)
         }
     }
 
-    return $return;
+    return (bool) $return;
 }

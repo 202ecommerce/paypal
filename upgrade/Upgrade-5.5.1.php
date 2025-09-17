@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -34,7 +35,7 @@ use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 /**
- * @param $module PayPal
+ * @param PayPal $module
  *
  * @return bool
  */
@@ -59,7 +60,7 @@ function upgrade_module_5_5_1($module)
             null,
             null,
             null,
-            (int) $method->isSandbox()
+            $method->isSandbox()
         );
         ProcessLoggerHandler::closeLogger();
     }

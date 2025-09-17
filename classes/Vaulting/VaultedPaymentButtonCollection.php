@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\Vaulting;
 
-use Context;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\services\ServicePaypalVaulting;
 
@@ -37,7 +37,7 @@ if (!defined('_PS_VERSION_')) {
 
 class VaultedPaymentButtonCollection
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
     /** @var AbstractMethodPaypal */
@@ -53,7 +53,7 @@ class VaultedPaymentButtonCollection
 
     public function __construct($id_customer, $paymentSourceType)
     {
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
         $this->method = AbstractMethodPaypal::load();
         $this->vaultingFunctionality = new VaultingFunctionality();
         $this->paypalVaultingService = new ServicePaypalVaulting();

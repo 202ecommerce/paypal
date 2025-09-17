@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\Webhook;
 
-use Configuration;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
 if (!defined('_PS_VERSION_')) {
@@ -49,7 +49,7 @@ class WebhookId
      */
     public function get()
     {
-        return Configuration::get(
+        return \Configuration::get(
             $this->getConfName(),
             null,
             null,
@@ -65,7 +65,7 @@ class WebhookId
      */
     public function update($id)
     {
-        Configuration::updateValue($this->getConfName(), (string) $id);
+        \Configuration::updateValue($this->getConfName(), (string) $id);
 
         return $this;
     }

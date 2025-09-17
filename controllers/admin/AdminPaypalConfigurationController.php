@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -50,7 +51,7 @@ use PaypalAddons\classes\Shortcut\ShortcutPreview;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayPalController
+class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPalController
 {
     public $bootstrap = false;
 
@@ -77,12 +78,12 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
 
     protected function initForms()
     {
-        $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = Tools::strtolower(Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT')));
         $this->forms['checkoutForm'] = new CheckoutForm((int) Tools::getValue('with_factory'));
         $this->forms['trackingForm'] = new TrackingParametersForm();
 
         if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
-            $this->forms['formInstallment'] = new FormInstallment((bool) $this->is_shown_modal);
+            $this->forms['formInstallment'] = new FormInstallment();
 
             if ((bool) $this->is_shown_modal === false) {
                 $this->forms['formInstallmentMessaging'] = new FormInstallmentMessaging();
@@ -101,8 +102,8 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
     public function setMedia($isNewTheme = false)
     {
         parent::setMedia($isNewTheme);
-        \Media::addJsDef([
-            'controllerUrl' => \AdminController::$currentIndex . '&token=' . \Tools::getAdminTokenLite($this->controller_name),
+        Media::addJsDef([
+            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name),
             'paypal' => [
                 'locale' => str_replace('-', '_', Context::getContext()->language->locale),
                 'merchantId' => $this->method->getClientId($this->method->isSandbox()),
@@ -129,7 +130,7 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
     protected function renderConfiguration()
     {
         $tpl = $this->context->smarty->createTemplate($this->getTemplatePath() . 'admin.tpl');
-        /** @var \PaypalAddons\classes\Form\FormInterface $form */
+        /** @var PaypalAddons\classes\Form\FormInterface $form */
         foreach ($this->forms as $formName => $form) {
             $tpl->assign($formName, $form->getDescription());
         }
@@ -169,15 +170,13 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
         $response = new JsonResponse();
 
         try {
-            /** @var \PaypalAddons\classes\Form\FormInterface $form */
+            /** @var PaypalAddons\classes\Form\FormInterface $form */
             foreach ($this->forms as $form) {
                 $form->save();
             }
 
             $data['success'] = true;
         } catch (Throwable $e) {
-            $data['success'] = false;
-        } catch (Exception $e) {
             $data['success'] = false;
         }
 
@@ -209,7 +208,7 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
         $paypalOnboarding = new PaypalGetAuthToken($authCode, $sharedId, $sellerNonce, $isSandbox);
         $result = $paypalOnboarding->execute();
 
-        $locale = \Context::getContext()->language->locale;
+        $locale = Context::getContext()->language->locale;
         $errorMessages = [
             $this->module->l(
                 'An error occured while trying to link your PayPal\'s account',
@@ -406,7 +405,7 @@ class AdminPaypalConfigurationController extends \PaypalAddons\classes\AdminPayP
             $confing = [];
         }
 
-        $country = Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY, 'fr');
+        $country = Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY, (int) Language::getIdByIso('fr'));
         $locale = $country;
         switch ($country) {
             case 'au':

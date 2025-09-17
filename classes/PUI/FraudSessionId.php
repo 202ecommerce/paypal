@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,10 +28,6 @@
 
 namespace PaypalAddons\classes\PUI;
 
-use Context;
-use Customer;
-use Validate;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -38,17 +35,17 @@ if (!defined('_PS_VERSION_')) {
 class FraudSessionId
 {
     /**
-     * @param Customer|null $customer
+     * @param \Customer|null $customer
      *
      * @return string
      */
     public function buildSessionId($customer = null)
     {
         if (is_null($customer)) {
-            $customer = Context::getContext()->customer;
+            $customer = \Context::getContext()->customer;
         }
 
-        if (false == Validate::isLoadedObject($customer)) {
+        if (false == \Validate::isLoadedObject($customer)) {
             return '';
         }
 

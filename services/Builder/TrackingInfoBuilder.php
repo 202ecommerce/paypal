@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,12 +32,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Carrier;
-use Hook;
-use Order;
 use PaypalAddons\services\ServicePaypalOrder;
 use PaypalAddons\services\TrackingParameters;
-use Validate;
 
 class TrackingInfoBuilder implements BuilderInterface
 {
@@ -75,16 +72,16 @@ class TrackingInfoBuilder implements BuilderInterface
             $output['carrier'] = \PaypalAddons\classes\Constants\TrackingParameters::CARRIER_OTHER;
         }
 
-        Hook::exec('actionAfterPaypalTrackingInfoBuild', ['id_order' => $this->paypalOrder->id_order, 'info' => &$output]);
+        \Hook::exec('actionAfterPaypalTrackingInfoBuild', ['id_order' => $this->paypalOrder->id_order, 'info' => &$output]);
 
         return $output;
     }
 
     protected function getTrackingNumber()
     {
-        $order = new Order($this->paypalOrder->id_order);
+        $order = new \Order($this->paypalOrder->id_order);
 
-        if (false == Validate::isLoadedObject($order)) {
+        if (false == \Validate::isLoadedObject($order)) {
             return '';
         }
 
@@ -99,18 +96,18 @@ class TrackingInfoBuilder implements BuilderInterface
 
     protected function getCarrier()
     {
-        $order = new Order($this->paypalOrder->id_order);
+        $order = new \Order($this->paypalOrder->id_order);
 
-        if (false == Validate::isLoadedObject($order)) {
-            return new Carrier();
+        if (false == \Validate::isLoadedObject($order)) {
+            return new \Carrier();
         }
 
         $shipping = $order->getShipping();
 
         if (empty($shipping[0]['id_carrier'])) {
-            return new Carrier();
+            return new \Carrier();
         }
 
-        return new Carrier((int) $shipping[0]['id_carrier']);
+        return new \Carrier((int) $shipping[0]['id_carrier']);
     }
 }

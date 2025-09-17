@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\Venmo;
 
-use Context;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,7 @@ class VenmoButton
 
     public function __construct()
     {
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
         $this->method = AbstractMethodPaypal::load();
     }
 
@@ -58,7 +58,7 @@ class VenmoButton
     protected function getJSscripts()
     {
         $srcLib = $this->method->getUrlJsSdkLib() . '&enable-funding=venmo';
-
+        /* @phpstan-ignore-next-line */
         if (defined('PAYPAL_VENMO_ADD_BUYER_COUNTRY') && PAYPAL_VENMO_ADD_BUYER_COUNTRY) {
             if ($this->method->isSandbox()) {
                 $srcLib .= '&buyer-country=US';

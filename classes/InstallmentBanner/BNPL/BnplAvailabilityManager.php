@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,9 +28,6 @@
 
 namespace PaypalAddons\classes\InstallmentBanner\BNPL;
 
-use Configuration;
-use Context;
-use Country;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
 
 if (!defined('_PS_VERSION_')) {
@@ -38,15 +36,15 @@ if (!defined('_PS_VERSION_')) {
 
 class BnplAvailabilityManager
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
     public function __construct($context = null)
     {
-        if ($context instanceof Context) {
+        if ($context instanceof \Context) {
             $this->context = $context;
         } else {
-            $this->context = Context::getContext();
+            $this->context = \Context::getContext();
         }
     }
 
@@ -69,8 +67,8 @@ class BnplAvailabilityManager
 
     public function isEligibleCountryConfiguration()
     {
-        $isoCountryDefault = Country::getIsoById(
-            (int) Configuration::get(
+        $isoCountryDefault = \Country::getIsoById(
+            (int) \Configuration::get(
                 'PS_COUNTRY_DEFAULT',
                 null,
                 null,
