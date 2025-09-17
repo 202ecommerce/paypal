@@ -276,8 +276,12 @@ class MethodMB extends AbstractMethodPaypal
         }
 
         $taxId = str_replace(['.', '-', '/'], '', $addressCustomer->vat_number);
-        $taxInfo['tax_id'] = $taxId;
-        $taxInfo['tax_id_type'] = $this->getTaxIdType($taxId);
+        $taxIdType = $this->getTaxIdType($taxId);
+
+        if (empty($taxIdType) === false) {
+            $taxInfo['tax_id'] = $taxId;
+            $taxInfo['tax_id_type'] = $this->getTaxIdType($taxId);
+        }
 
         return $taxInfo;
     }
