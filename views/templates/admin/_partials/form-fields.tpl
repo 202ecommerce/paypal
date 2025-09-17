@@ -69,8 +69,8 @@
           {/if}
         >
       {elseif $field.type === 'widget-code'}
-        <div class="input-group">
-          <input type="text" readonly class="form-control"  aria-describedby="basic-addon2" id="{$field.name|escape:'htmlall':'UTF-8'}" value="{$field.code|default:''|escape:'htmlall':'UTF-8'}">
+        <div class="input-group d-flex">
+          <input type="text" style="width: initial" readonly class="form-control"  aria-describedby="basic-addon2" id="{$field.name|escape:'htmlall':'UTF-8'}" value="{$field.code|default:''|escape:'htmlall':'UTF-8'}">
           <div class="input-group-append" style="cursor: pointer" onclick="document.getElementById('{if isset($field.name)}{$field.name|escape:'htmlall':'UTF-8'}{/if}').select(); document.execCommand('copy')">
             <span class="input-group-text" id="basic-addon2"><i class="icon-copy"></i></span>
           </div>
