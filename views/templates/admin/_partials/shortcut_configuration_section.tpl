@@ -44,7 +44,7 @@
     }
 {/if}
 
-<div customize-style-shortcut-container class="hidden">
+<div customize-style-shortcut-container>
   <div class="form-group row ">
     <div class="col-7 offset-3">
       <div preview-section class="invisible" style="position: relative; pointer-events: none">
