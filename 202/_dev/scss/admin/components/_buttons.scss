@@ -30,6 +30,15 @@
 
   &-secondary {
     color: $primary !important;
+    background-color: $secondary !important;
+    border-color: $secondary !important;
+  }
+  &-outline-primary {
+    color: $primary !important;
+    border-color: $primary !important;
+  }
+  &-outline-primary:hover {
+    color: $white !important;
   }
 
   @at-root .form-group & {

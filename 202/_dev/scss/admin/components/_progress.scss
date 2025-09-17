@@ -25,7 +25,10 @@
  */
 .progress {
   border: 1px solid $progress-border-color;
-  overflow: visible;
+  overflow: visible !important;
+  height: 0.5rem !important;
+  margin-bottom: inherit;
+  background-color: #ffffff !important;
 
   &-bar {
     overflow: visible;
@@ -33,6 +36,8 @@
     height: $progress-height;
     top: 0;
     margin: -1px -1px -1px;
+    background-color: $yellow !important;
+    min-width: 0 !important;
     @include border-left-radius($progress-border-radius);
 
     &::after {
