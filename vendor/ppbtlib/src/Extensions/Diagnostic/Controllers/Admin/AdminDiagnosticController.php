@@ -50,7 +50,7 @@ class AdminDiagnosticController extends \ModuleAdminController
     public $bootstrap = false;
 
     public $override_folder;
-    /** @var Module */
+    /** @var \PayPal */
     public $module;
 
     /**
