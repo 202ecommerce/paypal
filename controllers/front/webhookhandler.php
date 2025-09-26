@@ -66,7 +66,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
         parent::init();
 
         if ($this->isCheckAvailability()) {
-            header($_SERVER['SERVER_PROTOCOL'] . WebhookHandler::STATUS_AVAILABLE);
+            header($_SERVER['SERVER_PROTOCOL'] . ' ' .  WebhookHandler::STATUS_AVAILABLE);
             exit;
         }
 
