@@ -138,7 +138,7 @@ class WebhookService
         if (false === $method->isConfigured()) {
             return;
         }
-        if (empty($this->module->getWebhookService()->getPendingWebhooks(null, 1))) {
+        if (empty($this->module->getWebhookService()->getPendingWebhooks())) {
             return;
         }
 
