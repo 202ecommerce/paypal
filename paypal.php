@@ -92,61 +92,61 @@ define('PAYPAL_PAYMENT_CUSTOMER_CURRENCY', -1);
 
 class PayPal extends PaymentModule implements WidgetInterface
 {
-    const PAYPAL_PARTNER_CLIENT_ID_LIVE = 'ATgR8ZE5M_Jd7F_XMMQDqMfFFgr7hJHFw8yKfklWU4TwzReENgydr5I042YfS1nRTDey7C1NbuFfKo_o';
+    public const PAYPAL_PARTNER_CLIENT_ID_LIVE = 'ATgR8ZE5M_Jd7F_XMMQDqMfFFgr7hJHFw8yKfklWU4TwzReENgydr5I042YfS1nRTDey7C1NbuFfKo_o';
 
-    const PAYPAL_PARTNER_ID_LIVE = 'B3PVCXSW2J8JN';
+    public const PAYPAL_PARTNER_ID_LIVE = 'B3PVCXSW2J8JN';
 
-    const PAYPAL_PARTNER_CLIENT_ID_SANDBOX = 'AVJ8YvTxw5Clf5CyJXIX6mnSSNgpzFFRaZh0KekLIMVe2vlkrWDMgaOTbvNds1U2bXVcjX4JGaP_jDM1';
+    public const PAYPAL_PARTNER_CLIENT_ID_SANDBOX = 'AVJ8YvTxw5Clf5CyJXIX6mnSSNgpzFFRaZh0KekLIMVe2vlkrWDMgaOTbvNds1U2bXVcjX4JGaP_jDM1';
 
-    const PAYPAL_PARTNER_ID_SANDBOX = 'J7Q7R6V9MQZUG';
+    public const PAYPAL_PARTNER_ID_SANDBOX = 'J7Q7R6V9MQZUG';
 
-    const NEED_INSTALL_MODELS = 'PAYPAL_NEED_INSTALL_MODELS';
+    public const NEED_INSTALL_MODELS = 'PAYPAL_NEED_INSTALL_MODELS';
 
-    const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
+    public const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
 
-    const PAYPAL_STATUS_CODE_TOO_MANY_REQUEST = 429;
+    public const PAYPAL_STATUS_CODE_TOO_MANY_REQUEST = 429;
 
-    const SCA_LIABILITY_SHIFT_POSSIBLE = 'POSSIBLE';
+    public const SCA_LIABILITY_SHIFT_POSSIBLE = 'POSSIBLE';
 
-    const SCA_LIABILITY_SHIFT_NO = 'NO';
+    public const SCA_LIABILITY_SHIFT_NO = 'NO';
 
-    const SCA_BANK_NOT_READY = 'N';
+    public const SCA_BANK_NOT_READY = 'N';
 
-    const SCA_UNAVAILABLE = 'U';
+    public const SCA_UNAVAILABLE = 'U';
 
-    const SCA_BYPASSED = 'B';
+    public const SCA_BYPASSED = 'B';
 
-    const SCA_STATE_SUCCESS = 1;
+    public const SCA_STATE_SUCCESS = 1;
 
-    const SCA_STATE_UNKNOWN = 2;
+    public const SCA_STATE_UNKNOWN = 2;
 
-    const SCA_STATE_FAILED = 3;
+    public const SCA_STATE_FAILED = 3;
 
-    const SCA_STATE_NOT_PASSED = 4;
+    public const SCA_STATE_NOT_PASSED = 4;
 
-    const ACCESS_TOKEN = 'PAYPAL_ACCESS_TOKEN';
+    public const ACCESS_TOKEN = 'PAYPAL_ACCESS_TOKEN';
 
-    const SCA_WHEN_REQUIRED = 'SCA_WHEN_REQUIRED';
+    public const SCA_WHEN_REQUIRED = 'SCA_WHEN_REQUIRED';
 
-    const SCA_ALWAYS = 'SCA_ALWAYS';
+    public const SCA_ALWAYS = 'SCA_ALWAYS';
 
-    const PS_CUSTOMER_DATE_FORMAT = 'Y-m-d';
+    public const PS_CUSTOMER_DATE_FORMAT = 'Y-m-d';
 
-    const CAPTURE_STATUS_DECLINED = 'DECLINED';
+    public const CAPTURE_STATUS_DECLINED = 'DECLINED';
 
-    const CAPTURE_STATUS_COMPLETED = 'COMPLETED';
+    public const CAPTURE_STATUS_COMPLETED = 'COMPLETED';
 
-    const CAPTURE_STATUS_PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED';
+    public const CAPTURE_STATUS_PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED';
 
-    const CAPTURE_STATUS_PENDING = 'PENDING';
+    public const CAPTURE_STATUS_PENDING = 'PENDING';
 
-    const CAPTURE_STATUS_REFUNDED = 'REFUNDED';
+    public const CAPTURE_STATUS_REFUNDED = 'REFUNDED';
 
-    const CAPTURE_STATUS_FAILED = 'FAILED';
+    public const CAPTURE_STATUS_FAILED = 'FAILED';
 
-    const PAYPAL_ISSUE_PAYER_ACTION_REQUIRED = 'PAYER_ACTION_REQUIRED';
+    public const PAYPAL_ISSUE_PAYER_ACTION_REQUIRED = 'PAYER_ACTION_REQUIRED';
 
-    const LAST_WEBHOOK_EVENT_VERIFICATION = 'PAYPAL_LAST_WEBHOOK_EVENT_VERIFICATION';
+    public const LAST_WEBHOOK_EVENT_VERIFICATION = 'PAYPAL_LAST_WEBHOOK_EVENT_VERIFICATION';
 
     public static $dev = true;
     public $express_checkout;
@@ -1733,7 +1733,7 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     public function hookDisplayBackofficeHeader($params)
     {
-        if ((int) Configuration::get(self::LAST_WEBHOOK_EVENT_VERIFICATION) < time() - 600) {
+        if ((int) Configuration::get(self::LAST_WEBHOOK_EVENT_VERIFICATION) < time() - 1200) {
             if (count($this->getWebhookService()->getPendingWebhooks(null, 1))) {
                 $this->getWebhookService()->checkAndHandleNotifications();
                 Configuration::updateValue(self::LAST_WEBHOOK_EVENT_VERIFICATION, time());
