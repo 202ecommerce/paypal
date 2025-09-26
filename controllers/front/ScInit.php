@@ -122,7 +122,7 @@ class PaypalScInitModuleFrontController extends PaypalAbstarctModuleFrontControl
             // delete all product in cart
             $products = $this->context->cart->getProducts();
             foreach ($products as $product) {
-                $this->context->cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization'], $product['id_address_delivery']);
+                $this->context->cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization']);
             }
         }
 

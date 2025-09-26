@@ -49,7 +49,7 @@ class CloudSyncWrapper
     {
         $this->moduleManager = ModuleManagerBuilder::getInstance()->build();
         $this->accountInstaller = new Installer('5.0');
-        $this->mboInstaller = new DependencyBuilder(\Module::getInstanceByName('shoppingfeed'));
+        $this->mboInstaller = new DependencyBuilder(\Module::getInstanceByName('paypal'));
     }
 
     public function getPsAccountsService()

@@ -34,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
 
 class WebHookConf
 {
-    const ENABLE = 'PAYPAL_ENABLE_WEBHOOK';
+    public const ENABLE = 'PAYPAL_ENABLE_WEBHOOK';
 
-    const AVAILABLE = 'PAYPAL_WEBHOOK_AVAILABLE';
+    public const AVAILABLE = 'PAYPAL_WEBHOOK_AVAILABLE';
 }
