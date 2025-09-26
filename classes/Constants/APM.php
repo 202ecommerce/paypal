@@ -34,9 +34,9 @@ if (!defined('_PS_VERSION_')) {
 
 class APM
 {
-    const BANCONTACT = 'bancontact';
+    public const BANCONTACT = 'bancontact';
 
-    const BLIK = 'blik';
+    public const BLIK = 'blik';
 
     const EPS = 'eps';
 

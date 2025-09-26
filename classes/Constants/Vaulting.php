@@ -34,15 +34,15 @@ if (!defined('_PS_VERSION_')) {
 
 class Vaulting
 {
-    const ACCOUNT_VAULTING_STATE = 'PAYPAL_ACCOUNT_VAULTING_STATE';
+    public const ACCOUNT_VAULTING_STATE = 'PAYPAL_ACCOUNT_VAULTING_STATE';
 
-    const IS_AVAILABLE = 1;
+    public const IS_AVAILABLE = 1;
 
-    const IS_UNAVAILABLE = 2;
+    public const IS_UNAVAILABLE = 2;
 
-    const CAPABILITY = 'PAYPAL_WALLET_VAULTING_ADVANCED';
+    public const CAPABILITY = 'PAYPAL_WALLET_VAULTING_ADVANCED';
 
-    const STORE_IN_VAULT_ON_SUCCESS = 'ON_SUCCESS';
+    public const STORE_IN_VAULT_ON_SUCCESS = 'ON_SUCCESS';
 
     const USAGE_TYPE_MERCHANT = 'MERCHANT';
 
