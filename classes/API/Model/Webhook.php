@@ -92,7 +92,7 @@ class Webhook extends PayPalModel
     /**
      * A list of up to ten events to which to subscribe your webhook. To subscribe to all events including new events as they are added, specify the asterisk (`*`) wildcard. To replace the `event_types` array, specify the `*` wildcard. To see all supported events, [list available events](#available-event-type.list).
      *
-     * @param WebhookEventType[] $event_types
+     * @param \PaypalAddons\classes\API\Model\WebhookEventType[] $event_types
      *
      * @return $this
      */
@@ -106,7 +106,7 @@ class Webhook extends PayPalModel
     /**
      * A list of up to ten events to which to subscribe your webhook. To subscribe to all events including new events as they are added, specify the asterisk (`*`) wildcard. To replace the `event_types` array, specify the `*` wildcard. To see all supported events, [list available events](#available-event-type.list).
      *
-     * @return WebhookEventType[]
+     * @return \PaypalAddons\classes\API\Model\WebhookEventType[]
      */
     public function getEventTypes()
     {
