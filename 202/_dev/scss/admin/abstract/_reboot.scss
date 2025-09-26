@@ -119,4 +119,10 @@
   .custom-select {
     @extend .custom-select
   }
+  .btn-secondary {
+    color: $blue !important;
+  }
+  .btn-secondary:hover {
+    color: $blue !important;
+  }
 }
