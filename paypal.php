@@ -146,6 +146,8 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     const PAYPAL_ISSUE_PAYER_ACTION_REQUIRED = 'PAYER_ACTION_REQUIRED';
 
+    const LAST_WEBHOOK_EVENT_VERIFICATION = 'PAYPAL_LAST_WEBHOOK_EVENT_VERIFICATION';
+
     public static $dev = true;
     public $express_checkout;
     public $message;
@@ -291,6 +293,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         'actionLocalizationPageSave',
         'actionAdminOrdersTrackingNumberUpdate',
         'displayCustomerAccount',
+        'displayBackofficeHeader',
         ShortcutConfiguration::HOOK_REASSURANCE,
         ShortcutConfiguration::HOOK_AFTER_PRODUCT_ADDITIONAL_INFO,
         ShortcutConfiguration::HOOK_AFTER_PRODUCT_THUMBS,
@@ -442,6 +445,14 @@ class PayPal extends PaymentModule implements WidgetInterface
             $extension->initExtension();
             $this->hooks = array_merge($this->hooks, $extension->hooks);
         }
+    }
+
+    /**
+     * @return string
+     * */
+    public function getSecurityKey()
+    {
+        return $this->toolKit->hash($this->name);
     }
 
     public function install()
@@ -1718,6 +1729,16 @@ class PayPal extends PaymentModule implements WidgetInterface
         }
 
         return true;
+    }
+
+    public function hookDisplayBackofficeHeader($params)
+    {
+        if ((int) Configuration::get(self::LAST_WEBHOOK_EVENT_VERIFICATION) < time() - 600) {
+            if (count($this->getWebhookService()->getPendingWebhooks(null, 1))) {
+                $this->getWebhookService()->checkAndHandleNotifications();
+                Configuration::updateValue(self::LAST_WEBHOOK_EVENT_VERIFICATION, time());
+            }
+        }
     }
 
     public function hookDisplayAdminOrder($params)
