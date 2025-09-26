@@ -28,9 +28,7 @@
 
 namespace PaypalAddons\services;
 
-use Module;
 use PaypalAddons\classes\Webhook\WebhookEventHandler;
-use PaypalWebhook;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -46,6 +44,7 @@ class WebhookService
         /* @phpstan-ignore-next-line */
         $this->module = \Module::getInstanceByName('paypal');
     }
+
     /**
      * @param \PaypalOrder $paypalOrder
      *
@@ -146,10 +145,10 @@ class WebhookService
         $res = $method->getWebhookEventList(['page_size' => 50]);
         $handler = new WebhookEventHandler();
 
-        foreach($res->getList() as $event) {
+        foreach ($res->getList() as $event) {
             $handler->handle($event);
         }
-        /** @var PaypalWebhook $webhookEvent */
+        /** @var \PaypalWebhook $webhookEvent */
         foreach ($this->module->getWebhookService()->getPendingWebhooks(null, 72) as $webhookEvent) {
             $webhookEvent->delete();
         }
