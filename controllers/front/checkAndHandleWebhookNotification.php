@@ -61,7 +61,7 @@ class PaypalCheckAndHandleWebhookNotificationModuleFrontController extends Paypa
                     $e->getMessage(),
                     $e->getFile(),
                     $e->getLine()
-                ),
+                )
             );
             ProcessLoggerHandler::closeLogger();
             header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
