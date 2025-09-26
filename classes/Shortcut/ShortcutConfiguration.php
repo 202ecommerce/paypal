@@ -88,61 +88,61 @@ class ShortcutConfiguration
 
     public const STYLE_WIDTH_CART = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_CART';
 
-    const STYLE_WIDTH_SIGNUP = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_SIGNUP';
+    public const STYLE_WIDTH_SIGNUP = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_WIDTH_SIGNUP';
 
-    const STYLE_COLOR_PRODUCT = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_PRODUCT';
+    public const STYLE_COLOR_PRODUCT = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_PRODUCT';
 
-    const STYLE_COLOR_CART = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART';
+    public const STYLE_COLOR_CART = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_CART';
 
-    const STYLE_COLOR_SIGNUP = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_SIGNUP';
+    public const STYLE_COLOR_SIGNUP = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_COLOR_SIGNUP';
 
-    const STYLE_SHAPE_PRODUCT = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_PRODUCT';
+    public const STYLE_SHAPE_PRODUCT = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_PRODUCT';
 
-    const STYLE_SHAPE_CART = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART';
+    public const STYLE_SHAPE_CART = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_CART';
 
-    const STYLE_SHAPE_SIGNUP = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_SIGNUP';
+    public const STYLE_SHAPE_SIGNUP = 'PAYPAL_EXPRESS_CHECKOUT_SHORTCUT_STYLE_SHAPE_SIGNUP';
 
-    const TYPE_STYLE_SELECT = 1;
+    public const TYPE_STYLE_SELECT = 1;
 
-    const TYPE_STYLE_TEXT = 2;
+    public const TYPE_STYLE_TEXT = 2;
 
-    const STYLE_COLOR_GOLD = 'gold';
+    public const STYLE_COLOR_GOLD = 'gold';
 
-    const STYLE_COLOR_BLUE = 'blue';
+    public const STYLE_COLOR_BLUE = 'blue';
 
-    const STYLE_COLOR_SILVER = 'silver';
+    public const STYLE_COLOR_SILVER = 'silver';
 
-    const STYLE_COLOR_WHITE = 'white';
+    public const STYLE_COLOR_WHITE = 'white';
 
-    const STYLE_COLOR_BLACK = 'black';
+    public const STYLE_COLOR_BLACK = 'black';
 
-    const STYLE_SHAPE_RECT = 'rect';
+    public const STYLE_SHAPE_RECT = 'rect';
 
-    const STYLE_SHAPE_PILL = 'pill';
+    public const STYLE_SHAPE_PILL = 'pill';
 
-    const STYLE_LABEL_PAYPAL = 'paypal';
+    public const STYLE_LABEL_PAYPAL = 'paypal';
 
-    const STYLE_LABEL_CHECKOUT = 'checkout';
+    public const STYLE_LABEL_CHECKOUT = 'checkout';
 
-    const STYLE_LABEL_BUYNOW = 'buynow';
+    public const STYLE_LABEL_BUYNOW = 'buynow';
 
-    const STYLE_LABEL_PAY = 'pay';
+    public const STYLE_LABEL_PAY = 'pay';
 
-    const CONFIGURATION_TYPE_COLOR = 'color';
+    public const CONFIGURATION_TYPE_COLOR = 'color';
 
-    const CONFIGURATION_TYPE_SHAPE = 'shape';
+    public const CONFIGURATION_TYPE_SHAPE = 'shape';
 
-    const CONFIGURATION_TYPE_LABEL = 'label';
+    public const CONFIGURATION_TYPE_LABEL = 'label';
 
-    const CONFIGURATION_TYPE_WIDTH = 'width';
+    public const CONFIGURATION_TYPE_WIDTH = 'width';
 
-    const CONFIGURATION_TYPE_HEIGHT = 'height';
+    public const CONFIGURATION_TYPE_HEIGHT = 'height';
 
-    const SOURCE_PAGE_PRODUCT = 1;
+    public const SOURCE_PAGE_PRODUCT = 1;
 
-    const SOURCE_PAGE_CART = 2;
+    public const SOURCE_PAGE_CART = 2;
 
-    const SOURCE_PAGE_SIGNUP = 3;
+    public const SOURCE_PAGE_SIGNUP = 3;
 
-    const USE_OLD_HOOK = 'PAYPAL_USE_OLD_HOOK';
+    public const USE_OLD_HOOK = 'PAYPAL_USE_OLD_HOOK';
 }

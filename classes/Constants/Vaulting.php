@@ -44,39 +44,39 @@ class Vaulting
 
     public const STORE_IN_VAULT_ON_SUCCESS = 'ON_SUCCESS';
 
-    const USAGE_TYPE_MERCHANT = 'MERCHANT';
+    public const USAGE_TYPE_MERCHANT = 'MERCHANT';
 
-    const CUSTOMER_TYPE_CONSUMER = 'CONSUMER';
+    public const CUSTOMER_TYPE_CONSUMER = 'CONSUMER';
 
-    const ENABLED = 1;
+    public const ENABLED = 1;
 
-    const DISABLED = 0;
+    public const DISABLED = 0;
 
-    const PAYMENT_SOURCE_PAYPAL = 'paypal';
+    public const PAYMENT_SOURCE_PAYPAL = 'paypal';
 
-    const STATUS_VAULTED = 'VAULTED';
+    public const STATUS_VAULTED = 'VAULTED';
 
-    const STATUS_APPROVED = 'APPROVED';
+    public const STATUS_APPROVED = 'APPROVED';
 
-    const PRODUCT = 'PAYPAL_ADVANCED_VAULTING';
+    public const PRODUCT = 'PAYPAL_ADVANCED_VAULTING';
 
-    const PRODUCT_STATUS_ACTIVE = 'ACTIVE';
+    public const PRODUCT_STATUS_ACTIVE = 'ACTIVE';
 
-    const PRODUCT_STATUS_APPROVED = 'APPROVED';
+    public const PRODUCT_STATUS_APPROVED = 'APPROVED';
 
-    const PRODUCT_STATUS_SUBSCRIBED = 'SUBSCRIBED';
+    public const PRODUCT_STATUS_SUBSCRIBED = 'SUBSCRIBED';
 
-    const PRODUCT_STATUS_PENDING = 'PENDING';
+    public const PRODUCT_STATUS_PENDING = 'PENDING';
 
-    const PRODUCT_STATUS_IN_REVIEW = 'IN_REVIEW';
+    public const PRODUCT_STATUS_IN_REVIEW = 'IN_REVIEW';
 
-    const PRODUCT_STATUS_NEED_MORE_DATA = 'NEED_MORE_DATA';
+    public const PRODUCT_STATUS_NEED_MORE_DATA = 'NEED_MORE_DATA';
 
-    const PRODUCT_STATUS_NEED_DATA = 'NEED_DATA';
+    public const PRODUCT_STATUS_NEED_DATA = 'NEED_DATA';
 
-    const PRODUCT_STATUS_DECLINED = 'DECLINED';
+    public const PRODUCT_STATUS_DECLINED = 'DECLINED';
 
-    const PRODUCT_STATUS_DENIED = 'DENIED';
+    public const PRODUCT_STATUS_DENIED = 'DENIED';
 
-    const PRODUCT_STATUS_REFUSED = 'REFUSED';
+    public const PRODUCT_STATUS_REFUSED = 'REFUSED';
 }

@@ -38,21 +38,21 @@ class APM
 
     public const BLIK = 'blik';
 
-    const EPS = 'eps';
+    public const EPS = 'eps';
 
-    const GIROPAY = 'giropay';
+    public const GIROPAY = 'giropay';
 
-    const IDEAL = 'ideal';
+    public const IDEAL = 'ideal';
 
-    const MYBANK = 'mybank';
+    public const MYBANK = 'mybank';
 
-    const P24 = 'p24';
+    public const P24 = 'p24';
 
-    const BOLETOBANCARIO = 'boletobancario';
+    public const BOLETOBANCARIO = 'boletobancario';
 
-    const TRUSTLY = 'trustly';
+    public const TRUSTLY = 'trustly';
 
-    const MULTIBANCO = 'multibanco';
+    public const MULTIBANCO = 'multibanco';
 
-    const OXXO = 'oxxo';
+    public const OXXO = 'oxxo';
 }
