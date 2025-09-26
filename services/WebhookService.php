@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,6 @@
 
 namespace PaypalAddons\services;
 
-use Db;
-use DbQuery;
-use Exception;
-use Throwable;
-use Validate;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -48,7 +43,7 @@ class WebhookService
      */
     public function createForOrder(\PaypalOrder $paypalOrder, $idState = 0)
     {
-        $query = (new DbQuery())
+        $query = (new \DbQuery())
             ->select('id_paypal_webhook')
             ->from(\PaypalWebhook::$definition['table'])
             ->where('id_paypal_order = ' . (int) $paypalOrder->id)
@@ -58,7 +53,7 @@ class WebhookService
             $query->where('id_state = ' . (int) $idState);
         }
 
-        $idPaypalWebhook = (int) Db::getInstance()->getValue($query);
+        $idPaypalWebhook = (int) \Db::getInstance()->getValue($query);
 
         if ($idPaypalWebhook) {
             $webhook = new \PaypalWebhook($idPaypalWebhook);
@@ -81,7 +76,7 @@ class WebhookService
     public function getPendingWebhooks(\PaypalOrder $paypalOrder, $delay = null)
     {
         $webhooks = [];
-        $query = (new DbQuery())
+        $query = (new \DbQuery())
             ->select('id_paypal_webhook')
             ->from(\PaypalWebhook::$definition['table'])
             ->where('id_paypal_order = ' . (int) $paypalOrder->id)
@@ -98,10 +93,10 @@ class WebhookService
         }
 
         try {
-            $result = Db::getInstance()->executeS($query);
-        } catch (Throwable $e) {
+            $result = \Db::getInstance()->executeS($query);
+        } catch (\Throwable $e) {
             return $webhooks;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $webhooks;
         }
 
@@ -112,11 +107,11 @@ class WebhookService
         foreach ($result as $row) {
             try {
                 $webhook = new \PaypalWebhook($row['id_paypal_webhook']);
-                if (Validate::isLoadedObject($webhook) === true) {
+                if (\Validate::isLoadedObject($webhook) === true) {
                     $webhooks[] = $webhook;
                 }
-            } catch (Throwable $e) {
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
+            } catch (\Exception $e) {
             }
         }
 

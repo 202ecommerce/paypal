@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,27 +28,24 @@
 
 namespace PaypalAddons\classes\PrestaShopCloudSync;
 
-use Context;
-use Module;
-use PayPal;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class CloudSyncView
 {
-    /** @var Module|PayPal */
+    /** @var \PayPal */
     protected $module;
-    /** @var Context */
+    /** @var \Context */
     protected $context;
     /** @var CloudSyncWrapper */
     protected $cloudSyncWrapper;
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
-        $this->context = Context::getContext();
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
+        $this->context = \Context::getContext();
         $this->cloudSyncWrapper = new CloudSyncWrapper();
     }
 

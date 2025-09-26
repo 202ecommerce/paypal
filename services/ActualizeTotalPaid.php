@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,9 +28,6 @@
 
 namespace PaypalAddons\services;
 
-use Order;
-use OrderPayment;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -37,10 +35,10 @@ if (!defined('_PS_VERSION_')) {
 class ActualizeTotalPaid
 {
     /**
-     * @param Order $order
+     * @param \Order $order
      * @param float $totalPaid
      */
-    public function actualize(Order $order, $totalPaid)
+    public function actualize(\Order $order, $totalPaid)
     {
         $order->total_paid_real = $totalPaid;
         $order->save();
@@ -51,7 +49,7 @@ class ActualizeTotalPaid
             return;
         }
 
-        /** @var OrderPayment $payment */
+        /** @var \OrderPayment $payment */
         $payment = array_shift($payments);
         $payment->amount = (float) $totalPaid;
         $payment->save();

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,8 @@
 
 namespace PaypalAddons\services;
 
-use Db;
-use DbQuery;
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Model\VaultInfo;
-use Throwable;
 
 require_once dirname(__FILE__) . '/../classes/PaypalVaulting.php';
 
@@ -48,7 +45,7 @@ class ServicePaypalVaulting
 
     public function __construct($method = null)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
 
         if ($method instanceof AbstractMethodPaypal) {
             $this->method = $method;
@@ -82,9 +79,9 @@ class ServicePaypalVaulting
         $paypalVaultingObject->rememberedCards = $rememberedCards;
         try {
             return $paypalVaultingObject->save();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -99,7 +96,7 @@ class ServicePaypalVaulting
         }
 
         $idPaypalVaulting = (int) $this->db->getValue(
-            (new DbQuery())
+            (new \DbQuery())
                 ->from(\PaypalVaulting::$definition['table'])
                 ->where(sprintf('vault_id = "%s"', pSQL($vaultInfo->getVaultId())))
                 ->where(sprintf('paypal_customer_id = "%s"', pSQL($vaultInfo->getCustomerId())))
@@ -115,9 +112,9 @@ class ServicePaypalVaulting
 
         try {
             $paypalVaultingObject->save();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return null;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return null;
         }
 
@@ -171,7 +168,7 @@ class ServicePaypalVaulting
             $mode = (int) \Configuration::get('PAYPAL_SANDBOX');
         }
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from(\PaypalVaulting::$definition['table']);
         $query->where('id_customer = ' . (int) $idCustomer);
         $query->where('sandbox = ' . (int) $mode);

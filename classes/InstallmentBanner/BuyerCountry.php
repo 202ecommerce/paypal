@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,15 +28,16 @@
 
 namespace PaypalAddons\classes\InstallmentBanner;
 
-use Configuration;
-use Country;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class BuyerCountry
 {
     public function set($isoCountry)
     {
         if (in_array($isoCountry, ConfigurationMap::getAllowedCountries())) {
-            Configuration::updateValue(
+            \Configuration::updateValue(
                 ConfigurationMap::MESSAGING_BUYER_COUNTRY,
                 strtolower($isoCountry)
             );
@@ -46,13 +48,13 @@ class BuyerCountry
 
     public function get()
     {
-        $defaultValue = strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $defaultValue = strtolower(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
 
         if (false === in_array($defaultValue, ConfigurationMap::getAllowedCountries())) {
             $defaultValue = current(ConfigurationMap::getAllowedCountries());
         }
 
-        $buyerCountryValue = strtolower(Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY));
+        $buyerCountryValue = strtolower(\Configuration::get(ConfigurationMap::MESSAGING_BUYER_COUNTRY));
 
         if (false === in_array($buyerCountryValue, ConfigurationMap::getAllowedCountries())) {
             return $defaultValue;

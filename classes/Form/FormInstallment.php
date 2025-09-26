@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,7 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Configuration;
-use Context;
-use Country;
-use Module;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,18 +36,16 @@ if (!defined('_PS_VERSION_')) {
 
 class FormInstallment implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $className;
 
-    private $is_shown_modal;
-
-    public function __construct($is_shown_modal = false)
+    public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->className = 'FormInstallment';
-        $this->is_shown_modal = $is_shown_modal;
     }
 
     /**
@@ -59,7 +53,7 @@ class FormInstallment implements FormInterface
      */
     public function getDescription()
     {
-        $isoCountryDefault = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
         $fields = [];
 
         if (in_array($isoCountryDefault, ConfigurationMap::getBnplAvailableCountries())) {
@@ -79,14 +73,14 @@ class FormInstallment implements FormInterface
                         'label' => $this->module->l('Disabled', $this->className),
                     ],
                 ],
-                'value' => (int) Configuration::get(ConfigurationMap::ENABLE_BNPL),
+                'value' => (int) \Configuration::get(ConfigurationMap::ENABLE_BNPL),
             ];
             $fields[ConfigurationMap::BNPL_PRODUCT_PAGE] = [
                 'type' => 'checkbox',
                 'name' => ConfigurationMap::BNPL_PRODUCT_PAGE,
                 'label' => $this->module->l('Product Page', $this->className),
                 'value' => 1,
-                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE),
+                'checked' => (bool) \Configuration::get(ConfigurationMap::BNPL_PRODUCT_PAGE),
                 'image' => _MODULE_DIR_ . $this->module->name . '/views/img/product_page_button.png',
             ];
             $fields[ConfigurationMap::BNPL_PAYMENT_STEP_PAGE] = [
@@ -94,7 +88,7 @@ class FormInstallment implements FormInterface
                 'name' => ConfigurationMap::BNPL_PAYMENT_STEP_PAGE,
                 'label' => $this->module->l('Step payment in checkout', $this->className),
                 'value' => 1,
-                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_PAYMENT_STEP_PAGE),
+                'checked' => (bool) \Configuration::get(ConfigurationMap::BNPL_PAYMENT_STEP_PAGE),
                 'image' => _MODULE_DIR_ . $this->module->name . '/views/img/location.png',
             ];
             $fields[ConfigurationMap::BNPL_CART_PAGE] = [
@@ -102,7 +96,7 @@ class FormInstallment implements FormInterface
                 'name' => ConfigurationMap::BNPL_CART_PAGE,
                 'label' => $this->module->l('Cart Page', $this->className),
                 'value' => 1,
-                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_CART_PAGE),
+                'checked' => (bool) \Configuration::get(ConfigurationMap::BNPL_CART_PAGE),
                 'image' => _MODULE_DIR_ . $this->module->name . '/views/img/cart_page_button.png',
             ];
             $fields[ConfigurationMap::BNPL_CHECKOUT_PAGE] = [
@@ -110,7 +104,7 @@ class FormInstallment implements FormInterface
                 'name' => ConfigurationMap::BNPL_CHECKOUT_PAGE,
                 'label' => $this->module->l('Sign up step in checkout', $this->className),
                 'value' => 1,
-                'checked' => (bool) Configuration::get(ConfigurationMap::BNPL_CHECKOUT_PAGE),
+                'checked' => (bool) \Configuration::get(ConfigurationMap::BNPL_CHECKOUT_PAGE),
                 'image' => _MODULE_DIR_ . $this->module->name . '/views/img/signin-checkout-button.png',
             ];
         }
@@ -137,7 +131,7 @@ class FormInstallment implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         $return = true;
@@ -147,32 +141,32 @@ class FormInstallment implements FormInterface
         }
 
         // BNPL configurations
-        $return &= Configuration::updateValue(
+        $return &= \Configuration::updateValue(
             ConfigurationMap::ENABLE_BNPL,
             isset($data[ConfigurationMap::ENABLE_BNPL]) ? (int) $data[ConfigurationMap::ENABLE_BNPL] : 0
         );
-        $return &= Configuration::updateValue(
+        $return &= \Configuration::updateValue(
             ConfigurationMap::BNPL_CHECKOUT_PAGE,
             isset($data[ConfigurationMap::BNPL_CHECKOUT_PAGE]) ? (int) $data[ConfigurationMap::BNPL_CHECKOUT_PAGE] : 0
         );
-        $return &= Configuration::updateValue(
+        $return &= \Configuration::updateValue(
             ConfigurationMap::BNPL_CART_PAGE,
             isset($data[ConfigurationMap::BNPL_CART_PAGE]) ? (int) $data[ConfigurationMap::BNPL_CART_PAGE] : 0
         );
-        $return &= Configuration::updateValue(
+        $return &= \Configuration::updateValue(
             ConfigurationMap::BNPL_PRODUCT_PAGE,
             isset($data[ConfigurationMap::BNPL_PRODUCT_PAGE]) ? (int) $data[ConfigurationMap::BNPL_PRODUCT_PAGE] : 0
         );
-        $return &= Configuration::updateValue(
+        $return &= \Configuration::updateValue(
             ConfigurationMap::BNPL_PAYMENT_STEP_PAGE,
             isset($data[ConfigurationMap::BNPL_PAYMENT_STEP_PAGE]) ? (int) $data[ConfigurationMap::BNPL_PAYMENT_STEP_PAGE] : 0
         );
 
-        return $return;
+        return (bool) $return;
     }
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/bnpl.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/bnpl.tpl');
     }
 }

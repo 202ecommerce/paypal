@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,9 +28,7 @@
 
 namespace PaypalAddons\classes\InstallmentBanner\BNPL;
 
-use Configuration;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -50,9 +49,10 @@ class BNPLPaymentStep extends BNPLAbstract
         $return = [
             'shop_url' => $shop_url,
             'PayPal_payment_type' => $this->getMethodType(),
+            /* @phpstan-ignore-next-line */
             'action_url' => $this->context->link->getModuleLink($this->module->name, 'ScInit', [], true),
-            'ec_sc_in_context' => Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT'),
-            'merchant_id' => Configuration::get('PAYPAL_MERCHANT_ID_' . Tools::strtoupper($environment)),
+            'ec_sc_in_context' => \Configuration::get('PAYPAL_EXPRESS_CHECKOUT_IN_CONTEXT'),
+            'merchant_id' => \Configuration::get('PAYPAL_MERCHANT_ID_' . \Tools::strtoupper($environment)),
             'environment' => $environment,
         ];
 
@@ -63,7 +63,7 @@ class BNPLPaymentStep extends BNPLAbstract
     {
         $vars = parent::getJSvars();
         $vars['scOrderUrl'] = $this->method->getReturnUrl();
-        $vars[PaypalConfigurations::MOVE_BUTTON_AT_END] = (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END);
+        $vars[PaypalConfigurations::MOVE_BUTTON_AT_END] = (int) \Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END);
 
         return $vars;
     }

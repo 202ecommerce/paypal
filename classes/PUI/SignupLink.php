@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\PUI;
 
-use PayPal;
 use PaypalAddons\classes\AbstractMethodPaypal;
 
 if (!defined('_PS_VERSION_')) {
@@ -71,18 +71,18 @@ class SignupLink
     protected function getPartnerClientId()
     {
         if ($this->method->isSandbox()) {
-            return PayPal::PAYPAL_PARTNER_CLIENT_ID_SANDBOX;
+            return \PayPal::PAYPAL_PARTNER_CLIENT_ID_SANDBOX;
         } else {
-            return PayPal::PAYPAL_PARTNER_CLIENT_ID_LIVE;
+            return \PayPal::PAYPAL_PARTNER_CLIENT_ID_LIVE;
         }
     }
 
     protected function getPartnerId()
     {
         if ($this->method->isSandbox()) {
-            return PayPal::PAYPAL_PARTNER_ID_SANDBOX;
+            return \PayPal::PAYPAL_PARTNER_ID_SANDBOX;
         } else {
-            return PayPal::PAYPAL_PARTNER_ID_LIVE;
+            return \PayPal::PAYPAL_PARTNER_ID_LIVE;
         }
     }
 

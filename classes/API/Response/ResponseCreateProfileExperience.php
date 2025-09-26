@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -45,7 +46,7 @@ class ResponseCreateProfileExperience extends Response
     }
 
     /**
-     * @param string $idProdileExperience
+     * @param string $idProfileExperience
      *
      * @return ResponseCreateProfileExperience
      */

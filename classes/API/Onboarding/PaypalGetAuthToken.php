@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,14 +28,12 @@
 
 namespace PaypalAddons\classes\API\Onboarding;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\ExtensionSDK\AccessTokenRequest;
 use PaypalAddons\classes\API\HttpAdoptedResponse;
 use PaypalAddons\classes\API\PaypalClient;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseGetAuthToken;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -89,13 +88,7 @@ class PaypalGetAuthToken
                 ->setRefreshToken($responseDecode->result->refresh_token)
                 ->setTokenType($responseDecode->result->token_type)
                 ->setNonce($responseDecode->result->nonce);
-        } catch (Throwable $e) {
-            $error = new Error();
-            $error
-                ->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-            $returnResponse->setError($error)->setSuccess(false);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error
                 ->setMessage($e->getMessage())

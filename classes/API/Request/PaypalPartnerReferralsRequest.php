@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Client\HttpClient;
 use PaypalAddons\classes\API\ExtensionSDK\PartnerReferrals;
@@ -36,7 +36,6 @@ use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponsePartnerReferrals;
 use PaypalAddons\classes\PaypalException;
 use PaypalAddons\services\Builder\PartnerReferralsRequestBody;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -74,13 +73,7 @@ class PaypalPartnerReferralsRequest extends RequestAbstract
 
             return $response->setSuccess(false)
                 ->setError($error);
-        } catch (Throwable $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-
-            return $response->setSuccess(false)->setError($error);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

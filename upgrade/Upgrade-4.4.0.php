@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -68,15 +69,15 @@ function upgrade_module_4_4_0($module)
     }
 
     if (Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING')
-        && Validate::isLoadedObject(new OrderState(Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING')))) {
-        $order_state = new OrderState(Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING'));
+        && Validate::isLoadedObject(new OrderState((int) Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING')))) {
+        $order_state = new OrderState((int) Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING'));
         $source = _PS_MODULE_DIR_ . 'paypal/views/img/os_braintree.png';
         $destination = _PS_ROOT_DIR_ . '/img/os/' . (int) $order_state->id . '.gif';
         copy($source, $destination);
     }
     if (Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION')
-        && Validate::isLoadedObject(new OrderState(Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION')))) {
-        $order_state = new OrderState(Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION'));
+        && Validate::isLoadedObject(new OrderState((int) Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION')))) {
+        $order_state = new OrderState((int) Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION'));
         $source = _PS_MODULE_DIR_ . 'paypal/views/img/os_braintree.png';
         $destination = _PS_ROOT_DIR_ . '/img/os/' . (int) $order_state->id . '.gif';
         copy($source, $destination);

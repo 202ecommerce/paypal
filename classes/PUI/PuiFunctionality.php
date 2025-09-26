@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,14 +28,9 @@
 
 namespace PaypalAddons\classes\PUI;
 
-use Address;
-use Configuration;
-use Context;
-use Country;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\PUI;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -51,7 +47,7 @@ class PuiFunctionality
 
     public function isAvailable($refresh = true)
     {
-        $isAvailable = (int) Configuration::get(PUI::CONFIGURATION_IS_AVAILABLE);
+        $isAvailable = (int) \Configuration::get(PUI::CONFIGURATION_IS_AVAILABLE);
 
         if ($refresh == false && in_array($isAvailable, [PUI::IS_AVAILABLE, PUI::IS_UNAVAILABLE])) {
             return $isAvailable == PUI::IS_AVAILABLE;
@@ -60,43 +56,43 @@ class PuiFunctionality
         $sellerStatus = $this->method->getSellerStatus();
 
         if ($sellerStatus->isSuccess() == false) {
-            Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_UNAVAILABLE);
+            \Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_UNAVAILABLE);
 
             return false;
         }
 
         if (empty($sellerStatus->getCapabilities())) {
-            Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_UNAVAILABLE);
+            \Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_UNAVAILABLE);
 
             return false;
         }
 
         foreach ($sellerStatus->getCapabilities() as $capability) {
-            if (Tools::strtoupper($capability) == 'PAY_UPON_INVOICE') {
-                Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_AVAILABLE);
+            if (\Tools::strtoupper($capability) == 'PAY_UPON_INVOICE') {
+                \Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_AVAILABLE);
 
                 return true;
             }
         }
 
-        Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_UNAVAILABLE);
+        \Configuration::updateValue(PUI::CONFIGURATION_IS_AVAILABLE, PUI::IS_UNAVAILABLE);
 
         return false;
     }
 
-    public function isEligibleContext(Context $context)
+    public function isEligibleContext(\Context $context)
     {
         if (empty($context->cart->id_address_delivery)) {
             return false;
         }
 
-        $address = new Address($context->cart->id_address_delivery);
+        $address = new \Address($context->cart->id_address_delivery);
 
-        return 'de' == Tools::strtolower(Country::getIsoById($address->id_country));
+        return 'de' == \Tools::strtolower(\Country::getIsoById($address->id_country));
     }
 
     public function isEnabled()
     {
-        return (bool) Configuration::get(PaypalConfigurations::PUI_ENABLED);
+        return (bool) \Configuration::get(PaypalConfigurations::PUI_ENABLED);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -65,7 +66,7 @@ class PayPalModel
     /**
      * Magic Get Method
      *
-     * @param $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -81,8 +82,8 @@ class PayPalModel
     /**
      * Magic Set Method
      *
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      */
     public function __set($key, $value)
     {
@@ -96,7 +97,7 @@ class PayPalModel
     /**
      * Converts the input key into a valid Setter Method Name
      *
-     * @param $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -108,7 +109,7 @@ class PayPalModel
     /**
      * Magic isSet Method
      *
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */
@@ -120,7 +121,7 @@ class PayPalModel
     /**
      * Magic Unset Method
      *
-     * @param $key
+     * @param string $key
      */
     public function __unset($key)
     {
@@ -130,7 +131,7 @@ class PayPalModel
     /**
      * Converts Params to Array
      *
-     * @param $param
+     * @param mixed $param
      *
      * @return array
      */
@@ -161,7 +162,7 @@ class PayPalModel
     /**
      * Fills object value from Array list
      *
-     * @param $arr
+     * @param mixed $arr
      *
      * @return $this
      */
@@ -182,7 +183,7 @@ class PayPalModel
                                 continue;
                             }
                             $o = new $clazz();
-                            //$arr = array();
+                            // $arr = array();
                             $this->assignValue($k, $o);
                         } elseif ($this->isAssocArray($v)) {
                             /** @var self $o */
@@ -230,7 +231,7 @@ class PayPalModel
     /**
      * Fills object value from Json string
      *
-     * @param $json
+     * @param string $json
      *
      * @return $this
      */
@@ -286,7 +287,7 @@ class PayPalModel
                 return true;
             }
             if (!$silent) {
-                //Throw an Exception for string or array
+                // Throw an Exception for string or array
                 throw new \InvalidArgumentException('Invalid JSON String');
             }
 

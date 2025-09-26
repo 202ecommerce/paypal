@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -32,16 +33,12 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration;
-use Context;
-use Country;
-use Module;
 use PaypalAddons\classes\InstallmentBanner\BuyerCountry;
 use PaypalAddons\classes\InstallmentBanner\ConfigurationMap;
-use Tools;
 
 class FormInstallmentMessaging implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $className;
@@ -50,7 +47,8 @@ class FormInstallmentMessaging implements FormInterface
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->className = 'FormInstallmentMessaging';
         $this->buyerCountry = new BuyerCountry();
     }
@@ -62,7 +60,7 @@ class FormInstallmentMessaging implements FormInterface
         foreach (ConfigurationMap::getAllowedCountries() as $iso) {
             $options[] = [
                 'value' => strtolower($iso),
-                'title' => Country::getNameById(Context::getContext()->language->id, Country::getByIso($iso)),
+                'title' => \Country::getNameById(\Context::getContext()->language->id, \Country::getByIso($iso)),
             ];
         }
 
@@ -79,7 +77,7 @@ class FormInstallmentMessaging implements FormInterface
         $fields[ConfigurationMap::MESSENGING_CONFIG] = [
             'type' => 'hidden',
             'label' => '',
-            'value' => Configuration::get(ConfigurationMap::MESSENGING_CONFIG),
+            'value' => \Configuration::get(ConfigurationMap::MESSENGING_CONFIG),
             'name' => ConfigurationMap::MESSENGING_CONFIG,
         ];
         $fields[ConfigurationMap::MESSAGING_BUYER_COUNTRY] = [
@@ -113,7 +111,7 @@ class FormInstallmentMessaging implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         $return = true;
@@ -125,13 +123,13 @@ class FormInstallmentMessaging implements FormInterface
         $config = isset($data[ConfigurationMap::MESSENGING_CONFIG]) ? $data[ConfigurationMap::MESSENGING_CONFIG] : '{}';
         $return &= $this->saveDecodedConf($config);
 
-        $return &= Configuration::updateValue(ConfigurationMap::MESSENGING_CONFIG, $config);
+        $return &= \Configuration::updateValue(ConfigurationMap::MESSENGING_CONFIG, $config);
 
         if (isset($data[ConfigurationMap::MESSAGING_BUYER_COUNTRY])) {
             $this->buyerCountry->set($data[ConfigurationMap::MESSAGING_BUYER_COUNTRY]);
         }
 
-        return $return;
+        return (bool) $return;
     }
 
     /**
@@ -140,7 +138,7 @@ class FormInstallmentMessaging implements FormInterface
      *
      * @param string $config JSON string returned by configurator
      *
-     * @return string same string if not an error on decoding part
+     * @return bool
      */
     private function saveDecodedConf($config)
     {
@@ -151,11 +149,11 @@ class FormInstallmentMessaging implements FormInterface
                 $allConfigMap = ConfigurationMap::getParameterConfMap();
                 if (isset($allConfigMap[$key])) {
                     $enabled = isset($values['status']) && $values['status'] == 'enabled';
-                    $return &= Configuration::updateValue($allConfigMap[$key], $enabled);
+                    $return &= \Configuration::updateValue($allConfigMap[$key], $enabled);
                 }
             }
         }
 
-        return $return;
+        return (bool) $return;
     }
 }
