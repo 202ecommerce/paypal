@@ -309,6 +309,9 @@ class PayPal extends PaymentModule implements WidgetInterface
      */
     public $moduleConfigs = [];
 
+    /** @var string This module requires at least PHP 7.1 version */
+    public $php_version_required = '7.1';
+
     /**
      * List of admin tabs used in this Module
      */
