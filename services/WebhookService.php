@@ -28,12 +28,23 @@
 
 namespace PaypalAddons\services;
 
+use PaypalAddons\classes\Webhook\WebhookEventHandler;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class WebhookService
 {
+    /** @var \PayPal */
+    protected $module;
+
+    public function __construct()
+    {
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
+    }
+
     /**
      * @param \PaypalOrder $paypalOrder
      *
@@ -69,20 +80,22 @@ class WebhookService
     }
 
     /**
-     * @param \PaypalOrder $paypalOrder
+     * @param \PaypalOrder|null $paypalOrder
      *
      * @return \PaypalWebhook[]
      */
-    public function getPendingWebhooks(\PaypalOrder $paypalOrder, $delay = null)
+    public function getPendingWebhooks(?\PaypalOrder $paypalOrder = null, $delay = null)
     {
         $webhooks = [];
         $query = (new \DbQuery())
             ->select('id_paypal_webhook')
             ->from(\PaypalWebhook::$definition['table'])
-            ->where('id_paypal_order = ' . (int) $paypalOrder->id)
             ->where('id_webhook IS NULL OR id_webhook = ""');
 
-        if (false == is_null($delay)) {
+        if ($paypalOrder) {
+            $query->where('id_paypal_order = ' . (int) $paypalOrder->id);
+        }
+        if ($delay) {
             $query->where(
                 sprintf(
                     'date_add < DATE_SUB(STR_TO_DATE(\'%s\', GET_FORMAT(DATETIME,\'ISO\')), INTERVAL %d HOUR)',
@@ -95,8 +108,6 @@ class WebhookService
         try {
             $result = \Db::getInstance()->executeS($query);
         } catch (\Throwable $e) {
-            return $webhooks;
-        } catch (\Exception $e) {
             return $webhooks;
         }
 
@@ -111,10 +122,35 @@ class WebhookService
                     $webhooks[] = $webhook;
                 }
             } catch (\Throwable $e) {
-            } catch (\Exception $e) {
             }
         }
 
         return $webhooks;
+    }
+
+    public function checkAndHandleNotifications()
+    {
+        $method = \PaypalAddons\classes\AbstractMethodPaypal::load();
+
+        if (false === $this->module->getWebhookOption()->isEnable()) {
+            return;
+        }
+        if (false === $method->isConfigured()) {
+            return;
+        }
+        if (empty($this->module->getWebhookService()->getPendingWebhooks())) {
+            return;
+        }
+
+        $res = $method->getWebhookEventList(['page_size' => 50]);
+        $handler = new WebhookEventHandler();
+
+        foreach ($res->getList() as $event) {
+            $handler->handle($event);
+        }
+        /** @var \PaypalWebhook $webhookEvent */
+        foreach ($this->module->getWebhookService()->getPendingWebhooks(null, 72) as $webhookEvent) {
+            $webhookEvent->delete();
+        }
     }
 }

@@ -66,7 +66,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
         parent::init();
 
         if ($this->isCheckAvailability()) {
-            header('HTTP/1.1 ' . WebhookHandler::STATUS_AVAILABLE);
+            header($_SERVER['SERVER_PROTOCOL'] . ' ' . WebhookHandler::STATUS_AVAILABLE);
             exit;
         }
 
@@ -83,7 +83,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                 $webhookEvent->fromArray($this->getRequestData());
 
                 if ($this->webhookEventHandler->handle($webhookEvent)) {
-                    header('HTTP/1.1 200 OK');
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
                 } else {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 422 Unprocessable Content', true, 422);
                 }
@@ -104,11 +104,7 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
                 ProcessLoggerHandler::closeLogger();
                 header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
             }
-        } catch (Exception $exception) {
-        } catch (Throwable $exception) {// for php version > 7
-        }
-
-        if (isset($exception)) {
+        } catch (Throwable $exception) {
             $message = 'Error code: ' . $exception->getCode() . '.';
             $message .= 'Short message: ' . $exception->getMessage() . '.';
             $paypalOrder = $this->initPaypalOrder($this->getRequestData());

@@ -26,13 +26,20 @@
  *
  */
 
-namespace PaypalAddons\classes\Constants;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class WebhookHandler
+/**
+ * @param PayPal $module
+ *
+ * @return bool
+ */
+function upgrade_module_6_5_0(PayPal $module)
 {
-    public const STATUS_AVAILABLE = 202;
+    $installer = new PaypalPPBTlib\Install\ModuleInstaller($module);
+    $installer->registerHooks();
+    $module->getWebhookService()->checkAndHandleNotifications();
+
+    return true;
 }

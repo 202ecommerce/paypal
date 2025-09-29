@@ -298,6 +298,16 @@ class OrderStatusForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/order-status.tpl');
+        $tpl = \Context::getContext()->smarty->createTemplate(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/order-status.tpl');
+        $tpl->assign(
+            'checkAndHandleWebhookNotification',
+            \Context::getContext()->link->getModuleLink(
+                $this->module->name,
+                'checkAndHandleWebhookNotification',
+                ['token' => $this->module->getSecurityKey()]
+            )
+        );
+
+        return $tpl->fetch();
     }
 }
