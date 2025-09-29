@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,8 +28,6 @@
 
 namespace PaypalAddons\classes\PUI;
 
-use DateTime;
-use PayPal;
 use PaypalAddons\services\FormatterPaypal;
 
 if (!defined('_PS_VERSION_')) {
@@ -144,9 +143,9 @@ class DataUserForm
     /**
      * @return string
      */
-    public function getBirth($format = PayPal::PS_CUSTOMER_DATE_FORMAT)
+    public function getBirth($format = \PayPal::PS_CUSTOMER_DATE_FORMAT)
     {
-        $date = DateTime::createFromFormat(PayPal::PS_CUSTOMER_DATE_FORMAT, (string) $this->birth);
+        $date = \DateTime::createFromFormat(\PayPal::PS_CUSTOMER_DATE_FORMAT, (string) $this->birth);
 
         if (!$date) {
             return '';

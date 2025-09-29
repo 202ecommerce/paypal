@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,7 +32,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class WebhookEvent extends \PaypalAddons\classes\API\Model\PayPalModel
+class WebhookEvent extends PayPalModel
 {
     /**
      * The ID of the webhook event notification.

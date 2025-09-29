@@ -83,6 +83,11 @@
         @extend .d-flex;
         @extend .align-items-center;
         margin-bottom: 0.75rem;
+        font-size: 12px;
+        color: $body-color !important;
+        padding:inherit;
+        white-space: inherit;
+        text-align: inherit;
       }
       img {
         margin-left: -( $custom-control-gutter + $custom-control-indicator-size);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\SEPA;
 
-use Configuration;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 
 if (!defined('_PS_VERSION_')) {
@@ -38,6 +38,6 @@ class SepaFunctionality
 {
     public function isEnabled()
     {
-        return (int) Configuration::get(PaypalConfigurations::SEPA_ENABLED);
+        return (int) \Configuration::get(PaypalConfigurations::SEPA_ENABLED);
     }
 }

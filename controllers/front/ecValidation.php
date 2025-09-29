@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -57,14 +58,14 @@ class PaypalEcValidationModuleFrontController extends PaypalAbstarctModuleFrontC
      */
     public function postProcess()
     {
+        /** @var MethodEC $method_ec */
         $method_ec = AbstractMethodPaypal::load();
-        $paypal = Module::getInstanceByName($this->name);
 
         try {
             $method_ec->setParameters($this->values);
 
             if ($method_ec->getShortCut()) {
-                /** @var $resultPath \PaypalAddons\classes\API\Response\Response */
+                /** @var PaypalAddons\classes\API\Response\Response $resultPath */
                 $resultPath = $method_ec->doOrderPatch();
 
                 if ($resultPath->isSuccess() == false) {
@@ -74,8 +75,9 @@ class PaypalEcValidationModuleFrontController extends PaypalAbstarctModuleFrontC
 
             $method_ec->validation();
             $cart = Context::getContext()->cart;
+            /* @phpstan-ignore-next-line */
             $customer = new Customer($cart->id_customer);
-            $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $paypal->id . '&id_order=' . $paypal->currentOrder . '&key=' . $customer->secure_key;
+            $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $this->module->currentOrder . '&key=' . $customer->secure_key;
         } catch (PaypalAddons\classes\Exception\PayerActionRequired $e) {
             $this->redirectUrl = $e->getPayerActionLink();
 
@@ -91,7 +93,7 @@ class PaypalEcValidationModuleFrontController extends PaypalAbstarctModuleFrontC
             $this->transaction_detail = $method_ec->getDetailsTransaction();
         }
 
-        //unset cookie of payment init
+        // unset cookie of payment init
         Context::getContext()->cookie->__unset('paypal_ecs');
         Context::getContext()->cookie->__unset('paypal_ecs_email');
 

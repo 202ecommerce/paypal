@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -37,29 +38,29 @@ if (!defined('_PS_VERSION_')) {
  * Class PaypalException
  * Custom exception with additional long message parameter
  */
-class PaypalException extends Exception
+class PaypalException extends \Exception
 {
-    const CART_CHANGED = 1001;
+    public const CART_CHANGED = 1001;
 
-    const PRODUCT_UNAVAILABLE = 1002;
+    public const PRODUCT_UNAVAILABLE = 1002;
 
-    const INVALID_CUSTOMER = 1003;
+    public const INVALID_CUSTOMER = 1003;
 
-    const ARGUMENT_MISSING = 1004;
+    public const ARGUMENT_MISSING = 1004;
 
-    const PAYMENT_EXISTS = 1005;
+    public const PAYMENT_EXISTS = 1005;
 
-    const CAPTURE_FAIL = 1006;
+    public const CAPTURE_FAIL = 1006;
 
-    const SCA_FAIL = 1007;
+    public const SCA_FAIL = 1007;
 
-    const PAYMENT_ID_INVALID = 1008;
+    public const PAYMENT_ID_INVALID = 1008;
 
-    const CAPTURE_PENDING = 1009;
+    public const CAPTURE_PENDING = 1009;
 
-    const APPROVAL_LINK_INVALID = 1010;
+    public const APPROVAL_LINK_INVALID = 1010;
 
-    const PAYER_ACTION_REQUIRED = 1011;
+    public const PAYER_ACTION_REQUIRED = 1011;
 
     /** @var string Long detailed error message */
     private $message_long;

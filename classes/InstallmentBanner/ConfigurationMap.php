@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -28,7 +29,6 @@
 namespace PaypalAddons\classes\InstallmentBanner;
 
 use Configuration;
-use Country;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -36,55 +36,55 @@ if (!defined('_PS_VERSION_')) {
 
 class ConfigurationMap
 {
-    const ENABLE_INSTALLMENT = 'PAYPAL_ENABLE_INSTALLMENT';
+    public const ENABLE_INSTALLMENT = 'PAYPAL_ENABLE_INSTALLMENT';
 
-    const ADVANCED_OPTIONS_INSTALLMENT = 'PAYPAL_ADVANCED_OPTIONS_INSTALLMENT';
+    public const ADVANCED_OPTIONS_INSTALLMENT = 'PAYPAL_ADVANCED_OPTIONS_INSTALLMENT';
 
-    const PRODUCT_PAGE = 'PAYPAL_INSTALLMENT_PRODUCT_PAGE';
+    public const PRODUCT_PAGE = 'PAYPAL_INSTALLMENT_PRODUCT_PAGE';
 
-    const HOME_PAGE = 'PAYPAL_INSTALLMENT_HOME_PAGE';
+    public const HOME_PAGE = 'PAYPAL_INSTALLMENT_HOME_PAGE';
 
-    const CART_PAGE = 'PAYPAL_INSTALLMENT_CART_PAGE';
+    public const CART_PAGE = 'PAYPAL_INSTALLMENT_CART_PAGE';
 
-    const CHECKOUT_PAGE = 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE';
+    public const CHECKOUT_PAGE = 'PAYPAL_INSTALLMENT_CHECKOUT_PAGE';
 
-    const CATEGORY_PAGE = 'PAYPAL_INSTALLMENT_CATEGORY_PAGE';
+    public const CATEGORY_PAGE = 'PAYPAL_INSTALLMENT_CATEGORY_PAGE';
 
-    const COLOR = 'PAYPAL_INSTALLMENT_COLOR';
+    public const COLOR = 'PAYPAL_INSTALLMENT_COLOR';
 
-    const MESSENGING_CONFIG = 'PAYPAL_INSTALLMENT_MESSAGING_CONFIG';
+    public const MESSENGING_CONFIG = 'PAYPAL_INSTALLMENT_MESSAGING_CONFIG';
 
-    const MESSAGING_BUYER_COUNTRY = 'PAYPAL_INSTALLMENT_MESSAGING_BUYER_COUNTRY';
+    public const MESSAGING_BUYER_COUNTRY = 'PAYPAL_INSTALLMENT_MESSAGING_BUYER_COUNTRY';
 
-    const COLOR_BLUE = 'blue';
+    public const COLOR_BLUE = 'blue';
 
-    const COLOR_GRAY = 'gray';
+    public const COLOR_GRAY = 'gray';
 
-    const COLOR_BLACK = 'black';
+    public const COLOR_BLACK = 'black';
 
-    const COLOR_WHITE = 'white';
+    public const COLOR_WHITE = 'white';
 
-    const COLOR_MONOCHROME = 'monochrome';
+    public const COLOR_MONOCHROME = 'monochrome';
 
-    const COLOR_GRAYSCALE = 'grayscale';
+    public const COLOR_GRAYSCALE = 'grayscale';
 
-    const PAGE_TYPE_PRODUCT = 'product-details';
+    public const PAGE_TYPE_PRODUCT = 'product-details';
 
-    const PAGE_TYPE_CART = 'cart';
+    public const PAGE_TYPE_CART = 'cart';
 
-    const PAGE_TYPE_CHECKOUT = 'checkout';
+    public const PAGE_TYPE_CHECKOUT = 'checkout';
 
-    const PAGE_TYPE_PAYMENT_STEP = 'payment-step';
+    public const PAGE_TYPE_PAYMENT_STEP = 'payment-step';
 
-    const ENABLE_BNPL = 'PAYPAL_ENABLE_BNPL';
+    public const ENABLE_BNPL = 'PAYPAL_ENABLE_BNPL';
 
-    const BNPL_PRODUCT_PAGE = 'PAYPAL_BNPL_PRODUCT_PAGE';
+    public const BNPL_PRODUCT_PAGE = 'PAYPAL_BNPL_PRODUCT_PAGE';
 
-    const BNPL_PAYMENT_STEP_PAGE = 'PAYPAL_BNPL_PAYMENT_STEP_PAGE';
+    public const BNPL_PAYMENT_STEP_PAGE = 'PAYPAL_BNPL_PAYMENT_STEP_PAGE';
 
-    const BNPL_CART_PAGE = 'PAYPAL_BNPL_CART_PAGE';
+    public const BNPL_CART_PAGE = 'PAYPAL_BNPL_CART_PAGE';
 
-    const BNPL_CHECKOUT_PAGE = 'PAYPAL_BNPL_CHECKOUT_PAGE';
+    public const BNPL_CHECKOUT_PAGE = 'PAYPAL_BNPL_CHECKOUT_PAGE';
 
     public static function getColorGradient($color)
     {
@@ -96,7 +96,7 @@ class ConfigurationMap
             self::COLOR_GRAYSCALE => '#ffffff',
             self::COLOR_GRAY => '#ebecee',
         ];
-        $isoCountryDefault = \Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+        $isoCountryDefault = \Tools::strtolower(\Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT')));
 
         if ($isoCountryDefault === 'de') {
             $gradientMap[self::COLOR_BLACK] = '#2c2e2f';
@@ -164,7 +164,7 @@ class ConfigurationMap
 
     public static function getPageConfMap()
     {
-        //todo: should add possibility modify the list by hook?
+        // todo: should add possibility modify the list by hook?
         return [
             'OrderController' => self::CHECKOUT_PAGE,
             'CartController' => self::CART_PAGE,
@@ -191,7 +191,7 @@ class ConfigurationMap
 
     public static function getBnplColorMapping()
     {
-        //todo: validate mapping
+        // todo: validate mapping
         return [
             'gray' => 'white',
             'monochrome' => 'white',

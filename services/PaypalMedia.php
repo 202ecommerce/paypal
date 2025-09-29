@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,8 +28,6 @@
 
 namespace PaypalAddons\services;
 
-use Media;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -41,7 +40,7 @@ class PaypalMedia
     public function getJqueryPath()
     {
         if (version_compare(_PS_VERSION_, '1.7.7', '<')) {
-            return Media::getJqueryPath();
+            return \Media::getJqueryPath();
         }
 
         return [];

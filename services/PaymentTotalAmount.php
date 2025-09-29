@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,11 +28,8 @@
 
 namespace PaypalAddons\services;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Exception\RefundCalculationException;
-use PaypalOrder;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,13 +38,13 @@ if (!defined('_PS_VERSION_')) {
 class PaymentTotalAmount
 {
     /**
-     * @param PaypalOrder $paypalOrder
+     * @param \PaypalOrder $paypalOrder
      *
      * @return float
      *
      * @throws RefundCalculationException
      */
-    public function get(PaypalOrder $paypalOrder)
+    public function get(\PaypalOrder $paypalOrder)
     {
         $method = AbstractMethodPaypal::load($paypalOrder->method);
         $total = 0;
@@ -67,9 +65,9 @@ class PaymentTotalAmount
                     $totalRefund += $refund->amount->value;
                 }
             }
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new RefundCalculationException($e->getMessage());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new RefundCalculationException($e->getMessage());
         }
 

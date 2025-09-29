@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,9 +28,6 @@
 
 namespace PaypalAddons\classes\SEPA;
 
-use Configuration;
-use Context;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 
@@ -39,19 +37,20 @@ if (!defined('_PS_VERSION_')) {
 
 class SepaButton
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
-    /** @var Module */
+    /** @var \PayPal */
     protected $module;
 
-    /** @var AbstractMethodPaypal */
+    /** @var \MethodEC|\MethodPPP|\MethodMB */
     protected $method;
 
     public function __construct()
     {
-        $this->context = Context::getContext();
-        $this->module = Module::getInstanceByName('paypal');
+        $this->context = \Context::getContext();
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
     }
 
@@ -68,17 +67,17 @@ class SepaButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJSvars()
     {
         return [
-            PaypalConfigurations::MOVE_BUTTON_AT_END => (int) Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
+            PaypalConfigurations::MOVE_BUTTON_AT_END => (int) \Configuration::get(PaypalConfigurations::MOVE_BUTTON_AT_END),
         ];
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJS()
     {
@@ -131,7 +130,7 @@ class SepaButton
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getTplVars()
     {

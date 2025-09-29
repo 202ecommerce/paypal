@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Client\HttpClient;
 use PaypalAddons\classes\API\ExtensionSDK\GetVaultPaymentToken;
@@ -38,7 +38,6 @@ use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseVaultPaymentToken;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\PaypalException;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -97,13 +96,7 @@ class PaypalGetVaultPaymentTokenRequest extends RequestAbstract
 
             $error->setErrorCode($e->getCode());
             $response->setSuccess(false)->setError($error);
-        } catch (Throwable $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-            $response->setSuccess(false)
-                ->setError($error);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());

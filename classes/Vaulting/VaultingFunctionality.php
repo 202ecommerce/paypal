@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,14 +28,10 @@
 
 namespace PaypalAddons\classes\Vaulting;
 
-use Configuration;
-use Country;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Response\ResponseGetSellerStatus;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 use PaypalAddons\classes\Constants\Vaulting;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -52,24 +49,24 @@ class VaultingFunctionality
     public function __construct()
     {
         $this->method = AbstractMethodPaypal::load('EC');
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
     }
 
     public function isAvailable()
     {
-        $iso = Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT'));
+        $iso = \Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT'));
 
-        return Tools::strtolower($iso) == 'us';
+        return \Tools::strtolower($iso) == 'us';
     }
 
     public function isEnabled()
     {
-        return Vaulting::ENABLED === (int) Configuration::get(PaypalConfigurations::ACCOUNT_VAULTING) && (int) Configuration::get(PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT);
+        return Vaulting::ENABLED === (int) \Configuration::get(PaypalConfigurations::ACCOUNT_VAULTING) && (int) \Configuration::get(PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT);
     }
 
     public function enable($state)
     {
-        Configuration::updateValue(PaypalConfigurations::ACCOUNT_VAULTING, (int) $state);
+        \Configuration::updateValue(PaypalConfigurations::ACCOUNT_VAULTING, (int) $state);
 
         return $this;
     }
@@ -82,7 +79,7 @@ class VaultingFunctionality
             }
         }
 
-        $isAvailable = (int) Configuration::get(Vaulting::ACCOUNT_VAULTING_STATE);
+        $isAvailable = (int) \Configuration::get(Vaulting::ACCOUNT_VAULTING_STATE);
 
         if ($refresh == false && in_array($isAvailable, [Vaulting::IS_AVAILABLE, Vaulting::IS_UNAVAILABLE])) {
             return $isAvailable == Vaulting::IS_AVAILABLE;
@@ -95,26 +92,26 @@ class VaultingFunctionality
         $sellerStatus = $this->_cache['sellerStatus'];
 
         if ($sellerStatus->isSuccess() == false) {
-            Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_UNAVAILABLE);
+            \Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_UNAVAILABLE);
 
             return false;
         }
 
         if (empty($sellerStatus->getCapabilities())) {
-            Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_UNAVAILABLE);
+            \Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_UNAVAILABLE);
 
             return false;
         }
 
         foreach ($sellerStatus->getCapabilities() as $capability) {
-            if (Tools::strtoupper($capability) == Vaulting::CAPABILITY) {
-                Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_AVAILABLE);
+            if (\Tools::strtoupper($capability) == Vaulting::CAPABILITY) {
+                \Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_AVAILABLE);
 
                 return true;
             }
         }
 
-        Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_UNAVAILABLE);
+        \Configuration::updateValue(Vaulting::ACCOUNT_VAULTING_STATE, Vaulting::IS_UNAVAILABLE);
 
         return false;
     }
@@ -141,7 +138,7 @@ class VaultingFunctionality
                 continue;
             }
 
-            $status = Tools::strtoupper($capability['status']);
+            $status = \Tools::strtoupper($capability['status']);
 
             if (in_array($status, [Vaulting::PRODUCT_STATUS_ACTIVE, Vaulting::PRODUCT_STATUS_APPROVED, Vaulting::PRODUCT_STATUS_SUBSCRIBED])) {
                 return $this->module->l('PayPal account vaulting/save payments enabled', 'VaultingFunctionality');

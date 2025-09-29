@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,8 @@
 
 namespace PaypalAddons\services;
 
-use Configuration;
-use Country;
-use Exception;
 use PaypalAddons\classes\Constants\CountryIsoAlias;
 use PaypalAddons\classes\Constants\TrackingParameters as Map;
-use PrestaShopLogger;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -45,7 +41,7 @@ class TrackingParameters
     protected $carrierMap;
     /** @var array */
     protected $paypalCarriers = [];
-    /** @var Country */
+    /** @var \Country */
     protected $defaultCountry;
 
     public function __construct()
@@ -63,7 +59,7 @@ class TrackingParameters
     public function getPaypalCarriersByCountry($isoCountry = null)
     {
         if (!$isoCountry) {
-            $isoCountry = (new Country(Configuration::get('PS_COUNTRY_DEFAULT')))->iso_code;
+            $isoCountry = (new \Country(\Configuration::get('PS_COUNTRY_DEFAULT')))->iso_code;
         }
 
         $isoCountry = strtoupper($isoCountry);
@@ -112,13 +108,13 @@ class TrackingParameters
     protected function updateCarrierMap()
     {
         try {
-            return Configuration::updateValue(Map::CARRIER_MAP, json_encode($this->carrierMap));
-        } catch (Throwable $e) {
-            PrestaShopLogger::addLog('[paypal][TrackingParameters::updateCarrierMap()] Error: ' . $e->getMessage());
+            return \Configuration::updateValue(Map::CARRIER_MAP, json_encode($this->carrierMap));
+        } catch (\Throwable $e) {
+            \PrestaShopLogger::addLog('[paypal][TrackingParameters::updateCarrierMap()] Error: ' . $e->getMessage());
 
             return false;
-        } catch (Exception $e) {
-            PrestaShopLogger::addLog('[paypal][TrackingParameters::updateCarrierMap()] Error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            \PrestaShopLogger::addLog('[paypal][TrackingParameters::updateCarrierMap()] Error: ' . $e->getMessage());
 
             return false;
         }
@@ -126,7 +122,7 @@ class TrackingParameters
 
     public function getStatus()
     {
-        $status = Configuration::get(Map::STATUS);
+        $status = \Configuration::get(Map::STATUS);
 
         if ($status) {
             return $status;
@@ -138,7 +134,7 @@ class TrackingParameters
     public function setStatus($status)
     {
         if ($this->isStatusValid($status)) {
-            return Configuration::updateValue(Map::STATUS, $status);
+            return \Configuration::updateValue(Map::STATUS, $status);
         }
 
         return false;
@@ -167,13 +163,13 @@ class TrackingParameters
     protected function initDefaultCountry()
     {
         try {
-            $this->defaultCountry = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
-        } catch (Throwable $e) {
-            $this->defaultCountry = new Country();
+            $this->defaultCountry = new \Country(\Configuration::get('PS_COUNTRY_DEFAULT'));
+        } catch (\Throwable $e) {
+            $this->defaultCountry = new \Country();
 
             return false;
-        } catch (Exception $e) {
-            $this->defaultCountry = new Country();
+        } catch (\Exception $e) {
+            $this->defaultCountry = new \Country();
 
             return false;
         }
@@ -185,9 +181,9 @@ class TrackingParameters
     {
         try {
             $this->paypalCarriers = json_decode(\Tools::file_get_contents(_PS_MODULE_DIR_ . 'paypal/paypal-carriers.json'), true);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -197,12 +193,12 @@ class TrackingParameters
     protected function initCarrierMap()
     {
         try {
-            $carrierMap = json_decode(Configuration::get(Map::CARRIER_MAP), true);
-        } catch (Throwable $e) {
+            $carrierMap = json_decode(\Configuration::get(Map::CARRIER_MAP), true);
+        } catch (\Throwable $e) {
             $this->carrierMap = [];
 
             return false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->carrierMap = [];
 
             return false;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,10 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Context;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\PUI\PuiFunctionality;
 use PaypalAddons\classes\PUI\SignUpLinkButton;
 use PaypalAddons\classes\PuiMethodInterface;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,7 +39,7 @@ if (!defined('_PS_VERSION_')) {
 
 class AccountForm implements FormInterface
 {
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     protected $puiFunctionality;
@@ -50,7 +48,8 @@ class AccountForm implements FormInterface
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->puiFunctionality = new PuiFunctionality();
         $this->method = AbstractMethodPaypal::load();
     }
@@ -86,18 +85,20 @@ class AccountForm implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         if (empty($data['accountForm'])) {
-            return;
+            return true;
         }
 
-        return $this->method->saveAccountForm($data);
+        $this->method->saveAccountForm($data);
+
+        return true;
     }
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/account.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/account.tpl');
     }
 }

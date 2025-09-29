@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -58,19 +59,19 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
                     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = 'Error code: ' . $e->getCode() . '.';
             $message .= 'Short message: ' . $e->getMessage() . '.';
 
             ProcessLoggerHandler::openLogger();
             ProcessLoggerHandler::logError(
                 $message,
-                \Tools::getValue('txn_id') ? \Tools::getValue('txn_id') : null,
+                Tools::getValue('txn_id') ? Tools::getValue('txn_id') : null,
                 null,
                 null,
                 null,
                 null,
-                (int) \Configuration::get('PAYPAL_SANDBOX'),
+                (bool) Configuration::get('PAYPAL_SANDBOX'),
                 null
             );
             ProcessLoggerHandler::closeLogger();
@@ -80,7 +81,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
     }
 
     /**
-     * @param $data array Ipn message data
+     * @param array $data Ipn message data
      *
      * @return bool
      */
@@ -118,7 +119,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
                 $order->id_cart,
                 null,
                 'PayPal',
-                (int) Configuration::get('PAYPAL_SANDBOX')
+                (bool) Configuration::get('PAYPAL_SANDBOX')
             );
         }
         ProcessLoggerHandler::closeLogger();
@@ -202,14 +203,14 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
     }
 
     /**
-     * @param $orders array
-     * @param $idState int
+     * @param array $orders
+     * @param int $idState
      *
      * @return bool
      */
     protected function setOrderStatus($orders, $idState)
     {
-        /** @var $order \Order */
+        /** @var Order $order */
         foreach ($orders as $order) {
             $order->setCurrentState((int) $idState);
         }
@@ -218,7 +219,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
     }
 
     /**
-     * @param $value mixed
+     * @param mixed $value
      *
      * @return string
      */

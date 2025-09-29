@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,9 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
-use PayPal;
 use PaypalAddons\classes\API\ExtensionSDK\GetSellerStatus;
 use PaypalAddons\classes\API\HttpAdoptedResponse;
 use PaypalAddons\classes\API\Response\Error;
-use Throwable;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -52,13 +49,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
             if ($exec instanceof HttpAdoptedResponse) {
                 $exec = $exec->getAdoptedResponse();
             }
-        } catch (Throwable $e) {
-            $error = new Error();
-            $error->setMessage($e->getMessage())
-                ->setErrorCode($e->getCode());
-
-            return $response->setSuccess(false)->setError($error);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setMessage($e->getMessage())
                 ->setErrorCode($e->getCode());
@@ -85,9 +76,9 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
     protected function getPartnerMerchantId()
     {
         if ($this->method->isSandbox()) {
-            return PayPal::PAYPAL_PARTNER_ID_SANDBOX;
+            return \PayPal::PAYPAL_PARTNER_ID_SANDBOX;
         } else {
-            return PayPal::PAYPAL_PARTNER_ID_LIVE;
+            return \PayPal::PAYPAL_PARTNER_ID_LIVE;
         }
     }
 
@@ -113,7 +104,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
                 continue;
             }
 
-            if (Tools::strtoupper($capability->status) != 'ACTIVE') {
+            if (\Tools::strtoupper($capability->status) != 'ACTIVE') {
                 continue;
             }
 
@@ -148,13 +139,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
             return [];
         }
 
-        try {
-            $products = json_decode(json_encode($data->result->products), true);
-        } catch (Throwable $e) {
-            return [];
-        } catch (Exception $e) {
-            return [];
-        }
+        $products = json_decode(json_encode($data->result->products), true);
 
         if (empty($products)) {
             return [];
@@ -169,13 +154,7 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
             return [];
         }
 
-        try {
-            $capabilities = json_decode(json_encode($data->result->capabilities), true);
-        } catch (Throwable $e) {
-            return [];
-        } catch (Exception $e) {
-            return [];
-        }
+        $capabilities = json_decode(json_encode($data->result->capabilities), true);
 
         if (empty($capabilities)) {
             return [];

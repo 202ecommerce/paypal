@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,8 @@
 
 namespace PaypalAddons\services\Builder;
 
-use Carrier;
-use Hook;
-use Order;
 use PaypalAddons\services\ServicePaypalOrder;
 use PaypalAddons\services\TrackingParameters;
-use PaypalOrder;
-use Validate;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,14 +37,14 @@ if (!defined('_PS_VERSION_')) {
 
 class OrderAddTrackingInfoBuilder implements BuilderInterface
 {
-    /** @var PaypalOrder */
+    /** @var \PaypalOrder */
     protected $paypalOrder;
     /** @var ServicePaypalOrder */
     protected $paypalOrderService;
     /** @var TrackingParameters */
     protected $trackingParametersService;
 
-    public function __construct(PaypalOrder $paypalOrder)
+    public function __construct(\PaypalOrder $paypalOrder)
     {
         $this->paypalOrder = $paypalOrder;
         $this->paypalOrderService = new ServicePaypalOrder();
@@ -76,16 +72,16 @@ class OrderAddTrackingInfoBuilder implements BuilderInterface
             $output['carrier'] = \PaypalAddons\classes\Constants\TrackingParameters::CARRIER_OTHER;
         }
 
-        Hook::exec('actionAfterPaypalTrackingInfoBuild', ['id_order' => $this->paypalOrder->id_order, 'info' => &$output]);
+        \Hook::exec('actionAfterPaypalTrackingInfoBuild', ['id_order' => $this->paypalOrder->id_order, 'info' => &$output]);
 
         return $output;
     }
 
     protected function getTrackingNumber()
     {
-        $order = new Order($this->paypalOrder->id_order);
+        $order = new \Order($this->paypalOrder->id_order);
 
-        if (false == Validate::isLoadedObject($order)) {
+        if (false == \Validate::isLoadedObject($order)) {
             return '';
         }
 
@@ -100,18 +96,18 @@ class OrderAddTrackingInfoBuilder implements BuilderInterface
 
     protected function getCarrier()
     {
-        $order = new Order($this->paypalOrder->id_order);
+        $order = new \Order($this->paypalOrder->id_order);
 
-        if (false == Validate::isLoadedObject($order)) {
-            return new Carrier();
+        if (false == \Validate::isLoadedObject($order)) {
+            return new \Carrier();
         }
 
         $shipping = $order->getShipping();
 
         if (empty($shipping[0]['id_carrier'])) {
-            return new Carrier();
+            return new \Carrier();
         }
 
-        return new Carrier((int) $shipping[0]['id_carrier']);
+        return new \Carrier((int) $shipping[0]['id_carrier']);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -33,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
  */
 class PaypalWebhook extends ObjectModel
 {
-    const DATE_FORMAT = 'Y-m-d H:i:s';
+    public const DATE_FORMAT = 'Y-m-d H:i:s';
 
     /** @var int */
     public $id_paypal_order;
@@ -50,10 +51,10 @@ class PaypalWebhook extends ObjectModel
     /** @var int */
     public $id_state;
 
-    /* @var string creation date*/
+    /* @var string creation date */
     public $date_add;
 
-    /* @var string date*/
+    /* @var string date */
     public $date_completed;
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -33,5 +34,5 @@ if (!defined('_PS_VERSION_')) {
 
 class WebhookHandler
 {
-    const STATUS_AVAILABLE = 202;
+    public const STATUS_AVAILABLE = 202;
 }
