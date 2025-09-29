@@ -102,3 +102,27 @@
 .page-sidebar-closed:not(.mobile) #content.nobootstrap {
   padding-left: 50px;
 }
+
+#content.bootstrap {
+  a {
+    color: $link-color !important;
+
+    &:hover {
+      color: $link-hover-color !important;
+    }
+  }
+
+  .table thead>tr>th {
+    font-weight: $font-weight-semibold !important;
+  }
+
+  .custom-select {
+    @extend .custom-select
+  }
+  .btn-secondary {
+    color: $blue !important;
+  }
+  .btn-secondary:hover {
+    color: $blue !important;
+  }
+}
