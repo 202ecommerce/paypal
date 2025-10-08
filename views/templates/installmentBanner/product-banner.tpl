@@ -32,6 +32,10 @@
   .product-quantity [installment-container] {
     flex-basis: 100%;
   }
+
+  [paypal-messaging-banner] {
+    max-width: 300px;
+  }
 </style>
 
 <div style="padding: 5px 0">
