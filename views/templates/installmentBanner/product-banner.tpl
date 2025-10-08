@@ -56,6 +56,11 @@
         if (productPriceDOM instanceof Element) {
             productPrice = parseFloat(productPriceDOM.getAttribute('content'));
         }
+        if (!productPrice) {
+          if (document.querySelector('.product__current-price')) {
+            productPrice = parseFloat(document.querySelector('.product__current-price').innerText.replace(',', '.'));
+          }
+        }
 
         this.amount = quantity * productPrice;
         var bannerContainer = document.querySelector('[paypal-messaging-banner]');
