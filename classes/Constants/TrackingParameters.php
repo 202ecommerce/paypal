@@ -34,13 +34,13 @@ if (!defined('_PS_VERSION_')) {
 
 class TrackingParameters
 {
-    public const CARRIER_MAP = 'PAYPAL_TRACKING_CARRIER_MAP';
+    const CARRIER_MAP = 'PAYPAL_TRACKING_CARRIER_MAP';
 
-    public const STATUS = 'PAYPAL_TRACKING_STATUS';
+    const STATUS = 'PAYPAL_TRACKING_STATUS';
 
-    public const CARRIER_OTHER = 'OTHER';
+    const CARRIER_OTHER = 'OTHER';
 
-    public const STATUS_SHIPPED = 'SHIPPED';
+    const STATUS_SHIPPED = 'SHIPPED';
 
     public static function getPaypalStatusList()
     {

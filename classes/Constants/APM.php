@@ -34,25 +34,25 @@ if (!defined('_PS_VERSION_')) {
 
 class APM
 {
-    public const BANCONTACT = 'bancontact';
+    const BANCONTACT = 'bancontact';
 
-    public const BLIK = 'blik';
+    const BLIK = 'blik';
 
-    public const EPS = 'eps';
+    const EPS = 'eps';
 
-    public const GIROPAY = 'giropay';
+    const GIROPAY = 'giropay';
 
-    public const IDEAL = 'ideal';
+    const IDEAL = 'ideal';
 
-    public const MYBANK = 'mybank';
+    const MYBANK = 'mybank';
 
-    public const P24 = 'p24';
+    const P24 = 'p24';
 
-    public const BOLETOBANCARIO = 'boletobancario';
+    const BOLETOBANCARIO = 'boletobancario';
 
-    public const TRUSTLY = 'trustly';
+    const TRUSTLY = 'trustly';
 
-    public const MULTIBANCO = 'multibanco';
+    const MULTIBANCO = 'multibanco';
 
-    public const OXXO = 'oxxo';
+    const OXXO = 'oxxo';
 }

@@ -34,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
 
 class WhiteList
 {
-    public const ENABLED = 'PAYPAL_WHITE_LIST_ENABLED';
+    const ENABLED = 'PAYPAL_WHITE_LIST_ENABLED';
 
-    public const LIST_IP = 'PAYPAL_WHITE_LIST_IP';
+    const LIST_IP = 'PAYPAL_WHITE_LIST_IP';
 }

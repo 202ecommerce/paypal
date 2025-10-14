@@ -34,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
  */
 class PaypalWebhook extends ObjectModel
 {
-    public const DATE_FORMAT = 'Y-m-d H:i:s';
+    const DATE_FORMAT = 'Y-m-d H:i:s';
 
     /** @var int */
     public $id_paypal_order;
