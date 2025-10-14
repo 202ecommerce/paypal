@@ -44,10 +44,10 @@ if (!defined('_PS_VERSION_')) {
 class MethodMB extends AbstractMethodPaypal
 {
     /* @var string type of the payer tax */
-    public const BR_CPF = 'BR_CPF';
+    const BR_CPF = 'BR_CPF';
 
     /* @var string type of the payer tax */
-    public const BR_CNPJ = 'BR_CNPJ';
+    const BR_CNPJ = 'BR_CNPJ';
 
     protected $payment_method = 'PayPal';
 

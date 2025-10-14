@@ -34,5 +34,5 @@ if (!defined('_PS_VERSION_')) {
 
 class WebhookHandler
 {
-    public const STATUS_AVAILABLE = 202;
+    const STATUS_AVAILABLE = 202;
 }

@@ -40,27 +40,27 @@ if (!defined('_PS_VERSION_')) {
  */
 class PaypalException extends \Exception
 {
-    public const CART_CHANGED = 1001;
+    const CART_CHANGED = 1001;
 
-    public const PRODUCT_UNAVAILABLE = 1002;
+    const PRODUCT_UNAVAILABLE = 1002;
 
-    public const INVALID_CUSTOMER = 1003;
+    const INVALID_CUSTOMER = 1003;
 
-    public const ARGUMENT_MISSING = 1004;
+    const ARGUMENT_MISSING = 1004;
 
-    public const PAYMENT_EXISTS = 1005;
+    const PAYMENT_EXISTS = 1005;
 
-    public const CAPTURE_FAIL = 1006;
+    const CAPTURE_FAIL = 1006;
 
-    public const SCA_FAIL = 1007;
+    const SCA_FAIL = 1007;
 
-    public const PAYMENT_ID_INVALID = 1008;
+    const PAYMENT_ID_INVALID = 1008;
 
-    public const CAPTURE_PENDING = 1009;
+    const CAPTURE_PENDING = 1009;
 
-    public const APPROVAL_LINK_INVALID = 1010;
+    const APPROVAL_LINK_INVALID = 1010;
 
-    public const PAYER_ACTION_REQUIRED = 1011;
+    const PAYER_ACTION_REQUIRED = 1011;
 
     /** @var string Long detailed error message */
     private $message_long;
