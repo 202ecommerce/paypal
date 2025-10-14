@@ -34,6 +34,8 @@
 <p>
     {l s='You are currently using the Authorize mode. It means that you separate the payment authorization from the capture of the authorized payment. For capturing the authorized payment, you have to change the order status to "payment accepted" (or to a custom status with the same meaning). Here you can choose a custom order status for accepting the order and validating transactions in Authorize mode.' mod='paypal'}
 </p>
+<br>
+<h6>{l s='Webhooks' mod='paypal'}</h6>
 <p>
   {l s='Activating webhooks allows PayPal to update the status of your PrestaShop orders as soon as the payment status changes. You must ensure that webhooks are received by your PrestaShop.' mod='paypal'}
 </p>

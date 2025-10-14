@@ -31,8 +31,8 @@ $(document).ready( ()=> {
 
     if (el.length > 0) {
       el.click();
-      $('.payment-options div').hide();
-      $('.payment-options').append(scPaypalCheckedMsg);
+      $('.payment-options div, .payment__list div').hide();
+      $('.payment-options, .payment__list').append(scPaypalCheckedMsg);
     }
   }
 });
