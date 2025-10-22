@@ -25,7 +25,7 @@
  */
 
 // init in-context
-$(document).ready( () => {
+window.addEventListener('load', () => {
 
   // Insert paypal info block after option name
   $('.payment-option').each((step) => {
@@ -91,9 +91,5 @@ const hoverPopup = () => {
     if (!$('[data-pp-info]').is(':visible')) {
       $('body').removeClass('pp-popover');
     }
-  })
-
-  $('[data-paypal-info-popover] i').on('click', (e) => {
-    hidePopup($(e.target));
   })
 }
