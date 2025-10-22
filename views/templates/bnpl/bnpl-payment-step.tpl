@@ -77,7 +77,7 @@
 
     function paypalInitBNPLButtons() {
         BNPL.addMarkTo(
-          document.querySelector('[data-module-name="paypal_bnpl"]').closest('.payment-option'),
+          document.querySelector('[data-module-name="paypal_bnpl"]').closest('.payment-option, .payment__option label'),
           {
             display: "table-cell"
           }
