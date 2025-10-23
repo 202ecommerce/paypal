@@ -24,6 +24,8 @@
  *
  */
 
+import 'bootstrap/js/src/popover';
+
 // init in-context
 window.addEventListener('load', () => {
 
@@ -53,7 +55,8 @@ window.addEventListener('load', () => {
     let configs = getConfigPopup();
     $('[data-paypal-info-popover]').popover({
       placement: configs.popoverPlacement,
-      trigger: configs.popoverTrigger
+      trigger: configs.popoverTrigger,
+      animation: false,
     });
   } catch (e) {
     console.error(e);
@@ -77,19 +80,18 @@ const getConfigPopup = () => {
     popoverPlacement: placement,
     popoverTrigger: trigger
   }
-
 }
 
 const hoverPopup = () => {
-  $('[data-paypal-info-popover] i').on('mouseover', (e) => {
-    e.target.innerText = 'cancel';
+  $('[data-paypal-info-popover]').on('shown.bs.popover', (e) => {
+    const icon = e.currentTarget.querySelector('i');
+    icon.innerText = 'cancel';
     $('body').addClass('pp-popover');
-  })
+  });
 
-  $('[data-paypal-info-popover] i').on('mouseout', (e) => {
-    e.target.innerText = 'info';
-    if (!$('[data-pp-info]').is(':visible')) {
-      $('body').removeClass('pp-popover');
-    }
-  })
+  $('[data-paypal-info-popover]').on('hidden.bs.popover', (e) => {
+    const icon = e.currentTarget.querySelector('i');
+    icon.innerText = 'info';
+    $('body').removeClass('pp-popover');
+  });
 }
