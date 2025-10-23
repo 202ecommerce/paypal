@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,7 +28,6 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Client\HttpClient;
 use PaypalAddons\classes\API\ExtensionSDK\Order\OrdersCaptureRequest;
@@ -37,7 +37,6 @@ use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\ResponseOrderCapture;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\PaypalException;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -108,11 +107,7 @@ class PaypalOrderCaptureRequest extends RequestAbstract
             }
 
             $response->setError($error);
-        } catch (Throwable $e) {
-            $error = new Error();
-            $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
-            $response->setError($error)->setSuccess(false);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())->setMessage($e->getMessage());
             $response->setError($error)->setSuccess(false);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -31,13 +32,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Address;
-use Configuration;
-use Context;
-use Customer;
-use Hook;
-use Module;
-use Paypal;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
@@ -46,10 +40,10 @@ use PaypalAddons\services\PaypalContext;
 
 class OrderCreateBody implements BuilderInterface
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
-    /** @var Paypal */
+    /** @var \Paypal */
     protected $module;
 
     /** @var AbstractMethodPaypal */
@@ -64,17 +58,17 @@ class OrderCreateBody implements BuilderInterface
 
     protected $products = [];
 
-    protected $useTax = null;
+    protected $useTax;
 
     /** @var VaultingFunctionality */
     protected $vaultingFunctionality;
 
     public function __construct($context = null, $method = null)
     {
-        if ($context instanceof Context) {
+        if ($context instanceof \Context) {
             $this->context = $context;
         } else {
-            $this->context = Context::getContext();
+            $this->context = \Context::getContext();
         }
 
         if ($method instanceof AbstractMethodPaypal) {
@@ -83,7 +77,7 @@ class OrderCreateBody implements BuilderInterface
             $this->method = AbstractMethodPaypal::load();
         }
 
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->formatter = new FormatterPaypal();
         $this->vaultingFunctionality = new VaultingFunctionality();
     }
@@ -155,7 +149,7 @@ class OrderCreateBody implements BuilderInterface
             return $this->useTax;
         }
 
-        $this->useTax = (int) Configuration::get('PS_TAX') == 1;
+        $this->useTax = (int) \Configuration::get('PS_TAX') == 1;
 
         return $this->useTax;
     }
@@ -216,7 +210,7 @@ class OrderCreateBody implements BuilderInterface
     protected function getPayer()
     {
         $payer = [];
-        $customer = new Customer($this->context->cart->id_customer);
+        $customer = new \Customer($this->context->cart->id_customer);
 
         if (\Validate::isLoadedObject($customer) == false) {
             return $payer;
@@ -270,27 +264,27 @@ class OrderCreateBody implements BuilderInterface
             'currency_code' => $currency,
             'value' => $totalOrder,
             'breakdown' => [
-                    'item_total' => [
-                        'currency_code' => $currency,
-                        'value' => $subTotalExcl,
-                    ],
-                    'shipping' => [
-                        'currency_code' => $currency,
-                        'value' => $shippingTotal,
-                    ],
-                    'tax_total' => [
-                        'currency_code' => $currency,
-                        'value' => $subTotalTax,
-                    ],
-                    'discount' => [
-                        'currency_code' => $currency,
-                        'value' => $discountTotal,
-                    ],
-                    'handling' => [
-                        'currency_code' => $currency,
-                        'value' => $handling,
-                    ],
+                'item_total' => [
+                    'currency_code' => $currency,
+                    'value' => $subTotalExcl,
                 ],
+                'shipping' => [
+                    'currency_code' => $currency,
+                    'value' => $shippingTotal,
+                ],
+                'tax_total' => [
+                    'currency_code' => $currency,
+                    'value' => $subTotalTax,
+                ],
+                'discount' => [
+                    'currency_code' => $currency,
+                    'value' => $discountTotal,
+                ],
+                'handling' => [
+                    'currency_code' => $currency,
+                    'value' => $handling,
+                ],
+            ],
         ];
 
         return $amount;
@@ -380,7 +374,7 @@ class OrderCreateBody implements BuilderInterface
             $shippingInfo['name'] = $name;
         }
 
-        Hook::exec(
+        \Hook::exec(
             'actionPaypalShippingInfo',
             [
                 'shippingInfo' => &$shippingInfo,
@@ -527,7 +521,7 @@ class OrderCreateBody implements BuilderInterface
         if (PaypalContext::getContext()->get('scaVerification', false)) {
             $method = PaypalContext::getContext()->get('scaVerification');
 
-            if (in_array($method, [PayPal::SCA_WHEN_REQUIRED, PayPal::SCA_ALWAYS])) {
+            if (in_array($method, [\Paypal::SCA_WHEN_REQUIRED, \Paypal::SCA_ALWAYS])) {
                 return [
                     'card' => [
                         'attributes' => [
@@ -536,7 +530,7 @@ class OrderCreateBody implements BuilderInterface
                             ],
                         ],
                         'billing_address' => $this->getAddress(
-                            new Address($this->context->cart->id_address_invoice)
+                            new \Address($this->context->cart->id_address_invoice)
                         ),
                     ],
                 ];

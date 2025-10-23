@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -49,7 +50,7 @@ class PaypalOrderPuiCreateRequest extends PaypalOrderCreateRequest
         if (empty($sessionId)) {
             return $request;
         }
-        //This header is required for PUI payment
+        // This header is required for PUI payment
         $headers['PayPal-Client-Metadata-Id'] = $sessionId;
         $headers['PayPal-Request-Id'] = uniqid();
 

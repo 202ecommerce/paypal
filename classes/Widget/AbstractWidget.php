@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,35 +28,32 @@
 
 namespace PaypalAddons\classes\Widget;
 
-use Context;
-use Module;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 abstract class AbstractWidget
 {
-    /** @var Module */
+    /** @var \PayPal */
     protected $module;
 
     /** @var array */
     protected $configuratons;
 
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
     /**
-     * @param Module $module
+     * @param \PayPal $module
      * @param array $configuratons
      *
      * @return void
      */
-    public function __construct(Module $module, $configuratons = [])
+    public function __construct($module, $configuratons = [])
     {
         $this->module = $module;
         $this->configuratons = $configuratons;
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     /**

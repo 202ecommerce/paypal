@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,11 @@
 
 namespace PaypalAddons\classes\API\Request;
 
-use Exception;
 use PaypalAddons\classes\API\ExtensionSDK\AccessTokenRequest;
 use PaypalAddons\classes\API\HttpAdoptedResponse;
 use PaypalAddons\classes\API\Response\Error;
 use PaypalAddons\classes\API\Response\PaypalResponseAccessToken;
 use PaypalAddons\classes\PaypalException;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -75,13 +74,7 @@ class PaypalAccessTokenRequest extends RequestAbstract
             $error->setErrorCode($e->getCode());
             $response->setSuccess(false)
                 ->setError($error);
-        } catch (Throwable $e) {
-            $error = new Error();
-            $error->setErrorCode($e->getCode())
-                ->setMessage($e->getMessage());
-            $response->setSuccess(false)
-                ->setError($error);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = new Error();
             $error->setErrorCode($e->getCode())
                 ->setMessage($e->getMessage());

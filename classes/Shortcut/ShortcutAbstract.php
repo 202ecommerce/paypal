@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,13 +28,8 @@
 
 namespace PaypalAddons\classes\Shortcut;
 
-use Context;
-use Exception;
-use Hook;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\services\PaypalMedia;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,13 +37,13 @@ if (!defined('_PS_VERSION_')) {
 
 abstract class ShortcutAbstract
 {
-    /** @var Context */
+    /** @var \Context */
     protected $context;
 
-    /** @var Module */
+    /** @var \PayPal */
     protected $module;
 
-    /** @var AbstractMethodPaypal */
+    /** @var \MethodEC|\MethodPPP|\MethodMB */
     protected $method;
 
     /** @var string */
@@ -55,8 +51,9 @@ abstract class ShortcutAbstract
 
     public function __construct()
     {
-        $this->context = Context::getContext();
-        $this->module = Module::getInstanceByName('paypal');
+        $this->context = \Context::getContext();
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
         $this->method = AbstractMethodPaypal::load($this->getMethodType());
         $this->setId(uniqid());
     }
@@ -75,12 +72,14 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJSvars()
     {
         $JSvars = [];
+        /* @phpstan-ignore-next-line */
         $JSvars['sc_init_url'] = $this->context->link->getModuleLink($this->module->name, 'ScInit', [], true);
+        /* @phpstan-ignore-next-line */
         $JSvars['scOrderUrl'] = $this->context->link->getModuleLink($this->module->name, 'scOrder', [], true);
         $JSvars['styleSetting'] = $this->getStyleSetting();
 
@@ -88,7 +87,7 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getJS()
     {
@@ -128,7 +127,7 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     abstract protected function getTplVars();
 
@@ -142,7 +141,7 @@ abstract class ShortcutAbstract
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId()
     {
@@ -161,7 +160,7 @@ abstract class ShortcutAbstract
         return $this;
     }
 
-    /** @return []*/
+    /** @return array */
     public function getJqueryPath()
     {
         return $this->getPaypalMedia()->getJqueryPath();
@@ -178,9 +177,8 @@ abstract class ShortcutAbstract
         $isAddJquery = version_compare(_PS_VERSION_, '1.7.7', '<');
 
         try {
-            Hook::exec('actionPaypalShortcutIsAddJquery', ['isAddJquery' => &$isAddJquery]);
-        } catch (Throwable $e) {
-        } catch (Exception $e) {
+            \Hook::exec('actionPaypalShortcutIsAddJquery', ['isAddJquery' => &$isAddJquery]);
+        } catch (\Throwable $e) {
         }
 
         return $isAddJquery;

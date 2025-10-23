@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -34,19 +35,19 @@ if (!defined('_PS_VERSION_')) {
 class ShortcutPreview extends ShortcutAbstract
 {
     /** @var string */
-    protected $label = null;
+    protected $label;
 
     /** @var int */
-    protected $height = null;
+    protected $height;
 
     /** @var int */
-    protected $width = null;
+    protected $width;
 
     /** @var string */
-    protected $color = null;
+    protected $color;
 
     /** @var string */
-    protected $shape = null;
+    protected $shape;
 
     public function __construct(
         $label,
@@ -65,7 +66,7 @@ class ShortcutPreview extends ShortcutAbstract
     }
 
     /**
-     * @return []
+     * @return array
      */
     protected function getTplVars()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -37,7 +38,7 @@ if (!defined('_PS_VERSION_')) {
  * Class PaypalException
  * Custom exception with additional long message parameter
  */
-class PaypalException extends Exception
+class PaypalException extends \Exception
 {
     const CART_CHANGED = 1001;
 

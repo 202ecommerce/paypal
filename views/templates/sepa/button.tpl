@@ -66,7 +66,7 @@
                 '#paypal-sepa'
               );
               sepaObj.addMarkTo(
-                  document.querySelector('input[data-module-name="paypal_sepa"]').closest('.payment-option'),
+                  document.querySelector('input[data-module-name="paypal_sepa"]').closest('.payment-option, .payment__option label'),
                   {
                       display: "table-cell"
                   }

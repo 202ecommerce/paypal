@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,14 +28,10 @@
 
 namespace PaypalAddons\services;
 
-use Cart;
-use Context;
-use Module;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\WebHookConf;
 use PaypalAddons\classes\Webhook\CreateWebhook;
 use PaypalAddons\classes\Webhook\WebhookAvailability;
-use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -52,8 +49,8 @@ class Checker
 
     public function __construct()
     {
-        $this->context = Context::getContext();
-        $this->module = Module::getInstanceByName('paypal');
+        $this->context = \Context::getContext();
+        $this->module = \Module::getInstanceByName('paypal');
         $this->webhookAvailability = new WebhookAvailability();
         $this->method = AbstractMethodPaypal::load();
     }
@@ -127,7 +124,7 @@ class Checker
         return $response->isSuccess();
     }
 
-    public function isProductsAvailable(Cart $cart)
+    public function isProductsAvailable(\Cart $cart)
     {
         if (!$this->isAllProductsInStock($cart)) {
             return false;
@@ -142,7 +139,7 @@ class Checker
         return true;
     }
 
-    public function isAllProductsInStock(Cart $cart)
+    public function isAllProductsInStock(\Cart $cart)
     {
         if (version_compare(_PS_VERSION_, '1.7.3.2', '>=')) {
             return $cart->isAllProductsInStock(true);
@@ -153,8 +150,8 @@ class Checker
                 continue;
             }
             $idProductAttribute = empty($product['id_product_attribute']) ? null : $product['id_product_attribute'];
-            $availableOutOfStock = Product::isAvailableWhenOutOfStock($product['out_of_stock']);
-            $productQuantity = Product::getQuantity(
+            $availableOutOfStock = \Product::isAvailableWhenOutOfStock($product['out_of_stock']);
+            $productQuantity = \Product::getQuantity(
                 $product['id_product'],
                 $idProductAttribute,
                 null,
@@ -162,7 +159,7 @@ class Checker
                 $product['id_customization']
             );
 
-            if (($productQuantity < 0 && !$availableOutOfStock)) {
+            if ($productQuantity < 0 && !$availableOutOfStock) {
                 return false;
             }
         }

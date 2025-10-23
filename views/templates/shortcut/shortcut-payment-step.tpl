@@ -73,7 +73,7 @@
 
       if (typeof Shortcut != "undefined") {
           Shortcut.addMarkTo(
-            document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),
+            document.querySelector('[data-module-name="paypal"]').closest('.payment-option, .payment__option label'),
             {
               display: "table-cell"
             }
@@ -90,7 +90,7 @@
       } else {
           document.addEventListener('paypal-after-init-shortcut-button', function (event) {
               Shortcut.addMarkTo(
-                document.querySelector('[data-module-name="paypal"]').closest('.payment-option'),
+                document.querySelector('[data-module-name="paypal"]').closest('.payment-option, .payment__option label'),
                 {
                   display: "table-cell"
                 }

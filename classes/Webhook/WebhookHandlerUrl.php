@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,9 +28,6 @@
 
 namespace PaypalAddons\classes\Webhook;
 
-use Configuration;
-use Context;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -38,14 +36,8 @@ class WebhookHandlerUrl
 {
     public function get()
     {
-        $url = Context::getContext()->link->getModuleLink(
-            'paypal',
-            'webhookhandler',
-            [],
-            null,
-            (int) Configuration::get('PS_LANG_DEFAULT'),
-            (int) Configuration::get('PS_SHOP_DEFAULT')
-        );
+        /* @phpstan-ignore-next-line */
+        $url = \Context::getContext()->link->getModuleLink('paypal', 'webhookhandler', [], null, (int) \Configuration::get('PS_LANG_DEFAULT'), (int) \Configuration::get('PS_SHOP_DEFAULT'));
         $url = str_replace('http://', 'https://', $url);
 
         return $url;
@@ -53,16 +45,8 @@ class WebhookHandlerUrl
 
     public function getCheckAvailabilityUrl()
     {
-        $url = Context::getContext()->link->getModuleLink(
-            'paypal',
-            'webhookhandler',
-            [
-                'checkAvailability' => 1,
-            ],
-            null,
-            (int) Configuration::get('PS_LANG_DEFAULT'),
-            (int) Configuration::get('PS_SHOP_DEFAULT')
-        );
+        /* @phpstan-ignore-next-line */
+        $url = \Context::getContext()->link->getModuleLink('paypal', 'webhookhandler', ['checkAvailability' => 1], null, (int) \Configuration::get('PS_LANG_DEFAULT'), (int) \Configuration::get('PS_SHOP_DEFAULT'));
         $url = str_replace('http://', 'https://', $url);
 
         return $url;

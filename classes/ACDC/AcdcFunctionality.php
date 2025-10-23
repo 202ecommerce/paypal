@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,10 +28,7 @@
 
 namespace PaypalAddons\classes\ACDC;
 
-use Configuration;
-use Country;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,13 +38,13 @@ class AcdcFunctionality
 {
     public function isAvailable()
     {
-        $isoCountryDefault = Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT'));
+        $isoCountryDefault = \Country::getIsoById((int) \Configuration::get('PS_COUNTRY_DEFAULT'));
 
-        return Tools::strtolower($isoCountryDefault) == 'de';
+        return \Tools::strtolower($isoCountryDefault) == 'de';
     }
 
     public function isEnabled()
     {
-        return (int) Configuration::get(PaypalConfigurations::ACDC_OPTION);
+        return (int) \Configuration::get(PaypalConfigurations::ACDC_OPTION);
     }
 }

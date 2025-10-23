@@ -16,18 +16,18 @@ jobs:
             - name: Setup PHP
               uses: nanasess/setup-php@v4.1.0
               with:
-                php-version: '7.3'
+                php-version: '7.4'
 
             # Add vendor folder in cache to make next builds faster
             - name: Cache vendor folder
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: vendor
                   key: php-${{ hashFiles('composer.lock') }}
 
             # Add composer local folder in cache to make next builds faster
             - name: Cache composer folder
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.composer/cache
                   key: php-composer-cache

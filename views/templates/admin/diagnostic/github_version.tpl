@@ -26,9 +26,16 @@
 <div class="w-100 mb-3">
   <div class="row">
     <div class="col-sm-12">
+      {if empty($githubVersions)}
+        <div class="alert alert-danger mt-3 mb-3" role="alert">
+          <p class="alert-text">{l s='Github repository not found or forbidden' mod='paypal'}</p>
+        </div>
+      {else}
       {assign var="isUpToDate" value=true}
       {foreach $githubVersions as $index => $githubVersion}
-        {if version_compare($githubVersion.name, $moduleVersion) > 0 and empty($githubVersion.prerelease) === true}
+        {assign var="gitHubName" value=$githubVersion.name|default:''}
+        {assign var="gitHubPreRelease" value=$githubVersion.prerelease|default:''}
+        {if version_compare($gitHubName, $moduleVersion) > 0 and empty($gitHubPreRelease) === true}
           {assign var="isUpToDate" value=false}
         {/if}
       {/foreach}
@@ -55,12 +62,13 @@
 
               {assign var="uptodate" value=true}
               {foreach name=githubVersions from=$githubVersions key=index item=githubVersion}
-                {if version_compare($githubVersion.name, $moduleVersion) > 0 and $smarty.foreach.githubVersions.first}
+                {assign var="gitHubName" value=$githubVersion.name|default:''}
+                {if version_compare($gitHubName, $moduleVersion) > 0 and $smarty.foreach.githubVersions.first}
                   {assign var="uptodate" value=false}
                   <div class="{if $index != (count($githubVersions)-1)}border-bottom{/if} mt-3 pb-3">
                     <div class="d-flex flex-column">
                       <div class="d-flex align-items-center">
-                        <span>{{l s='Your version is: %a but lastest stable version is: %b.' mod='paypal'}|replace:['%a','%b']:[$moduleVersion, $githubVersion.name]}</span>
+                        <span>{{l s='Your version is: %a but lastest stable version is: %b.' mod='paypal'}|replace:['%a','%b']:[$moduleVersion, gitHubName]}</span>
                       </div>
                     </div>
                     <div class="text-center">
@@ -85,7 +93,7 @@
                         {$githubVersion.body|escape:'html':'UTF-8'|nl2br}
                     </div>
                   </div>
-                {elseif version_compare($githubVersion.name, $moduleVersion) == 0 && $uptodate == true}
+                {elseif version_compare(gitHubName, $moduleVersion) == 0 && $uptodate == true}
                   <div class="d-flex align-items-center mt-3 pb-3">
                     <span class="material-icons text-success">close</span>
                     {l s='Nice, your addons looks up to date.' mod='paypal'}
@@ -97,16 +105,11 @@
               {l s='Need more information, please visit our ' mod='paypal'}
               <a href="https://github.com/{$githubInfos|escape:'html':'UTF-8'}">{l s='GitHub public repository' mod='paypal'}</a>.
               </div>
-
-              {if empty($githubVersions)}
-                <div class="alert alert-danger mt-3 mb-3" role="alert">
-                  <p class="alert-text">{l s='Github repository not found or forbidden' mod='paypal'}</p>
-                </div>
-              {/if}
             </div>
           </div>
         </div>
       </div>
+      {/if}
     </div>
   </div>
 </div>

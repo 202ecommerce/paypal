@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -36,6 +37,9 @@ use PaypalPPBTlib\Extensions\Diagnostic\Controllers\Admin\AdminDiagnosticControl
 
 class AdminPaypalDiagnosticController extends AdminDiagnosticController
 {
+    /** @var PayPal */
+    public $module;
+
     public function initPageHeaderToolbar()
     {
         parent::initPageHeaderToolbar();

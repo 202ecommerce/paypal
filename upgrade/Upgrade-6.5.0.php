@@ -26,13 +26,20 @@
  *
  */
 
-namespace PaypalAddons\classes\API;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-interface WrapperInterface
+/**
+ * @param PayPal $module
+ *
+ * @return bool
+ */
+function upgrade_module_6_5_0(PayPal $module)
 {
-    public function wrap($object);
+    $installer = new PaypalPPBTlib\Install\ModuleInstaller($module);
+    $installer->registerHooks();
+    $module->getWebhookService()->checkAndHandleNotifications();
+
+    return true;
 }

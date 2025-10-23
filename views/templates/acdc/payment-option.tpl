@@ -152,7 +152,7 @@
         '[paypal-acdc-form-button]'
       );
       acdcObj.addMarkTo(
-        document.querySelector('[data-module-name="paypal_acdc"]').closest('.payment-option'),
+        document.querySelector('[data-module-name="paypal_acdc"]').closest('.payment-option, .payment__option label'),
         {
           display: "table-cell"
         }

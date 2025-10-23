@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -50,10 +51,10 @@ class PaypalWebhook extends ObjectModel
     /** @var int */
     public $id_state;
 
-    /* @var string creation date*/
+    /* @var string creation date */
     public $date_add;
 
-    /* @var string date*/
+    /* @var string date */
     public $date_completed;
 
     /**

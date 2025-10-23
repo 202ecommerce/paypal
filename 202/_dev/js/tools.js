@@ -135,7 +135,7 @@ export const Tools = {
     }
 
     window.paypalToolsHiddenElemenList[hideElementSelector] = [checkElement];
-    const options = checkElement.closest('.payment-options');
+    const options = checkElement.closest('.payment-options, .payment__list');
 
     if (options instanceof Element == false) {
       return;
@@ -167,7 +167,7 @@ export const Tools = {
     }
 
     window.paypalToolsShowElemenList[showElementSelector] = [checkElement];
-    const options = checkElement.closest('.payment-options');
+    const options = checkElement.closest('.payment-options, .payment__list');
 
     if (options instanceof Element == false) {
       return;

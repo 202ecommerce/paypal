@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,12 +28,8 @@
 
 namespace PaypalAddons\classes\Form;
 
-use Carrier;
-use Context;
-use Module;
 use PaypalAddons\classes\Constants\TrackingParameters as TrackingParametersMap;
 use PaypalAddons\services\TrackingParameters;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -48,9 +45,9 @@ class TrackingParametersForm implements FormInterface
 
     public function __construct()
     {
-        $this->module = Module::getInstanceByName('paypal');
+        $this->module = \Module::getInstanceByName('paypal');
         $this->className = 'TrackingParametersForm';
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     /**
@@ -76,7 +73,7 @@ class TrackingParametersForm implements FormInterface
                     'label' => $this->module->l('Carrier map', $this->className),
                     'set' => [
                         'mapService' => $this->initTrackingParametersService(),
-                        'carriers' => Carrier::getCarriers($this->context->language->id, true, false, false, null, Carrier::ALL_CARRIERS),
+                        'carriers' => \Carrier::getCarriers($this->context->language->id, true, false, false, null, \Carrier::ALL_CARRIERS),
                     ],
                 ],
             ],
@@ -95,7 +92,7 @@ class TrackingParametersForm implements FormInterface
     public function save($data = null)
     {
         if (is_null($data)) {
-            $data = Tools::getAllValues();
+            $data = \Tools::getAllValues();
         }
 
         if (empty($data['trackingParametersForm']) || empty($data['carrier_map'])) {
@@ -149,6 +146,6 @@ class TrackingParametersForm implements FormInterface
 
     protected function getHelpInfo()
     {
-        return Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/tracking.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_partials/messages/form-help-info/tracking.tpl');
     }
 }

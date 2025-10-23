@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -26,9 +27,6 @@
  */
 
 namespace PaypalAddons\services;
-
-use Exception;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -67,8 +65,7 @@ class ToolKit
 
         try {
             return unlink($file);
-        } catch (Exception $e) {
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
         }
 
         return false;
@@ -82,10 +79,41 @@ class ToolKit
 
         try {
             return rmdir($dir);
-        } catch (Exception $e) {
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
         }
 
         return false;
+    }
+
+    public function displayPrice($price, $currency = null, $no_utf8 = false, ?\Context $context = null)
+    {
+        if (version_compare(_PS_VERSION_, '1.7.7.0', '<')) {
+            return call_user_func([\Tools::class, 'displayPrice'], $price, $currency, $no_utf8, $context);
+        }
+
+        if (!is_numeric($price)) {
+            return $price;
+        }
+
+        $context = $context ?: \Context::getContext();
+        $currency = $currency ?: $context->currency;
+
+        if (is_int($currency)) {
+            $currency = \Currency::getCurrencyInstance($currency);
+        }
+        /* @phpstan-ignore-next-line */
+        $locale = \Tools::getContextLocale($context);
+        $currencyCode = is_array($currency) ? $currency['iso_code'] : $currency->iso_code;
+
+        return $locale->formatPrice($price, $currencyCode);
+    }
+
+    public function hash($string)
+    {
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return call_user_func([\Tools::class, 'encrypt'], $string);
+        } else {
+            return \Tools::hash($string);
+        }
     }
 }

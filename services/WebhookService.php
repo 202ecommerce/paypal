@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,11 +28,7 @@
 
 namespace PaypalAddons\services;
 
-use Db;
-use DbQuery;
-use Exception;
-use Throwable;
-use Validate;
+use PaypalAddons\classes\Webhook\WebhookEventHandler;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -39,6 +36,15 @@ if (!defined('_PS_VERSION_')) {
 
 class WebhookService
 {
+    /** @var \PayPal */
+    protected $module;
+
+    public function __construct()
+    {
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
+    }
+
     /**
      * @param \PaypalOrder $paypalOrder
      *
@@ -48,7 +54,7 @@ class WebhookService
      */
     public function createForOrder(\PaypalOrder $paypalOrder, $idState = 0)
     {
-        $query = (new DbQuery())
+        $query = (new \DbQuery())
             ->select('id_paypal_webhook')
             ->from(\PaypalWebhook::$definition['table'])
             ->where('id_paypal_order = ' . (int) $paypalOrder->id)
@@ -58,7 +64,7 @@ class WebhookService
             $query->where('id_state = ' . (int) $idState);
         }
 
-        $idPaypalWebhook = (int) Db::getInstance()->getValue($query);
+        $idPaypalWebhook = (int) \Db::getInstance()->getValue($query);
 
         if ($idPaypalWebhook) {
             $webhook = new \PaypalWebhook($idPaypalWebhook);
@@ -74,20 +80,22 @@ class WebhookService
     }
 
     /**
-     * @param \PaypalOrder $paypalOrder
+     * @param \PaypalOrder|null $paypalOrder
      *
      * @return \PaypalWebhook[]
      */
-    public function getPendingWebhooks(\PaypalOrder $paypalOrder, $delay = null)
+    public function getPendingWebhooks(?\PaypalOrder $paypalOrder = null, $delay = null)
     {
         $webhooks = [];
-        $query = (new DbQuery())
+        $query = (new \DbQuery())
             ->select('id_paypal_webhook')
             ->from(\PaypalWebhook::$definition['table'])
-            ->where('id_paypal_order = ' . (int) $paypalOrder->id)
             ->where('id_webhook IS NULL OR id_webhook = ""');
 
-        if (false == is_null($delay)) {
+        if ($paypalOrder) {
+            $query->where('id_paypal_order = ' . (int) $paypalOrder->id);
+        }
+        if ($delay) {
             $query->where(
                 sprintf(
                     'date_add < DATE_SUB(STR_TO_DATE(\'%s\', GET_FORMAT(DATETIME,\'ISO\')), INTERVAL %d HOUR)',
@@ -98,10 +106,8 @@ class WebhookService
         }
 
         try {
-            $result = Db::getInstance()->executeS($query);
-        } catch (Throwable $e) {
-            return $webhooks;
-        } catch (Exception $e) {
+            $result = \Db::getInstance()->executeS($query);
+        } catch (\Throwable $e) {
             return $webhooks;
         }
 
@@ -112,14 +118,39 @@ class WebhookService
         foreach ($result as $row) {
             try {
                 $webhook = new \PaypalWebhook($row['id_paypal_webhook']);
-                if (Validate::isLoadedObject($webhook) === true) {
+                if (\Validate::isLoadedObject($webhook) === true) {
                     $webhooks[] = $webhook;
                 }
-            } catch (Throwable $e) {
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
             }
         }
 
         return $webhooks;
+    }
+
+    public function checkAndHandleNotifications()
+    {
+        $method = \PaypalAddons\classes\AbstractMethodPaypal::load();
+
+        if (false === $this->module->getWebhookOption()->isEnable()) {
+            return;
+        }
+        if (false === $method->isConfigured()) {
+            return;
+        }
+        if (empty($this->module->getWebhookService()->getPendingWebhooks())) {
+            return;
+        }
+
+        $res = $method->getWebhookEventList(['page_size' => 50]);
+        $handler = new WebhookEventHandler();
+
+        foreach ($res->getList() as $event) {
+            $handler->handle($event);
+        }
+        /** @var \PaypalWebhook $webhookEvent */
+        foreach ($this->module->getWebhookService()->getPendingWebhooks(null, 72) as $webhookEvent) {
+            $webhookEvent->delete();
+        }
     }
 }

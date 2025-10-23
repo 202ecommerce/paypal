@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -27,11 +28,8 @@
 
 namespace PaypalAddons\classes\WhiteList;
 
-use Configuration;
-use Exception;
 use PaypalAddons\classes\Constants\WhiteList;
 use Symfony\Component\HttpFoundation\Request;
-use Throwable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,29 +39,27 @@ class WhiteListService
 {
     public function isEnabled()
     {
-        return (bool) Configuration::get(WhiteList::ENABLED);
+        return (bool) \Configuration::get(WhiteList::ENABLED);
     }
 
     public function setEnabled($isEnabled)
     {
-        Configuration::updateValue(WhiteList::ENABLED, (int) $isEnabled);
+        \Configuration::updateValue(WhiteList::ENABLED, (int) $isEnabled);
 
         return $this;
     }
 
     public function getListIP()
     {
-        $list = Configuration::get(WhiteList::LIST_IP);
+        $list = \Configuration::get(WhiteList::LIST_IP);
 
         if (empty($list)) {
             return [];
         }
 
-        try {
-            $list = json_decode($list, true);
-        } catch (Throwable $e) {
-            return [];
-        } catch (Exception $e) {
+        $list = json_decode($list, true);
+
+        if (empty($list)) {
             return [];
         }
 
@@ -76,7 +72,7 @@ class WhiteListService
             return $this;
         }
 
-        Configuration::updateValue(WhiteList::LIST_IP, json_encode($list));
+        \Configuration::updateValue(WhiteList::LIST_IP, json_encode($list));
 
         return $this;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Since 2007 PayPal
  *
@@ -86,7 +87,7 @@ class MethodEC extends AbstractMethodPaypal
     }
 
     /**
-     * @param $values array replace for tools::getValues()
+     * @param array $values replace for tools::getValues()
      */
     public function setParameters($values)
     {
@@ -284,6 +285,7 @@ class MethodEC extends AbstractMethodPaypal
 
     public function getReturnUrl()
     {
+        /* @phpstan-ignore-next-line */
         return Context::getContext()->link->getModuleLink($this->name, 'ecValidation', [], true);
     }
 
