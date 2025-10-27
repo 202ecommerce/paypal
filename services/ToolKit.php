@@ -85,7 +85,7 @@ class ToolKit
         return false;
     }
 
-    public function displayPrice($price, $currency = null, $no_utf8 = false, ?\Context $context = null)
+    public function displayPrice($price, $currency = null, $no_utf8 = false, \Context $context = null)
     {
         if (version_compare(_PS_VERSION_, '1.7.7.0', '<')) {
             return call_user_func([\Tools::class, 'displayPrice'], $price, $currency, $no_utf8, $context);

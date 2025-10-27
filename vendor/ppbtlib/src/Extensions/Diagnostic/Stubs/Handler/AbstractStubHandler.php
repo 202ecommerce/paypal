@@ -76,7 +76,7 @@ abstract class AbstractStubHandler implements StubHandlerInterface
             ];
         }
 
-        header("Content-Disposition: attachment; filename=\"" . $fileName . "\"");
+        header("Content-Disposition: attachment; filename=\"" . basename($fileName) . "\"");
         header("Content-Type: application/force-download");
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
