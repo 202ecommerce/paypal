@@ -127,7 +127,7 @@ class ReflectionUtil
     {
         $class = is_object($class) ? get_class($class) : $class;
         if (!class_exists('ReflectionProperty')) {
-            throw new \RuntimeException(sprintf('Property type of %s::%s cannot be resolved', $class, $propertyName));
+            throw new \RuntimeException(sprintf('Property type of %s::%s cannot be resolved', htmlentities($class), htmlentities($propertyName)));
         }
 
         if ($annotations = &self::$propertiesType[$class][$propertyName]) {
