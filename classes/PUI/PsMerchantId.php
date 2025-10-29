@@ -50,6 +50,6 @@ class PsMerchantId
 
     public function get()
     {
-        return 'PrestaShop_' . md5($this->method->getClientId($this->method->isSandbox()));
+        return 'PrestaShop_' . hash('sha256', $this->method->getClientId($this->method->isSandbox()));
     }
 }

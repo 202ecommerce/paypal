@@ -706,7 +706,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             \PrestaShopLogger::addLog('[PayPal] AbstractMethodPaypal::buildCartTrace(). Error: ' . $e->getMessage());
         }
 
-        return md5(implode('_', $key));
+        return hash('sha256', implode('_', $key));
     }
 
     /**

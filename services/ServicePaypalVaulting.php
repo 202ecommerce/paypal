@@ -194,6 +194,6 @@ class ServicePaypalVaulting
 
     protected function getProfileKey($mode)
     {
-        return md5($this->method->getClientId((int) $mode));
+        return hash('sha256', $this->method->getClientId((int) $mode));
     }
 }

@@ -118,7 +118,7 @@ class Module extends \Module
             $extension = new $extension();
             $extension->setModule($this);
             if (is_callable(array($extension, $hookName))) {
-                $hookResult = $extension->{$hookName}($params);
+                $hookResult = call_user_func_array([$extension, $hookName], $params);
                 if ($result === false) {
                     $result = $hookResult;
                 } elseif (is_array($hookResult) && $result !== false) {
@@ -159,7 +159,7 @@ class Module extends \Module
             }
             $extension->setModule($this);
             if (is_callable(array($extension, $method))) {
-                return $extension->{$method}($hookName, $configuration);
+                return call_user_func_array([$extension, $method], [$hookName, $configuration]);
             }
         }
 

@@ -58,7 +58,7 @@ class GithubVersionHandler extends AbstractStubHandler
         }
 
         $url = sprintf(self::GITHUB_REPO_URL, $this->getStub()->getParameters()->getRepository());
-    	$key = 'github-' . md5($url);
+        $key = 'github-' . hash('sha256', $url);
     	$cache = new CacheStorage();
     	$cache->setExpiry(3600);
     	if ($cache->exist($key) === true && $cache->isExpired($key) === false) {

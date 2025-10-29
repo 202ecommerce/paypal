@@ -84,7 +84,7 @@ class WebhookService
      *
      * @return \PaypalWebhook[]
      */
-    public function getPendingWebhooks(?\PaypalOrder $paypalOrder = null, $delay = null)
+    public function getPendingWebhooks(\PaypalOrder $paypalOrder = null, $delay = null)
     {
         $webhooks = [];
         $query = (new \DbQuery())
