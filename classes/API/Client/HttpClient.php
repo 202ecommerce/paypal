@@ -101,6 +101,7 @@ class HttpClient implements ClientInterface
         $options[CURLOPT_HTTPHEADER] = $this->serializeHeaders($request->getHeaders());
         $options[CURLOPT_RETURNTRANSFER] = true;
         $options[CURLOPT_HEADER] = false;
+        $options[CURLOPT_SSLVERSION] = 6;
         $options[CURLOPT_CONNECTTIMEOUT] = 0;
         $options[CURLOPT_TIMEOUT] = 10;
 
