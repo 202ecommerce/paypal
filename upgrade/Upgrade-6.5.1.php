@@ -45,14 +45,14 @@ function upgrade_module_6_5_1(PayPal $module)
     $sandboxModeList = [true, false];
 
     foreach ($sandboxModeList as $mode) {
-        /** @var \PaypalAddons\classes\AbstractMethodPaypal $method */
+        /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
         foreach ($methods as $method) {
             Db::getInstance()->update(
                 'paypal_vaulting',
                 [
                     'profile_key' => hash('sha256', $method->getClientId($mode)),
                 ],
-                sprintf('profile_key LIKE "%s"', md5($method->getClientId($mode))),
+                sprintf('profile_key LIKE "%s"', md5($method->getClientId($mode)))
             );
         }
     }
