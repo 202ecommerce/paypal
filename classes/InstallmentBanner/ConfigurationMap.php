@@ -127,6 +127,7 @@ class ConfigurationMap
             self::class . '::getLanguageCurrencyMap() is deprecated. Use ' . self::class . '::getBnplLanguageCurrencyMap() instead.',
             E_USER_DEPRECATED
         );
+
         return self::getBnplLanguageCurrencyMap();
     }
 
