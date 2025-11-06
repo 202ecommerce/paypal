@@ -1921,6 +1921,11 @@ class PayPal extends PaymentModule implements WidgetInterface
         return $tpl->fetch();
     }
 
+    public function hookActionBeforeCartUpdateQty($params)
+    {
+        $this->hookActionCartUpdateQuantityBefore($params);
+    }
+
     public function hookActionCartUpdateQuantityBefore($params)
     {
         $this->resetCookiePaymentInfo();
