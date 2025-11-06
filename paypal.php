@@ -277,7 +277,6 @@ class PayPal extends PaymentModule implements WidgetInterface
         'actionOrderStatusUpdate',
         'displayHeader',
         'displayFooterProduct',
-        'actionCartUpdateQuantityBefore',
         'displayReassurance',
         'displayInvoiceLegalFreeText',
         'displayShoppingCartFooter',
@@ -375,6 +374,12 @@ class PayPal extends PaymentModule implements WidgetInterface
                 break;
             default:
                 $this->paypal_method = 'EC';
+        }
+
+        if (version_compare(_PS_VERSION_, '1.7.5.2', '<=')) {
+            $this->hooks[] = 'actionBeforeCartUpdateQty';
+        } else {
+            $this->hooks[] = 'actionCartUpdateQuantityBefore';
         }
 
         $this->moduleConfigs = [
