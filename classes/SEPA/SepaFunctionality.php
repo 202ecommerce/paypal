@@ -44,6 +44,7 @@ class SepaFunctionality
     {
         $this->method = AbstractMethodPaypal::load('PPP');
     }
+
     public function isEnabled()
     {
         return (int) \Configuration::get(PaypalConfigurations::SEPA_ENABLED);
