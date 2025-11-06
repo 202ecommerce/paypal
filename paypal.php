@@ -806,6 +806,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         $bnplAvailabilityManager = $this->getBnplAvailabilityManager();
         $bnplOption = $this->getBnplOption();
         $venmoFunctionality = $this->initVenmoFunctionality();
+        $sepaFunctionality = $this->initSepaFunctionality();
 
         switch ($this->paypal_method) {
             case 'EC':
@@ -885,7 +886,7 @@ class PayPal extends PaymentModule implements WidgetInterface
             }
 
             if ($this->paypal_method == 'PPP') {
-                if ($this->initSepaFunctionality()->isEnabled()) {
+                if ($sepaFunctionality->isEnabled() && $sepaFunctionality->isAvailable()) {
                     $payments_options[] = $this->renderSepaOption($params);
                 }
 

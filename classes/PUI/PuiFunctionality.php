@@ -47,6 +47,10 @@ class PuiFunctionality
 
     public function isAvailable($refresh = true)
     {
+        if ($this->method->getIntent() === AbstractMethodPaypal::AUTHORIZE) {
+            return false;
+        }
+
         $isAvailable = (int) \Configuration::get(PUI::CONFIGURATION_IS_AVAILABLE);
 
         if ($refresh == false && in_array($isAvailable, [PUI::IS_AVAILABLE, PUI::IS_UNAVAILABLE])) {
