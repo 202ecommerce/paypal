@@ -106,28 +106,26 @@ class CheckoutForm implements FormInterface
             ];
         }
 
-        if (in_array($this->method, ['EC', 'MB'])) {
-            $fields[PaypalConfigurations::INTENT] = [
-                'type' => 'select',
-                'label' => $this->module->l('Payment action', 'AdminPayPalSetupController'),
-                'name' => PaypalConfigurations::INTENT,
-                'options' => [
-                    [
-                        'value' => 'sale',
-                        'title' => $this->module->l('Sale', 'AdminPayPalSetupController'),
-                    ],
-                    [
-                        'value' => 'authorize',
-                        'title' => $this->module->l('Authorize', 'AdminPayPalSetupController'),
-                    ],
+        $fields[PaypalConfigurations::INTENT] = [
+            'type' => 'select',
+            'label' => $this->module->l('Payment action', 'AdminPayPalSetupController'),
+            'name' => PaypalConfigurations::INTENT,
+            'options' => [
+                [
+                    'value' => 'sale',
+                    'title' => $this->module->l('Sale', 'AdminPayPalSetupController'),
                 ],
-                'value' => \Configuration::get(PaypalConfigurations::INTENT),
-                'variant' => 'primary',
-            ];
+                [
+                    'value' => 'authorize',
+                    'title' => $this->module->l('Authorize', 'AdminPayPalSetupController'),
+                ],
+            ],
+            'value' => \Configuration::get(PaypalConfigurations::INTENT),
+            'variant' => 'primary',
+        ];
 
-            if ($this->method == 'MB') {
-                $fields[PaypalConfigurations::INTENT]['label'] = $this->module->l('Payment action (for PayPal Express Checkout only)', 'AdminPayalSetupController');
-            }
+        if ($this->method == 'MB') {
+            $fields[PaypalConfigurations::INTENT]['label'] = $this->module->l('Payment action (for PayPal Express Checkout only)', 'AdminPayalSetupController');
         }
 
         $fields[PaypalConfigurations::EXPRESS_CHECKOUT_IN_CONTEXT] = [
