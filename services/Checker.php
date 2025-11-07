@@ -70,6 +70,7 @@ class Checker
         $return['ping_page'] = $tls_server;
         $curl = curl_init($tls_server);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 6);
         $response = curl_exec($curl);
         if (trim($response) != 'ok') {
             $return['status'] = false;
