@@ -59,7 +59,7 @@ class LogsStub extends AbstractStub
             case self::DOWNLOAD_LOGS_EVENT:
                 $data = $this->handler->downloadLog($params);
 
-                header("Content-Disposition: attachment; filename=\"" . $data['fileName'] . "\"");
+                header("Content-Disposition: attachment; filename=\"" . basename($data['fileName']) . "\"");
                 header("Content-Type: application/force-download");
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate');

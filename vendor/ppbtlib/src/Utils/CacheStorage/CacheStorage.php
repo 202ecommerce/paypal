@@ -141,7 +141,7 @@ class CacheStorage
      */
     public function buildKeyFromParams(array $params)
     {
-        return md5(serialize($params));
+        return hash('sha256', json_encode($params));
     }
 
     /**
@@ -186,7 +186,6 @@ class CacheStorage
         $dateGeneration = date('Y-m-d H:i:s');
         file_put_contents($filename, "<?php\r\r//Generated $dateGeneration\r\rreturn " . $content . ';', LOCK_EX);
         rename($filename, $fileName);
-        chmod($fileName, 0777);
     }
 
     /**

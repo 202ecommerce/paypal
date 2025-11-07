@@ -111,7 +111,7 @@ class VaultedPaymentButton
 
     protected function getIdentifier()
     {
-        return md5($this->userIdToken);
+        return hash('sha256', $this->userIdToken);
     }
 
     protected function getPartnerId()

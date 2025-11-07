@@ -94,7 +94,7 @@ class HooksStubHandler extends AbstractStubHandler
             $query = new DbQuery();
             $query->select('*');
             $query->from('hook_module');
-            $query->where("`id_hook` = {$id_hook} AND `id_module` = {$id_module} AND `id_shop` = {$idShop}");
+            $query->where(sprintf('`id_hook` = %d AND `id_module` = %d AND `id_shop` = %d', (int) $id_hook, (int) $id_module, (int) $idShop));
 
             $result = Db::getInstance()->executeS($query);
 
