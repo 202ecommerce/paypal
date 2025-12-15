@@ -45,5 +45,5 @@
  {/if}
  data-pp-amount="{$paypalmessenging.amount|escape:'htmlall':'UTF-8'}"
  data-pp-placement="{$paypalmessenging.placement|escape:'htmlall':'UTF-8'}"
- data-pp-locale="{$paypalmessenging.locale|escape:'htmlall':'UTF-8'}">
+ data-pp-locale="{$paypalmessenging.locale|replace:'_':'-'|escape:'htmlall':'UTF-8'}">
 </div>
