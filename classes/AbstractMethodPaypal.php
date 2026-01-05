@@ -371,7 +371,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
         $response->setScaState($scaState);
 
-        if ($this->getIntent() == 'CAPTURE') {
+        if ($this->getIntent() == self::SALE) {
             if (empty($response->getData()->result->purchase_units[0]->payments->captures)) {
                 $error = new Error();
                 $error
