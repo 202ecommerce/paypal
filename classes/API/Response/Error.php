@@ -57,7 +57,17 @@ class Error
 
     public function setMessage($message)
     {
-        $this->message = $message;
+        if (is_string($message)) {
+            $this->message = $message;
+
+            return $this;
+        }
+
+        $stringMessage = json_encode($message);
+
+        if ($stringMessage) {
+            $this->message = $stringMessage;
+        }
 
         return $this;
     }
