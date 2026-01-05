@@ -28,7 +28,6 @@
 namespace PaypalPPBTlib\Extensions\Diagnostic\Stubs\Handler;
 
 use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Concrete\FileIntegrityStub;
-use PaypalPPBTlib\Extensions\Diagnostic\Stubs\Model\Diff\DiffHandler;
 use PaypalPPBTlib\Utils\CacheStorage\CacheStorage;
 
 class FileIntegrityStubHandler extends AbstractStubHandler
@@ -66,12 +65,12 @@ class FileIntegrityStubHandler extends AbstractStubHandler
 
         $url = sprintf(self::GITHUB_REPO_URL, $this->getStub()->getParameters()->getRepository());
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
-    	$key = 'github-' . md5($url);
-    	$cache = new CacheStorage();
-    	$cache->setExpiry(3600);
-    	if ($cache->exist($key) === true && $cache->isExpired($key) === false) {
+        $key = 'github-' . hash('sha256', $url);
+        $cache = new CacheStorage();
+        $cache->setExpiry(3600);
+        if ($cache->exist($key) === true && $cache->isExpired($key) === false) {
             return $cache->get($key)['content'];
-    	}
+        }
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -120,15 +119,23 @@ class FileIntegrityStubHandler extends AbstractStubHandler
 
     protected function getMd5fileAsArray($url)
     {
-
-    	$key = 'github-md5-' . md5($url);
-    	$cache = new CacheStorage();
-    	$cache->setExpiry(3600);
-    	if ($cache->exist($key) === true && $cache->isExpired($key) === false) {
+        $key = 'github-md5-' . hash('sha256', $url);
+        $cache = new CacheStorage();
+        $cache->setExpiry(3600);
+        if ($cache->exist($key) === true && $cache->isExpired($key) === false) {
             return $cache->get($key)['content'];
-    	}
+        }
 
-        $md5file = file_get_contents($url);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+        $md5file = curl_exec($ch);
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return null;
+        }
+        curl_close($ch);
+
         if (empty($md5file)) {
             $cache->set($key, null);
             return null;
@@ -174,25 +181,9 @@ class FileIntegrityStubHandler extends AbstractStubHandler
                 $allowDiff = $this->getStub()->getParameters()->getAllowDiff();
                 if ($md5local !== (string) $md5) {
                     // Diff not computed
-                    if ($allowDiff === false) {
-                        $updated = [
-                            'path' => $fileName,
-                            'diff' => '',
-                        ];
-                        $differences['updated'][] = $updated;
-                        continue;
-                    }
-                    $url = sprintf(
-                        self::GIT_FILE_PATH,
-                        $this->getStub()->getParameters()->getRepository(),
-                        $this->getStub()->getParameters()->getModuleVersion(),
-                        $fileName
-                    );
-                    $urlContent = file_get_contents($url);
-                    $diffHandler = (new DiffHandler())->setModule($this->getStub()->getModule());
                     $updated = [
                         'path' => $fileName,
-                        'diff' => $diffHandler->handle($urlContent, file_get_contents($path)),
+                        'diff' => '',
                     ];
                     $differences['updated'][] = $updated;
                 }

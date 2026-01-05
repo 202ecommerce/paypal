@@ -51,6 +51,6 @@ class FraudSessionId
 
         $key = $customer->email . $customer->id . getmypid();
 
-        return md5($key);
+        return hash('sha256', $key);
     }
 }

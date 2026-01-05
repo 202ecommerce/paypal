@@ -7,6 +7,7 @@ $rules['modifier_keywords'] = [
     'elements' => ['property', 'method'], // exclude 'const'
 ];
 $rules['nullable_type_declaration_for_default_null_value'] = false;
+$rules['blank_line_after_opening_tag'] = false;
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)

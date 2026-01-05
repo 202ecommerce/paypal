@@ -26,30 +26,36 @@
  *
  */
 
-namespace PaypalAddons\classes\PUI;
-
-use PaypalAddons\classes\AbstractMethodPaypal;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class PsMerchantId
+/**
+ * @param PayPal $module
+ *
+ * @return bool
+ */
+function upgrade_module_6_5_1(PayPal $module)
 {
-    /** @var AbstractMethodPaypal */
-    protected $method;
+    $methods = [
+        new MethodEC(),
+        new MethodPPP(),
+        new MethodMB(),
+    ];
+    $sandboxModeList = [true, false];
 
-    public function __construct($method = null)
-    {
-        if ($method instanceof AbstractMethodPaypal) {
-            $this->method = $method;
-        } else {
-            $this->method = AbstractMethodPaypal::load('PPP');
+    foreach ($sandboxModeList as $mode) {
+        /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
+        foreach ($methods as $method) {
+            Db::getInstance()->update(
+                'paypal_vaulting',
+                [
+                    'profile_key' => hash('sha256', $method->getClientId($mode)),
+                ],
+                sprintf('profile_key LIKE "%s"', md5($method->getClientId($mode)))
+            );
         }
     }
 
-    public function get()
-    {
-        return 'PrestaShop_' . hash('sha256', $this->method->getClientId($this->method->isSandbox()));
-    }
+    return true;
 }
