@@ -33,6 +33,7 @@
 </p>
 <p>
     {l s='We recommend the Authorize configuration only in case you need to check the availability of your products before confirming the order.' mod='paypal'}
+    {l s='Authorize configuration works with payment methods: PayPal and cards, does not work with Payment upon invoice or other local payment methods.' mod='paypal'}
 </p>
 <p>
     {l s='In-context has shown a better conversion rate.' mod='paypal'}

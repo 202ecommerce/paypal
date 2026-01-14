@@ -26,49 +26,36 @@
  *
  */
 
-namespace PaypalAddons\classes\API\Response;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class Error
+/**
+ * @param PayPal $module
+ *
+ * @return bool
+ */
+function upgrade_module_6_5_1(PayPal $module)
 {
-    protected $errorCode;
+    $methods = [
+        new MethodEC(),
+        new MethodPPP(),
+        new MethodMB(),
+    ];
+    $sandboxModeList = [true, false];
 
-    protected $message;
-
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    public function getCode()
-    {
-        return $this->errorCode;
-    }
-
-    public function setErrorCode($errorCode)
-    {
-        $this->errorCode = $errorCode;
-
-        return $this;
-    }
-
-    public function setMessage($message)
-    {
-        if (is_string($message)) {
-            $this->message = $message;
-
-            return $this;
+    foreach ($sandboxModeList as $mode) {
+        /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
+        foreach ($methods as $method) {
+            Db::getInstance()->update(
+                'paypal_vaulting',
+                [
+                    'profile_key' => hash('sha256', $method->getClientId($mode)),
+                ],
+                sprintf('profile_key LIKE "%s"', md5($method->getClientId($mode)))
+            );
         }
-
-        $stringMessage = json_encode($message);
-
-        if ($stringMessage) {
-            $this->message = $stringMessage;
-        }
-
-        return $this;
     }
+
+    return true;
 }

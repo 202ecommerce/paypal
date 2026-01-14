@@ -164,11 +164,12 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
      */
     public function confirmCapture($orderPayPal)
     {
-        return null;
+        return $this->paypalApiManager->getCaptureAuthorizeRequest($orderPayPal)->execute();
     }
 
     public function void($orderPayPal)
     {
+        return $this->paypalApiManager->getAuthorizationVoidRequest($orderPayPal)->execute();
     }
 
     /**
@@ -278,7 +279,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     public function getIntent()
     {
-        return self::SALE;
+        return Configuration::get('PAYPAL_API_INTENT') == 'sale' ? self::SALE : self::AUTHORIZE;
     }
 
     public function getReturnUrl()

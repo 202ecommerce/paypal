@@ -371,7 +371,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
         $response->setScaState($scaState);
 
-        if ($this->getIntent() == 'CAPTURE') {
+        if ($this->getIntent() == self::SALE) {
             if (empty($response->getData()->result->purchase_units[0]->payments->captures)) {
                 $error = new Error();
                 $error
@@ -761,12 +761,8 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /**
      * @return int id of the order status
      **/
-    public function getOrderStatus($captureState = \PayPal::CAPTURE_STATUS_COMPLETED)
+    public function getOrderStatus($captureState = \PayPal::CAPTURE_STATUS_PENDING)
     {
-        if ($this->getWebhookOption()->isEnable() && $this->getWebhookOption()->isAvailable()) {
-            return $this->getStatusMapping()->getWaitValidationStatus();
-        }
-
         if ($this->getStatusMapping()->isModeSale() == false) {
             return $this->getStatusMapping()->getWaitValidationStatus();
         }
