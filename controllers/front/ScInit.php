@@ -63,6 +63,7 @@ class PaypalScInitModuleFrontController extends PaypalAbstarctModuleFrontControl
 
         switch ($request->page) {
             case 'cart':
+            case 'payment-step':
                 if ($this->context->cart->checkQuantities() && $this->context->cart->nbProducts()) {
                     $this->jsonValues = ['success' => true];
                 } else {
