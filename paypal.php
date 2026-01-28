@@ -2712,8 +2712,18 @@ class PayPal extends PaymentModule implements WidgetInterface
 
         foreach ($shops as $s) {
             foreach ($carrier_ids as $id_carrier) {
-                if (!Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'module_carrier` (`id_module`, `id_shop`, `id_reference`)
-				VALUES (' . (int) $this->id . ', "' . (int) $s . '", ' . (int) $id_carrier . ')')) {
+                $inserted = Db::getInstance()->insert(
+                    'module_carrier',
+                    [
+                        'id_module' => (int) $this->id,
+                        'id_shop' => (int) $s,
+                        'id_reference' => (int) $id_carrier,
+                    ],
+                    false,
+                    true,
+                    Db::INSERT_IGNORE
+                );
+                if (!$inserted) {
                     return false;
                 }
             }
