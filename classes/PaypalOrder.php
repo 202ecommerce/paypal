@@ -142,9 +142,9 @@ class PaypalOrder extends ObjectModel
 
         if (is_array($rowOrder)) {
             return $rowOrder;
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**

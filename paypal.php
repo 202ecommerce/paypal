@@ -630,9 +630,9 @@ class PayPal extends PaymentModule implements WidgetInterface
     {
         if (Configuration::get('PAYPAL_SANDBOX')) {
             return 'https://www.sandbox.paypal.com/';
-        } else {
-            return 'https://www.paypal.com/';
         }
+
+        return 'https://www.paypal.com/';
     }
 
     public function hookDisplayShoppingCartFooter()
@@ -1541,9 +1541,9 @@ class PayPal extends PaymentModule implements WidgetInterface
             return false;
         } elseif ($mode_id != $this->context->currency->id) {
             return (int) $mode_id;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -2387,18 +2387,17 @@ class PayPal extends PaymentModule implements WidgetInterface
     {
         if (version_compare(_PS_VERSION_, '1.7.7', '<')) {
             return _PS_PRICE_DISPLAY_PRECISION_;
-        } else {
-            if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
-                $context = Context::getContext()->cloneContext();
-                $context->currency = $currency;
-                $precision = call_user_func([$context, 'getComputingPrecision']);
-                unset($context);
-
-                return $precision;
-            } else {
-                return call_user_func([Context::getContext(), 'getComputingPrecision']);
-            }
         }
+        if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
+            $context = Context::getContext()->cloneContext();
+            $context->currency = $currency;
+            $precision = call_user_func([$context, 'getComputingPrecision']);
+            unset($context);
+
+            return $precision;
+        }
+
+        return call_user_func([Context::getContext(), 'getComputingPrecision']);
     }
 
     /**
@@ -2420,9 +2419,9 @@ class PayPal extends PaymentModule implements WidgetInterface
 
         if (in_array($isoCurrency, $currency_wt_decimal) || ($precision == 0)) {
             return (int) 0;
-        } else {
-            return (int) 2;
         }
+
+        return (int) 2;
     }
 
     /**
@@ -2657,7 +2656,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         foreach ($this->extensions as $extension) {
             /** @var AbstractModuleExtension $extension */
             $extension = new $extension();
-            if (!($extension instanceof WidgetInterface)) {
+            if (!$extension instanceof WidgetInterface) {
                 continue;
             }
             $extensionClass = (new ReflectionClass($extension))->getShortName();
@@ -2850,9 +2849,9 @@ class PayPal extends PaymentModule implements WidgetInterface
 
         if ((int) $sandbox) {
             return 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
-        } else {
-            return 'https://ipnpb.paypal.com/cgi-bin/webscr';
         }
+
+        return 'https://ipnpb.paypal.com/cgi-bin/webscr';
     }
 
     /**
@@ -2943,9 +2942,9 @@ class PayPal extends PaymentModule implements WidgetInterface
     {
         if (version_compare(_PS_VERSION_, '1.7.3.4.0', '<')) {
             return Product::getIdProductAttributesByIdAttributes($idProduct, $idAttributes, $findBest);
-        } else {
-            return Product::getIdProductAttributeByIdAttributes($idProduct, $idAttributes, $findBest);
         }
+
+        return Product::getIdProductAttributeByIdAttributes($idProduct, $idAttributes, $findBest);
     }
 
     /**

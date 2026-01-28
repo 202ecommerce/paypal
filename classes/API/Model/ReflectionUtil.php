@@ -80,9 +80,8 @@ class ReflectionUtil
             $anno = preg_split("/[\s\[\]]+/", $param);
 
             return $anno[0];
-        } else {
-            throw new \Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
         }
+        throw new \Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
     }
 
     /**
@@ -108,9 +107,8 @@ class ReflectionUtil
 
         if (isset($param)) {
             return substr($param, -strlen('[]')) === '[]';
-        } else {
-            throw new \Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
         }
+        throw new \Exception("Getter function for '$propertyName' in '$class' class should have a proper return type.");
     }
 
     /**
