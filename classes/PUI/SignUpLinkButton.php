@@ -63,9 +63,9 @@ class SignUpLinkButton
     {
         if ($this->method->isSandbox()) {
             return 'https://www.sandbox.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
-        } else {
-            return 'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
         }
+
+        return 'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
     }
 
     protected function initSignupLink()

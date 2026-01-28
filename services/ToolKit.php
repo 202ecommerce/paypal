@@ -112,8 +112,8 @@ class ToolKit
     {
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             return call_user_func([\Tools::class, 'encrypt'], $string);
-        } else {
-            return \Tools::hash($string);
         }
+
+        return \Tools::hash($string);
     }
 }
