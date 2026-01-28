@@ -43,12 +43,10 @@ class RefundAmountCalculator
     {
         $amount = 0;
 
-        if (empty($params['productList'])) {
-            return $amount;
-        }
-
-        foreach ($params['productList'] as $product) {
-            $amount += (float) $product['amount'];
+        if (false === empty($params['productList'])) {
+            foreach ($params['productList'] as $product) {
+                $amount += (float) $product['amount'];
+            }
         }
 
         if (false == empty($params['partialRefundShippingCost'])) {
