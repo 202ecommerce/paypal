@@ -26,29 +26,42 @@
  *
  */
 
-namespace PaypalAddons\classes\Webhook;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class IpnPaypalListener
+/**
+ * @param PayPal $module
+ *
+ * @return bool
+ */
+function upgrade_module_6_5_2(PayPal $module)
 {
-    /**
-     * @param bool $sandbox
-     *
-     * @return string
-     */
-    public function get($sandbox = null)
-    {
-        if ($sandbox === null) {
-            $sandbox = (int) \Configuration::get('PAYPAL_SANDBOX');
-        }
+    $methods = [
+        new MethodEC(),
+        new MethodPPP(),
+        new MethodMB(),
+    ];
+    $sandboxModeList = [true, false];
 
-        if ((int) $sandbox) {
-            return 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
-        }
+    foreach ($sandboxModeList as $mode) {
+        /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
+        foreach ($methods as $method) {
+            $method->setSandbox($mode);
 
-        return 'https://ipnpb.paypal.com/cgi-bin/webscr';
+            if (!$method->isConfigured()) {
+                continue;
+            }
+
+            $config = [
+                'clientId' => $method->getClientId(),
+                'secret' => $method->getSecret(),
+                'merchantId' => $method->getMerchantId(),
+                'isSandbox' => $method->isSandbox(),
+            ];
+            $method->setConfig($config);
+        }
     }
+
+    return true;
 }

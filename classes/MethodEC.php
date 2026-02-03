@@ -66,6 +66,8 @@ class MethodEC extends AbstractMethodPaypal
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->whiteListService = new WhiteListService();
         $this->initApiManager();
     }
@@ -157,11 +159,17 @@ class MethodEC extends AbstractMethodPaypal
 
         if ($isSandbox) {
             Configuration::updateValue('PAYPAL_EC_CLIENTID_SANDBOX', $params['clientId']);
-            Configuration::updateValue('PAYPAL_EC_SECRET_SANDBOX', $params['secret']);
+            Configuration::updateValue(
+                'PAYPAL_EC_SECRET_SANDBOX',
+                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+            );
             Configuration::updateValue('PAYPAL_EC_MERCHANT_ID_SANDBOX', $params['merchantId']);
         } else {
             Configuration::updateValue('PAYPAL_EC_CLIENTID_LIVE', $params['clientId']);
-            Configuration::updateValue('PAYPAL_EC_SECRET_LIVE', $params['secret']);
+            Configuration::updateValue(
+                'PAYPAL_EC_SECRET_LIVE',
+                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+            );
             Configuration::updateValue('PAYPAL_EC_MERCHANT_ID_LIVE', $params['merchantId']);
         }
     }
@@ -280,6 +288,12 @@ class MethodEC extends AbstractMethodPaypal
             $secret = Configuration::get('PAYPAL_EC_SECRET_LIVE');
         }
 
+        if (strpos($secret, $this->module->getSecurityKey()) === 0) {
+            $secret = $this->module->getToolKit()->decrypt(
+                str_replace($this->module->getSecurityKey(), '', $secret)
+            );
+        }
+
         return (string) $secret;
     }
 
@@ -313,9 +327,9 @@ class MethodEC extends AbstractMethodPaypal
     {
         if ($this->isSandbox()) {
             return Configuration::get('PAYPAL_EC_MERCHANT_ID_SANDBOX');
-        } else {
-            return Configuration::get('PAYPAL_EC_MERCHANT_ID_LIVE');
         }
+
+        return Configuration::get('PAYPAL_EC_MERCHANT_ID_LIVE');
     }
 
     public function getSellerStatus()

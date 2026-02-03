@@ -28,6 +28,9 @@
 
 namespace PaypalAddons\services;
 
+use PaypalAddons\Defuse\Crypto\Crypto;
+use PaypalAddons\Defuse\Crypto\Key;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -112,8 +115,28 @@ class ToolKit
     {
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             return call_user_func([\Tools::class, 'encrypt'], $string);
-        } else {
-            return \Tools::hash($string);
+        }
+
+        return \Tools::hash($string);
+    }
+
+    public function encrypt($plaintext)
+    {
+        return Crypto::encrypt(
+            $plaintext,
+            Key::loadFromAsciiSafeString(_NEW_COOKIE_KEY_)
+        );
+    }
+
+    public function decrypt($cipherText)
+    {
+        try {
+            return Crypto::decrypt(
+                $cipherText,
+                Key::loadFromAsciiSafeString(_NEW_COOKIE_KEY_)
+            );
+        } catch (\Throwable $e) {
+            return null;
         }
     }
 }
