@@ -77,9 +77,9 @@ class PaypalGetSellerStatusRequest extends RequestAbstract
     {
         if ($this->method->isSandbox()) {
             return \PayPal::PAYPAL_PARTNER_ID_SANDBOX;
-        } else {
-            return \PayPal::PAYPAL_PARTNER_ID_LIVE;
         }
+
+        return \PayPal::PAYPAL_PARTNER_ID_LIVE;
     }
 
     protected function getSellerMerchantId()

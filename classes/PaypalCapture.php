@@ -106,9 +106,9 @@ class PaypalCapture extends ObjectModel
 
         if (is_array($row)) {
             return $row;
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
