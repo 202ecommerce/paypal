@@ -72,18 +72,18 @@ class SignupLink
     {
         if ($this->method->isSandbox()) {
             return \PayPal::PAYPAL_PARTNER_CLIENT_ID_SANDBOX;
-        } else {
-            return \PayPal::PAYPAL_PARTNER_CLIENT_ID_LIVE;
         }
+
+        return \PayPal::PAYPAL_PARTNER_CLIENT_ID_LIVE;
     }
 
     protected function getPartnerId()
     {
         if ($this->method->isSandbox()) {
             return \PayPal::PAYPAL_PARTNER_ID_SANDBOX;
-        } else {
-            return \PayPal::PAYPAL_PARTNER_ID_LIVE;
         }
+
+        return \PayPal::PAYPAL_PARTNER_ID_LIVE;
     }
 
     protected function getSellerNonce()

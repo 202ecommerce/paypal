@@ -47,8 +47,8 @@ class IpnPaypalListener
 
         if ((int) $sandbox) {
             return 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
-        } else {
-            return 'https://ipnpb.paypal.com/cgi-bin/webscr';
         }
+
+        return 'https://ipnpb.paypal.com/cgi-bin/webscr';
     }
 }

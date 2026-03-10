@@ -388,8 +388,8 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     {
         if ($this->isSandbox()) {
             return Configuration::get('PAYPAL_MERCHANT_ID_SANDBOX');
-        } else {
-            return Configuration::get('PAYPAL_MERCHANT_ID_LIVE');
         }
+
+        return Configuration::get('PAYPAL_MERCHANT_ID_LIVE');
     }
 }

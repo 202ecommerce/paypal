@@ -313,9 +313,9 @@ class MethodEC extends AbstractMethodPaypal
     {
         if ($this->isSandbox()) {
             return Configuration::get('PAYPAL_EC_MERCHANT_ID_SANDBOX');
-        } else {
-            return Configuration::get('PAYPAL_EC_MERCHANT_ID_LIVE');
         }
+
+        return Configuration::get('PAYPAL_EC_MERCHANT_ID_LIVE');
     }
 
     public function getSellerStatus()

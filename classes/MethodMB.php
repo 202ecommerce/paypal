@@ -469,9 +469,9 @@ class MethodMB extends AbstractMethodPaypal
     {
         if ($this->isSandbox()) {
             return Configuration::get('PAYPAL_MB_MERCHANT_ID_SANDBOX');
-        } else {
-            return Configuration::get('PAYPAL_MB_MERCHANT_ID_LIVE');
         }
+
+        return Configuration::get('PAYPAL_MB_MERCHANT_ID_LIVE');
     }
 
     public function getShortCut()
