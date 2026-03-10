@@ -1173,6 +1173,7 @@ class PayPal extends PaymentModule implements WidgetInterface
                 return false;
             }
 
+            $this->context->controller->registerStylesheet($this->name . '-checkout', 'modules/' . $this->name . '/views/css/paypal-checkout.css');
             $this->context->controller->registerJavascript($this->name . '-paypal-info', 'modules/' . $this->name . '/views/js/paypal-info.js');
             $resources[] = _MODULE_DIR_ . $this->name . '/views/js/paypal-info.js';
 
