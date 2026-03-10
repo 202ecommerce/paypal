@@ -2579,7 +2579,11 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     public function isSslActive()
     {
-        return Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
+        if (version_compare(_PS_VERSION_, '9', '<')) {
+            return Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
+        }
+
+        return Configuration::get('PS_SSL_ENABLED');
     }
 
     public function renameTabParent()
