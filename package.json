@@ -50,7 +50,7 @@
         "stylelint-checkstyle-formatter": "^0.1.2",
         "stylelint-config-twbs-bootstrap": "^7.0.0",
         "stylemark": "^0.1.1",
-        "terser-webpack-plugin": "^5.3.6",
+        "terser-webpack-plugin": "^5.3.17",
         "ts-node": "^10.9.2",
         "typescript": "^5.7.3",
         "vanilla-lazyload": "^15.2.0",
