@@ -86,6 +86,8 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->whiteListService = new WhiteListService();
         $this->initApiManager();
     }
@@ -144,11 +146,17 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
         if ($isSandbox) {
             Configuration::updateValue('PAYPAL_SANDBOX_CLIENTID', $params['clientId']);
-            Configuration::updateValue('PAYPAL_SANDBOX_SECRET', $params['secret']);
+            Configuration::updateValue(
+                'PAYPAL_SANDBOX_SECRET',
+                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+            );
             Configuration::updateValue('PAYPAL_MERCHANT_ID_SANDBOX', $params['merchantId']);
         } else {
             Configuration::updateValue('PAYPAL_LIVE_CLIENTID', $params['clientId']);
-            Configuration::updateValue('PAYPAL_LIVE_SECRET', $params['secret']);
+            Configuration::updateValue(
+                'PAYPAL_LIVE_SECRET',
+                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+            );
             Configuration::updateValue('PAYPAL_MERCHANT_ID_LIVE', $params['merchantId']);
         }
     }
@@ -272,6 +280,12 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             $secret = Configuration::get('PAYPAL_SANDBOX_SECRET');
         } else {
             $secret = Configuration::get('PAYPAL_LIVE_SECRET');
+        }
+
+        if (strpos($secret, $this->module->getSecurityKey()) === 0) {
+            $secret = $this->module->getToolKit()->decrypt(
+                str_replace($this->module->getSecurityKey(), '', $secret)
+            );
         }
 
         return $secret;

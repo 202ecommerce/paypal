@@ -72,6 +72,14 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     /** @var string */
     protected $cartTrace;
+    /** @var \PayPal */
+    protected $module;
+
+    public function __construct()
+    {
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
+    }
 
     /**
      * @param string $method

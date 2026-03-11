@@ -72,6 +72,8 @@ class MethodMB extends AbstractMethodPaypal
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->servicePaypalVaulting = new ServicePaypalVaulting($this);
         $this->whiteListService = new WhiteListService();
         $this->initApiManager();
@@ -131,11 +133,17 @@ class MethodMB extends AbstractMethodPaypal
 
         if ($isSandbox) {
             Configuration::updateValue('PAYPAL_MB_SANDBOX_CLIENTID', $params['clientId']);
-            Configuration::updateValue('PAYPAL_MB_SANDBOX_SECRET', $params['secret']);
+            Configuration::updateValue(
+                'PAYPAL_MB_SANDBOX_SECRET',
+                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+            );
             Configuration::updateValue('PAYPAL_MB_MERCHANT_ID_SANDBOX', $params['merchantId']);
         } else {
             Configuration::updateValue('PAYPAL_MB_LIVE_CLIENTID', $params['clientId']);
-            Configuration::updateValue('PAYPAL_MB_LIVE_SECRET', $params['secret']);
+            Configuration::updateValue(
+                'PAYPAL_MB_LIVE_SECRET',
+                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+            );
             Configuration::updateValue('PAYPAL_MB_MERCHANT_ID_LIVE', $params['merchantId']);
         }
     }
@@ -411,6 +419,12 @@ class MethodMB extends AbstractMethodPaypal
             $secret = Configuration::get('PAYPAL_MB_SANDBOX_SECRET');
         } else {
             $secret = Configuration::get('PAYPAL_MB_LIVE_SECRET');
+        }
+
+        if (strpos($secret, $this->module->getSecurityKey()) === 0) {
+            $secret = $this->module->getToolKit()->decrypt(
+                str_replace($this->module->getSecurityKey(), '', $secret)
+            );
         }
 
         return $secret;
