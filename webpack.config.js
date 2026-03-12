@@ -58,6 +58,7 @@ const config = {
 
     'css/paypal_bo': './202/_dev/scss/paypal_bo.scss',
     'css/paypal_fo': './202/_dev/scss/paypal_fo.scss',
+    'css/paypal-checkout': './202/_dev/scss/paypal-checkout.scss',
     'css/diagnostic/diagnostic': './202/_dev/scss/diagnostic/diagnostic.scss',
   },
 
