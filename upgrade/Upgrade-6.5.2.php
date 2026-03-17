@@ -37,31 +37,7 @@ if (!defined('_PS_VERSION_')) {
  */
 function upgrade_module_6_5_2(PayPal $module)
 {
-    $methods = [
-        new MethodEC(),
-        new MethodPPP(),
-        new MethodMB(),
-    ];
-    $sandboxModeList = [true, false];
-
-    foreach ($sandboxModeList as $mode) {
-        /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
-        foreach ($methods as $method) {
-            $method->setSandbox($mode);
-
-            if (!$method->isConfigured()) {
-                continue;
-            }
-
-            $config = [
-                'clientId' => $method->getClientId(),
-                'secret' => $method->getSecret(),
-                'merchantId' => $method->getMerchantId(),
-                'isSandbox' => $method->isSandbox(),
-            ];
-            $method->setConfig($config);
-        }
-    }
+    Configuration::updateGlobalValue(PayPal::NEED_RESAVE_CREDENTIALS, 1);
 
     return true;
 }
