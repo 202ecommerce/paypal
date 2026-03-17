@@ -457,8 +457,8 @@ class PayPal extends PaymentModule implements WidgetInterface
         }
 
         if ((int) Configuration::getGlobalValue(self::NEED_RESAVE_CREDENTIALS)) {
-            $this->resaveCredentials();
             Configuration::updateGlobalValue(self::NEED_RESAVE_CREDENTIALS, 0);
+            $this->resaveCredentials();
         }
     }
 
