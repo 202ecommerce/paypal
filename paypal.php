@@ -104,6 +104,8 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
 
+    const NEED_RESAVE_CREDENTIALS = 'PAYPAL_NEED_RESAVE_CREDENTIALS';
+
     const PAYPAL_STATUS_CODE_TOO_MANY_REQUEST = 429;
 
     const SCA_LIABILITY_SHIFT_POSSIBLE = 'POSSIBLE';
@@ -452,6 +454,11 @@ class PayPal extends PaymentModule implements WidgetInterface
             $extension = new $extensionName($this);
             $extension->initExtension();
             $this->hooks = array_merge($this->hooks, $extension->hooks);
+        }
+
+        if ((int) Configuration::getGlobalValue(self::NEED_RESAVE_CREDENTIALS)) {
+            $this->resaveCredentials();
+            Configuration::updateGlobalValue(self::NEED_RESAVE_CREDENTIALS, 0);
         }
     }
 
@@ -3226,5 +3233,34 @@ class PayPal extends PaymentModule implements WidgetInterface
     public function getToolKit()
     {
         return $this->toolKit;
+    }
+
+    protected function resaveCredentials()
+    {
+        $methods = [
+            new MethodEC(),
+            new MethodPPP(),
+            new MethodMB(),
+        ];
+        $sandboxModeList = [true, false];
+
+        foreach ($sandboxModeList as $mode) {
+            /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
+            foreach ($methods as $method) {
+                $method->setSandbox($mode);
+
+                if (!$method->isConfigured()) {
+                    continue;
+                }
+
+                $config = [
+                    'clientId' => $method->getClientId(),
+                    'secret' => $method->getSecret(),
+                    'merchantId' => $method->getMerchantId(),
+                    'isSandbox' => $method->isSandbox(),
+                ];
+                $method->setConfig($config);
+            }
+        }
     }
 }
