@@ -3245,7 +3245,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         $sandboxModeList = [true, false];
 
         foreach ($sandboxModeList as $mode) {
-            /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
+            /** @var AbstractMethodPaypal $method */
             foreach ($methods as $method) {
                 $method->setSandbox($mode);
 
