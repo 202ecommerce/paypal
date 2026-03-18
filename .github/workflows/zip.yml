@@ -1,0 +1,87 @@
+name: Create module zip
+on: [push, pull_request]
+permissions:
+  contents: read
+
+env:
+  PROJECT_NAME: paypal
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PHP 7.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.1'
+
+      - name: Package zip
+        run: |
+          set -e  # Arrêter le script si une commande échoue
+
+          PROJECT_DIR=$(pwd)
+          PACKAGES_DIR="$PROJECT_DIR/../packages"
+          MODULE_NAME="paypal"
+
+          mkdir -p "$PACKAGES_DIR/$MODULE_NAME"
+
+          sudo apt-get update && sudo apt-get install xmlstarlet -y
+          MODULE_VERSION=$(xmlstarlet sel -t -v '/project/property[@name="TARGETVERSION"]/@value' 202/build.xml)
+
+          find ./ -type f -exec sed -i "s/@version@/$MODULE_VERSION/g" {} +
+
+          composer global require prestashop/autoindex
+          [ -f "./index.php" ] && [ -f "$HOME/.composer/vendor/prestashop/autoindex/assets/index.php" ] && cat index.php > ~/.composer/vendor/prestashop/autoindex/assets/index.php
+          ~/.composer/vendor/bin/autoindex --exclude=202
+          cp classes/index.php  index.php
+          rm -f composer.lock
+          [ -d "./vendor" ] && find ./vendor -mindepth 1 ! -regex '^./vendor/totpsclasslib\(/.*\)?' -delete
+          composer remove phpstan/phpstan phpunit/phpunit prestashop/php-dev-tools prestashop/header-stamp --no-progress --dev --no-install --no-update
+          composer install --no-dev --optimize-autoloader --classmap-authoritative --ignore-platform-reqs
+          rm 202 node_modules composer.* node_modules _dev .git tests var views/_dev .husky README.md -Rf
+          rm commitlint.config.js .prettierrc docker-compose.yml browserlist .stylelintignore .editorconfig babel.config.js webpack.config.js postcss.config.js cache.properties sonar-project.properties config_fr.xml composer.json composer.lock composer.phar .gitignore .browserlistrc .eslintrc.js .postcssrc.js babel.config.js vue.config.js package.json package-lock.json .php-cs-fixer.dist.php .php_cs.cache .php-cs-fixer.cache .gitlab-ci.yml before_autoload.sh Makefile -Rf
+
+          cd "$PACKAGES_DIR/$MODULE_NAME"
+          cp -R "$PROJECT_DIR" "$MODULE_NAME"
+
+          zip -9 -r -q \
+            --symlinks \
+            --exclude=\*.DS_Store\* \
+            --exclude=\*._.DS_Store\* \
+            --exclude=\*__MACOSX\* \
+            --exclude=\*.buildpath\* \
+            --exclude=\*.dropbox\* \
+            --exclude=\*.git\* \
+            --exclude=\*.idea\* \
+            --exclude=\*.project\* \
+            --exclude=\*.sass-cache\* \
+            --exclude=\*.settings\* \
+            --exclude=\*.svn\* \
+            --exclude=\*config.codekit\* \
+            --exclude=\*desktop.ini\* \
+            --exclude=\*nbproject\* \
+            --exclude=\*.log \
+            --exclude="$MODULE_NAME/config.xml" \
+            --exclude="$MODULE_NAME/config_\*.xml" \
+            "$MODULE_NAME.zip" \
+            "$MODULE_NAME"
+
+          unzip -l "$MODULE_NAME.zip"
+
+          find "./$MODULE_NAME" -type f -exec md5sum "{}" + > "${MODULE_NAME}.md5"
+
+          cp "$MODULE_NAME.zip" "$PROJECT_DIR/$MODULE_NAME-v${MODULE_VERSION}-${{github.run_number}}.zip"
+          cp "$MODULE_NAME.md5" "$PROJECT_DIR/${MODULE_NAME}-v${MODULE_VERSION}-${{github.run_number}}.md5"
+
+          cd "$PROJECT_DIR"
+          find . -type f ! \( -name "*.zip" -o -name "*.md5" \) -delete
+          find . -type d -empty -delete
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}
+          path: |
