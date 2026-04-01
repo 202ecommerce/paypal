@@ -35,7 +35,7 @@ if (!defined('_PS_VERSION_')) {
  *
  * @return bool
  */
-function upgrade_module_6_5_2(PayPal $module)
+function upgrade_module_6_6_0(PayPal $module)
 {
     Configuration::updateGlobalValue(PayPal::NEED_RESAVE_CREDENTIALS, 1);
 
