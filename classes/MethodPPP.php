@@ -127,11 +127,11 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         }
 
         if ($sandbox) {
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_CLIENTID_SANDBOX, '');
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_SECRET_SANDBOX, '');
+            Configuration::updateValue(PayPal::PAYPAL_PPP_CLIENTID_SANDBOX, '');
+            Configuration::updateValue(PayPal::PAYPAL_PPP_SECRET_SANDBOX, '');
         } else {
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_CLIENTID_LIVE, '');
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_SECRET_LIVE, '');
+            Configuration::updateValue(PayPal::PAYPAL_PPP_CLIENTID_LIVE, '');
+            Configuration::updateValue(PayPal::PAYPAL_PPP_SECRET_LIVE, '');
         }
         Configuration::updateValue('PAYPAL_CONNECTION_PPP_CONFIGURED', 0);
     }
@@ -148,19 +148,19 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         }
 
         if ($isSandbox) {
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_CLIENTID_SANDBOX, $params['clientId']);
+            Configuration::updateValue(PayPal::PAYPAL_PPP_CLIENTID_SANDBOX, $params['clientId']);
             Configuration::updateValue(
-                \PayPal::PAYPAL_PPP_SECRET_SANDBOX,
+                PayPal::PAYPAL_PPP_SECRET_SANDBOX,
                 $this->module->getToolKit()->encrypt($params['secret'])
             );
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_MERCHANT_ID_SANDBOX, $params['merchantId']);
+            Configuration::updateValue(PayPal::PAYPAL_PPP_MERCHANT_ID_SANDBOX, $params['merchantId']);
         } else {
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_CLIENTID_LIVE, $params['clientId']);
+            Configuration::updateValue(PayPal::PAYPAL_PPP_CLIENTID_LIVE, $params['clientId']);
             Configuration::updateValue(
-                \PayPal::PAYPAL_PPP_SECRET_LIVE,
+                PayPal::PAYPAL_PPP_SECRET_LIVE,
                 $this->module->getToolKit()->encrypt($params['secret'])
             );
-            Configuration::updateValue(\PayPal::PAYPAL_PPP_MERCHANT_ID_LIVE, $params['merchantId']);
+            Configuration::updateValue(PayPal::PAYPAL_PPP_MERCHANT_ID_LIVE, $params['merchantId']);
         }
     }
 
@@ -265,9 +265,9 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         }
 
         if ($sandbox) {
-            $clientId = Configuration::get(\PayPal::PAYPAL_PPP_CLIENTID_SANDBOX);
+            $clientId = Configuration::get(PayPal::PAYPAL_PPP_CLIENTID_SANDBOX);
         } else {
-            $clientId = Configuration::get(\PayPal::PAYPAL_PPP_CLIENTID_LIVE);
+            $clientId = Configuration::get(PayPal::PAYPAL_PPP_CLIENTID_LIVE);
         }
 
         return $clientId;
@@ -280,9 +280,9 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         }
 
         if ($sandbox) {
-            $secret = Configuration::get(\PayPal::PAYPAL_PPP_SECRET_SANDBOX);
+            $secret = Configuration::get(PayPal::PAYPAL_PPP_SECRET_SANDBOX);
         } else {
-            $secret = Configuration::get(\PayPal::PAYPAL_PPP_SECRET_LIVE);
+            $secret = Configuration::get(PayPal::PAYPAL_PPP_SECRET_LIVE);
         }
 
         $secret = $this->module->getToolKit()->decrypt($secret);
@@ -400,9 +400,9 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     public function getMerchantId()
     {
         if ($this->isSandbox()) {
-            return Configuration::get(\PayPal::PAYPAL_PPP_MERCHANT_ID_SANDBOX);
+            return Configuration::get(PayPal::PAYPAL_PPP_MERCHANT_ID_SANDBOX);
         }
 
-        return Configuration::get(\PayPal::PAYPAL_PPP_MERCHANT_ID_LIVE);
+        return Configuration::get(PayPal::PAYPAL_PPP_MERCHANT_ID_LIVE);
     }
 }
