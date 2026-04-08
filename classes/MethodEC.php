@@ -136,13 +136,16 @@ class MethodEC extends AbstractMethodPaypal
     public function logOut($sandbox = null)
     {
         if ($sandbox == null) {
-            $mode = $this->isSandbox() ? 'SANDBOX' : 'LIVE';
-        } else {
-            $mode = (int) $sandbox ? 'SANDBOX' : 'LIVE';
+            $sandbox = $this->isSandbox();
         }
 
-        Configuration::updateValue('PAYPAL_EC_CLIENTID_' . $mode, '');
-        Configuration::updateValue('PAYPAL_EC_SECRET_' . $mode, '');
+        if ($sandbox) {
+            Configuration::updateValue(\PayPal::PAYPAL_EC_CLIENTID_SANDBOX, '');
+            Configuration::updateValue(\PayPal::PAYPAL_EC_SECRET_SANDBOX, '');
+        } else {
+            Configuration::updateValue(\PayPal::PAYPAL_EC_CLIENTID_LIVE, '');
+            Configuration::updateValue(\PayPal::PAYPAL_EC_SECRET_LIVE, '');
+        }
         Configuration::updateValue('PAYPAL_CONNECTION_EC_CONFIGURED', 0);
     }
 
@@ -158,19 +161,19 @@ class MethodEC extends AbstractMethodPaypal
         }
 
         if ($isSandbox) {
-            Configuration::updateValue('PAYPAL_EC_CLIENTID_SANDBOX', $params['clientId']);
+            Configuration::updateValue(\PayPal::PAYPAL_EC_CLIENTID_SANDBOX, $params['clientId']);
             Configuration::updateValue(
-                'PAYPAL_EC_SECRET_SANDBOX',
-                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+                \PayPal::PAYPAL_EC_SECRET_SANDBOX,
+                $this->module->getToolKit()->encrypt($params['secret'])
             );
-            Configuration::updateValue('PAYPAL_EC_MERCHANT_ID_SANDBOX', $params['merchantId']);
+            Configuration::updateValue(\PayPal::PAYPAL_EC_MERCHANT_ID_SANDBOX, $params['merchantId']);
         } else {
-            Configuration::updateValue('PAYPAL_EC_CLIENTID_LIVE', $params['clientId']);
+            Configuration::updateValue(\PayPal::PAYPAL_EC_CLIENTID_LIVE, $params['clientId']);
             Configuration::updateValue(
-                'PAYPAL_EC_SECRET_LIVE',
-                $this->module->getSecurityKey() . $this->module->getToolKit()->encrypt($params['secret'])
+                \PayPal::PAYPAL_EC_SECRET_LIVE,
+                $this->module->getToolKit()->encrypt($params['secret'])
             );
-            Configuration::updateValue('PAYPAL_EC_MERCHANT_ID_LIVE', $params['merchantId']);
+            Configuration::updateValue(\PayPal::PAYPAL_EC_MERCHANT_ID_LIVE, $params['merchantId']);
         }
     }
 
@@ -268,9 +271,9 @@ class MethodEC extends AbstractMethodPaypal
         }
 
         if ($sandbox) {
-            $clientId = Configuration::get('PAYPAL_EC_CLIENTID_SANDBOX');
+            $clientId = Configuration::get(\PayPal::PAYPAL_EC_CLIENTID_SANDBOX);
         } else {
-            $clientId = Configuration::get('PAYPAL_EC_CLIENTID_LIVE');
+            $clientId = Configuration::get(\PayPal::PAYPAL_EC_CLIENTID_LIVE);
         }
 
         return $clientId;
@@ -283,16 +286,12 @@ class MethodEC extends AbstractMethodPaypal
         }
 
         if ($sandbox) {
-            $secret = Configuration::get('PAYPAL_EC_SECRET_SANDBOX');
+            $secret = Configuration::get(\PayPal::PAYPAL_EC_SECRET_SANDBOX);
         } else {
-            $secret = Configuration::get('PAYPAL_EC_SECRET_LIVE');
+            $secret = Configuration::get(\PayPal::PAYPAL_EC_SECRET_LIVE);
         }
 
-        if (strpos($secret, $this->module->getSecurityKey()) === 0) {
-            $secret = $this->module->getToolKit()->decrypt(
-                str_replace($this->module->getSecurityKey(), '', $secret)
-            );
-        }
+        $secret = $this->module->getToolKit()->decrypt($secret);
 
         return (string) $secret;
     }
@@ -326,10 +325,10 @@ class MethodEC extends AbstractMethodPaypal
     public function getMerchantId()
     {
         if ($this->isSandbox()) {
-            return Configuration::get('PAYPAL_EC_MERCHANT_ID_SANDBOX');
+            return Configuration::get(\PayPal::PAYPAL_EC_MERCHANT_ID_SANDBOX);
         }
 
-        return Configuration::get('PAYPAL_EC_MERCHANT_ID_LIVE');
+        return Configuration::get(\PayPal::PAYPAL_EC_MERCHANT_ID_LIVE);
     }
 
     public function getSellerStatus()
