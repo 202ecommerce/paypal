@@ -104,8 +104,6 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
 
-    const NEED_ENCRYPT_CREDENTIALS = 'PAYPAL_NEED_ENCRYPT_CREDENTIALS';
-
     const PAYPAL_EC_SECRET_SANDBOX = 'PAYPAL_EC_SECRET_SANDBOX';
 
     const PAYPAL_EC_SECRET_LIVE = 'PAYPAL_EC_SECRET_LIVE';
@@ -492,10 +490,19 @@ class PayPal extends PaymentModule implements WidgetInterface
             $this->hooks = array_merge($this->hooks, $extension->hooks);
         }
 
-        if ((int) Configuration::getGlobalValue(self::NEED_ENCRYPT_CREDENTIALS)) {
-            Configuration::updateGlobalValue(self::NEED_ENCRYPT_CREDENTIALS, 0);
+        $flagFile = $this->getEncryptCredentialsFlagFile();
+        if (file_exists($flagFile)) {
+            unlink($flagFile);
             $this->encryptCredentials();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncryptCredentialsFlagFile()
+    {
+        return _PS_MODULE_DIR_ . 'paypal/encrypt_credentials.flag';
     }
 
     /**
