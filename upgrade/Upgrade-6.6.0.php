@@ -37,7 +37,8 @@ if (!defined('_PS_VERSION_')) {
  */
 function upgrade_module_6_6_0(PayPal $module)
 {
-    Configuration::updateGlobalValue(PayPal::NEED_RESAVE_CREDENTIALS, 1);
+    $flagFile = $module->getEncryptCredentialsFlagFile();
+    file_put_contents($flagFile, '1');
 
     return true;
 }

@@ -104,7 +104,41 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
 
-    const NEED_RESAVE_CREDENTIALS = 'PAYPAL_NEED_RESAVE_CREDENTIALS';
+    const PAYPAL_EC_SECRET_SANDBOX = 'PAYPAL_EC_SECRET_SANDBOX';
+
+    const PAYPAL_EC_SECRET_LIVE = 'PAYPAL_EC_SECRET_LIVE';
+
+    const PAYPAL_EC_CLIENTID_SANDBOX = 'PAYPAL_EC_CLIENTID_SANDBOX';
+
+    const PAYPAL_EC_CLIENTID_LIVE = 'PAYPAL_EC_CLIENTID_LIVE';
+
+    const PAYPAL_EC_MERCHANT_ID_SANDBOX = 'PAYPAL_EC_MERCHANT_ID_SANDBOX';
+
+    const PAYPAL_EC_MERCHANT_ID_LIVE = 'PAYPAL_EC_MERCHANT_ID_LIVE';
+
+    const PAYPAL_MB_SECRET_SANDBOX = 'PAYPAL_MB_SANDBOX_SECRET';
+
+    const PAYPAL_MB_SECRET_LIVE = 'PAYPAL_MB_LIVE_SECRET';
+
+    const PAYPAL_MB_CLIENTID_SANDBOX = 'PAYPAL_MB_SANDBOX_CLIENTID';
+
+    const PAYPAL_MB_CLIENTID_LIVE = 'PAYPAL_MB_LIVE_CLIENTID';
+
+    const PAYPAL_MB_MERCHANT_ID_SANDBOX = 'PAYPAL_MB_MERCHANT_ID_SANDBOX';
+
+    const PAYPAL_MB_MERCHANT_ID_LIVE = 'PAYPAL_MB_MERCHANT_ID_LIVE';
+
+    const PAYPAL_PPP_SECRET_SANDBOX = 'PAYPAL_SANDBOX_SECRET';
+
+    const PAYPAL_PPP_SECRET_LIVE = 'PAYPAL_LIVE_SECRET';
+
+    const PAYPAL_PPP_CLIENTID_SANDBOX = 'PAYPAL_SANDBOX_CLIENTID';
+
+    const PAYPAL_PPP_CLIENTID_LIVE = 'PAYPAL_LIVE_CLIENTID';
+
+    const PAYPAL_PPP_MERCHANT_ID_SANDBOX = 'PAYPAL_MERCHANT_ID_SANDBOX';
+
+    const PAYPAL_PPP_MERCHANT_ID_LIVE = 'PAYPAL_MERCHANT_ID_LIVE';
 
     const PAYPAL_STATUS_CODE_TOO_MANY_REQUEST = 429;
 
@@ -456,10 +490,19 @@ class PayPal extends PaymentModule implements WidgetInterface
             $this->hooks = array_merge($this->hooks, $extension->hooks);
         }
 
-        if ((int) Configuration::getGlobalValue(self::NEED_RESAVE_CREDENTIALS)) {
-            Configuration::updateGlobalValue(self::NEED_RESAVE_CREDENTIALS, 0);
-            $this->resaveCredentials();
+        $flagFile = $this->getEncryptCredentialsFlagFile();
+        if (file_exists($flagFile)) {
+            unlink($flagFile);
+            $this->encryptCredentials();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncryptCredentialsFlagFile()
+    {
+        return _PS_MODULE_DIR_ . 'paypal/encrypt_credentials.flag';
     }
 
     /**
@@ -3235,31 +3278,40 @@ class PayPal extends PaymentModule implements WidgetInterface
         return $this->toolKit;
     }
 
-    protected function resaveCredentials()
+    protected function encryptCredentials()
     {
-        $methods = [
-            new MethodEC(),
-            new MethodPPP(),
-            new MethodMB(),
+        $secretKeys = [
+            self::PAYPAL_EC_SECRET_SANDBOX,
+            self::PAYPAL_EC_SECRET_LIVE,
+            self::PAYPAL_MB_SECRET_SANDBOX,
+            self::PAYPAL_MB_SECRET_LIVE,
+            self::PAYPAL_PPP_SECRET_SANDBOX,
+            self::PAYPAL_PPP_SECRET_LIVE,
         ];
-        $sandboxModeList = [true, false];
 
-        foreach ($sandboxModeList as $mode) {
-            /** @var AbstractMethodPaypal $method */
-            foreach ($methods as $method) {
-                $method->setSandbox($mode);
+        $shops = Shop::getShops();
 
-                if (!$method->isConfigured()) {
+        foreach ($shops as $shop) {
+            $idShop = (int) $shop['id_shop'];
+            $idShopGroup = (int) $shop['id_shop_group'];
+
+            foreach ($secretKeys as $key) {
+                $value = Configuration::get($key, null, $idShopGroup, $idShop);
+
+                if (empty($value)) {
                     continue;
                 }
 
-                $config = [
-                    'clientId' => $method->getClientId(),
-                    'secret' => $method->getSecret(),
-                    'merchantId' => $method->getMerchantId(),
-                    'isSandbox' => $method->isSandbox(),
-                ];
-                $method->setConfig($config);
+                // Check if the value is already encrypted by trying to decrypt it
+                $decrypted = $this->toolKit->decrypt($value);
+
+                if ($decrypted !== null) {
+                    // Value is already encrypted, skip
+                    continue;
+                }
+
+                // Value is not encrypted, encrypt it now
+                Configuration::updateValue($key, $this->toolKit->encrypt($value), false, $idShopGroup, $idShop);
             }
         }
     }

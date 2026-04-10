@@ -38,7 +38,7 @@ jobs:
           ~/.composer/vendor/bin/autoindex --exclude=202
           cp classes/index.php  index.php
           rm -f composer.lock
-          [ -d "./vendor" ] && find ./vendor -mindepth 1 ! -regex '^./vendor/totpsclasslib\(/.*\)?' -delete
+          [ -d "./vendor" ] && find ./vendor -mindepth 1 ! -regex '^./vendor/\(ppbtlib\|prefixed\)\(/.*\)?' -delete
           composer remove phpstan/phpstan phpunit/phpunit prestashop/php-dev-tools prestashop/header-stamp --no-progress --dev --no-install --no-update
           composer install --no-dev --optimize-autoloader --classmap-authoritative --ignore-platform-reqs
           rm 202 node_modules composer.* node_modules _dev .git tests var views/_dev .husky README.md -Rf
