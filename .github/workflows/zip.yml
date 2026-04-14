@@ -18,6 +18,19 @@ jobs:
         with:
           php-version: '7.1'
 
+      - name: Setup node env
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install node dependencies
+        working-directory: ./202/_dev
+        run: npm i
+
+      - name: Build assets
+        working-directory: ./202/_dev
+        run: npm run build
+
       - name: Package zip
         run: |
           set -e  # Arrêter le script si une commande échoue
