@@ -23,10 +23,6 @@
  *  @copyright PayPal
  *
  */
-
-import axios from 'axios';
-import qs from 'qs';
-
 export default class Logs {
   init() {
     this.registerEvents();
@@ -52,16 +48,23 @@ export default class Logs {
   async loadLogs($panelGroup) {
     const $btn = $panelGroup.find('.paypal-collapse');
     const url = window.paypal.actionLink;
-
-    const response = await axios.post(url, qs.stringify({
+    const body = {
       ajax: 1,
       value: $btn.data('value'),
       type: $btn.data('type'),
       event: 'loadLogs',
-    }));
+    }
 
-    if (response.data.content) {
-      $panelGroup.find('[data-zone-content]').html(response.data.content);
+    const response = await fetch(url, {
+      method: 'POST',
+      body: new URLSearchParams(body).toString(),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+
+    const data = await response.text();
+
+    if (data) {
+      $panelGroup.find('[data-zone-content]').html(data);
     }
     $panelGroup.data('loaded', true);
   }

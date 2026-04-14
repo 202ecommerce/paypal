@@ -18,6 +18,19 @@ jobs:
         with:
           php-version: '7.1'
 
+      - name: Setup node env
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install node dependencies
+        working-directory: ./202/_dev
+        run: npm i
+
+      - name: Build assets
+        working-directory: ./202/_dev
+        run: npm run build
+
       - name: Package zip
         run: |
           set -e  # Arrêter le script si une commande échoue
@@ -43,6 +56,10 @@ jobs:
           composer install --no-dev --optimize-autoloader --classmap-authoritative --ignore-platform-reqs
           rm 202 node_modules composer.* node_modules _dev .git tests var views/_dev .husky README.md -Rf
           rm commitlint.config.js .prettierrc docker-compose.yml browserlist .stylelintignore .editorconfig babel.config.js webpack.config.js postcss.config.js cache.properties sonar-project.properties config_fr.xml composer.json composer.lock composer.phar .gitignore .browserlistrc .eslintrc.js .postcssrc.js babel.config.js vue.config.js package.json package-lock.json .php-cs-fixer.dist.php .php_cs.cache .php-cs-fixer.cache .gitlab-ci.yml before_autoload.sh Makefile -Rf
+          rm views/js/*.map
+          rm views/js/diagnostic/*.map
+          rm views/css/*.map
+          rm views/css/diagnostic/*.map
 
           cd "$PACKAGES_DIR/$MODULE_NAME"
           cp -R "$PROJECT_DIR" "$MODULE_NAME"
