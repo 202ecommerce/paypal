@@ -92,7 +92,6 @@ class OrderCreateBody implements BuilderInterface
 
         $body = [
             'intent' => $this->getIntent(),
-            'application_context' => $this->getApplicationContext(),
             'purchase_units' => [
                 [
                     'amount' => $this->getAmount($currency),
@@ -350,6 +349,7 @@ class OrderCreateBody implements BuilderInterface
 
         if ($this->isShortcut()) {
             $applicationContext['shipping_preference'] = 'GET_FROM_FILE';
+            $applicationContext['user_action'] = 'CONTINUE';
         }
 
         return $applicationContext;
@@ -518,6 +518,8 @@ class OrderCreateBody implements BuilderInterface
 
     protected function getPaymentSource()
     {
+        $experienceContext = $this->getApplicationContext();
+
         if (PaypalContext::getContext()->get('scaVerification', false)) {
             $method = PaypalContext::getContext()->get('scaVerification');
 
@@ -532,6 +534,7 @@ class OrderCreateBody implements BuilderInterface
                         'billing_address' => $this->getAddress(
                             new \Address($this->context->cart->id_address_invoice)
                         ),
+                        'experience_context' => $experienceContext,
                     ],
                 ];
             }
@@ -551,6 +554,7 @@ class OrderCreateBody implements BuilderInterface
                                         'customer_type' => Vaulting::CUSTOMER_TYPE_CONSUMER,
                                     ],
                                 ],
+                                'experience_context' => $experienceContext,
                             ],
                         ];
                     }
@@ -560,6 +564,10 @@ class OrderCreateBody implements BuilderInterface
             return [];
         }
 
-        return [];
+        return [
+            'paypal' => [
+                'experience_context' => $experienceContext,
+            ]
+        ];
     }
 }
