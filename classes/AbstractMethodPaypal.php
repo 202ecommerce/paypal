@@ -506,7 +506,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         /** @var \PayPal $paypal */
         $paypal = \Module::getInstanceByName($this->name);
 
-        if ($convert && $id_currency_to = $paypal->needConvert()) {
+        if (\Validate::isLoadedObject($context_currency) && !is_null($context_currency->precision) && $convert && $id_currency_to = $paypal->needConvert()) {
             /* @phpstan-ignore-next-line */
             $currency_to_convert = new \Currency($id_currency_to);
             $price = \Tools::convertPriceFull($price, $context_currency, $currency_to_convert);

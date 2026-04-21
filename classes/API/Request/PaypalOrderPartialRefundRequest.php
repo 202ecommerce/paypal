@@ -42,7 +42,7 @@ class PaypalOrderPartialRefundRequest extends PaypalOrderRefundRequest
     public function __construct(HttpClient $client, AbstractMethodPaypal $method, \PaypalOrder $paypalOrder, $amount)
     {
         parent::__construct($client, $method, $paypalOrder);
-        $this->amount = $this->method->formatPrice($amount, $this->paypalOrder->currency);
+        $this->amount = $this->method->formatPrice($amount, $this->paypalOrder->currency, false);
     }
 
     /**
