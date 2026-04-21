@@ -1,5 +1,7 @@
 name: Unit test
 on: [pull_request]
+permissions:
+  contents: read
 jobs:
     # Run PHPUnit against the module and a PrestaShop release
     phpunit:

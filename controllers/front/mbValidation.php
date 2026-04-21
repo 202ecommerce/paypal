@@ -76,7 +76,8 @@ class PaypalMbValidationModuleFrontController extends PaypalAbstarctModuleFrontC
         }
 
         if (!empty($this->_errors)) {
-            $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $this->_errors);
+            $this->errors = $this->_errors;
+            $this->redirectUrl = Context::getContext()->link->getPageLink('order');
         }
     }
 

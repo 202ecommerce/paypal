@@ -72,6 +72,14 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
     /** @var string */
     protected $cartTrace;
+    /** @var \PayPal */
+    protected $module;
+
+    public function __construct()
+    {
+        /* @phpstan-ignore-next-line */
+        $this->module = \Module::getInstanceByName('paypal');
+    }
 
     /**
      * @param string $method
@@ -217,22 +225,22 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         /* @phpstan-ignore-next-line */
         $customer = new \Customer($cart->id_customer);
         $vaultingFunctionality = $this->initVaultingFunctionality();
+        $module = \Module::getInstanceByName('paypal');
 
         if (!\Validate::isLoadedObject($customer)) {
-            throw new PaypalException(PaypalException::INVALID_CUSTOMER, 'Customer is not loaded object');
+            throw new PaypalException(PaypalException::INVALID_CUSTOMER, $module->l('Customer is not found', 'AbstractMethodPaypal'));
         }
         if (empty($this->getPaymentId())) {
-            throw new PaypalException(PaypalException::ARGUMENT_MISSING, 'Payment ID isn\'t setted');
+            throw new PaypalException(PaypalException::ARGUMENT_MISSING, $module->l('Payment ID isn\'t setted', 'AbstractMethodPaypal'));
         }
         if (false === $this->isCorrectCart($cart, $this->getPaymentId())) {
-            throw new PaypalException(PaypalException::CART_CHANGED, 'The elements in the shopping cart were changed. Please try to pay again.');
+            throw new PaypalException(PaypalException::CART_CHANGED, $module->l('The elements in the shopping cart were changed. Please try to pay again.', 'AbstractMethodPaypal'));
         }
         if (\PaypalOrder::paymentExists($this->getPaymentId())) {
-            throw new PaypalException(PaypalException::PAYMENT_EXISTS, 'Payment exists.');
+            throw new PaypalException(PaypalException::PAYMENT_EXISTS, $module->l('Payment exists.', 'AbstractMethodPaypal'));
         }
-
         if (false === $this->initChecker()->isProductsAvailable($cart)) {
-            throw new PaypalException(PaypalException::PRODUCT_UNAVAILABLE, sprintf('Cart with id %d contains products unavailable. Cannot capture the order.', (int) $cart->id));
+            throw new PaypalException(PaypalException::PRODUCT_UNAVAILABLE, sprintf($module->l('Cart with id %d contains products unavailable. Cannot capture the order.', 'AbstractMethodPaypal'), (int) $cart->id));
         }
 
         $response = $this->completePayment();

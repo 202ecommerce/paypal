@@ -152,10 +152,9 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
                 $address_exist = true;
                 $id_address = $address['id_address'];
                 break;
-            } else {
-                if (strrpos($address['alias'], 'Paypal_Address') !== false) {
-                    $count = (int) Tools::substr($address['alias'], -1) + 1;
-                }
+            }
+            if (strrpos($address['alias'], 'Paypal_Address') !== false) {
+                $count = (int) Tools::substr($address['alias'], -1) + 1;
             }
         }
         if (!$address_exist) {
