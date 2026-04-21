@@ -567,7 +567,7 @@ class OrderCreateBody implements BuilderInterface
         return [
             'paypal' => [
                 'experience_context' => $experienceContext,
-            ]
+            ],
         ];
     }
 }
