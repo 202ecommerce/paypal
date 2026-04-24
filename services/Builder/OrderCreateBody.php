@@ -32,6 +32,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use PayPal;
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
@@ -198,6 +199,12 @@ class OrderCreateBody implements BuilderInterface
                 'value' => $productTax,
             ];
             $item['quantity'] = $product['quantity'];
+
+            if (isset($product['is_virtual']) && $product['is_virtual']) {
+                $item['category'] = PayPal::DIGITAL_GOODS;
+            } else {
+                $item['category'] = PayPal::PHYSICAL_GOODS;
+            }
 
             $items[] = $item;
         }
