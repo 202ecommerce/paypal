@@ -28,7 +28,8 @@
             "PaypalAddons\\Http\\Client\\": "vendor/prefixed/php-http/httplug/src",
             "PaypalAddons\\Http\\Message\\": "vendor/prefixed/php-http/message/src",
             "PaypalAddons\\Http\\Promise\\": "vendor/prefixed/php-http/promise/src",
-            "PaypalAddons\\Psr\\Http\\Message\\": "vendor/prefixed/psr/http-message/src"
+            "PaypalAddons\\Psr\\Http\\Message\\": "vendor/prefixed/psr/http-message/src",
+            "PaypalAddons\\Defuse\\Crypto\\": "vendor/prefixed/defuse/php-encryption/src"
         },
         "classmap": [
             "classes/",

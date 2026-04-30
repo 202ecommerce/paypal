@@ -26,29 +26,19 @@
  *
  */
 
-namespace PaypalAddons\classes\Webhook;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class IpnPaypalListener
+/**
+ * @param PayPal $module
+ *
+ * @return bool
+ */
+function upgrade_module_6_6_0(PayPal $module)
 {
-    /**
-     * @param bool $sandbox
-     *
-     * @return string
-     */
-    public function get($sandbox = null)
-    {
-        if ($sandbox === null) {
-            $sandbox = (int) \Configuration::get('PAYPAL_SANDBOX');
-        }
+    $flagFile = $module->getEncryptCredentialsFlagFile();
+    file_put_contents($flagFile, '1');
 
-        if ((int) $sandbox) {
-            return 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
-        }
-
-        return 'https://ipnpb.paypal.com/cgi-bin/webscr';
-    }
+    return true;
 }

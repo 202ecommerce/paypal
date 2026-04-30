@@ -46,7 +46,7 @@ class WebhookAvailability
         $response = new Response();
         $curl = curl_init((new WebhookHandlerUrl())->getCheckAvailabilityUrl());
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSLVERSION, 6);
+        curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_exec($curl);
         $info = curl_getinfo($curl);
 

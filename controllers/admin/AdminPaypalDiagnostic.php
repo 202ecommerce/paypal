@@ -44,6 +44,7 @@ class AdminPaypalDiagnosticController extends AdminDiagnosticController
     {
         parent::initPageHeaderToolbar();
         $this->context->smarty->clearAssign('help_link');
+        $this->page_header_toolbar_title = sprintf($this->module->l('Diagnostic %s'), 'PayPal');
     }
 
     public function initContent()

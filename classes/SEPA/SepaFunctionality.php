@@ -28,6 +28,7 @@
 
 namespace PaypalAddons\classes\SEPA;
 
+use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\PaypalConfigurations;
 
 if (!defined('_PS_VERSION_')) {
@@ -36,8 +37,21 @@ if (!defined('_PS_VERSION_')) {
 
 class SepaFunctionality
 {
+    /** @var \MethodPPP */
+    protected $method;
+
+    public function __construct()
+    {
+        $this->method = AbstractMethodPaypal::load('PPP');
+    }
+
     public function isEnabled()
     {
         return (int) \Configuration::get(PaypalConfigurations::SEPA_ENABLED);
+    }
+
+    public function isAvailable()
+    {
+        return $this->method->getIntent() === AbstractMethodPaypal::SALE;
     }
 }

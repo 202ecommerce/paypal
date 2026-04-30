@@ -26,29 +26,36 @@
  *
  */
 
-namespace PaypalAddons\classes\Webhook;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class IpnPaypalListener
+/**
+ * @param PayPal $module
+ *
+ * @return bool
+ */
+function upgrade_module_6_5_1(PayPal $module)
 {
-    /**
-     * @param bool $sandbox
-     *
-     * @return string
-     */
-    public function get($sandbox = null)
-    {
-        if ($sandbox === null) {
-            $sandbox = (int) \Configuration::get('PAYPAL_SANDBOX');
-        }
+    $methods = [
+        new MethodEC(),
+        new MethodPPP(),
+        new MethodMB(),
+    ];
+    $sandboxModeList = [true, false];
 
-        if ((int) $sandbox) {
-            return 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
+    foreach ($sandboxModeList as $mode) {
+        /** @var PaypalAddons\classes\AbstractMethodPaypal $method */
+        foreach ($methods as $method) {
+            Db::getInstance()->update(
+                'paypal_vaulting',
+                [
+                    'profile_key' => hash('sha256', $method->getClientId($mode)),
+                ],
+                sprintf('profile_key LIKE "%s"', md5($method->getClientId($mode)))
+            );
         }
-
-        return 'https://ipnpb.paypal.com/cgi-bin/webscr';
     }
+
+    return true;
 }

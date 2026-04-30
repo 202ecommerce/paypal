@@ -57,10 +57,10 @@ class OrderStateStub extends AbstractStub implements StubInterface
     {
         switch ($event) {
             case self::FIX_ORDER_STATE_EVENT:
-                $this->handler->fixOrderState($params['moduleName']);
+                $this->handler->fixOrderState();
                 break;
             case self::ASSOCIATE_ORDER_STATE_EVENT:
-                $this->handler->associateOrderState($params['moduleName'], $params['moduleName']);
+                $this->handler->associateOrderState();
                 break;
             default:
                 throw new \RuntimeException('message d\'erreur');

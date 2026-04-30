@@ -24,54 +24,10 @@
  *
  */
 
-// Components
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-@import "bootstrap/scss/popover";
 @import "components/loader";
-
 @import "helpers/display";
-
-.pp-info {
-  .item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 14px;
-
-    .header {
-      font-weight: 700;
-    }
-
-    .desc {
-      text-align: center;
-      line-height: 1.3;
-      width: 100%;
-    }
-  }
-}
 
 #index [paypal-messaging-banner], #category [paypal-messaging-banner] {
   display: flex;
   justify-content: center;
 }
-
-@media only screen and (min-width: 992px) {
-  body.pp-popover .popover {max-width:500px;}
-}
-
-@media only screen and (max-width: 991px) {
-  .popover.bs-tether-element-attached-top {
-    left: -95px !important;
-    width: 276px;
-    top: 13px !important;
-
-    &::before,
-    &::after {
-      left: 85%;
-    }
-  }
-}
-
-

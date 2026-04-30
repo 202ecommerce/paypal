@@ -110,42 +110,25 @@ class ConfigurationMap
      */
     public static function getAllowedCountries()
     {
-        return ['fr', 'de', 'gb', 'us', 'au', 'it', 'es'];
+        return ['fr', 'de', 'gb', 'us', 'au', 'it', 'es', 'ca'];
     }
 
     public static function getBnplAvailableCountries()
     {
-        return ['fr', 'de', 'gb', 'us', 'au', 'it', 'es'];
+        return ['fr', 'de', 'gb', 'us', 'au', 'it', 'es', 'ca'];
     }
 
+    /**
+     * @deprecated
+     */
     public static function getLanguageCurrencyMap()
     {
-        return [
-            ['fr' => 'eur'],
-            ['fr' => 'gbp'],
-            ['fr' => 'usd'],
-            ['fr' => 'aud'],
-            ['de' => 'eur'],
-            ['de' => 'gbp'],
-            ['de' => 'aud'],
-            ['de' => 'usd'],
-            ['gb' => 'gbp'],
-            ['gb' => 'usd'],
-            ['gb' => 'aud'],
-            ['gb' => 'eur'],
-            ['en' => 'gbp'],
-            ['en' => 'usd'],
-            ['en' => 'aud'],
-            ['en' => 'eur'],
-            ['it' => 'eur'],
-            ['it' => 'gbp'],
-            ['it' => 'usd'],
-            ['it' => 'aud'],
-            ['es' => 'eur'],
-            ['es' => 'gbp'],
-            ['es' => 'usd'],
-            ['es' => 'aud'],
-        ];
+        @trigger_error(
+            self::class . '::getLanguageCurrencyMap() is deprecated. Use ' . self::class . '::getBnplLanguageCurrencyMap() instead.',
+            E_USER_DEPRECATED
+        );
+
+        return self::getBnplLanguageCurrencyMap();
     }
 
     public static function getBnplLanguageCurrencyMap()
@@ -159,6 +142,11 @@ class ConfigurationMap
             ['au' => 'aud'],
             ['it' => 'eur'],
             ['es' => 'eur'],
+            ['fr' => 'cad'],
+            ['en' => 'cad'],
+            ['gb' => 'cad'],
+            ['us' => 'cad'],
+            ['ca' => 'cad'],
         ];
     }
 

@@ -75,7 +75,7 @@
                                                             {foreach $orderStateList as $orderState}
                                                                 <option value="{$orderState.id_order_state|escape:'html':'UTF-8'}"
                                                                         {if $orderStateConfig.value == $orderState.id_order_state}
-                                                                            {l s='selected' mod='paypal'}
+                                                                          selected
                                                                         {/if}>
                                                                     {$orderState.name|escape:'html':'UTF-8'}
                                                                 </option>

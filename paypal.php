@@ -104,6 +104,42 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     const NEED_INSTALL_EXTENSIONS = 'PAYPAL_NEED_INSTALL_EXTENSIONS';
 
+    const PAYPAL_EC_SECRET_SANDBOX = 'PAYPAL_EC_SECRET_SANDBOX';
+
+    const PAYPAL_EC_SECRET_LIVE = 'PAYPAL_EC_SECRET_LIVE';
+
+    const PAYPAL_EC_CLIENTID_SANDBOX = 'PAYPAL_EC_CLIENTID_SANDBOX';
+
+    const PAYPAL_EC_CLIENTID_LIVE = 'PAYPAL_EC_CLIENTID_LIVE';
+
+    const PAYPAL_EC_MERCHANT_ID_SANDBOX = 'PAYPAL_EC_MERCHANT_ID_SANDBOX';
+
+    const PAYPAL_EC_MERCHANT_ID_LIVE = 'PAYPAL_EC_MERCHANT_ID_LIVE';
+
+    const PAYPAL_MB_SECRET_SANDBOX = 'PAYPAL_MB_SANDBOX_SECRET';
+
+    const PAYPAL_MB_SECRET_LIVE = 'PAYPAL_MB_LIVE_SECRET';
+
+    const PAYPAL_MB_CLIENTID_SANDBOX = 'PAYPAL_MB_SANDBOX_CLIENTID';
+
+    const PAYPAL_MB_CLIENTID_LIVE = 'PAYPAL_MB_LIVE_CLIENTID';
+
+    const PAYPAL_MB_MERCHANT_ID_SANDBOX = 'PAYPAL_MB_MERCHANT_ID_SANDBOX';
+
+    const PAYPAL_MB_MERCHANT_ID_LIVE = 'PAYPAL_MB_MERCHANT_ID_LIVE';
+
+    const PAYPAL_PPP_SECRET_SANDBOX = 'PAYPAL_SANDBOX_SECRET';
+
+    const PAYPAL_PPP_SECRET_LIVE = 'PAYPAL_LIVE_SECRET';
+
+    const PAYPAL_PPP_CLIENTID_SANDBOX = 'PAYPAL_SANDBOX_CLIENTID';
+
+    const PAYPAL_PPP_CLIENTID_LIVE = 'PAYPAL_LIVE_CLIENTID';
+
+    const PAYPAL_PPP_MERCHANT_ID_SANDBOX = 'PAYPAL_MERCHANT_ID_SANDBOX';
+
+    const PAYPAL_PPP_MERCHANT_ID_LIVE = 'PAYPAL_MERCHANT_ID_LIVE';
+
     const PAYPAL_STATUS_CODE_TOO_MANY_REQUEST = 429;
 
     const SCA_LIABILITY_SHIFT_POSSIBLE = 'POSSIBLE';
@@ -277,7 +313,6 @@ class PayPal extends PaymentModule implements WidgetInterface
         'actionOrderStatusUpdate',
         'displayHeader',
         'displayFooterProduct',
-        'actionCartUpdateQuantityBefore',
         'displayReassurance',
         'displayInvoiceLegalFreeText',
         'displayShoppingCartFooter',
@@ -377,6 +412,12 @@ class PayPal extends PaymentModule implements WidgetInterface
                 $this->paypal_method = 'EC';
         }
 
+        if (version_compare(_PS_VERSION_, '1.7.5.2', '<=')) {
+            $this->hooks[] = 'actionBeforeCartUpdateQty';
+        } else {
+            $this->hooks[] = 'actionCartUpdateQuantityBefore';
+        }
+
         $this->moduleConfigs = [
             'PAYPAL_MERCHANT_ID_SANDBOX' => '',
             'PAYPAL_MERCHANT_ID_LIVE' => '',
@@ -448,6 +489,20 @@ class PayPal extends PaymentModule implements WidgetInterface
             $extension->initExtension();
             $this->hooks = array_merge($this->hooks, $extension->hooks);
         }
+
+        $flagFile = $this->getEncryptCredentialsFlagFile();
+        if (file_exists($flagFile)) {
+            unlink($flagFile);
+            $this->encryptCredentials();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncryptCredentialsFlagFile()
+    {
+        return _PS_MODULE_DIR_ . 'paypal/encrypt_credentials.flag';
     }
 
     /**
@@ -625,9 +680,9 @@ class PayPal extends PaymentModule implements WidgetInterface
     {
         if (Configuration::get('PAYPAL_SANDBOX')) {
             return 'https://www.sandbox.paypal.com/';
-        } else {
-            return 'https://www.paypal.com/';
         }
+
+        return 'https://www.paypal.com/';
     }
 
     public function hookDisplayShoppingCartFooter()
@@ -806,6 +861,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         $bnplAvailabilityManager = $this->getBnplAvailabilityManager();
         $bnplOption = $this->getBnplOption();
         $venmoFunctionality = $this->initVenmoFunctionality();
+        $sepaFunctionality = $this->initSepaFunctionality();
 
         switch ($this->paypal_method) {
             case 'EC':
@@ -885,7 +941,7 @@ class PayPal extends PaymentModule implements WidgetInterface
             }
 
             if ($this->paypal_method == 'PPP') {
-                if ($this->initSepaFunctionality()->isEnabled()) {
+                if ($sepaFunctionality->isEnabled() && $sepaFunctionality->isAvailable()) {
                     $payments_options[] = $this->renderSepaOption($params);
                 }
 
@@ -1167,6 +1223,7 @@ class PayPal extends PaymentModule implements WidgetInterface
                 return false;
             }
 
+            $this->context->controller->registerStylesheet($this->name . '-checkout', 'modules/' . $this->name . '/views/css/paypal-checkout.css');
             $this->context->controller->registerJavascript($this->name . '-paypal-info', 'modules/' . $this->name . '/views/js/paypal-info.js');
             $resources[] = _MODULE_DIR_ . $this->name . '/views/js/paypal-info.js';
 
@@ -1535,9 +1592,9 @@ class PayPal extends PaymentModule implements WidgetInterface
             return false;
         } elseif ($mode_id != $this->context->currency->id) {
             return (int) $mode_id;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1914,6 +1971,11 @@ class PayPal extends PaymentModule implements WidgetInterface
         $tpl->assign('paypal_msg', $paypal_msg);
 
         return $tpl->fetch();
+    }
+
+    public function hookActionBeforeCartUpdateQty($params)
+    {
+        $this->hookActionCartUpdateQuantityBefore($params);
     }
 
     public function hookActionCartUpdateQuantityBefore($params)
@@ -2376,18 +2438,17 @@ class PayPal extends PaymentModule implements WidgetInterface
     {
         if (version_compare(_PS_VERSION_, '1.7.7', '<')) {
             return _PS_PRICE_DISPLAY_PRECISION_;
-        } else {
-            if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
-                $context = Context::getContext()->cloneContext();
-                $context->currency = $currency;
-                $precision = call_user_func([$context, 'getComputingPrecision']);
-                unset($context);
-
-                return $precision;
-            } else {
-                return call_user_func([Context::getContext(), 'getComputingPrecision']);
-            }
         }
+        if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
+            $context = Context::getContext()->cloneContext();
+            $context->currency = $currency;
+            $precision = call_user_func([$context, 'getComputingPrecision']);
+            unset($context);
+
+            return $precision;
+        }
+
+        return call_user_func([Context::getContext(), 'getComputingPrecision']);
     }
 
     /**
@@ -2409,9 +2470,9 @@ class PayPal extends PaymentModule implements WidgetInterface
 
         if (in_array($isoCurrency, $currency_wt_decimal) || ($precision == 0)) {
             return (int) 0;
-        } else {
-            return (int) 2;
         }
+
+        return (int) 2;
     }
 
     /**
@@ -2569,7 +2630,11 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     public function isSslActive()
     {
-        return Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
+        if (version_compare(_PS_VERSION_, '9', '<')) {
+            return Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
+        }
+
+        return Configuration::get('PS_SSL_ENABLED');
     }
 
     public function renameTabParent()
@@ -2646,7 +2711,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         foreach ($this->extensions as $extension) {
             /** @var AbstractModuleExtension $extension */
             $extension = new $extension();
-            if (!($extension instanceof WidgetInterface)) {
+            if (!$extension instanceof WidgetInterface) {
                 continue;
             }
             $extensionClass = (new ReflectionClass($extension))->getShortName();
@@ -2701,8 +2766,18 @@ class PayPal extends PaymentModule implements WidgetInterface
 
         foreach ($shops as $s) {
             foreach ($carrier_ids as $id_carrier) {
-                if (!Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'module_carrier` (`id_module`, `id_shop`, `id_reference`)
-				VALUES (' . (int) $this->id . ', "' . (int) $s . '", ' . (int) $id_carrier . ')')) {
+                $inserted = Db::getInstance()->insert(
+                    'module_carrier',
+                    [
+                        'id_module' => (int) $this->id,
+                        'id_shop' => (int) $s,
+                        'id_reference' => (int) $id_carrier,
+                    ],
+                    false,
+                    true,
+                    Db::INSERT_IGNORE
+                );
+                if (!$inserted) {
                     return false;
                 }
             }
@@ -2829,9 +2904,9 @@ class PayPal extends PaymentModule implements WidgetInterface
 
         if ((int) $sandbox) {
             return 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
-        } else {
-            return 'https://ipnpb.paypal.com/cgi-bin/webscr';
         }
+
+        return 'https://ipnpb.paypal.com/cgi-bin/webscr';
     }
 
     /**
@@ -2922,9 +2997,9 @@ class PayPal extends PaymentModule implements WidgetInterface
     {
         if (version_compare(_PS_VERSION_, '1.7.3.4.0', '<')) {
             return Product::getIdProductAttributesByIdAttributes($idProduct, $idAttributes, $findBest);
-        } else {
-            return Product::getIdProductAttributeByIdAttributes($idProduct, $idAttributes, $findBest);
         }
+
+        return Product::getIdProductAttributeByIdAttributes($idProduct, $idAttributes, $findBest);
     }
 
     /**
@@ -3196,5 +3271,48 @@ class PayPal extends PaymentModule implements WidgetInterface
             function ($file) {
                 return !preg_match('/^config_[a-z]+\.xml$/', $file) && $file !== 'config.xml';
             });
+    }
+
+    public function getToolKit()
+    {
+        return $this->toolKit;
+    }
+
+    protected function encryptCredentials()
+    {
+        $secretKeys = [
+            self::PAYPAL_EC_SECRET_SANDBOX,
+            self::PAYPAL_EC_SECRET_LIVE,
+            self::PAYPAL_MB_SECRET_SANDBOX,
+            self::PAYPAL_MB_SECRET_LIVE,
+            self::PAYPAL_PPP_SECRET_SANDBOX,
+            self::PAYPAL_PPP_SECRET_LIVE,
+        ];
+
+        $shops = Shop::getShops();
+
+        foreach ($shops as $shop) {
+            $idShop = (int) $shop['id_shop'];
+            $idShopGroup = (int) $shop['id_shop_group'];
+
+            foreach ($secretKeys as $key) {
+                $value = Configuration::get($key, null, $idShopGroup, $idShop);
+
+                if (empty($value)) {
+                    continue;
+                }
+
+                // Check if the value is already encrypted by trying to decrypt it
+                $decrypted = $this->toolKit->decrypt($value);
+
+                if ($decrypted !== null) {
+                    // Value is already encrypted, skip
+                    continue;
+                }
+
+                // Value is not encrypted, encrypt it now
+                Configuration::updateValue($key, $this->toolKit->encrypt($value), false, $idShopGroup, $idShop);
+            }
+        }
     }
 }
