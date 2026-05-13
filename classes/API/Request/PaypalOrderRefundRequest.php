@@ -144,7 +144,7 @@ class PaypalOrderRefundRequest extends RequestAbstract
             throw new OrderFullyRefundedException();
         }
 
-        $refundValue = $this->method->formatPrice($amount, $this->paypalOrder->currency);
+        $refundValue = $this->method->formatPrice($amount, $this->paypalOrder->currency, false);
 
         $amount = [
             'currency_code' => $this->paypalOrder->currency,
