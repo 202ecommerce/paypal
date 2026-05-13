@@ -88,7 +88,21 @@ const config = {
           {loader: MiniCssExtractPlugin.loader},
           {loader: 'css-loader'},
           {loader: 'postcss-loader'},
-          {loader: 'sass-loader'},
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                silenceDeprecations: [
+                  'import',
+                  'color-functions',
+                  'slash-div',
+                  'abs-percent',
+                  'if-function',
+                  'global-builtin',
+                ],
+              },
+            },
+          },
         ],
       },
       {
