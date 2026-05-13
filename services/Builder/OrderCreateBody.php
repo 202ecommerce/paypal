@@ -43,7 +43,7 @@ class OrderCreateBody implements BuilderInterface
     /** @var \Context */
     protected $context;
 
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     /** @var AbstractMethodPaypal */
@@ -197,6 +197,12 @@ class OrderCreateBody implements BuilderInterface
                 'value' => $productTax,
             ];
             $item['quantity'] = $product['quantity'];
+
+            if (isset($product['is_virtual']) && $product['is_virtual']) {
+                $item['category'] = \PayPal::DIGITAL_GOODS;
+            } else {
+                $item['category'] = \PayPal::PHYSICAL_GOODS;
+            }
 
             $items[] = $item;
         }
@@ -523,7 +529,7 @@ class OrderCreateBody implements BuilderInterface
         if (PaypalContext::getContext()->get('scaVerification', false)) {
             $method = PaypalContext::getContext()->get('scaVerification');
 
-            if (in_array($method, [\Paypal::SCA_WHEN_REQUIRED, \Paypal::SCA_ALWAYS])) {
+            if (in_array($method, [\PayPal::SCA_WHEN_REQUIRED, \PayPal::SCA_ALWAYS])) {
                 return [
                     'card' => [
                         'attributes' => [

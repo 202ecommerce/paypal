@@ -184,6 +184,9 @@ class PayPal extends PaymentModule implements WidgetInterface
 
     const LAST_WEBHOOK_EVENT_VERIFICATION = 'PAYPAL_LAST_WEBHOOK_EVENT_VERIFICATION';
 
+    const PHYSICAL_GOODS = 'PHYSICAL_GOODS';
+    const DIGITAL_GOODS = 'DIGITAL_GOODS';
+
     public static $dev = true;
     public $express_checkout;
     public $message;
