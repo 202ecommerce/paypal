@@ -187,7 +187,7 @@ class OrderCreateBody implements BuilderInterface
             }
 
             $item['name'] = $this->formatter->formatPaypalString($product['name']);
-            $item['sku'] = $product['id_product'];
+            $item['sku'] = (string) $product['id_product'];
             $item['unit_amount'] = [
                 'currency_code' => $currency,
                 'value' => $priceExcl,
@@ -196,7 +196,7 @@ class OrderCreateBody implements BuilderInterface
                 'currency_code' => $currency,
                 'value' => $productTax,
             ];
-            $item['quantity'] = $product['quantity'];
+            $item['quantity'] = (string) $product['quantity'];
 
             if (isset($product['is_virtual']) && $product['is_virtual']) {
                 $item['category'] = \PayPal::DIGITAL_GOODS;
@@ -315,7 +315,7 @@ class OrderCreateBody implements BuilderInterface
             }
 
             $item['name'] = $this->module->l('Gift wrapping', get_class($this));
-            $item['sku'] = $this->context->cart->id;
+            $item['sku'] = (string) $this->context->cart->id;
             $item['unit_amount'] = [
                 'currency_code' => $currency,
                 'value' => $this->method->formatPrice($priceExcl),
@@ -324,7 +324,7 @@ class OrderCreateBody implements BuilderInterface
                 'currency_code' => $currency,
                 'value' => $this->method->formatPrice($tax),
             ];
-            $item['quantity'] = 1;
+            $item['quantity'] = '1';
 
             $items[] = $item;
         }
