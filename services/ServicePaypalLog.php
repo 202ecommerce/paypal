@@ -65,4 +65,15 @@ class ServicePaypalLog
     {
         return \PaypalOrder::loadByOrderId($log->id_order);
     }
+
+    public function updateOrderLogs(\Order $order)
+    {
+        \Db::getInstance()->update(
+            \PaypalLog::$definition['table'],
+            [
+                'id_order' => $order->id,
+            ],
+            'id_cart = ' . $order->id_cart
+        );
+    }
 }
