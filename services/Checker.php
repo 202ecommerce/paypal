@@ -62,27 +62,48 @@ class Checker
             'error_message' => '',
         ];
 
-        if (defined('CURL_SSLVERSION_TLSv1_2') == false) {
+        if (!defined('CURL_SSLVERSION_TLSv1_2')) {
             define('CURL_SSLVERSION_TLSv1_2', 6);
+        }
+        if (!defined('CURL_SSLVERSION_TLSv1_3')) {
+            define('CURL_SSLVERSION_TLSv1_3', 7);
         }
 
         $tls_server = $this->context->link->getModuleLink($this->module->name, 'tlscurltestserver');
         $return['ping_page'] = $tls_server;
-        $curl = curl_init($tls_server);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
-        $response = curl_exec($curl);
-        if (trim($response) != 'ok') {
-            $return['status'] = false;
+
+        $lastError = '';
+
+        foreach ([CURL_SSLVERSION_TLSv1_2, CURL_SSLVERSION_TLSv1_3] as $tlsVersion) {
+            $curl = curl_init($tls_server);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_SSLVERSION, $tlsVersion);
+            // Force HTTP/1.1 to avoid false negatives under Nginx HTTP/2 configurations (ALPN negotiation issues)
+            curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+            curl_setopt($curl, CURLOPT_USERAGENT, sprintf(
+                'PrestaShop/%s PayPalModule/%s PHP/%s TLS-Check',
+                _PS_VERSION_,
+                $this->module->version,
+                PHP_VERSION
+            ));
+            $response = curl_exec($curl);
             $curl_info = curl_getinfo($curl);
-            if ($curl_info['http_code'] == 401) {
-                $return['error_message'] = $this->module->l('401 Unauthorised. Please note that the TLS verification can\'t be done if you have htaccess password protection, debug or maintenance mode enabled on your web site.', 'AdminPayPalController');
-            } else {
-                $return['error_message'] = curl_error($curl);
+            $lastError = curl_error($curl);
+            curl_close($curl);
+
+            // A HTTP 401 means the TLS handshake succeeded (the server responded at HTTP level);
+            // the 401 is due to htaccess/maintenance protection, not a TLS failure.
+            if (trim($response) === 'ok' || $curl_info['http_code'] === 401) {
+                $return['status'] = true;
+                if ($curl_info['http_code'] === 401) {
+                    $return['error_message'] = $this->module->l('401 Unauthorised. Please note that the TLS verification can\'t be done if you have htaccess password protection, debug or maintenance mode enabled on your web site.', 'AdminPayPalController');
+                }
+
+                return $return;
             }
-        } else {
-            $return['status'] = true;
         }
+
+        $return['error_message'] = $lastError;
 
         return $return;
     }

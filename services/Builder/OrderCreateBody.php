@@ -43,7 +43,7 @@ class OrderCreateBody implements BuilderInterface
     /** @var \Context */
     protected $context;
 
-    /** @var \Paypal */
+    /** @var \PayPal */
     protected $module;
 
     /** @var AbstractMethodPaypal */
@@ -92,7 +92,6 @@ class OrderCreateBody implements BuilderInterface
 
         $body = [
             'intent' => $this->getIntent(),
-            'application_context' => $this->getApplicationContext(),
             'purchase_units' => [
                 [
                     'amount' => $this->getAmount($currency),
@@ -188,7 +187,7 @@ class OrderCreateBody implements BuilderInterface
             }
 
             $item['name'] = $this->formatter->formatPaypalString($product['name']);
-            $item['sku'] = $product['id_product'];
+            $item['sku'] = (string) $product['id_product'];
             $item['unit_amount'] = [
                 'currency_code' => $currency,
                 'value' => $priceExcl,
@@ -197,7 +196,13 @@ class OrderCreateBody implements BuilderInterface
                 'currency_code' => $currency,
                 'value' => $productTax,
             ];
-            $item['quantity'] = $product['quantity'];
+            $item['quantity'] = (string) $product['quantity'];
+
+            if (isset($product['is_virtual']) && $product['is_virtual']) {
+                $item['category'] = \PayPal::DIGITAL_GOODS;
+            } else {
+                $item['category'] = \PayPal::PHYSICAL_GOODS;
+            }
 
             $items[] = $item;
         }
@@ -310,7 +315,7 @@ class OrderCreateBody implements BuilderInterface
             }
 
             $item['name'] = $this->module->l('Gift wrapping', get_class($this));
-            $item['sku'] = $this->context->cart->id;
+            $item['sku'] = (string) $this->context->cart->id;
             $item['unit_amount'] = [
                 'currency_code' => $currency,
                 'value' => $this->method->formatPrice($priceExcl),
@@ -319,7 +324,7 @@ class OrderCreateBody implements BuilderInterface
                 'currency_code' => $currency,
                 'value' => $this->method->formatPrice($tax),
             ];
-            $item['quantity'] = 1;
+            $item['quantity'] = '1';
 
             $items[] = $item;
         }
@@ -350,6 +355,7 @@ class OrderCreateBody implements BuilderInterface
 
         if ($this->isShortcut()) {
             $applicationContext['shipping_preference'] = 'GET_FROM_FILE';
+            $applicationContext['user_action'] = 'CONTINUE';
         }
 
         return $applicationContext;
@@ -518,10 +524,12 @@ class OrderCreateBody implements BuilderInterface
 
     protected function getPaymentSource()
     {
+        $experienceContext = $this->getApplicationContext();
+
         if (PaypalContext::getContext()->get('scaVerification', false)) {
             $method = PaypalContext::getContext()->get('scaVerification');
 
-            if (in_array($method, [\Paypal::SCA_WHEN_REQUIRED, \Paypal::SCA_ALWAYS])) {
+            if (in_array($method, [\PayPal::SCA_WHEN_REQUIRED, \PayPal::SCA_ALWAYS])) {
                 return [
                     'card' => [
                         'attributes' => [
@@ -532,6 +540,7 @@ class OrderCreateBody implements BuilderInterface
                         'billing_address' => $this->getAddress(
                             new \Address($this->context->cart->id_address_invoice)
                         ),
+                        'experience_context' => $experienceContext,
                     ],
                 ];
             }
@@ -551,6 +560,7 @@ class OrderCreateBody implements BuilderInterface
                                         'customer_type' => Vaulting::CUSTOMER_TYPE_CONSUMER,
                                     ],
                                 ],
+                                'experience_context' => $experienceContext,
                             ],
                         ];
                     }
@@ -560,6 +570,10 @@ class OrderCreateBody implements BuilderInterface
             return [];
         }
 
-        return [];
+        return [
+            'paypal' => [
+                'experience_context' => $experienceContext,
+            ],
+        ];
     }
 }
