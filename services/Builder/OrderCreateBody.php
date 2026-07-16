@@ -35,6 +35,7 @@ if (!defined('_PS_VERSION_')) {
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
+use PaypalAddons\classes\Webhook\OrderShippingCallbackUrl;
 use PaypalAddons\services\FormatterPaypal;
 use PaypalAddons\services\PaypalContext;
 
@@ -116,7 +117,7 @@ class OrderCreateBody implements BuilderInterface
         if (false === empty($paymentSource)) {
             $body['payment_source'] = $paymentSource;
         }
-
+dump($body);die;
         return $body;
     }
 
@@ -242,12 +243,22 @@ class OrderCreateBody implements BuilderInterface
         return $payer;
     }
 
-    protected function getAmount($currency)
+    /**
+     * @param string $currency
+     * @param float|null $shippingCostOverride Tax-mode-aware shipping cost (see isUseTax()) to use
+     *                                         instead of the cart's own carrier, e.g. when quoting
+     *                                         a shipping option the buyer hasn't picked on the cart yet
+     *
+     * @return array
+     */
+    protected function getAmount($currency, $shippingCostOverride = null)
     {
         $cartSummary = $this->context->cart->getSummaryDetails();
         $items = $this->getItems($currency, true);
         $subTotalExcl = 0;
-        $shippingTotal = $this->method->formatPrice($this->getTotalShipping());
+        $shippingTotal = $this->method->formatPrice(
+            $shippingCostOverride !== null ? $shippingCostOverride : $this->getTotalShipping()
+        );
         $subTotalTax = 0;
         $discountTotal = $this->method->formatPrice(abs($this->getDiscount()));
         $handling = $this->getHandling($currency);
@@ -356,6 +367,10 @@ class OrderCreateBody implements BuilderInterface
         if ($this->isShortcut()) {
             $applicationContext['shipping_preference'] = 'GET_FROM_FILE';
             $applicationContext['user_action'] = 'CONTINUE';
+            $applicationContext['order_update_callback_config'] = [
+                'callback_url' => (new OrderShippingCallbackUrl())->get(),
+                'callback_events' => ['SHIPPING_ADDRESS', 'SHIPPING_OPTIONS'],
+            ];
         }
 
         return $applicationContext;
@@ -452,6 +467,23 @@ class OrderCreateBody implements BuilderInterface
     protected function getCustomId()
     {
         return $this->method->getCustomFieldInformation($this->context->cart);
+    }
+
+    /**
+     * Public entry point used by the shipping callback controller to quote the order amount
+     * for a candidate carrier that isn't (yet) the cart's own carrier.
+     *
+     * @param float $shippingCostTaxIncl
+     * @param float $shippingCostTaxExcl
+     *
+     * @return array
+     */
+    public function getAmountForCarrier($shippingCostTaxIncl, $shippingCostTaxExcl)
+    {
+        $currency = $this->getCurrency();
+        $shippingCost = $this->isUseTax() ? $shippingCostTaxIncl : $shippingCostTaxExcl;
+
+        return $this->getAmount($currency, $shippingCost);
     }
 
     protected function getBrandName()

@@ -292,6 +292,7 @@ class PayPal extends PaymentModule implements WidgetInterface
     public $objectModels = [
         'PaypalCapture',
         'PaypalOrder',
+        'PaypalOrderCart',
         'PaypalVaulting',
         'PaypalIpn',
         'PaypalWebhook',
@@ -375,6 +376,8 @@ class PayPal extends PaymentModule implements WidgetInterface
     /** @var ToolKit */
     protected $toolKit;
 
+    public $secure_key = '';
+
     public function __construct()
     {
         $this->name = 'paypal';
@@ -400,6 +403,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         $this->errors = '';
         $countryDefault = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
         $this->toolKit = new ToolKit();
+        $this->secure_key = $this->getToolKit()->hash($this->name);
 
         switch ($countryDefault->iso_code) {
             case 'DE':

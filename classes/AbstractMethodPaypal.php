@@ -52,6 +52,7 @@ use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalAddons\services\Checker;
 use PaypalAddons\services\Order\RefundAmountCalculator;
 use PaypalAddons\services\PaypalContext;
+use PaypalAddons\services\ServicePaypalOrderCart;
 use PaypalAddons\services\ServicePaypalVaulting;
 use PaypalAddons\services\StatusMapping;
 use PaypalPPBTlib\AbstractMethod;
@@ -159,6 +160,10 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
         $this->setPaymentId($response->getPaymentId());
         $this->updateCartTrace(\Context::getContext()->cart, $response->getPaymentId());
+
+        if (is_callable([$this, 'getShortCut']) && $this->getShortCut()) {
+            (new ServicePaypalOrderCart())->create(\Context::getContext()->cart->id, $response->getPaymentId());
+        }
 
         return $response;
     }
