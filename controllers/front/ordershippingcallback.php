@@ -28,7 +28,7 @@
 
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\services\Builder\OrderCreateBody;
-use PaypalAddons\services\ServicePaypalOrderCart;
+use PaypalAddons\services\CustomId;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 if (!defined('_PS_VERSION_')) {
@@ -60,6 +60,13 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
     {
         parent::init();
 
+        if (hash_equals((string) $this->module->secure_key, (string) Tools::getValue('_token')) === false) {
+            $this->logError('Invalid or missing token in shipping callback request', null);
+            $this->respond(401);
+
+            return;
+        }
+
         try {
             $requestData = json_decode($this->request, true);
 
@@ -75,10 +82,10 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
                 return;
             }
 
-            $idCart = (new ServicePaypalOrderCart())->getIdCartByPaymentId($requestData['id']);
+            $idCart = $this->getCartIdFromRequest($requestData);
 
             if (empty($idCart)) {
-                $this->logError('Unknown payment id in shipping callback: ' . $requestData['id'], null);
+                $this->logError('Unable to resolve cart id from shipping callback custom_id. Payment id: ' . $requestData['id'], null);
                 $this->respond(400);
 
                 return;
@@ -129,6 +136,22 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
             $this->logError('Error code: ' . $exception->getCode() . '. Short message: ' . $exception->getMessage() . '.', isset($idCart) ? $idCart : null);
             $this->respond(500);
         }
+    }
+
+    /**
+     * Resolves the cart id from the callback payload's `custom_id`, which PayPal echoes
+     * back unchanged on `purchase_units[0].custom_id` from what was sent at order-create
+     * time (@see \PaypalAddons\services\CustomId::build()).
+     *
+     * @param array $requestData
+     *
+     * @return int|null
+     */
+    protected function getCartIdFromRequest(array $requestData)
+    {
+        $customId = isset($requestData['purchase_units'][0]['custom_id']) ? $requestData['purchase_units'][0]['custom_id'] : '';
+
+        return (new CustomId())->getCartId($customId);
     }
 
     /**
@@ -244,6 +267,7 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
         $statusMessages = [
             200 => 'OK',
             400 => 'Bad Request',
+            401 => 'Unauthorized',
             422 => 'Unprocessable Content',
             500 => 'Internal Server Error',
         ];

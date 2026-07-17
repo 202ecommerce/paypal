@@ -28,6 +28,8 @@
 
 namespace PaypalAddons\classes\API\Model;
 
+use PaypalAddons\services\CustomId;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -204,14 +206,6 @@ class WebhookEvent extends PayPalModel
 
     public function getCartId()
     {
-        $parts = explode('_', $this->getResource()->__get('custom_id'));
-
-        foreach ($parts as $part) {
-            if (strpos($part, 'Cart') === 0) {
-                return (int) trim(explode(':', $part)[1]);
-            }
-        }
-
-        return null;
+        return (new CustomId())->getCartId($this->getResource()->__get('custom_id'));
     }
 }

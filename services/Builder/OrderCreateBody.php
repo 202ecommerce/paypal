@@ -36,6 +36,7 @@ use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\Vaulting;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
 use PaypalAddons\classes\Webhook\OrderShippingCallbackUrl;
+use PaypalAddons\services\CustomId;
 use PaypalAddons\services\FormatterPaypal;
 use PaypalAddons\services\PaypalContext;
 
@@ -117,7 +118,7 @@ class OrderCreateBody implements BuilderInterface
         if (false === empty($paymentSource)) {
             $body['payment_source'] = $paymentSource;
         }
-dump($body);die;
+
         return $body;
     }
 
@@ -466,7 +467,7 @@ dump($body);die;
 
     protected function getCustomId()
     {
-        return $this->method->getCustomFieldInformation($this->context->cart);
+        return (new CustomId())->build($this->context->cart);
     }
 
     /**

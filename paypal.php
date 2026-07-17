@@ -292,7 +292,6 @@ class PayPal extends PaymentModule implements WidgetInterface
     public $objectModels = [
         'PaypalCapture',
         'PaypalOrder',
-        'PaypalOrderCart',
         'PaypalVaulting',
         'PaypalIpn',
         'PaypalWebhook',

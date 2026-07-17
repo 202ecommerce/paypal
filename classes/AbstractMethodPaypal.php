@@ -52,7 +52,6 @@ use PaypalAddons\classes\Webhook\WebhookOption;
 use PaypalAddons\services\Checker;
 use PaypalAddons\services\Order\RefundAmountCalculator;
 use PaypalAddons\services\PaypalContext;
-use PaypalAddons\services\ServicePaypalOrderCart;
 use PaypalAddons\services\ServicePaypalVaulting;
 use PaypalAddons\services\StatusMapping;
 use PaypalPPBTlib\AbstractMethod;
@@ -160,10 +159,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
 
         $this->setPaymentId($response->getPaymentId());
         $this->updateCartTrace(\Context::getContext()->cart, $response->getPaymentId());
-
-        if (is_callable([$this, 'getShortCut']) && $this->getShortCut()) {
-            (new ServicePaypalOrderCart())->create(\Context::getContext()->cart->id, $response->getPaymentId());
-        }
 
         return $response;
     }
@@ -534,24 +529,6 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         }
 
         return $url . $log->id_transaction;
-    }
-
-    /**
-     * @param \Cart $cart
-     *
-     * @return string additional payment information
-     */
-    public function getCustomFieldInformation(\Cart $cart)
-    {
-        $module = \Module::getInstanceByName($this->name);
-        $return = (string) _PS_VERSION_ . '_' . (string) $module->version . '_' . \phpversion() . '_';
-        if (\Tools::getValue('sc') !== false) {
-            $return .= 'ESC_';
-        }
-        $return .= $module->l('Cart ID: ', get_class($this)) . $cart->id . '_';
-        $return .= $module->l('Shop name: ', get_class($this)) . \Configuration::get('PS_SHOP_NAME', null, $cart->id_shop);
-
-        return \substr($return, 0, 137);
     }
 
     public function getBrandName()
