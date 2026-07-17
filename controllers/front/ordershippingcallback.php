@@ -163,6 +163,7 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
      */
     protected function setCurrencyContext(Cart $cart)
     {
+        /* @phpstan-ignore-next-line */
         $currency = new Currency((int) $cart->id_currency);
 
         if (Validate::isLoadedObject($currency) === false) {

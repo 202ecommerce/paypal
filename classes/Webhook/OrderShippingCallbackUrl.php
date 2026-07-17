@@ -39,16 +39,7 @@ class OrderShippingCallbackUrl
         /** @var \PayPal $module */
         $module = \Module::getInstanceByName('paypal');
         /* @phpstan-ignore-next-line */
-        $url = \Context::getContext()->link->getModuleLink(
-            'paypal',
-            'ordershippingcallback',
-            [
-                '_token' => $module->secure_key,
-            ],
-            true,
-            (int) \Configuration::get('PS_LANG_DEFAULT'),
-            (int) \Configuration::get('PS_SHOP_DEFAULT')
-        );
+        $url = \Context::getContext()->link->getModuleLink('paypal', 'ordershippingcallback', ['_token' => $module->secure_key], true, (int) \Configuration::get('PS_LANG_DEFAULT'), (int) \Configuration::get('PS_SHOP_DEFAULT'));
 
         return $url;
     }
