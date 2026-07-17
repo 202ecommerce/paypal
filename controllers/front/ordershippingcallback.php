@@ -27,7 +27,7 @@
  */
 
 use PaypalAddons\classes\AbstractMethodPaypal;
-use PaypalAddons\services\Builder\OrderCreateBody;
+use PaypalAddons\services\Builder\OrderShippingCallbackResponseBody;
 use PaypalAddons\services\CustomId;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
@@ -103,16 +103,14 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
             $this->setShopContext($cart);
             $this->setCurrencyContext($cart);
 
-            $carriers = $this->getEligibleCarriers($cart, $requestData['shipping_address']['country_code']);
+            $responseBody = new OrderShippingCallbackResponseBody($cart, $this->method, $requestData);
+            $selectedCarrier = $responseBody->getSelectedCarrier();
 
-            if (empty($carriers)) {
+            if (empty($selectedCarrier)) {
                 $this->respond(422, ['name' => 'COUNTRY_ERROR']);
 
                 return;
             }
-
-            $requestedCarrierId = isset($requestData['shipping_option']['id']) ? (int) $requestData['shipping_option']['id'] : 0;
-            $selectedCarrier = $this->pickCarrier($carriers, $requestedCarrierId);
 
             // Persist immediately so the PrestaShop order created after capture uses the same
             // carrier/shipping cost PayPal actually charged (scOrder.php only re-syncs the
@@ -120,19 +118,7 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
             $cart->id_carrier = (int) $selectedCarrier['id_carrier'];
             $cart->update();
 
-            $bodyBuilder = $this->getBodyBuilder($cart);
-            $amount = $bodyBuilder->getAmountForCarrier((float) $selectedCarrier['price'], (float) $selectedCarrier['price_tax_exc']);
-
-            $this->respond(200, [
-                'id' => $requestData['id'],
-                'purchase_units' => [
-                    [
-                        'reference_id' => empty($requestData['purchase_units'][0]['reference_id']) ? 'default' : $requestData['purchase_units'][0]['reference_id'],
-                        'amount' => $amount,
-                        'shipping_options' => $this->buildShippingOptions($carriers, $amount['currency_code'], (int) $selectedCarrier['id_carrier']),
-                    ],
-                ],
-            ]);
+            $this->respond(200, $responseBody->build());
         } catch (Throwable $exception) {
             $this->logError('Error code: ' . $exception->getCode() . '. Short message: ' . $exception->getMessage() . '.', isset($idCart) ? $idCart : null);
             $this->respond(500);
@@ -153,98 +139,6 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
         $customId = isset($requestData['purchase_units'][0]['custom_id']) ? $requestData['purchase_units'][0]['custom_id'] : '';
 
         return (new CustomId())->getCartId($customId);
-    }
-
-    /**
-     * @param Cart $cart
-     * @param string $countryIsoCode
-     *
-     * @return array List of carriers eligible for the given country, as returned by Carrier::getCarriersForOrder()
-     */
-    protected function getEligibleCarriers($cart, $countryIsoCode)
-    {
-        if (Validate::isLanguageIsoCode($countryIsoCode) === false) {
-            return [];
-        }
-
-        $idCountry = Country::getByIso($countryIsoCode);
-
-        if (empty($idCountry)) {
-            return [];
-        }
-
-        $idZone = (int) Country::getIdZone($idCountry);
-        $groups = $cart->id_customer ? (new Customer((int) $cart->id_customer))->getGroups() : null;
-        $error = [];
-
-        return Carrier::getCarriersForOrder($idZone, $groups, $cart, $error);
-    }
-
-    /**
-     * @param array $carriers
-     * @param int $requestedCarrierId
-     *
-     * @return array The requested carrier if still eligible, otherwise the cheapest eligible one
-     */
-    protected function pickCarrier(array $carriers, $requestedCarrierId)
-    {
-        if ($requestedCarrierId) {
-            foreach ($carriers as $carrier) {
-                if ((int) $carrier['id_carrier'] === $requestedCarrierId) {
-                    return $carrier;
-                }
-            }
-        }
-
-        $cheapest = null;
-
-        foreach ($carriers as $carrier) {
-            if ($cheapest === null || (float) $carrier['price'] < (float) $cheapest['price']) {
-                $cheapest = $carrier;
-            }
-        }
-
-        return $cheapest;
-    }
-
-    /**
-     * @param array $carriers
-     * @param string $currency
-     * @param int $selectedCarrierId
-     *
-     * @return array
-     */
-    protected function buildShippingOptions(array $carriers, $currency, $selectedCarrierId)
-    {
-        $options = [];
-
-        foreach ($carriers as $carrier) {
-            $options[] = [
-                'id' => (string) $carrier['id_carrier'],
-                'label' => $carrier['name'],
-                'type' => 'SHIPPING',
-                'selected' => (int) $carrier['id_carrier'] === $selectedCarrierId,
-                'amount' => [
-                    'currency_code' => $currency,
-                    'value' => $this->method->formatPrice($carrier['price']),
-                ],
-            ];
-        }
-
-        return $options;
-    }
-
-    /**
-     * @param Cart $cart
-     *
-     * @return OrderCreateBody
-     */
-    protected function getBodyBuilder($cart)
-    {
-        $context = clone Context::getContext();
-        $context->cart = $cart;
-
-        return new OrderCreateBody($context, $this->method);
     }
 
     protected function setShopContext(Cart $cart)

@@ -83,6 +83,7 @@ class PurchaseUnit
 
     /**
      * The `id_carrier` PayPal selected via the shipping callback (`shipping.options[].selected`)
+     *
      * @see \PaypalOrdershippingcallbackModuleFrontController::buildShippingOptions() for where the `id` values originate.
      *
      * @return int|null
