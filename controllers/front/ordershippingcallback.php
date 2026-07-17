@@ -101,6 +101,7 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
             }
 
             $this->setShopContext($cart);
+            $this->setCurrencyContext($cart);
 
             $carriers = $this->getEligibleCarriers($cart, $requestData['shipping_address']['country_code']);
 
@@ -126,7 +127,7 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
                 'id' => $requestData['id'],
                 'purchase_units' => [
                     [
-                        'reference_id' => 'default',
+                        'reference_id' => empty($requestData['purchase_units'][0]['reference_id']) ? 'default' : $requestData['purchase_units'][0]['reference_id'],
                         'amount' => $amount,
                         'shipping_options' => $this->buildShippingOptions($carriers, $amount['currency_code'], (int) $selectedCarrier['id_carrier']),
                     ],
@@ -256,6 +257,25 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
 
         $this->context->shop = $shop;
         Shop::setContext(Shop::CONTEXT_SHOP, $shop->id);
+    }
+
+    /**
+     * The server-to-server callback carries no cookie/session, so `Context::getContext()->currency`
+     * defaults to the shop's default currency rather than the one the cart was actually priced in.
+     * `OrderCreateBody::getCurrency()` (used to price the carriers) reads from context, so it must
+     * be aligned with the cart's own currency before building amounts.
+     *
+     * @param Cart $cart
+     */
+    protected function setCurrencyContext(Cart $cart)
+    {
+        $currency = new Currency((int) $cart->id_currency);
+
+        if (Validate::isLoadedObject($currency) === false) {
+            return;
+        }
+
+        $this->context->currency = $currency;
     }
 
     /**
