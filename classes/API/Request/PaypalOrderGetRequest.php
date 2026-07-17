@@ -216,7 +216,7 @@ class PaypalOrderGetRequest extends RequestAbstract
         }
 
         foreach ($exec->result->purchase_units[0]->shipping->options as $option) {
-            if (false == empty($option->selected)) {
+            if (false == empty($option->selected) && isset($option->id)) {
                 return (int) $option->id;
             }
         }

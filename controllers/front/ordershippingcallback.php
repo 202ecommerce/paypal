@@ -203,7 +203,7 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
             $idCart,
             null,
             null,
-            (int) Configuration::get('PAYPAL_SANDBOX'),
+            (bool) Configuration::get('PAYPAL_SANDBOX'),
             null
         );
         ProcessLoggerHandler::closeLogger();

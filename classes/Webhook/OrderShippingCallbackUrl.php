@@ -36,6 +36,7 @@ class OrderShippingCallbackUrl
 {
     public function get()
     {
+        /** @var \PayPal $module */
         $module = \Module::getInstanceByName('paypal');
         /* @phpstan-ignore-next-line */
         $url = \Context::getContext()->link->getModuleLink(
