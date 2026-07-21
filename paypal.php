@@ -1632,7 +1632,7 @@ class PayPal extends PaymentModule implements WidgetInterface
         $currency_special = null,
         $dont_touch_amount = false,
         $secure_key = false,
-        Shop $shop = null,
+        ?Shop $shop = null,
         $order_reference = null
     ) {
         if ($this->needConvert()) {
