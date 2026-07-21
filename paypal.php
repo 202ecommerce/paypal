@@ -854,10 +854,6 @@ class PayPal extends PaymentModule implements WidgetInterface
         if (Module::isEnabled('braintreeofficial') && (int) Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
             return [];
         }
-        if (false === $this->context->customer->isLogged(true)) {
-            return [];
-        }
-
         $isoCountryDefault = Country::getIsoById((int) Configuration::get('PS_COUNTRY_DEFAULT'));
         $payments_options = [];
         $method = AbstractMethodPaypal::load();
