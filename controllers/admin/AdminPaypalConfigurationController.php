@@ -51,7 +51,7 @@ use PaypalAddons\classes\Shortcut\ShortcutPreview;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPalController
+class AdminPaypalConfigurationController extends ModuleAdminController
 {
     public $bootstrap = false;
 
