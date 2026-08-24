@@ -119,12 +119,17 @@ class AdminPaypalConfigurationController extends ModuleAdminController
 
     public function initContent()
     {
+        if (false == $this->ajax) {
+            header('Cache-Control: max-age=0');
+            header('Clear-Site-Data: "cache"');
+        }
         if (Tools::getValue('action') === 'onboarding-completed') {
             $this->method->setSandbox((int) Tools::getValue('sandbox'));
             $this->completeOnboarding();
         }
         $this->content .= $this->renderConfiguration();
-        parent::initContent();
+
+        return parent::initContent();
     }
 
     protected function renderConfiguration()
