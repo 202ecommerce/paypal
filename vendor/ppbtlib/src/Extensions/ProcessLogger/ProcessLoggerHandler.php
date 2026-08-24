@@ -210,7 +210,7 @@ class ProcessLoggerHandler
             return Db::getInstance()->delete(
                 'paypal_processlogger',
                 sprintf(
-                    'date_add <= NOW() - INTERVAL %d DAY',
+                    'date_add <= NOW() - INTERVAL %d DAY AND id_order = 0',
                     self::getAutoErasingDelayInDays()
                 )
             );
@@ -232,13 +232,9 @@ class ProcessLoggerHandler
      */
     public static function getAutoErasingDelayInDays()
     {
-        $numberOfDays = Configuration::get('PAYPAL_EXTLOGS_ERASING_DAYSMAX');
+        $numberOfDays = (int) Configuration::get('PAYPAL_EXTLOGS_ERASING_DAYSMAX', null, null, null, 90);
 
-        if (empty($numberOfDays) || false === is_numeric($numberOfDays)) {
-            return 5;
-        }
-
-        return (int)$numberOfDays;
+        return $numberOfDays;
     }
 
     /**
