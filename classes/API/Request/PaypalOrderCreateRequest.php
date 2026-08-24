@@ -64,7 +64,7 @@ class PaypalOrderCreateRequest extends RequestAbstract
                     ->setData($exec)
                     ->setPaymentId($exec->result->id)
                     ->setStatusCode($exec->statusCode)
-                    ->setApproveLink($this->getLink('approve', $exec->result->links));
+                    ->setApproveLink($this->getLink('payer-action', $exec->result->links));
             } elseif ($exec->statusCode == 204) {
                 $response->setSuccess(true);
             } else {
