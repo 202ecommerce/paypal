@@ -67,6 +67,7 @@ use PaypalAddons\classes\Widget\InstallmentWidget;
 use PaypalAddons\classes\Widget\ShortcutWidget;
 use PaypalAddons\services\PaymentRefundAmount;
 use PaypalAddons\services\PaypalContext;
+use PaypalAddons\services\ServicePaypalLog;
 use PaypalAddons\services\ServicePaypalOrder;
 use PaypalAddons\services\ServicePaypalVaulting;
 use PaypalAddons\services\StatusMapping;
@@ -1787,6 +1788,8 @@ class PayPal extends PaymentModule implements WidgetInterface
             }
         }
 
+        $this->updateOrderLogs($order);
+
         return true;
     }
 
@@ -3313,5 +3316,19 @@ class PayPal extends PaymentModule implements WidgetInterface
                 Configuration::updateValue($key, $this->toolKit->encrypt($value), false, $idShopGroup, $idShop);
             }
         }
+    }
+
+    protected function updateOrderLogs(?OrderCore $order)
+    {
+        if (false === Validate::isLoadedObject($order)) {
+            return;
+        }
+
+        $this->getServicePaypalLog()->updateOrderLogs($order);
+    }
+
+    public function getServicePaypalLog()
+    {
+        return new ServicePaypalLog();
     }
 }
