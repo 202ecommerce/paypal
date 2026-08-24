@@ -195,7 +195,33 @@ class PaypalOrderGetRequest extends RequestAbstract
             $purchaseUnit->setCurrency($exec->result->purchase_units[0]->amount->currency_code);
         }
 
+        $purchaseUnit->setIdCarrier($this->getIdCarrier($exec));
+
         return $purchaseUnit;
+    }
+
+    /**
+     * Reads the carrier PayPal selected while the buyer was in the shipping-callback popup
+     * (`purchase_units[0].shipping.options[].selected`), so it can be re-applied to the cart
+     * once the buyer returns from PayPal (@see PaypalScOrderModuleFrontController::prepareOrder()).
+     *
+     * @param object $exec
+     *
+     * @return int|null
+     */
+    protected function getIdCarrier($exec)
+    {
+        if (empty($exec->result->purchase_units[0]->shipping->options)) {
+            return null;
+        }
+
+        foreach ($exec->result->purchase_units[0]->shipping->options as $option) {
+            if (false == empty($option->selected) && isset($option->id)) {
+                return (int) $option->id;
+            }
+        }
+
+        return null;
     }
 
     protected function getStatus($exec)

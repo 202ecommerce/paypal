@@ -38,6 +38,9 @@ class PurchaseUnit
 
     protected $amount;
 
+    /** @var int|null */
+    protected $idCarrier;
+
     /**
      * @return string
      */
@@ -74,6 +77,30 @@ class PurchaseUnit
     public function setAmount($amount)
     {
         $this->amount = (float) $amount;
+
+        return $this;
+    }
+
+    /**
+     * The `id_carrier` PayPal selected via the shipping callback (`shipping.options[].selected`)
+     *
+     * @see \PaypalOrdershippingcallbackModuleFrontController::buildShippingOptions() for where the `id` values originate.
+     *
+     * @return int|null
+     */
+    public function getIdCarrier()
+    {
+        return $this->idCarrier;
+    }
+
+    /**
+     * @param int|null $idCarrier
+     *
+     * @return self
+     */
+    public function setIdCarrier($idCarrier)
+    {
+        $this->idCarrier = $idCarrier === null ? null : (int) $idCarrier;
 
         return $this;
     }

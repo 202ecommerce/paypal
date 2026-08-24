@@ -89,14 +89,6 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
      */
     public function prepareOrder($info)
     {
-        if (false === $this->method->isCorrectCart($this->context->cart, $this->paymentData->orderID)) {
-            $this->redirectUrl = Context::getContext()->link->getPageLink('order');
-            $this->_errors[] = $this->module->l('The elements in the shopping cart were changed. Please try to pay again.', $this->fileName);
-            $this->module->resetCookiePaymentInfo();
-
-            return;
-        }
-
         if ($this->context->cookie->__get('logged')) {
             $customer = $this->context->customer;
         } elseif ($id_customer = Customer::customerExists($info->getClient()->getEmail(), true)) {
@@ -213,6 +205,19 @@ class PaypalScOrderModuleFrontController extends PaypalAbstarctModuleFrontContro
         }
 
         $this->context->cart->updateAddressId($this->context->cart->id_address_delivery, $id_address);
+
+        $idCarrier = $info->getPurchaseUnit()->getIdCarrier();
+
+        if (empty($idCarrier) === false) {
+            $carrier = new Carrier($idCarrier);
+
+            if (Validate::isLoadedObject($carrier) && $carrier->active) {
+                $this->context->cart->id_carrier = $idCarrier;
+                $this->context->cart->delivery_option = json_encode([$id_address => $idCarrier . ',']);
+                $this->context->cart->update();
+            }
+        }
+
         $invalidAddressIds = [];
 
         if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
