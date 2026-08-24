@@ -51,7 +51,7 @@ use PaypalAddons\classes\Shortcut\ShortcutPreview;
 use PaypalAddons\classes\Vaulting\VaultingFunctionality;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPalController
+class AdminPaypalConfigurationController extends ModuleAdminController
 {
     public $bootstrap = false;
 
@@ -119,12 +119,17 @@ class AdminPaypalConfigurationController extends PaypalAddons\classes\AdminPayPa
 
     public function initContent()
     {
+        if (false == $this->ajax) {
+            header('Cache-Control: max-age=0');
+            header('Clear-Site-Data: "cache"');
+        }
         if (Tools::getValue('action') === 'onboarding-completed') {
             $this->method->setSandbox((int) Tools::getValue('sandbox'));
             $this->completeOnboarding();
         }
         $this->content .= $this->renderConfiguration();
-        parent::initContent();
+
+        return parent::initContent();
     }
 
     protected function renderConfiguration()
