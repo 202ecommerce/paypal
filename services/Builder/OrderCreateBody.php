@@ -510,7 +510,7 @@ class OrderCreateBody implements BuilderInterface
         $discounts = $this->context->cart->getCartRules();
 
         if (empty($discounts)) {
-            return $handling;
+            return $this->method->formatPrice($handling);
         }
 
         foreach ($discounts as $discount) {
