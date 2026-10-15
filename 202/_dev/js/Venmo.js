@@ -118,7 +118,7 @@ class Venmo {
       const paymentOption = document.querySelector('[data-module-name="paypal_venmo"]');
 
       if (paymentOption) {
-        const paymentOptionRow = paymentOption.closest('.payment-option');
+        const paymentOptionRow = paymentOption.closest('.payment-option, .payment__option');
 
         if (paymentOptionRow) {
           paymentOptionRow.style.display = 'none';

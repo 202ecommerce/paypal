@@ -25,4 +25,4 @@
  */
 
  //  Add transaction id in order detail's list
-$(document).ready( () => $('.page-order-confirmation #order-details ul').append($('[data-paypal-transaction-id]')));
+$(document).ready( () => $('.page-order-confirmation #order-details ul, .page-order-confirmation ul.order-details, .page-order-confirmation ul.order-confirmation__details-list').first().append($('[data-paypal-transaction-id]')));

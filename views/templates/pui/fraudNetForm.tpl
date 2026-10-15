@@ -50,7 +50,7 @@
         pui-form
 >
 
-  <div class="form-group row">
+  <div class="form-group row mb-3">
     <div class="col-lg-2">
       <label class="form-label" for="paypal_pui_firstname">{l s='First name' mod='paypal'}</label>
 
@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row mb-3">
     <div class="col-lg-2">
       <label class="form-label" for="paypal_pui_lastname">{l s='Last name' mod='paypal'}</label>
     </div>
@@ -83,7 +83,7 @@
     </div>
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row mb-3">
     <div class="col-lg-2">
       <label class="form-label" for="paypal_pui_email">{l s='E-Mail' mod='paypal'}</label>
     </div>
@@ -99,7 +99,7 @@
     </div>
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row mb-3">
     <div class="col-lg-2">
       <label class="form-label" for="paypal_pui_birhday">{l s='Birth day' mod='paypal'}</label>
     </div>
@@ -156,7 +156,7 @@
     </script>
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row mb-3">
     <div class="col-lg-2">
       <label class="form-label" for="paypal_pui_phone">{l s='Phone' mod='paypal'}</label>
     </div>
@@ -181,7 +181,7 @@
       {l s='If your request to purchase Upon invoice is accepted, the purchase price claim will be assigned to Ratepay, and you may only pay Ratepay, not the merchant.' mod='paypal'}
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row mb-3">
     <div class="col-lg-12">
       <button class="btn btn-primary">{l s='Submit' mod='paypal'}</button>
     </div>

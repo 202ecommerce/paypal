@@ -24,9 +24,16 @@
  *
  *}
 
-<a class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="paypal-link" href="{$vaultListUrl|escape:'html':'UTF-8'}" title="{l s='Saved PayPal account' mod='paypal'}">
+{if isset($useAccountMenuMarkup) && $useAccountMenuMarkup}
+<a class="account-menu__link account-menu__link--paypal" id="paypal-link" href="{$vaultListUrl|escape:'html':'UTF-8'}" title="{l s='Saved PayPal account' mod='paypal'}">
+  <i class="account-menu__icon material-icons" aria-hidden="true">credit_card</i>
+  {l s='Saved PayPal account' mod='paypal'}
+</a>
+{else}
+<a class="my-account__link col-lg-4 col-md-6 col-sm-6 col-xs-12 col-12" id="paypal-link" href="{$vaultListUrl|escape:'html':'UTF-8'}" title="{l s='Saved PayPal account' mod='paypal'}">
   <span class="link-item">
     <i class="material-icons">credit_card</i>
       {l s='Saved PayPal account' mod='paypal'}
   </span>
 </a>
+{/if}

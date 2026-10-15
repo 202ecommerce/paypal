@@ -86,7 +86,7 @@ export const Tools = {
       }
     });
 
-    $('.payment-option').click(function() {
+    $('.payment-option, .payment__option').click(function() {
       if (checkBox.checked) {
         Tools.enable(disabledElement);
       } else {
@@ -135,7 +135,7 @@ export const Tools = {
     }
 
     window.paypalToolsHiddenElemenList[hideElementSelector] = [checkElement];
-    const options = checkElement.closest('.payment-options, .payment__list');
+    const options = checkElement.closest('.payment-options, .payment__list, .payment-options__list');
 
     if (options instanceof Element == false) {
       return;
@@ -167,7 +167,7 @@ export const Tools = {
     }
 
     window.paypalToolsShowElemenList[showElementSelector] = [checkElement];
-    const options = checkElement.closest('.payment-options, .payment__list');
+    const options = checkElement.closest('.payment-options, .payment__list, .payment-options__list');
 
     if (options instanceof Element == false) {
       return;

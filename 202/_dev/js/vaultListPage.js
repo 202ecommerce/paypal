@@ -51,7 +51,7 @@ document.addEventListener('click', (event) => {
       .then((response) => {
         if (response.success) {
           const paymentSource = event.target.closest('[payment-source]');
-          const mainSection = document.getElementById('main');
+          const mainSection = document.getElementById('main') || document.getElementById('content');
 
           if (paymentSource instanceof HTMLElement) {
             paymentSource.remove();
@@ -64,6 +64,8 @@ document.addEventListener('click', (event) => {
             html += '<span aria-hidden="true">&times;</span>';
             html += '</button></div>';
             alert.innerHTML = html;
+            // Dismiss without relying on the theme's Bootstrap alert plugin (BS4 vs BS5)
+            alert.querySelector('[data-dismiss="alert"]').addEventListener('click', () => alert.remove());
 
             if (mainSection.firstChild) {
               mainSection.insertBefore(alert, mainSection.firstChild);

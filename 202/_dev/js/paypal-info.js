@@ -30,7 +30,7 @@ import 'bootstrap/js/src/popover';
 window.addEventListener('load', () => {
 
   // Insert paypal info block after option name
-  $('.payment-option').each((step) => {
+  $('.payment-option, .payment__option').each((step) => {
     let i = step + 1;
     if ($(`#payment-option-${i}-container [data-module-name^='paypal']`).length > 0) {
       let dataPaypalInfo = $(`#payment-option-${i}-additional-information [data-paypal-info]`);
