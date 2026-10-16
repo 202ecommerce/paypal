@@ -340,6 +340,13 @@ ACDC.prototype.addMarkTo = function(element, styles = {}) {
     return;
   }
 
+  // Hummingbird 2.x wraps the whole option (incl. button) in .payment-option: put the mark in its label
+  const optionLabel = element.querySelector('.payment-option__label');
+
+  if (optionLabel instanceof Element) {
+    element = optionLabel;
+  }
+
   const markContainer = document.createElement('span');
 
   for (let key in styles) {

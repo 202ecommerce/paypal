@@ -65,3 +65,21 @@
     }
   }
 }
+
+// Hummingbird 2.x: radio + label live in .payment-option__form-check (block), keep PayPal mark and info icon inline
+.payment-option__label [paypal-mark-container] {
+  display: inline-block !important;
+  margin-left: .5rem;
+  vertical-align: middle;
+}
+
+.payment-option__form-check > [data-paypal-info] {
+  display: inline-block;
+  padding-left: .25rem;
+  vertical-align: middle;
+
+  .material-icons {
+    font-size: 1.25rem;
+    vertical-align: middle;
+  }
+}
