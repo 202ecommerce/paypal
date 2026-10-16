@@ -49,7 +49,7 @@
       <input type="hidden" id="source_page" name="source_page" value="cart">
       <input type="hidden" name="isAddAddress" value="1">
     </form>
-    <div paypal-button-container></div>
+    <div paypal-button-container paypal-payment-step-button></div>
 
     <div style="display: none" class="alert alert-danger" paypal-ec-wrong-button-message>
       <div>{l s='Please click on the \'Pay with PayPal\' button' mod='paypal'}</div>
@@ -60,52 +60,57 @@
 
 {block name='js'}
   <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          document.querySelector('#payment-confirmation button').addEventListener('click', function(event) {
-              let selectedOption = $('input[name=payment-option]:checked');
-              if (selectedOption.attr("data-module-name") == "paypal") {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  document.querySelector('[paypal-ec-wrong-button-message]').style.display = 'block';
-              }
-          });
-      });
+      (function () {
+          // Also supports the one-page checkout: its own confirmation button, an express checkout
+          // shortcut above the form and a payment list re-rendered by ajax (this script runs again)
+          var paymentConfirmationSelector = '#payment-confirmation, #opc-payment-confirmation';
 
-      if (typeof Shortcut != "undefined") {
-          Shortcut.addMarkTo(
-            document.querySelector('[data-module-name="paypal"]').closest('.payment-option, .payment__option label'),
-            {
-              display: "table-cell"
-            }
-          );
-          Shortcut.disableTillConsenting();
-          Shortcut.hideElementTillPaymentOptionChecked(
-              '[data-module-name="paypal"]',
-              '#payment-confirmation'
-          );
-          Shortcut.showElementIfPaymentOptionChecked(
-            '[data-module-name="paypal"]',
-            '[paypal-button-container]'
-          );
-      } else {
-          document.addEventListener('paypal-after-init-shortcut-button', function (event) {
+          if (typeof window.paypalPaymentStepGuard === 'undefined') {
+              window.paypalPaymentStepGuard = true;
+              document.addEventListener('click', function (event) {
+                  if (event.target instanceof Element === false
+                      || event.target.closest('#payment-confirmation button, #opc-payment-confirmation button') === null) {
+                      return;
+                  }
+
+                  var selectedOption = document.querySelector('input[name=payment-option]:checked');
+
+                  if (selectedOption && selectedOption.getAttribute('data-module-name') == 'paypal') {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      var message = document.querySelector('[paypal-ec-wrong-button-message]');
+
+                      if (message) {
+                          message.style.display = 'block';
+                      }
+                  }
+              }, true);
+          }
+
+          document.addEventListener('paypal-after-init-shortcut-button', function () {
+              var paypalOption = document.querySelector('[data-module-name="paypal"]');
+
+              if (paypalOption === null) {
+                  return;
+              }
+
               Shortcut.addMarkTo(
-                document.querySelector('[data-module-name="paypal"]').closest('.payment-option, .payment__option label'),
+                paypalOption.closest('.payment-option, .payment__option label'),
                 {
                   display: "table-cell"
                 }
               );
-              Shortcut.disableTillConsenting();
+              Shortcut.disableTillConsenting(document.querySelector('[paypal-payment-step-button]'));
               Shortcut.hideElementTillPaymentOptionChecked(
                   '[data-module-name="paypal"]',
-                  '#payment-confirmation'
+                  paymentConfirmationSelector
               );
               Shortcut.showElementIfPaymentOptionChecked(
                 '[data-module-name="paypal"]',
-                '[paypal-button-container]'
+                '[paypal-payment-step-button]'
               );
-          })
-      }
+          }, { once: true });
+      })();
   </script>
 {/block}
 

@@ -94,20 +94,6 @@ ACDC.prototype.sendData = function(data) {
   form.submit();
 };
 
-ACDC.prototype.getPaypalButtonsContainer = function() {
-  if (document.querySelector('#paypal-buttons')) {
-    return document.querySelector('#paypal-buttons');
-  }
-
-  var container = document.createElement('div');
-  container.id = 'paypal-buttons';
-  container.style = 'width: 300px';
-
-  document.querySelector('#payment-confirmation').after(container);
-
-  return container;
-};
-
 ACDC.prototype.initFields = function() {
   this.initCardFields();
 };
@@ -148,9 +134,7 @@ ACDC.prototype.initCardFields = function() {
   }
 
   if (this.isMoveButtonAtEnd) {
-    let paypalButtonsContainer = this.getPaypalButtonsContainer();
-    paypalButtonsContainer.append(this.buttonForm);
-    this.buttonForm.style.display = 'none';
+    Tools.moveButtonAtEnd(this.buttonForm, '[paypal-acdc-form-button]');
   }
 
   const numberField = cardFields.NumberField({
@@ -206,9 +190,7 @@ ACDC.prototype.initHostedFields = function() {
   if (totPaypalAcdcSdk.HostedFields.isEligible()) {
 
     if (this.isMoveButtonAtEnd) {
-      let paypalButtonsContainer = this.getPaypalButtonsContainer();
-      paypalButtonsContainer.append(this.buttonForm);
-      this.buttonForm.style.display = 'none';
+      Tools.moveButtonAtEnd(this.buttonForm, '[paypal-acdc-form-button]');
     }
 
     // Renders card fields
@@ -337,6 +319,18 @@ ACDC.prototype.hideElementTillPaymentOptionChecked = function(paymentOptionSelec
 
 ACDC.prototype.addMarkTo = function(element, styles = {}) {
   if (element instanceof Element == false) {
+    return;
+  }
+
+  // Hummingbird 2.x wraps the whole option (incl. button) in .payment-option: put the mark in its label
+  const optionLabel = element.querySelector('.payment-option__label');
+
+  if (optionLabel instanceof Element) {
+    element = optionLabel;
+  }
+
+  // The payment step script can run several times on the same markup
+  if (element.querySelector('[paypal-mark-container]')) {
     return;
   }
 

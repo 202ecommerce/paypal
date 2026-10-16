@@ -94,9 +94,7 @@ PaypalButton.prototype.initButton = function () {
     );
   }
   if (this.isMoveButtonAtEnd) {
-    const paypalButtonsContainer = this.getPaypalButtonsContainer();
-    paypalButtonsContainer.append(this.button);
-    this.button.style.display = 'none';
+    Tools.moveButtonAtEnd(this.button, this.button.id ? `#${this.button.id}` : null);
   }
 };
 
@@ -144,20 +142,6 @@ PaypalButton.prototype.sendData = function(data) {
   form.submit();
 };
 
-PaypalButton.prototype.getPaypalButtonsContainer = function() {
-   if (document.querySelector('#paypal-buttons')) {
-    return document.querySelector('#paypal-buttons');
-   }
-
-   var container = document.createElement('div');
-   container.id = 'paypal-buttons';
-   container.style = 'width: 300px';
-
-   document.querySelector('#payment-confirmation').after(container);
-
-   return container;
-};
-
 PaypalButton.prototype.hideElementTillPaymentOptionChecked = function(paymentOptionSelector, hideElementSelector) {
   Tools.hideElementTillPaymentOptionChecked(paymentOptionSelector, hideElementSelector);
 };
@@ -179,6 +163,13 @@ PaypalButton.prototype.needSaveAccount = function() {
 PaypalButton.prototype.addMarkTo = function(element, styles = {}) {
         if (element instanceof Element == false) {
           return;
+        }
+
+        // Hummingbird 2.x wraps the whole option (incl. button) in .payment-option: put the mark in its label
+        const optionLabel = element.querySelector('.payment-option__label');
+
+        if (optionLabel instanceof Element) {
+          element = optionLabel;
         }
 
         let markContainer = element.querySelector('[paypal-mark-container]');

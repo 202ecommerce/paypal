@@ -129,6 +129,15 @@
         return;
       }
 
+      // The payment options can be re-rendered by ajax (e.g. one-page checkout): init each card form once
+      var acdcWrapper = document.querySelector('[paypal-acdc-wrapper]:not([data-paypal-initialized])');
+
+      if (acdcWrapper === null) {
+        return;
+      }
+
+      acdcWrapper.setAttribute('data-paypal-initialized', '1');
+
       var messages = new Object();
       messages['INVALID_REQUEST'] = '{l s='There was a problem with your request' mod='paypal'}';
       messages['CVV_IS_EMPTY'] = '{l s='Please enter a valid cvv' mod='paypal'}';
@@ -139,13 +148,13 @@
         controller: '{$scInitController nofilter}',
         validationController: '{$validationController nofilter}',
         messages: messages,
-        buttonForm: document.querySelector('[paypal-acdc-form-button]'),
+        buttonForm: acdcWrapper.querySelector('[paypal-acdc-form-button]'),
         isMoveButtonAtEnd: PAYPAL_MOVE_BUTTON_AT_END,
       });
       acdcObj.initFields();
       acdcObj.hideElementTillPaymentOptionChecked(
         '[data-module-name="paypal_acdc"]',
-        '#payment-confirmation'
+        '#payment-confirmation, #opc-payment-confirmation'
       );
       acdcObj.showElementIfPaymentOptionChecked(
         '[data-module-name="paypal_acdc"]',

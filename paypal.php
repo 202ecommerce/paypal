@@ -994,6 +994,12 @@ class PayPal extends PaymentModule implements WidgetInterface
                     ]
                 )
             );
+            // Hummingbird 2.x renders account links as a flat "account-menu" list instead of a grid
+            $theme = $this->context->shop->theme;
+            $template->assign(
+                'useAccountMenuMarkup',
+                $theme->getName() === 'hummingbird' && version_compare((string) $theme->get('version'), '2.0.0', '>=')
+            );
 
             return $template->fetch();
         }

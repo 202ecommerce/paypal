@@ -45,7 +45,7 @@
       <input type="hidden" id="source_page" name="source_page" value="cart">
       <input type="hidden" name="isAddAddress" value="1">
     </form>
-    <div paypal-bnpl-button-container></div>
+    <div paypal-bnpl-button-container paypal-bnpl-payment-step-button></div>
 
     <div style="display: none" class="alert alert-danger" paypal-wrong-button-message>
       <div>{l s='Please click on the \'Pay in X times\' button' mod='paypal'}</div>
@@ -56,42 +56,57 @@
 
 {block name='js'}
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('#payment-confirmation button').addEventListener('click', function(event) {
-            let selectedOption = $('input[name=payment-option]:checked');
-            if (selectedOption.attr("data-module-name") == "paypal_bnpl") {
-                event.preventDefault();
-                event.stopPropagation();
-                document.querySelector('[paypal-wrong-button-message]').style.display = 'block';
+    (function () {
+        // Also supports the one-page checkout: its own confirmation button, a BNPL button in the
+        // express checkout slot above the form and a payment list re-rendered by ajax (this script runs again)
+        var paymentConfirmationSelector = '#payment-confirmation, #opc-payment-confirmation';
+
+        if (typeof window.paypalBnplPaymentStepGuard === 'undefined') {
+            window.paypalBnplPaymentStepGuard = true;
+            document.addEventListener('click', function (event) {
+                if (event.target instanceof Element === false
+                    || event.target.closest('#payment-confirmation button, #opc-payment-confirmation button') === null) {
+                    return;
+                }
+
+                var selectedOption = document.querySelector('input[name=payment-option]:checked');
+
+                if (selectedOption && selectedOption.getAttribute('data-module-name') == 'paypal_bnpl') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var message = document.querySelector('[paypal-wrong-button-message]');
+
+                    if (message) {
+                        message.style.display = 'block';
+                    }
+                }
+            }, true);
+        }
+
+        document.addEventListener('paypal-after-init-bnpl-button', function () {
+            var bnplOption = document.querySelector('[data-module-name="paypal_bnpl"]');
+
+            if (bnplOption === null) {
+                return;
             }
-        });
-    });
 
-    if (typeof BNPL != "undefined") {
-        paypalInitBNPLButtons();
-    } else {
-        document.addEventListener('paypal-after-init-bnpl-button', function (event) {
-          paypalInitBNPLButtons();
-        })
-    }
-
-    function paypalInitBNPLButtons() {
-        BNPL.addMarkTo(
-          document.querySelector('[data-module-name="paypal_bnpl"]').closest('.payment-option, .payment__option label'),
-          {
-            display: "table-cell"
-          }
-        );
-        BNPL.disableTillConsenting();
-        BNPL.hideElementTillPaymentOptionChecked(
-            '[data-module-name="paypal_bnpl"]',
-            '#payment-confirmation'
-        );
-        BNPL.showElementIfPaymentOptionChecked(
-          '[data-module-name="paypal_bnpl"]',
-          '[paypal-bnpl-button-container]'
-        );
-    }
+            BNPL.addMarkTo(
+              bnplOption.closest('.payment-option, .payment__option label'),
+              {
+                display: "table-cell"
+              }
+            );
+            BNPL.disableTillConsenting(document.querySelector('[paypal-bnpl-payment-step-button]'));
+            BNPL.hideElementTillPaymentOptionChecked(
+                '[data-module-name="paypal_bnpl"]',
+                paymentConfirmationSelector
+            );
+            BNPL.showElementIfPaymentOptionChecked(
+              '[data-module-name="paypal_bnpl"]',
+              '[paypal-bnpl-payment-step-button]'
+            );
+        }, { once: true });
+    })();
   </script>
 {/block}
 
