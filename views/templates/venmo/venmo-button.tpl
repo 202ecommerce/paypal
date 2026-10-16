@@ -38,6 +38,15 @@
             return;
         }
 
+        // The payment options can be re-rendered by ajax (e.g. one-page checkout): init each button once
+        var venmoContainer = document.querySelector('[paypal-venmo-button-container]');
+
+        if (venmoContainer === null || venmoContainer.hasAttribute('data-paypal-initialized')) {
+            return;
+        }
+
+        venmoContainer.setAttribute('data-paypal-initialized', '1');
+
         var venmoButton = new Venmo({
             container: '[paypal-venmo-button-container]',
             controller: '{/literal}{Context::getContext()->link->getModuleLink('paypal', 'ScInit') nofilter}{literal}',
@@ -48,7 +57,7 @@
         venmoButton.initButton();
         venmoButton.hideElementTillPaymentOptionChecked(
           '[data-module-name="paypal_venmo"]',
-          '#payment-confirmation'
+          '#payment-confirmation, #opc-payment-confirmation'
         );
         venmoButton.showElementIfPaymentOptionChecked(
           '[data-module-name="paypal_venmo"]',

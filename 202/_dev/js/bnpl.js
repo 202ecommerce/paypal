@@ -48,18 +48,34 @@ const BNPL = {
 
   isMoveButtonAtEnd: null,
 
+  isInitialized: false,
+
   init() {
     this.updateInfo();
+
+    if (this.isInitialized) {
+      return;
+    }
+
+    this.isInitialized = true;
     BNPL.checkProductAvailability();
     prestashop.on('updatedProduct', function(e, xhr, settings) {
       BNPL.checkProductAvailability();
     });
   },
 
-  updateInfo() {
-    this.page = $('[data-container-bnpl]').data('paypal-bnpl-source-page');
-    this.button = document.querySelector('[paypal-bnpl-button-container]');
-    let isAddAddress = document.querySelector('[data-container-bnpl] [name="isAddAddress"]');
+  updateInfo(container = null) {
+    if (container instanceof Element == false) {
+      container = document.querySelector('[data-container-bnpl]');
+    }
+
+    if (container instanceof Element == false) {
+      return;
+    }
+
+    this.page = $(container).data('paypal-bnpl-source-page');
+    this.button = container.querySelector('[paypal-bnpl-button-container]');
+    let isAddAddress = container.querySelector('[name="isAddAddress"]');
 
     if (this.page == 'product') {
       this.productQuantity = $('input[name="qty"]').val();
@@ -67,9 +83,7 @@ const BNPL = {
       this.combination = this.getCombination();
     }
 
-    if (isAddAddress) {
-      this.isAddAddress = (isAddAddress.value == '1');
-    }
+    this.isAddAddress = isAddAddress ? (isAddAddress.value == '1') : null;
   },
 
   getCombination() {
@@ -86,26 +100,38 @@ const BNPL = {
     return combination;
   },
 
-  getPaypalButtonsContainer() {
-    if (document.querySelector('#paypal-buttons')) {
-      return document.querySelector('#paypal-buttons');
+  initButton() {
+    let isRendered = false;
+
+    document.querySelectorAll('[data-container-bnpl]').forEach(function(container) {
+      if (container.hasAttribute('data-paypal-initialized')) {
+        return;
+      }
+
+      const button = container.querySelector('[paypal-bnpl-button-container]');
+
+      if (button instanceof Element == false) {
+        return;
+      }
+
+      container.setAttribute('data-paypal-initialized', '1');
+
+      if (BNPL.renderButton(container, button)) {
+        isRendered = true;
+      }
+    });
+
+    if (isRendered === false) {
+      return;
     }
 
-    var container = document.createElement('div');
-    container.id = 'paypal-buttons';
-    container.style = 'width: 300px';
-
-    document.querySelector('#payment-confirmation').after(container);
-
-    return container;
+    let event = new Event('paypal-after-init-bnpl-button');
+    document.dispatchEvent(event);
   },
 
-  initButton() {
-    if (BNPL.isMoveButtonAtEnd) {
-      var paypalButtonsContainer = BNPL.getPaypalButtonsContainer();
-      paypalButtonsContainer.append(BNPL.button);
-      BNPL.button.style.display = 'none';
-    }
+  renderButton(container, button) {
+    this.updateInfo(container);
+    const page = this.page;
 
     const paypalButton = totPaypalBnplSdkButtons.Buttons({
       fundingSource: totPaypalBnplSdkButtons.FUNDING.PAYLATER,
@@ -117,7 +143,7 @@ const BNPL = {
       },
 
       createOrder: function(data, actions) {
-        return BNPL.getIdOrder();
+        return BNPL.getIdOrder(container);
       },
 
       onApprove: function(data, actions) {
@@ -127,22 +153,28 @@ const BNPL = {
     });
 
     if (!paypalButton.isEligible()) {
-      const paymentOption = document.querySelector('[data-module-name="paypal_bnpl"]');
+      if (page == 'payment-step') {
+        const paymentOption = document.querySelector('[data-module-name="paypal_bnpl"]');
 
-      if (paymentOption) {
-        const paymentOptionRow = paymentOption.closest('.payment-option, .payment__option');
+        if (paymentOption) {
+          const paymentOptionRow = paymentOption.closest('.payment-option, .payment__option');
 
-        if (paymentOptionRow) {
-          paymentOptionRow.style.display = 'none';
+          if (paymentOptionRow) {
+            paymentOptionRow.style.display = 'none';
+          }
         }
       }
 
-      return;
+      return false;
     }
 
-    paypalButton.render(this.button);
-    let event = new Event('paypal-after-init-bnpl-button');
-    document.dispatchEvent(event);
+    if (BNPL.isMoveButtonAtEnd && page == 'payment-step') {
+      Tools.moveButtonAtEnd(button, '[paypal-bnpl-button-container]');
+    }
+
+    paypalButton.render(button);
+
+    return true;
   },
 
   getColor() {
@@ -172,12 +204,12 @@ const BNPL = {
     form.submit();
   },
 
-  getIdOrder() {
+  getIdOrder(container = null) {
     let data = new Object();
     let url = new URL(this.controller);
     url.searchParams.append('ajax', '1');
     url.searchParams.append('action', 'CreateOrder');
-    this.updateInfo();
+    this.updateInfo(container);
     data['page'] = this.page;
 
 
@@ -217,6 +249,8 @@ const BNPL = {
     url.searchParams.append('action', 'CheckAvailability');
     this.updateInfo();
     data['page'] = this.page;
+    // Keep the button checked now: this.button can change before the response is received
+    const button = this.button;
 
     if (this.page == 'product') {
       data['idProduct'] = this.idProduct;
@@ -234,10 +268,14 @@ const BNPL = {
       }).then(function(res){
         return res.json();
     }).then(function (json) {
+      if (button instanceof Element == false) {
+        return;
+      }
+
       if (json.success) {
-        BNPL.button.style.display = 'block';
+        button.style.display = 'block';
       } else {
-        BNPL.button.style.display = 'none';
+        button.style.display = 'none';
       }
     });
   },
@@ -254,9 +292,9 @@ const BNPL = {
     return this.styleSetting;
   },
 
-  disableTillConsenting() {
+  disableTillConsenting(button = null) {
     Tools.disableTillConsenting(
-      this.button,
+      button instanceof Element ? button : this.button,
       document.getElementById('conditions_to_approve[terms-and-conditions]')
     );
   },
@@ -279,6 +317,11 @@ const BNPL = {
 
     if (optionLabel instanceof Element) {
       element = optionLabel;
+    }
+
+    // The payment step script can run several times on the same markup
+    if (element.querySelector('[paypal-mark-container]')) {
+      return;
     }
 
     const markContainer = document.createElement('span');

@@ -95,6 +95,51 @@ export const Tools = {
     });
   },
 
+  // Order confirmation button of the default checkout and of the one-page checkout
+  paymentConfirmationSelector: '#payment-confirmation, #opc-payment-confirmation',
+
+  getPaypalButtonsContainer() {
+    if (document.querySelector('#paypal-buttons')) {
+      return document.querySelector('#paypal-buttons');
+    }
+
+    const paymentConfirmation = document.querySelector(Tools.paymentConfirmationSelector);
+
+    if (paymentConfirmation instanceof Element == false) {
+      return null;
+    }
+
+    const container = document.createElement('div');
+    container.id = 'paypal-buttons';
+    container.style = 'width: 300px';
+
+    paymentConfirmation.after(container);
+
+    return container;
+  },
+
+  // Moves a payment step button after the order confirmation button. The payment options can be
+  // re-rendered by ajax (e.g. one-page checkout): the button of a previous render is dropped.
+  moveButtonAtEnd(button, previousButtonSelector) {
+    const paypalButtonsContainer = Tools.getPaypalButtonsContainer();
+
+    if (paypalButtonsContainer instanceof Element == false) {
+      return false;
+    }
+
+    if (previousButtonSelector) {
+      paypalButtonsContainer.querySelectorAll(previousButtonSelector).forEach(function(previousButton) {
+        if (previousButton !== button) {
+          previousButton.remove();
+        }
+      });
+    }
+    paypalButtonsContainer.append(button);
+    button.style.display = 'none';
+
+    return true;
+  },
+
   disable(element) {
     if (element instanceof Element == false) {
       return;
@@ -129,20 +174,14 @@ export const Tools = {
       window.paypalToolsHiddenElemenList = {};
     }
 
-    if (hideElementSelector in window.paypalToolsHiddenElemenList) {
-      window.paypalToolsHiddenElemenList[hideElementSelector].push(checkElement);
-      return;
+    window.paypalToolsHiddenElemenList[hideElementSelector] = Tools.registerCheckElement(
+      window.paypalToolsHiddenElemenList[hideElementSelector],
+      checkElement
+    );
+
+    if (Tools.listenPaymentOptions(checkElement, Tools.hideElementTillChecked)) {
+      Tools.hideElementTillChecked();
     }
-
-    window.paypalToolsHiddenElemenList[hideElementSelector] = [checkElement];
-    const options = checkElement.closest('.payment-options, .payment__list, .payment-options__list');
-
-    if (options instanceof Element == false) {
-      return;
-    }
-
-    Tools.hideElementTillChecked();
-    options.addEventListener('input', Tools.hideElementTillChecked);
   },
 
   showElementIfPaymentOptionChecked(checkElementSelector, showElementSelector) {
@@ -161,20 +200,37 @@ export const Tools = {
       window.paypalToolsShowElemenList = {};
     }
 
-    if (showElementSelector in window.paypalToolsShowElemenList) {
-      window.paypalToolsShowElemenList[showElementSelector].push(checkElement);
-      return;
-    }
+    window.paypalToolsShowElemenList[showElementSelector] = Tools.registerCheckElement(
+      window.paypalToolsShowElemenList[showElementSelector],
+      checkElement
+    );
 
-    window.paypalToolsShowElemenList[showElementSelector] = [checkElement];
-    const options = checkElement.closest('.payment-options, .payment__list, .payment-options__list');
+    if (Tools.listenPaymentOptions(checkElement, Tools.showElementsIfChecked)) {
+      Tools.showElementsIfChecked();
+    }
+  },
+
+  // Payment options can be re-rendered by ajax (e.g. one-page checkout): forget the removed ones
+  registerCheckElement(checkElements, checkElement) {
+    const list = (checkElements || []).filter(function(elem) {
+      return elem.isConnected && elem !== checkElement;
+    });
+    list.push(checkElement);
+
+    return list;
+  },
+
+  listenPaymentOptions(checkElement, listener) {
+    const options = checkElement.closest('.payment-options, .payment__list, .payment-options__list, #opc-payment-methods');
 
     if (options instanceof Element == false) {
-      return;
+      return false;
     }
 
-    Tools.showElementsIfChecked();
-    options.addEventListener('input', Tools.showElementsIfChecked);
+    // Registering the same listener twice on the same element is a no-op
+    options.addEventListener('input', listener);
+
+    return true;
   },
 
   showElementsIfChecked() {
@@ -189,6 +245,10 @@ export const Tools = {
         }
       });
       const showElement = document.querySelector(showElementSelector);
+
+      if (showElement instanceof Element == false) {
+        return;
+      }
 
       if (isShow) {
         showElement.style.display = 'block';
@@ -205,6 +265,11 @@ export const Tools = {
     Object.keys(window.paypalToolsHiddenElemenList).forEach(function(hideElementSelector) {
       let isHide = false;
       const hideElement = document.querySelector(hideElementSelector);
+
+      if (hideElement instanceof Element == false) {
+        return;
+      }
+
       window.paypalToolsHiddenElemenList[hideElementSelector].forEach(function(elem) {
         if (elem.checked) {
           isHide = true;

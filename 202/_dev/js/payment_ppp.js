@@ -25,8 +25,20 @@
  */
 let ppp = {},
     exec_ppp_payment = true;
+// Order confirmation button of the default checkout and of the one-page checkout
+const paymentConfirmationButtonSelector = '#payment-confirmation button, #opc-payment-confirmation button';
+
 $(document).ready( () => {
   function initPaymentWall() {
+    const placeholder = document.getElementById('ppplus');
+
+    // The payment options can be re-rendered by ajax (e.g. one-page checkout): init each payment wall once
+    if (placeholder === null || placeholder.hasAttribute('data-paypal-initialized')) {
+      return;
+    }
+
+    placeholder.setAttribute('data-paypal-initialized', '1');
+
     let showPui = false;
     if (modePPP == 'sandbox') {
       showPui = true;
@@ -54,19 +66,28 @@ $(document).ready( () => {
     initPaymentWall();
   }
 
-  if ($('#checkout-payment-step').hasClass('js-current-step')) {
+  if ($('#checkout-payment-step').hasClass('js-current-step') || document.getElementById('opc-payment-methods')) {
     waitPaypalLoaded();
   }
 
-  // Order payment button action for paypal plus
-  $('#payment-confirmation button').on('click', (e) => {
+  if (typeof prestashop !== 'undefined') {
+    prestashop.on('opcPaymentMethodsUpdated', waitPaypalLoaded);
+  }
+
+  // Order payment button action for paypal plus. Delegated in the capture phase: the button can be
+  // replaced, and the one-page checkout has its own click handler on it.
+  document.addEventListener('click', (e) => {
+    if (e.target instanceof Element === false || e.target.closest(paymentConfirmationButtonSelector) === null) {
+      return;
+    }
+
     let selectedOption = $('input[name=payment-option]:checked').attr('id');
     if ($(`#${selectedOption}-additional-information .payment_module`).hasClass('paypal-plus')) {
       e.preventDefault();
       e.stopPropagation();
       doPatchPPP();
     }
-  });
+  }, true);
 });
 
 
@@ -87,7 +108,9 @@ const doPatchPPP = () => {
         },
       });
     } catch (e) {
-      document.querySelector('#payment-confirmation button').disabled = true;
+      document.querySelectorAll(paymentConfirmationButtonSelector).forEach((button) => {
+        button.disabled = true;
+      });
     }
 
     $.ajax({

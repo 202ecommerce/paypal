@@ -190,13 +190,21 @@
 
 <script>
   function paypalPuiInit() {
+      // The payment options can be re-rendered by ajax (e.g. one-page checkout): init each form once
+      var puiForm = document.querySelector('form[pui-form]');
+
+      if (puiForm === null || puiForm.hasAttribute('data-paypal-initialized')) {
+          return;
+      }
+
+      puiForm.setAttribute('data-paypal-initialized', '1');
       PaypalTools.disableTillConsenting(
           document.querySelector('[pui-form] button'),
           document.getElementById('conditions_to_approve[terms-and-conditions]')
       );
       PaypalTools.hideElementTillPaymentOptionChecked(
           '[data-module-name="paypal_pui"]',
-          '#payment-confirmation'
+          '#payment-confirmation, #opc-payment-confirmation'
       );
       var paypalPuiPhone = PaypalTools.initPhoneInput(
           document.querySelector('#paypal_pui_phone'),
@@ -212,7 +220,7 @@
         paypalPuiPhone.setCountry('de');
       }
 
-      document.querySelector('form[pui-form]').addEventListener('submit', function(e) {
+      puiForm.addEventListener('submit', function(e) {
           if (paypalPuiPhone.getValidationError() == 0) {
               return;
           }

@@ -48,9 +48,19 @@
                   return;
               }
 
+              // The payment options can be re-rendered by ajax (e.g. one-page checkout): init each button once.
+              // A button of a previous render can still be in #paypal-buttons, the fresh one comes first.
+              var sepaButton = document.querySelector('#paypal-sepa');
+
+              if (sepaButton === null || sepaButton.hasAttribute('data-paypal-initialized')) {
+                  return;
+              }
+
+              sepaButton.setAttribute('data-paypal-initialized', '1');
+
               var sepaObj = new SepaButton({
                   method: 'sepa',
-                  button: '#paypal-sepa',
+                  button: sepaButton,
                   controller: '{$scInitController nofilter}',
                   validationController: '{$validationController nofilter}',
                   paypal: window[skdNameSpace],
@@ -59,7 +69,7 @@
               sepaObj.initButton();
               sepaObj.hideElementTillPaymentOptionChecked(
                   '[data-module-name="paypal_sepa"]',
-                  '#payment-confirmation'
+                  '#payment-confirmation, #opc-payment-confirmation'
               );
               sepaObj.showElementIfPaymentOptionChecked(
                 '[data-module-name="paypal_sepa"]',

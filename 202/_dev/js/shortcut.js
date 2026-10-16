@@ -50,17 +50,33 @@ const Shortcut = {
 
   savePaypalAccount: false,
 
+  isInitialized: false,
+
   init() {
     this.updateInfo();
+
+    if (this.isInitialized) {
+      return;
+    }
+
+    this.isInitialized = true;
     prestashop.on('updatedProduct', function(e, xhr, settings) {
       Shortcut.checkProductAvailability();
     });
   },
 
-  updateInfo() {
-    this.page = $('[data-container-express-checkout]').data('paypal-source-page');
-    this.button = document.querySelector('[paypal-button-container]');
-    let isAddAddress = document.querySelector('[data-container-express-checkout] [name="isAddAddress"]');
+  updateInfo(container = null) {
+    if (container instanceof Element == false) {
+      container = document.querySelector('[data-container-express-checkout]');
+    }
+
+    if (container instanceof Element == false) {
+      return;
+    }
+
+    this.page = $(container).data('paypal-source-page');
+    this.button = container.querySelector('[paypal-button-container]');
+    let isAddAddress = container.querySelector('[name="isAddAddress"]');
     const vaultCheckbox = document.querySelector('[save-paypal-account]');
 
     if (this.page == 'product') {
@@ -69,9 +85,7 @@ const Shortcut = {
       this.combination = this.getCombination();
     }
 
-    if (isAddAddress) {
-      this.isAddAddress = (isAddAddress.value == '1');
-    }
+    this.isAddAddress = isAddAddress ? (isAddAddress.value == '1') : null;
 
     if (vaultCheckbox instanceof HTMLInputElement) {
       this.savePaypalAccount = vaultCheckbox.checked;
@@ -94,29 +108,42 @@ const Shortcut = {
     return combination;
   },
 
-  getPaypalButtonsContainer() {
-    if (document.querySelector('#paypal-buttons')) {
-      return document.querySelector('#paypal-buttons');
+  initButton() {
+    let isRendered = false;
+
+    document.querySelectorAll('[data-container-express-checkout]').forEach(function(container) {
+      if (container.hasAttribute('data-paypal-initialized')) {
+        return;
+      }
+
+      const button = container.querySelector('[paypal-button-container]');
+
+      if (button instanceof Element == false) {
+        return;
+      }
+
+      container.setAttribute('data-paypal-initialized', '1');
+      Shortcut.renderButton(container, button);
+      isRendered = true;
+    });
+
+    if (isRendered === false) {
+      return;
     }
 
-    var container = document.createElement('div');
-    container.id = 'paypal-buttons';
-    container.style = 'width: 300px';
-
-    document.querySelector('#payment-confirmation').after(container);
-
-    return container;
+    let event = new Event('paypal-after-init-shortcut-button');
+    document.dispatchEvent(event);
   },
 
-  initButton() {
+  renderButton(container, button) {
+    this.updateInfo(container);
+
     if (typeof Shortcut.getStyleSetting()['width'] !== 'undefined') {
-      Shortcut.button.style.width = Shortcut.getStyleSetting()['width'] + 'px';
+      button.style.width = Shortcut.getStyleSetting()['width'] + 'px';
     }
 
-    if (Shortcut.isMoveButtonAtEnd) {
-      var paypalButtonsContainer = Shortcut.getPaypalButtonsContainer();
-      paypalButtonsContainer.append(Shortcut.button);
-      Shortcut.button.style.display = 'none';
+    if (Shortcut.isMoveButtonAtEnd && this.page == 'payment-step') {
+      Tools.moveButtonAtEnd(button, '[paypal-button-container]');
     }
 
     totPaypalSdkButtons.Buttons({
@@ -125,17 +152,14 @@ const Shortcut = {
       style: Shortcut.getStyleSetting(),
 
       createOrder: function(data, actions) {
-        return Shortcut.getIdOrder();
+        return Shortcut.getIdOrder(container);
       },
 
       onApprove: function(data, actions) {
         Shortcut.sendData(data);
       },
 
-    }).render(this.button);
-
-    let event = new Event('paypal-after-init-shortcut-button');
-    document.dispatchEvent(event);
+    }).render(button);
   },
 
   sendData(data) {
@@ -153,12 +177,12 @@ const Shortcut = {
     form.submit();
   },
 
-  getIdOrder() {
+  getIdOrder(container = null) {
     let data = new Object();
     let url = new URL(this.controller);
     url.searchParams.append('ajax', '1');
     url.searchParams.append('action', 'CreateOrder');
-    this.updateInfo();
+    this.updateInfo(container);
     data['page'] = this.page;
     data['sc'] = true;
 
@@ -239,9 +263,9 @@ const Shortcut = {
     return this.styleSetting;
   },
 
-  disableTillConsenting() {
+  disableTillConsenting(button = null) {
     Tools.disableTillConsenting(
-      this.button,
+      button instanceof Element ? button : this.button,
       document.getElementById('conditions_to_approve[terms-and-conditions]')
     );
   },
@@ -264,6 +288,11 @@ const Shortcut = {
 
     if (optionLabel instanceof Element) {
       element = optionLabel;
+    }
+
+    // The payment step script can run several times on the same markup
+    if (element.querySelector('[paypal-mark-container]')) {
+      return;
     }
 
     const markContainer = document.createElement('span');

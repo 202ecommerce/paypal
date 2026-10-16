@@ -49,8 +49,18 @@
               return;
             }
 
+            // The payment options can be re-rendered by ajax (e.g. one-page checkout): init each button once.
+            // A button of a previous render can still be in #paypal-buttons, the fresh one comes first.
+            var vaultButton = document.querySelector('#paypal-' + skdNameSpace);
+
+            if (vaultButton === null || vaultButton.hasAttribute('data-paypal-initialized')) {
+              return;
+            }
+
+            vaultButton.setAttribute('data-paypal-initialized', '1');
+
             var button = new PaypalButton({
-              button: '#paypal-' + skdNameSpace,
+              button: vaultButton,
               controller: '{$scInitController|escape:'htmlall':'UTF-8'}',
               validationController: '{$validationController|escape:'htmlall':'UTF-8'}',
               paypal: window[skdNameSpace],
@@ -63,7 +73,7 @@
             button.initButton();
             button.hideElementTillPaymentOptionChecked(
               '[data-module-name="paypal"]',
-              '#payment-confirmation'
+              '#payment-confirmation, #opc-payment-confirmation'
             );
             button.showElementIfPaymentOptionChecked(
               '[data-module-name="paypal"]',

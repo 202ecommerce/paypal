@@ -56,9 +56,7 @@ ApmButton.prototype.initButton = function() {
   }
 
   if (this.isMoveButtonAtEnd) {
-    let paypalButtonsContainer = this.getPaypalButtonsContainer();
-    paypalButtonsContainer.append(this.button);
-    this.button.style.display = 'none';
+    Tools.moveButtonAtEnd(this.button, this.button.id ? `#${this.button.id}` : null);
   }
 
   let paypalButton = this.paypal.Buttons({
@@ -152,6 +150,11 @@ ApmButton.prototype.addMarkTo = function(element, styles = {}) {
     element = optionLabel;
   }
 
+  // The payment step script can run several times on the same markup
+  if (element.querySelector('[paypal-mark-container]')) {
+    return;
+  }
+
   const markContainer = document.createElement('span');
 
   for (let key in styles) {
@@ -168,20 +171,6 @@ ApmButton.prototype.addMarkTo = function(element, styles = {}) {
   if (mark.isEligible()) {
     mark.render(markContainer);
   }
-};
-
-ApmButton.prototype.getPaypalButtonsContainer = function() {
-  if (document.querySelector('#paypal-buttons')) {
-    return document.querySelector('#paypal-buttons');
-  }
-
-  var container = document.createElement('div');
-  container.id = 'paypal-buttons';
-  container.style = 'width: 300px';
-
-  document.querySelector('#payment-confirmation').after(container);
-
-  return container;
 };
 
 window.ApmButton = ApmButton;
