@@ -81,9 +81,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     protected $payment_method = 'PayPal';
 
-    /** @var WhiteListService */
-    protected $whiteListService;
-
     public function __construct()
     {
         parent::__construct();

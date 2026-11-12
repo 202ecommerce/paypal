@@ -61,9 +61,6 @@ class MethodEC extends AbstractMethodPaypal
     /** @var bool */
     protected $isSandbox;
 
-    /** @var WhiteListService */
-    protected $whiteListService;
-
     public function __construct()
     {
         parent::__construct();

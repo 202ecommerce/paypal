@@ -70,6 +70,9 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /** @var array */
     public $errors = [];
 
+    /** @var WhiteList\WhiteListService */
+    protected $whiteListService;
+
     /** @var PaypalApiManager */
     protected $paypalApiManager;
 

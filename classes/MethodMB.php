@@ -67,9 +67,6 @@ class MethodMB extends AbstractMethodPaypal
 
     protected $servicePaypalVaulting;
 
-    /** @var WhiteListService */
-    protected $whiteListService;
-
     public function __construct()
     {
         parent::__construct();
