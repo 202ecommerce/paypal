@@ -127,9 +127,22 @@ class AdminPaypalConfigurationController extends ModuleAdminController
             $this->method->setSandbox((int) Tools::getValue('sandbox'));
             $this->completeOnboarding();
         }
+        if (false == $this->ajax) {
+            $this->refreshConnectionStates();
+        }
         $this->content .= $this->renderConfiguration();
 
         return parent::initContent();
+    }
+
+    /**
+     * Credentials are checked from the back office only, the front office reads the stored results
+     */
+    protected function refreshConnectionStates()
+    {
+        $this->method->refreshConnectionState(true);
+        $this->method->refreshConnectionState(false);
+        Configuration::updateValue('PAYPAL_NEED_CHECK_CREDENTIALS', 0);
     }
 
     protected function renderConfiguration()
@@ -257,6 +270,8 @@ class AdminPaypalConfigurationController extends ModuleAdminController
             'isSandbox' => $isSandbox,
         ];
         $method->setConfig($params);
+        $method->setSandbox($isSandbox);
+        $method->checkCredentials();
 
         $response->setData([
             'success' => true,

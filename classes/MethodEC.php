@@ -83,7 +83,6 @@ class MethodEC extends AbstractMethodPaypal
     {
         parent::setSandbox($isSandbox);
         $this->initApiManager();
-        $this->checkCredentials();
 
         return $this;
     }
@@ -135,7 +134,7 @@ class MethodEC extends AbstractMethodPaypal
 
     public function logOut($sandbox = null)
     {
-        if ($sandbox == null) {
+        if ($sandbox === null) {
             $sandbox = $this->isSandbox();
         }
 
@@ -146,7 +145,7 @@ class MethodEC extends AbstractMethodPaypal
             Configuration::updateValue(PayPal::PAYPAL_EC_CLIENTID_LIVE, '');
             Configuration::updateValue(PayPal::PAYPAL_EC_SECRET_LIVE, '');
         }
-        Configuration::updateValue('PAYPAL_CONNECTION_EC_CONFIGURED', 0);
+        $this->resetConnectionState($sandbox);
     }
 
     /**
@@ -215,48 +214,6 @@ class MethodEC extends AbstractMethodPaypal
         $response = $this->paypalApiManager->getAuthorizationVoidRequest($orderPayPal)->execute();
 
         return $response;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isConfigured()
-    {
-        if (false == $this->whiteListService->isEligibleContext()) {
-            return false;
-        }
-
-        if ($this->isCredentialsSetted() === false) {
-            return false;
-        }
-
-        if ((bool) Configuration::get('PAYPAL_CONNECTION_EC_CONFIGURED')) {
-            return true;
-        }
-
-        $this->checkCredentials();
-
-        return (bool) Configuration::get('PAYPAL_CONNECTION_EC_CONFIGURED');
-    }
-
-    public function checkCredentials()
-    {
-        $response = $this->paypalApiManager->getAccessTokenRequest()->execute();
-
-        if ($response->isSuccess()) {
-            Configuration::updateValue('PAYPAL_CONNECTION_EC_CONFIGURED', 1);
-        } else {
-            $this->setConfig([
-                'clientId' => '',
-                'secret' => '',
-                'merchantId' => '',
-            ]);
-            Configuration::updateValue('PAYPAL_CONNECTION_EC_CONFIGURED', 0);
-
-            if ($response->getError()) {
-                $this->errors[] = $response->getError()->getMessage();
-            }
-        }
     }
 
     public function getIntent()

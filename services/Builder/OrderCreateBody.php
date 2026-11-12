@@ -368,10 +368,14 @@ class OrderCreateBody implements BuilderInterface
         if ($this->isShortcut()) {
             $applicationContext['shipping_preference'] = 'GET_FROM_FILE';
             $applicationContext['user_action'] = 'CONTINUE';
-            $applicationContext['order_update_callback_config'] = [
-                'callback_url' => (new OrderShippingCallbackUrl())->get(),
-                'callback_events' => ['SHIPPING_ADDRESS', 'SHIPPING_OPTIONS'],
-            ];
+            $callbackUrl = new OrderShippingCallbackUrl();
+
+            if ($callbackUrl->isAvailable()) {
+                $applicationContext['order_update_callback_config'] = [
+                    'callback_url' => $callbackUrl->get(),
+                    'callback_events' => ['SHIPPING_ADDRESS', 'SHIPPING_OPTIONS'],
+                ];
+            }
         }
 
         return $applicationContext;

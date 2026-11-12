@@ -43,4 +43,30 @@ class OrderShippingCallbackUrl
 
         return $url;
     }
+
+    /**
+     * PayPal accepts only a public HTTPS callback URL (it rejects the order with INVALID_PARAMETER_VALUE otherwise)
+     *
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        $url = $this->get();
+
+        if (strpos($url, 'https://') !== 0) {
+            return false;
+        }
+
+        $host = (string) parse_url($url, PHP_URL_HOST);
+
+        if ($host === '' || $host === 'localhost' || substr($host, -10) === '.localhost') {
+            return false;
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP) !== false) {
+            return (bool) filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+        }
+
+        return true;
+    }
 }

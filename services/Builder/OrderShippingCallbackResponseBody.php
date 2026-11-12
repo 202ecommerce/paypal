@@ -174,12 +174,25 @@ class OrderShippingCallbackResponseBody implements BuilderInterface
                 'selected' => (int) $carrier['id_carrier'] === $selectedCarrierId,
                 'amount' => [
                     'currency_code' => $currency,
-                    'value' => $this->method->formatPrice($carrier['price']),
+                    'value' => $this->method->formatPrice(
+                        $this->isUseTax() ? $carrier['price'] : $carrier['price_tax_exc']
+                    ),
                 ],
             ];
         }
 
         return $options;
+    }
+
+    /**
+     * Must follow the same tax mode as OrderCreateBody::getAmountForCarrier(), since PayPal
+     * requires breakdown.shipping to equal the selected option's amount.
+     *
+     * @return bool
+     */
+    protected function isUseTax()
+    {
+        return (int) \Configuration::get('PS_TAX') == 1;
     }
 
     /**

@@ -103,7 +103,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     {
         parent::setSandbox($isSandbox);
         $this->initApiManager();
-        $this->checkCredentials();
 
         return $this;
     }
@@ -122,7 +121,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
 
     public function logOut($sandbox = null)
     {
-        if ($sandbox == null) {
+        if ($sandbox === null) {
             $sandbox = $this->isSandbox();
         }
 
@@ -133,7 +132,7 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
             Configuration::updateValue(PayPal::PAYPAL_PPP_CLIENTID_LIVE, '');
             Configuration::updateValue(PayPal::PAYPAL_PPP_SECRET_LIVE, '');
         }
-        Configuration::updateValue('PAYPAL_CONNECTION_PPP_CONFIGURED', 0);
+        $this->resetConnectionState($sandbox);
     }
 
     /**
@@ -184,28 +183,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isConfigured()
-    {
-        if (false == $this->whiteListService->isEligibleContext()) {
-            return false;
-        }
-
-        if ($this->isCredentialsSetted() === false) {
-            return false;
-        }
-
-        if ((bool) Configuration::get('PAYPAL_CONNECTION_PPP_CONFIGURED')) {
-            return true;
-        }
-
-        $this->checkCredentials();
-
-        return (bool) Configuration::get('PAYPAL_CONNECTION_PPP_CONFIGURED');
-    }
-
-    /**
      * Assign form data for Paypal Plus payment option
      *
      * @return bool
@@ -236,26 +213,6 @@ class MethodPPP extends AbstractMethodPaypal implements PuiMethodInterface
         Media::addJsDefL('waitingRedirectionMsg', $paypal->l('In few seconds, you will be redirected to PayPal. Please wait.', get_class($this)));
 
         return true;
-    }
-
-    public function checkCredentials()
-    {
-        $response = $this->paypalApiManager->getAccessTokenRequest()->execute();
-
-        if ($response->isSuccess()) {
-            Configuration::updateValue('PAYPAL_CONNECTION_PPP_CONFIGURED', 1);
-        } else {
-            $this->setConfig([
-                'clientId' => '',
-                'secret' => '',
-                'merchantId' => '',
-            ]);
-            Configuration::updateValue('PAYPAL_CONNECTION_PPP_CONFIGURED', 0);
-
-            if ($response->getError()) {
-                $this->errors[] = $response->getError()->getMessage();
-            }
-        }
     }
 
     public function getClientId($sandbox = null)
