@@ -67,6 +67,12 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /** @var bool */
     protected $isSandbox;
 
+    /** @var array */
+    public $errors = [];
+
+    /** @var WhiteList\WhiteListService */
+    protected $whiteListService;
+
     /** @var PaypalApiManager */
     protected $paypalApiManager;
 
@@ -842,7 +848,7 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             ]);
         }
 
-        if (isset($data['paypal_clientid_live']) && isset($data['paypal_secret_live'])) {
+        if (isset($data['paypal_clientid_sandbox']) && isset($data['paypal_secret_sandbox'])) {
             $this->setConfig([
                 'clientId' => pSQL($data['paypal_clientid_sandbox']),
                 'secret' => pSQL($data['paypal_secret_sandbox']),
@@ -851,7 +857,9 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             ]);
         }
 
-        $this->checkCredentials();
+        // credentials may have changed without changing the client ID (e.g. a new secret), so always check them
+        $this->refreshConnectionState(true, true);
+        $this->refreshConnectionState(false, true);
     }
 
     protected function initVaultingFunctionality()
@@ -952,10 +960,176 @@ abstract class AbstractMethodPaypal extends AbstractMethod
     /** @return  string*/
     abstract public function getIntent();
 
-    /** @return  bool*/
-    abstract public function isConfigured();
+    /**
+     * Tells whether credentials of the current mode (sandbox/live) were successfully checked.
+     * Never calls the PayPal API: it only reads the result stored by checkCredentials(),
+     * which is bound to the client ID it was made with.
+     * Checks are performed from the back office only (see refreshConnectionState()).
+     *
+     * @return bool
+     */
+    public function isConfigured()
+    {
+        if (false == $this->whiteListService->isEligibleContext()) {
+            return false;
+        }
 
-    abstract public function checkCredentials();
+        if ($this->isCredentialsSetted() === false) {
+            return false;
+        }
+
+        $state = $this->getConnectionState();
+
+        if ($state !== null) {
+            return (bool) $state['status'];
+        }
+
+        return $this->isConfiguredLegacy();
+    }
+
+    /**
+     * Requests an access token with credentials of the current mode and stores the result.
+     * Credentials are never removed on failure: a failed check may be caused by a network error or a rate limit.
+     * Must be called from the back office only.
+     *
+     * @return bool
+     */
+    public function checkCredentials()
+    {
+        if ($this->isCredentialsSetted() === false) {
+            $this->resetConnectionState();
+
+            return false;
+        }
+
+        $response = $this->paypalApiManager->getAccessTokenRequest()->execute();
+        $this->saveConnectionState($response->isSuccess());
+
+        if ($response->isSuccess() === false && $response->getError()) {
+            $this->errors[] = $response->getError()->getMessage();
+        }
+
+        return (bool) $response->isSuccess();
+    }
+
+    /**
+     * Checks credentials of the given mode unless they were already successfully checked.
+     * Must be called from the back office only.
+     *
+     * @param bool $sandbox
+     * @param bool $force check even if the credentials were already successfully checked
+     *
+     * @return bool
+     */
+    public function refreshConnectionState($sandbox, $force = false)
+    {
+        $actualSandboxMode = $this->isSandbox();
+        $this->setSandbox($sandbox);
+
+        try {
+            if ($this->isCredentialsSetted() === false) {
+                $this->resetConnectionState();
+                $result = false;
+            } else {
+                $state = $this->getConnectionState();
+                $result = !$force && $state !== null && $state['status'] ? true : $this->checkCredentials();
+            }
+        } finally {
+            $this->setSandbox($actualSandboxMode);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Status stored by module versions which had one connection flag for both modes.
+     * Used until the first check made by this version, so a module upgrade does not disable payments.
+     *
+     * @return bool
+     */
+    protected function isConfiguredLegacy()
+    {
+        return (bool) \Configuration::get($this->getLegacyConnectionConfigKey());
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLegacyConnectionConfigKey()
+    {
+        return 'PAYPAL_CONNECTION_' . $this->getConnectionMethodCode() . '_CONFIGURED';
+    }
+
+    /**
+     * @return string EC, MB, PPP
+     */
+    protected function getConnectionMethodCode()
+    {
+        $reflection = new \ReflectionClass($this);
+
+        return strtoupper(preg_replace('/^Method/', '', $reflection->getShortName()));
+    }
+
+    /**
+     * @param bool|null $sandbox
+     *
+     * @return string
+     */
+    protected function getConnectionConfigKey($sandbox = null)
+    {
+        if ($sandbox === null) {
+            $sandbox = $this->isSandbox();
+        }
+
+        return 'PAYPAL_CONN_' . $this->getConnectionMethodCode() . ($sandbox ? '_SANDBOX' : '_LIVE');
+    }
+
+    /**
+     * @param bool|null $sandbox
+     *
+     * @return array|null null if there is no check result for the actual client ID
+     */
+    protected function getConnectionState($sandbox = null)
+    {
+        $state = json_decode((string) \Configuration::get($this->getConnectionConfigKey($sandbox)), true);
+
+        if (!is_array($state) || !isset($state['status'], $state['client_id'], $state['date'])) {
+            return null;
+        }
+
+        if ((string) $state['client_id'] !== (string) $this->getClientId($sandbox)) {
+            return null;
+        }
+
+        return $state;
+    }
+
+    /**
+     * @param bool $status
+     * @param bool|null $sandbox
+     */
+    protected function saveConnectionState($status, $sandbox = null)
+    {
+        \Configuration::updateValue(
+            $this->getConnectionConfigKey($sandbox),
+            json_encode([
+                'status' => (bool) $status,
+                'client_id' => (string) $this->getClientId($sandbox),
+                'date' => time(),
+            ])
+        );
+        // the shared flag of previous versions is replaced by per-mode results from now on
+        \Configuration::deleteByName($this->getLegacyConnectionConfigKey());
+    }
+
+    /**
+     * @param bool|null $sandbox
+     */
+    protected function resetConnectionState($sandbox = null)
+    {
+        \Configuration::deleteByName($this->getConnectionConfigKey($sandbox));
+        \Configuration::deleteByName($this->getLegacyConnectionConfigKey());
+    }
 
     abstract public function logOut($sandbox = null);
 }
