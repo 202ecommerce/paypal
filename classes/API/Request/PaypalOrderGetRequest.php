@@ -95,7 +95,11 @@ class PaypalOrderGetRequest extends RequestAbstract
         } catch (PaypalException $e) {
             $error = new Error();
             $resultDecoded = json_decode($e->getMessage());
-            $error->setMessage($resultDecoded->details[0]->description)->setErrorCode($e->getCode());
+            $error->setErrorCode($e->getCode());
+
+            if (!empty($resultDecoded->details[0]->description)) {
+                $error->setMessage($resultDecoded->details[0]->description);
+            }
 
             $response->setSuccess(false)
                 ->setError($error);

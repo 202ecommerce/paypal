@@ -1,0 +1,36 @@
+{
+  "id": "test-payment-id-524",
+  "intent": "CAPTURE",
+  "status": "COMPLETED",
+  "purchase_units": [
+    {
+      "reference_id": "default",
+      "amount": {
+        "currency_code": "EUR",
+        "value": "29.00"
+      },
+      "payments": {
+        "captures": [
+          {
+            "id": "test-transaction-id-524",
+            "status": "COMPLETED",
+            "amount": {
+              "currency_code": "EUR",
+              "value": "29.00"
+            },
+            "final_capture": true,
+            "create_time": "2026-11-05T10:15:30Z",
+            "update_time": "2026-11-05T10:15:30Z"
+          }
+        ]
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/test-payment-id-524",
+      "rel": "self",
+      "method": "GET"
+    }
+  ]
+}
