@@ -1,0 +1,21 @@
+{
+  "id": "test-payment-id-524",
+  "intent": "CAPTURE",
+  "status": "PAYER_ACTION_REQUIRED",
+  "purchase_units": [
+    {
+      "reference_id": "default",
+      "amount": {
+        "currency_code": "EUR",
+        "value": "29.00"
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "https://www.sandbox.paypal.com/checkoutnow?token=test-payment-id-524",
+      "rel": "payer-action",
+      "method": "GET"
+    }
+  ]
+}

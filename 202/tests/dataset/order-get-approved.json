@@ -1,0 +1,26 @@
+{
+  "id": "test-payment-id-524",
+  "intent": "CAPTURE",
+  "status": "APPROVED",
+  "purchase_units": [
+    {
+      "reference_id": "default",
+      "amount": {
+        "currency_code": "EUR",
+        "value": "29.00"
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/test-payment-id-524",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/test-payment-id-524/capture",
+      "rel": "capture",
+      "method": "POST"
+    }
+  ]
+}

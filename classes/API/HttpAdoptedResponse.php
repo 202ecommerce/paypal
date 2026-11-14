@@ -44,7 +44,13 @@ class HttpAdoptedResponse extends HttpJsonResponse
     public function getAdoptedResponse()
     {
         if ($this->getCode() < 200 || $this->getCode() > 299) {
-            throw new PaypalException($this->getCode(), $this->getContent());
+            $content = $this->getContent();
+
+            if (false === is_string($content)) {
+                $content = json_encode($content);
+            }
+
+            throw new PaypalException((int) $this->getCode(), $content);
         }
 
         return json_decode(json_encode([

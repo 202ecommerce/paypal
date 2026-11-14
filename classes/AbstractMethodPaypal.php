@@ -359,19 +359,16 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             } else {
                 $response = $this->paypalApiManager->getOrderAuthorizeRequest($this->getPaymentId())->execute();
             }
+
+            if ($response->isSuccess() === false && false === $this instanceof \MethodMB) {
+                $getOrderResponse = $this->paypalApiManager->getOrderGetRequest($this->getPaymentId())->execute();
+
+                if ($getOrderResponse->isSuccess() && $getOrderResponse->getStatus() === 'COMPLETED') {
+                    $response = $this->getResponseFromCompletedOrder($getOrderResponse);
+                }
+            }
         } else {
-            $response->setSuccess(true)
-                ->setData($getOrderResponse->getData())
-                ->setPaymentId($this->getPaymentId())
-                ->setTransactionId($getOrderResponse->getTransactionId())
-                ->setCurrency($getOrderResponse->getPurchaseUnit()->getCurrency())
-                ->setCapture($this->getIntent() !== 'CAPTURE')
-                ->setTotalPaid($getOrderResponse->getPurchaseUnit()->getAmount())
-                ->setStatus($getOrderResponse->getStatus())
-                ->setPaymentMethod($getOrderResponse->getPaymentMethod())
-                ->setPaymentTool($getOrderResponse->getPaymentTool())
-                ->setMethod($getOrderResponse->getMethod())
-                ->setDateTransaction($getOrderResponse->getDateTransaction());
+            $response = $this->getResponseFromCompletedOrder($getOrderResponse);
         }
         if ($response->isSuccess() === false) {
             return $response;
@@ -405,6 +402,30 @@ abstract class AbstractMethodPaypal extends AbstractMethod
                 }
             }
         }
+
+        return $response;
+    }
+
+    /**
+     * @param ResponseOrderGet $getOrderResponse
+     *
+     * @return ResponseOrderCapture
+     */
+    protected function getResponseFromCompletedOrder(ResponseOrderGet $getOrderResponse)
+    {
+        $response = new ResponseOrderCapture();
+        $response->setSuccess(true)
+            ->setData($getOrderResponse->getData())
+            ->setPaymentId($this->getPaymentId())
+            ->setTransactionId($getOrderResponse->getTransactionId())
+            ->setCurrency($getOrderResponse->getPurchaseUnit()->getCurrency())
+            ->setCapture($this->getIntent() !== 'CAPTURE')
+            ->setTotalPaid($getOrderResponse->getPurchaseUnit()->getAmount())
+            ->setStatus($getOrderResponse->getStatus())
+            ->setPaymentMethod($getOrderResponse->getPaymentMethod())
+            ->setPaymentTool($getOrderResponse->getPaymentTool())
+            ->setMethod($getOrderResponse->getMethod())
+            ->setDateTransaction($getOrderResponse->getDateTransaction());
 
         return $response;
     }
