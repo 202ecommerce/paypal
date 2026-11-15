@@ -167,6 +167,7 @@ class OrderShippingCallbackResponseBody implements BuilderInterface
         $options = [];
 
         foreach ($this->carriers as $carrier) {
+            $shippingCost = (int) \Configuration::get('PS_TAX') == 1 ? $carrier['price_tax_exc'] : $carrier['price'];
             $options[] = [
                 'id' => (string) $carrier['id_carrier'],
                 'label' => $carrier['name'],
@@ -174,7 +175,7 @@ class OrderShippingCallbackResponseBody implements BuilderInterface
                 'selected' => (int) $carrier['id_carrier'] === $selectedCarrierId,
                 'amount' => [
                     'currency_code' => $currency,
-                    'value' => $this->method->formatPrice($carrier['price']),
+                    'value' => $this->method->formatPrice($shippingCost),
                 ],
             ];
         }

@@ -172,13 +172,6 @@ class OrderCreateBody implements BuilderInterface
         foreach ($products as $product) {
             $item = [];
             $priceExcl = $this->method->formatPrice($product['price']);
-            $priceIncl = $this->method->formatPrice($product['price_wt']);
-
-            if ($this->isUseTax()) {
-                $productTax = $this->method->formatPrice($priceIncl - $priceExcl, null, false);
-            } else {
-                $productTax = 0;
-            }
 
             if (isset($product['attributes']) && (empty($product['attributes']) === false)) {
                 $product['name'] .= ' - ' . $product['attributes'];
@@ -194,10 +187,12 @@ class OrderCreateBody implements BuilderInterface
                 'currency_code' => $currency,
                 'value' => $priceExcl,
             ];
-            $item['tax'] = [
-                'currency_code' => $currency,
-                'value' => $productTax,
-            ];
+            if ($this->isUseTax() == false) {
+                $item['tax'] = [
+                    'currency_code' => $currency,
+                    'value' => 0,
+                ];
+            }
             $item['quantity'] = (string) $product['quantity'];
 
             if (isset($product['is_virtual']) && $product['is_virtual']) {
@@ -246,15 +241,13 @@ class OrderCreateBody implements BuilderInterface
 
     /**
      * @param string $currency
-     * @param float|null $shippingCostOverride Tax-mode-aware shipping cost (see isUseTax()) to use
-     *                                         instead of the cart's own carrier, e.g. when quoting
-     *                                         a shipping option the buyer hasn't picked on the cart yet
+     * @param float|null $shippingCostOverride Tax-excluded shipping cost for a candidate carrier
+     * @param float|null $shippingCostTaxInclOverride Tax-included shipping cost for the same carrier
      *
      * @return array
      */
-    protected function getAmount($currency, $shippingCostOverride = null)
+    protected function getAmount($currency, $shippingCostOverride = null, $shippingCostTaxInclOverride = null)
     {
-        $cartSummary = $this->context->cart->getSummaryDetails();
         $items = $this->getItems($currency, true);
         $subTotalExcl = 0;
         $shippingTotal = $this->method->formatPrice(
@@ -266,16 +259,40 @@ class OrderCreateBody implements BuilderInterface
 
         foreach ($items as $item) {
             $subTotalExcl += (float) $item['unit_amount']['value'] * (float) $item['quantity'];
-            $subTotalTax += (float) $item['tax']['value'] * (float) $item['quantity'];
+            if (isset($item['tax'])) {
+                $subTotalTax += (float) $item['tax']['value'] * (float) $item['quantity'];
+            }
         }
 
         $subTotalExcl = $this->method->formatPrice($subTotalExcl, null, false);
-        $subTotalTax = $this->method->formatPrice($subTotalTax, null, false);
-        $totalOrder = $this->method->formatPrice(
-            $subTotalExcl + $subTotalTax + $shippingTotal + $handling - $discountTotal,
-            null,
-            false
-        );
+
+        if ($this->isUseTax()) {
+            $totalOrder = $this->context->cart->getOrderTotal(true, \Cart::BOTH);
+
+            if ($shippingCostTaxInclOverride !== null) {
+                $totalOrder += $shippingCostTaxInclOverride - $this->context->cart->getOrderTotal(true, \Cart::ONLY_SHIPPING);
+            }
+
+            $totalOrder = $this->method->formatPrice($totalOrder);
+            // Keep cart-rule and shipping taxes in the cart total, rather than on individual items.
+            $subTotalTax = $this->method->formatPrice(
+                $totalOrder - $subTotalExcl - $shippingTotal - $handling + $discountTotal,
+                null,
+                false
+            );
+
+            if ($subTotalTax < 0) {
+                $discountTotal = $this->method->formatPrice($discountTotal + abs($subTotalTax), null, false);
+                $subTotalTax = $this->method->formatPrice(0, null, false);
+            }
+        } else {
+            $subTotalTax = $this->method->formatPrice($subTotalTax, null, false);
+            $totalOrder = $this->method->formatPrice(
+                $subTotalExcl + $subTotalTax + $shippingTotal + $handling - $discountTotal,
+                null,
+                false
+            );
+        }
 
         $amount = [
             'currency_code' => $currency,
@@ -317,14 +334,7 @@ class OrderCreateBody implements BuilderInterface
 
         if ($this->context->cart->gift && $this->context->cart->getGiftWrappingPrice()) {
             $item = [];
-            $priceIncl = $this->context->cart->getGiftWrappingPrice(true);
             $priceExcl = $this->context->cart->getGiftWrappingPrice(false);
-
-            if ($this->isUseTax()) {
-                $tax = $priceIncl - $priceExcl;
-            } else {
-                $tax = 0;
-            }
 
             $item['name'] = $this->module->l('Gift wrapping', get_class($this));
             $item['sku'] = (string) $this->context->cart->id;
@@ -332,10 +342,12 @@ class OrderCreateBody implements BuilderInterface
                 'currency_code' => $currency,
                 'value' => $this->method->formatPrice($priceExcl),
             ];
-            $item['tax'] = [
-                'currency_code' => $currency,
-                'value' => $this->method->formatPrice($tax),
-            ];
+            if ($this->isUseTax() == false) {
+                $item['tax'] = [
+                    'currency_code' => $currency,
+                    'value' => $this->method->formatPrice(0),
+                ];
+            }
             $item['quantity'] = '1';
 
             $items[] = $item;
@@ -482,9 +494,8 @@ class OrderCreateBody implements BuilderInterface
     public function getAmountForCarrier($shippingCostTaxIncl, $shippingCostTaxExcl)
     {
         $currency = $this->getCurrency();
-        $shippingCost = $this->isUseTax() ? $shippingCostTaxIncl : $shippingCostTaxExcl;
 
-        return $this->getAmount($currency, $shippingCost);
+        return $this->getAmount($currency, $shippingCostTaxExcl, $shippingCostTaxIncl);
     }
 
     protected function getBrandName()
@@ -527,7 +538,7 @@ class OrderCreateBody implements BuilderInterface
      */
     protected function getDiscount()
     {
-        $discountTotal = $this->context->cart->getOrderTotal($this->isUseTax(), \Cart::ONLY_DISCOUNTS);
+        $discountTotal = $this->context->cart->getOrderTotal(false, \Cart::ONLY_DISCOUNTS);
 
         if ($this->module->isConsiderGiftProductAsDiscount()) {
             $summaryDetails = $this->context->cart->getSummaryDetails();
@@ -535,8 +546,9 @@ class OrderCreateBody implements BuilderInterface
 
             if (is_array($gifts)) {
                 foreach ($gifts as $gift) {
-                    if (isset($gift['price_with_reduction'])) {
-                        $discountTotal += $gift['price_with_reduction'];
+                    $priceKey = $this->isUseTax() ? 'price_with_reduction_without_tax' : 'price_with_reduction';
+                    if (isset($gift[$priceKey])) {
+                        $discountTotal += $gift[$priceKey];
                     }
                 }
             }
@@ -547,7 +559,7 @@ class OrderCreateBody implements BuilderInterface
 
     protected function getTotalShipping()
     {
-        return $this->context->cart->getOrderTotal($this->isUseTax(), \Cart::ONLY_SHIPPING);
+        return $this->context->cart->getOrderTotal(false, \Cart::ONLY_SHIPPING);
     }
 
     protected function getProcessingInstruction()
