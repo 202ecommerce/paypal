@@ -402,12 +402,10 @@ class Form {
           if (response.isSandbox) {
             document.querySelector('[name="is_configured_sandbox"]').value = 1;
             document.querySelector('[name="paypal_clientid_sandbox"]').value = response.clientid;
-            document.querySelector('[name="paypal_secret_sandbox"]').value = response.secret;
             document.querySelector('[name="merchant_id_sandbox"]').value = response.merchantId;
           } else {
             document.querySelector('[name="is_configured_live"]').value = 1;
             document.querySelector('[name="paypal_clientid_live"]').value = response.clientid;
-            document.querySelector('[name="paypal_secret_live"]').value = response.secret;
             document.querySelector('[name="merchant_id_live"]').value = response.merchantId;
           }
         } else {

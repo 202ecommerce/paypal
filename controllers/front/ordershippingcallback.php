@@ -107,7 +107,12 @@ class PaypalOrdershippingcallbackModuleFrontController extends PaypalAbstarctMod
             $selectedCarrier = $responseBody->getSelectedCarrier();
 
             if (empty($selectedCarrier)) {
-                $this->respond(422, ['name' => 'COUNTRY_ERROR']);
+                // PayPal only understands this exact error shape; any other body makes the
+                // popup crash ("Something went wrong") instead of asking for another address.
+                $this->respond(422, [
+                    'name' => 'UNPROCESSABLE_ENTITY',
+                    'details' => [['issue' => 'COUNTRY_ERROR']],
+                ]);
 
                 return;
             }

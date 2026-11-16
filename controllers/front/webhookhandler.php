@@ -29,6 +29,7 @@
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\API\Model\WebhookEvent;
 use PaypalAddons\classes\Constants\WebhookHandler;
+use PaypalAddons\classes\Security\InternalCheckToken;
 use PaypalAddons\classes\Webhook\WebhookEventHandler;
 use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
@@ -128,7 +129,10 @@ class PaypalWebhookhandlerModuleFrontController extends PaypalAbstarctModuleFron
 
     protected function isCheckAvailability()
     {
-        return (bool) Tools::isSubmit('checkAvailability');
+        return InternalCheckToken::isValid(
+            InternalCheckToken::SCOPE_WEBHOOK_AVAILABILITY,
+            Tools::getValue('checkAvailability')
+        );
     }
 
     /**

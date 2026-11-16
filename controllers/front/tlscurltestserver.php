@@ -25,6 +25,8 @@
  *  @copyright PayPal
  *
  */
+use PaypalAddons\classes\Security\InternalCheckToken;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -36,6 +38,11 @@ class PayPalTlscurltestserverModuleFrontController extends ModuleFrontController
 {
     public function initContent()
     {
+        if (!InternalCheckToken::isValid(InternalCheckToken::SCOPE_TLS_CHECK, Tools::getValue('token'))) {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found', true, 404);
+            exit;
+        }
+
         exit('ok');
     }
 }

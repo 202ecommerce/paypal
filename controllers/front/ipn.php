@@ -66,7 +66,7 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
             ProcessLoggerHandler::openLogger();
             ProcessLoggerHandler::logError(
                 $message,
-                Tools::getValue('txn_id') ? Tools::getValue('txn_id') : null,
+                $this->getSafeTransactionId(),
                 null,
                 null,
                 null,
@@ -188,13 +188,43 @@ class PaypalIpnModuleFrontController extends PaypalAbstarctModuleFrontController
      */
     protected function requestIsValid()
     {
-        $curl = curl_init($this->module->getIpnPaypalListener() . '?cmd=_notify-validate&' . http_build_query($_POST));
+        // PayPal requires the message to be sent back unaltered (same fields, same order, same encoding),
+        // so the raw request body is reused as-is instead of rebuilding it from $_POST.
+        $rawBody = (string) Tools::file_get_contents('php://input');
+
+        if ($rawBody === '' || empty($_POST['txn_id'])) {
+            return false;
+        }
+
+        $curl = curl_init($this->module->getIpnPaypalListener());
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, 'cmd=_notify-validate&' . $rawBody);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Connection: Close']);
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_TIMEOUT, 90);
         $response = curl_exec($curl);
+        curl_close($curl);
 
-        return trim($response) == 'VERIFIED';
+        return is_string($response) && trim($response) === 'VERIFIED';
+    }
+
+    /**
+     * PayPal transaction IDs are alphanumeric (17 chars); anything else is not logged.
+     *
+     * @return string|null
+     */
+    protected function getSafeTransactionId()
+    {
+        $txnId = Tools::getValue('txn_id');
+
+        if (is_string($txnId) && preg_match('/^[A-Za-z0-9]{1,64}$/', $txnId)) {
+            return $txnId;
+        }
+
+        return null;
     }
 
     protected function alreadyHandled($data)

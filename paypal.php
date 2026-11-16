@@ -1210,11 +1210,6 @@ class PayPal extends PaymentModule implements WidgetInterface
         $resources = [];
         $method = AbstractMethodPaypal::load($this->paypal_method);
 
-        if ((int) Configuration::get('PAYPAL_NEED_CHECK_CREDENTIALS')) {
-            $method->checkCredentials();
-            Configuration::updateValue('PAYPAL_NEED_CHECK_CREDENTIALS', 0);
-        }
-
         if (Tools::getValue('controller') == 'order') {
             if (!$this->checkActiveModule()) {
                 return;

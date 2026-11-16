@@ -59,7 +59,8 @@
             'name' => 'paypal_secret_live',
             'label' => "{l s='Client\’s secret' mod='paypal'}",
             'variant' => 'primary',
-            'value' => $field.set.paypal_secret_live|default:''
+            'value' => '',
+            'placeholder' => ($field.set.has_secret_live|default:false) ? "{l s='Saved - leave empty to keep the current secret' mod='paypal'}" : ''
             ]}
             {assign var='merchantIdLive' value=[
             'type' => 'text',
@@ -80,7 +81,8 @@
             'name' => 'paypal_secret_sandbox',
             'label' => "{l s='Client\’s secret' mod='paypal'}",
             'variant' => 'primary',
-            'value' => $field.set.paypal_secret_sandbox|default:''
+            'value' => '',
+            'placeholder' => ($field.set.has_secret_sandbox|default:false) ? "{l s='Saved - leave empty to keep the current secret' mod='paypal'}" : ''
             ]}
             {assign var='merchantIdSandbox' value=[
             'type' => 'text',

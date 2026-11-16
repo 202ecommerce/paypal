@@ -67,9 +67,6 @@ class MethodMB extends AbstractMethodPaypal
 
     protected $servicePaypalVaulting;
 
-    /** @var WhiteListService */
-    protected $whiteListService;
-
     public function __construct()
     {
         parent::__construct();
@@ -90,7 +87,6 @@ class MethodMB extends AbstractMethodPaypal
     {
         parent::setSandbox($isSandbox);
         $this->initApiManager();
-        $this->checkCredentials();
 
         return $this;
     }
@@ -109,7 +105,7 @@ class MethodMB extends AbstractMethodPaypal
 
     public function logOut($sandbox = null)
     {
-        if ($sandbox == null) {
+        if ($sandbox === null) {
             $sandbox = $this->isSandbox();
         }
 
@@ -120,7 +116,7 @@ class MethodMB extends AbstractMethodPaypal
             Configuration::updateValue(PayPal::PAYPAL_MB_CLIENTID_LIVE, '');
             Configuration::updateValue(PayPal::PAYPAL_MB_SECRET_LIVE, '');
         }
-        Configuration::updateValue('PAYPAL_CONNECTION_MB_CONFIGURED', '');
+        $this->resetConnectionState($sandbox);
     }
 
     /**
@@ -186,46 +182,6 @@ class MethodMB extends AbstractMethodPaypal
     public function void($orderPayPal)
     {
         return $this->paypalApiManager->getAuthorizationVoidRequest($orderPayPal)->execute();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isConfigured($mode = null)
-    {
-        if (false == $this->whiteListService->isEligibleContext()) {
-            return false;
-        }
-        if ($this->isCredentialsSetted() === false) {
-            return false;
-        }
-        if ((bool) Configuration::get('PAYPAL_CONNECTION_MB_CONFIGURED')) {
-            return true;
-        }
-
-        $this->checkCredentials();
-
-        return (bool) Configuration::get('PAYPAL_CONNECTION_MB_CONFIGURED');
-    }
-
-    public function checkCredentials()
-    {
-        $response = $this->paypalApiManager->getAccessTokenRequest()->execute();
-
-        if ($response->isSuccess()) {
-            Configuration::updateValue('PAYPAL_CONNECTION_MB_CONFIGURED', 1);
-        } else {
-            $this->setConfig([
-                'clientId' => '',
-                'secret' => '',
-                'merchantId' => '',
-            ]);
-            Configuration::updateValue('PAYPAL_CONNECTION_MB_CONFIGURED', 0);
-
-            if ($response->getError()) {
-                $this->errors[] = $response->getError()->getMessage();
-            }
-        }
     }
 
     /**

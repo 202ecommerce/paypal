@@ -30,6 +30,7 @@ namespace PaypalAddons\services;
 
 use PaypalAddons\classes\AbstractMethodPaypal;
 use PaypalAddons\classes\Constants\WebHookConf;
+use PaypalAddons\classes\Security\InternalCheckToken;
 use PaypalAddons\classes\Webhook\CreateWebhook;
 use PaypalAddons\classes\Webhook\WebhookAvailability;
 
@@ -69,7 +70,11 @@ class Checker
             define('CURL_SSLVERSION_TLSv1_3', 7);
         }
 
-        $tls_server = $this->context->link->getModuleLink($this->module->name, 'tlscurltestserver');
+        $tls_server = $this->context->link->getModuleLink(
+            $this->module->name,
+            'tlscurltestserver',
+            ['token' => InternalCheckToken::get(InternalCheckToken::SCOPE_TLS_CHECK)]
+        );
         $return['ping_page'] = $tls_server;
 
         $lastError = '';

@@ -28,6 +28,8 @@
 
 namespace PaypalAddons\classes\API\Response;
 
+use PaypalAddons\classes\Security\PaypalUrlValidator;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -48,7 +50,7 @@ class ResponseOrderCreate extends Response
      */
     public function getApproveLink()
     {
-        return (string) $this->approveLink;
+        return PaypalUrlValidator::filter((string) $this->approveLink);
     }
 
     /**

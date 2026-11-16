@@ -28,6 +28,8 @@
 
 namespace PaypalAddons\classes\Exception;
 
+use PaypalAddons\classes\Security\PaypalUrlValidator;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -45,6 +47,6 @@ class PayerActionRequired extends \Exception
 
     public function getPayerActionLink()
     {
-        return $this->payerActionLink;
+        return PaypalUrlValidator::filter($this->payerActionLink);
     }
 }
