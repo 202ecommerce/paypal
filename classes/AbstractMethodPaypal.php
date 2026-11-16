@@ -801,7 +801,9 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         // Assign values for sandbox mode
         $this->setSandbox(true);
         $tplVars['paypal_clientid_sandbox'] = $this->getClientId();
-        $tplVars['paypal_secret_sandbox'] = $this->getSecret();
+        // The secret is never sent back to the browser; an empty field on save keeps the stored value
+        $tplVars['paypal_secret_sandbox'] = '';
+        $tplVars['has_secret_sandbox'] = (string) $this->getSecret() !== '';
         $tplVars['is_configured_sandbox'] = (int) $this->isConfigured();
         $tplVars['merchant_id_sandbox'] = $this->getMerchantId();
 
@@ -813,7 +815,9 @@ abstract class AbstractMethodPaypal extends AbstractMethod
         // Assign values for live
         $this->setSandbox(false);
         $tplVars['paypal_clientid_live'] = $this->getClientId();
-        $tplVars['paypal_secret_live'] = $this->getSecret();
+        // The secret is never sent back to the browser; an empty field on save keeps the stored value
+        $tplVars['paypal_secret_live'] = '';
+        $tplVars['has_secret_live'] = (string) $this->getSecret() !== '';
         $tplVars['is_configured_live'] = (int) $this->isConfigured();
         $tplVars['merchant_id_live'] = $this->getMerchantId();
 
@@ -839,27 +843,49 @@ abstract class AbstractMethodPaypal extends AbstractMethod
             \Configuration::updateValue('PAYPAL_SANDBOX', $data['mode'] == 'SANDBOX');
         }
 
-        if (isset($data['paypal_clientid_live']) && isset($data['paypal_secret_live'])) {
-            $this->setConfig([
-                'clientId' => pSQL($data['paypal_clientid_live']),
-                'secret' => pSQL($data['paypal_secret_live']),
-                'merchantId' => pSQL($data['merchant_id_live']),
-                'isSandbox' => false,
-            ]);
-        }
+        foreach (['live' => false, 'sandbox' => true] as $suffix => $isSandbox) {
+            if (!isset($data['paypal_clientid_' . $suffix]) || !isset($data['paypal_secret_' . $suffix])) {
+                continue;
+            }
 
-        if (isset($data['paypal_clientid_sandbox']) && isset($data['paypal_secret_sandbox'])) {
             $this->setConfig([
-                'clientId' => pSQL($data['paypal_clientid_sandbox']),
-                'secret' => pSQL($data['paypal_secret_sandbox']),
-                'merchantId' => pSQL($data['merchant_id_sandbox']),
-                'isSandbox' => true,
+                'clientId' => pSQL($data['paypal_clientid_' . $suffix]),
+                'secret' => pSQL($this->resolvePostedSecret(
+                    (string) $data['paypal_clientid_' . $suffix],
+                    (string) $data['paypal_secret_' . $suffix],
+                    $isSandbox
+                )),
+                'merchantId' => pSQL(isset($data['merchant_id_' . $suffix]) ? $data['merchant_id_' . $suffix] : ''),
+                'isSandbox' => $isSandbox,
             ]);
         }
 
         // credentials may have changed without changing the client ID (e.g. a new secret), so always check them
         $this->refreshConnectionState(true, true);
         $this->refreshConnectionState(false, true);
+    }
+
+    /**
+     * The secret is not rendered in the account form: an empty posted secret
+     * means "keep the stored one", as long as the client ID is unchanged.
+     *
+     * @param string $postedClientId
+     * @param string $postedSecret
+     * @param bool $isSandbox
+     *
+     * @return string
+     */
+    protected function resolvePostedSecret($postedClientId, $postedSecret, $isSandbox)
+    {
+        if ($postedSecret !== '' || $postedClientId === '') {
+            return $postedSecret;
+        }
+
+        if ($postedClientId !== (string) $this->getClientId($isSandbox)) {
+            return '';
+        }
+
+        return (string) $this->getSecret($isSandbox);
     }
 
     protected function initVaultingFunctionality()

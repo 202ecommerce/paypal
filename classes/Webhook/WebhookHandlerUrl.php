@@ -28,6 +28,8 @@
 
 namespace PaypalAddons\classes\Webhook;
 
+use PaypalAddons\classes\Security\InternalCheckToken;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -46,7 +48,7 @@ class WebhookHandlerUrl
     public function getCheckAvailabilityUrl()
     {
         /* @phpstan-ignore-next-line */
-        $url = \Context::getContext()->link->getModuleLink('paypal', 'webhookhandler', ['checkAvailability' => 1], null, (int) \Configuration::get('PS_LANG_DEFAULT'), (int) \Configuration::get('PS_SHOP_DEFAULT'));
+        $url = \Context::getContext()->link->getModuleLink('paypal', 'webhookhandler', ['checkAvailability' => InternalCheckToken::get(InternalCheckToken::SCOPE_WEBHOOK_AVAILABILITY)], null, (int) \Configuration::get('PS_LANG_DEFAULT'), (int) \Configuration::get('PS_SHOP_DEFAULT'));
         $url = str_replace('http://', 'https://', $url);
 
         return $url;

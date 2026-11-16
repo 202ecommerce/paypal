@@ -276,7 +276,6 @@ class AdminPaypalConfigurationController extends ModuleAdminController
         $response->setData([
             'success' => true,
             'clientid' => $result->getClientId(),
-            'secret' => $result->getSecret(),
             'merchantId' => $result->getMerchantId(),
             'isSandbox' => $isSandbox,
         ])->send();
